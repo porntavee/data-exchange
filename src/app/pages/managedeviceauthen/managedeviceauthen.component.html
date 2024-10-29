@@ -1,0 +1,333 @@
+<!-- Section EDIMS NODE -->
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <button pButton pRipple class="p-button-info Newbut" (click)="testLoginDialog()" ><i class="pi pi-sign-in"><span class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Test Login</span></i></button>
+        <button pButton pRipple class="p-button-info Clearbut" (click)="showUpdateDialog()" ><i class="pi pi-reply"><span class="Cleartxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Update All</span></i></button>
+        <button pButton pRipple class="p-button-success Exportbut" style="margin-left:8px"
+          (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+      </div>
+      <div class="p-toolbar-group-right">
+        <!-- <button pButton pRipple class="p-button-success mr-2 Newbut" (click)="showAddDialog()" ><i class="pi pi-plus"><span class="Newtxt">New</span></i></button> -->
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+            placeholder="Search by IP Address..." />
+        </span>
+      </div>
+    </p-toolbar>
+
+
+  <p-table #dt [value]="datanode" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="id"
+    [globalFilterFields]="['ip_address']"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="device_name">Device name<p-sortIcon field="device_name"></p-sortIcon></th>
+        <th pSortableColumn="ip_address">IP Address<p-sortIcon field="ip_address"></p-sortIcon></th>
+        <th pSortableColumn="device_profile_name">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            User Profile<p-sortIcon field="device_profile_name"></p-sortIcon>
+            <p-columnFilter field="device_profile_name" matchMode="in" display="menu" [showMatchModes]="false"
+              [showOperator]="false" [showAddButton]="false">
+              <ng-template pTemplate="header">
+                <div class="p-px-3 p-pt-3 p-pb-0" style="margin-top: 15px; margin-left: 10px;">
+                  <span class="p-text-bold">Used Profile Picker</span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="device_profile_nameArr" placeholder="Any"
+                  (onChange)="filter($event.value)">
+                  <ng-template let-option pTemplate="item">
+                    <div class="p-multiselect-representative-option">
+                      <span class="p-ml-1">{{option}}</span>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <!-- <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th> -->
+        <!-- <th pSortableColumn="management_vlan">Management VLAN<p-sortIcon field="management_vlan"></p-sortIcon></th> -->
+        <th pSortableColumn="update_time">Update Time<p-sortIcon field="update_time"></p-sortIcon></th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td><div class="myDIV1" title="{{rowData.device_name}}">{{ rowData.device_name }}</div></td>
+        <td>{{ rowData.ip_address }}</td>
+        <td>{{ rowData.device_profile_name }}</td>
+        <!-- <td>{{ rowData.status }}</td> -->
+        <!-- <td>{{ rowData.management_vlan }}</td> -->
+        <td>{{ rowData.update_time | date:'dd-MM-YYYY HH:mm:ss' }}</td>
+        <td>
+          <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+          <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(rowData)"
+            icon="pi pi-ellipsis-h"></button>
+          <!-- <button pButton label="Edit" type="button" class="p-button-info" (click)="showEditDialog(rowData)"></button> -->
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog header="Update All" [(visible)]="displayUpdateAll" [style]="{ 'width': '500px', 'height': '400px' }"
+  (onHide)="hideDialog()" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <!-- <div class="col pl-0">
+          <label for="Vlan" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div> -->
+        <div class="col pl-0">
+          <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Device Profile Name</label>
+          <p-dropdown [options]="device_profile_nameArrlist" [(ngModel)]="selecteddevice_profile"
+            optionLabel="deviceName" [scrollHeight]="scrollHeight" placeholder="Select Device profile name"
+            (onChange)="listvalueprofile($event.value)"><ng-template let-device pTemplate="item">
+              <div class="item-drop1">
+                <span class="item-value1">{{device.deviceName}} | {{device.deviceDesc}}</span>
+
+              </div>
+            </ng-template></p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label for="Vlan" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmitAll()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Add Device" [(visible)]="displayAdddevice" [style]="{ 'width': '500px', 'height': '450px' }"
+  (onHide)="hideDialog()" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}" style="margin-right: 15px;">IP Address </label>
+          <input type="text" [class]="invalid" pInputText id="IPAddress" [(ngModel)]="selectedIPAddress" autofocus required [style]="{'width':'250px'}"/>
+         
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <!-- <div class="col pl-0">
+          <label for="Vlan" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div> -->
+        <div class="col pl-0">
+          <label for="Brand" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Brand</label>
+          <!-- <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeTaskType($event)" [options]="taskTypes"
+            [(ngModel)]="selectedType" optionLabel="name" [style]="{'width':'250px'}" autofocus></p-dropdown> -->
+          <p-dropdown class="mx-2" [options]="listBrand" [(ngModel)]="selectedlistBrand" placeholder="Select brand"
+            (onChange)="listBrandchange($event.value)" [style]="{'width':'250px'}" autofocus></p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label for="Model" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Model</label>
+          <input type="text" [class]="invalid" pInputText id="Model" [(ngModel)]="selectedModel" autofocus required />
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmitAdd()"></button>
+  </ng-template>
+</p-dialog>
+
+
+
+<!-- SECTION DEVICE PROFILE -->
+
+<!-- <div style="display: flex; justify-content: flex-end;">
+    <div class="p-inputgroup" style="width:15%; margin-bottom: 16px; margin-top:16px">
+        <span class="p-inputgroup-addon"><p-checkbox></p-checkbox></span>
+        <input type="text" pInputText placeholder="IP Filter">
+    </div>
+</div> -->
+
+<p-dialog header="Update All" [(visible)]="displayAddDeviceProfile" [style]="{ 'width': '500px', 'height': '500px' }">
+  <div style="margin-bottom: 32px;">
+    <p-dropdown [options]="brands" [(ngModel)]="selected_brand" optionLabel="name"></p-dropdown> <br>
+  </div>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmit()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Edit" [(visible)]="displayEdit" [style]="{ 'width': '500px', 'height': '450px' }"
+  (onHide)="hideDialog()" styleClass="p-fluid">
+  <!-- <div style="margin-bottom: 32px;">
+        <p-dropdown [options]="brands" [(ngModel)]="selected_brand" optionLabel="name"></p-dropdown> <br>
+    </div> -->
+  <div class="p-field">
+    <div class="row mx-0">
+      <!-- <div class="col pl-0">
+          <label for="Vlan" style="color:#DBDBDB;">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div> -->
+      <div class="col pl-0">
+        <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Device Profile Name</label>
+        <p-dropdown [options]="device_profile_nameArrlist" [(ngModel)]="selecteddevice_profile" optionLabel="deviceName"
+          [scrollHeight]="scrollHeight" placeholder="Select Device profile name" [style]="{'width':'200px'}"
+          (onChange)="listvalueprofile($event.value)"><ng-template let-device pTemplate="item">
+            <div class="item-drop1">
+              <span class="item-value1">{{device.deviceName}} | {{device.deviceDesc}}</span>
+
+            </div>
+          </ng-template></p-dropdown>
+      </div>
+
+    </div>
+  </div>
+  <div class="p-field">
+    <div class="row mx-0">
+      <!-- <div class="col pl-0">
+          <label for="Vlan" style="color:#DBDBDB;">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div> -->
+      <div class="col pl-0">
+        <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+        'theme-saga-text': themeService.theme === 'saga-orange'}">SNMP Profile Name</label>
+        <p-dropdown [options]="snmp_profile_name" [(ngModel)]="snmp_profile" optionLabel="name"
+        [scrollHeight]="scrollHeight" placeholder="Select SNMP profile name" [style]="{'width':'200px'}"
+        ></p-dropdown>
+      </div>
+
+    </div>
+  </div>
+  <!--  -->
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmitlistdeviceprofile()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Edit" [(visible)]="displayEdit_edims_node" [style]="{ 'width': '500px', 'height': '460px' }"
+  (onHide)="hideDialog()" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}" style="margin-right: 15px;">IP Address </label>
+          <input type="text" [class]="invalid" pInputText id="IPAddress" [(ngModel)]="editDatanode.ip_address" autofocus required [style]="{'width':'250px'}"/>
+         
+        </div>
+        <!-- <div class="col pr-0">
+        <label for="Vlan" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan</label>
+        <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="editDatanode.management_vlan" autofocus required />
+      </div> -->
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <!-- <div class="col pl-0">
+          <label for="Vlan" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan</label>
+          <input type="text" [class]="invalid" pInputText id="vlan" [(ngModel)]="selectedlistVlan" autofocus required />
+        </div> -->
+        <div class="col pl-0">
+          <label for="Brand" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Brand</label>
+          <!-- <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeTaskType($event)" [options]="taskTypes"
+            [(ngModel)]="selectedType" optionLabel="name" [style]="{'width':'250px'}" autofocus></p-dropdown> -->
+          <p-dropdown class="mx-2" [options]="listBrand" [(ngModel)]="selectedlistBrand" placeholder="Select brand"
+            (onChange)="listBrandchange($event.value)" [style]="{'width':'250px'}" autofocus></p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label for="Model" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Model</label>
+          <input type="text" [class]="invalid" pInputText id="Model" [(ngModel)]="editDatanode.model" autofocus required />
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmiteditnode(editDatanode)"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="View" [(visible)]="displayView" [style]="{ 'width': '500px', 'height': '430px' }"
+  (onHide)="hideDialog()" styleClass="p-fluid">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; ">
+      <span style="font-weight: bold;">Device name: </span> {{viewDatanode.device_name}}
+    </div>
+
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">IP Address: </span> {{viewDatanode.ip_address}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">User Profile: </span> {{viewDatanode.device_profile_name}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">SNMP Profile: </span> {{viewDatanode.snmp_profile_name}}
+    </div>
+  </div>
+  <!-- <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">Status: </span> {{viewDatanode.status}}
+    </div>
+  </div> -->
+  <!-- <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">Management VLAN: </span> {{viewDatanode.management_vlan}}
+    </div>
+  </div> -->
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">Brand: </span> {{viewDatanode.brand}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">Model: </span> {{viewDatanode.model}}
+    </div>
+  </div>
+ 
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 5px;">
+        <span style="font-weight: bold;">Update Time: </span> {{ viewDatanode.update_time | date:'dd-MM-YYYY HH:mm:ss' }}
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-toast></p-toast>

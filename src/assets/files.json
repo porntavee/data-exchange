@@ -1,0 +1,20 @@
+{
+    "data": 
+    [
+        {
+            "label": "Nview",
+            "data": "Nview",
+            "expandedIcon": "",
+            "collapsedIcon": "",
+            "haschildren":"TRUE"
+        },
+        {
+            "label": "RCview",
+            "data": "RCview",
+            "expandedIcon": "",
+            "collapsedIcon": "",
+            "haschildren":"TRUE"
+        }
+        
+    ]
+}

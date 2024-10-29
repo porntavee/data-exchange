@@ -1,0 +1,202 @@
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div
+            style="height:40px; background-color: #E99797; padding: 8px; font-weight: bold; border-radius: 10px 10px 0 0; ">
+            Today Port Link Down
+            <div style="font-size:18px; font-weight: bold; "></div>
+            <div class="button-holder" *ngIf="toggleOptions">
+                <p-menu #menu [popup]="true" [model]="menuExportchartOptions" appendTo="body" ></p-menu>
+                <button button pButton pRipple type="button" icon="pi pi-align-justify" class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;" (click)="menu.toggle($event)"></button>
+              </div>
+        </div>
+        
+        <div class="col-12" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'}">
+
+            <div><p-multiSelect [options]="portlinkarrs_hand1" [(ngModel)]="selecteddatalist1" defaultLabel="Hide Item" display="chip"
+                    (onChange)="onChangechart1($event)"> </p-multiSelect>
+            </div>
+            <div id="container"></div>
+            <!-- <highcharts-chart *ngIf="isHighcharts" [Highcharts]="Highcharts" [options]="chartOptions"
+                style="width: 100%; height: 100%; display: block;" [(update)]="updateFlag" [oneToOne]="true">
+            </highcharts-chart> -->
+
+            <p-accordion>
+                <p-accordionTab header="List" [selected]="false">
+                    <h5>Today Port Link Down</h5>
+                    <p-table [value]="portlink" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {currentPage} of {totalPages} pages"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Alarm count</th>
+                                <th>Device Name</th>
+                                <th>strName</th>
+                                <th>strDesc</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-portlink>
+                            <tr>
+                                <td>{{portlink.alarm_count}}</td>
+                                <td>{{portlink.strDeviceName}}</td>
+                                <td>{{portlink.strName}}</td>
+                                <td>{{portlink.strDesc}}</td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div
+            style="height:40px; background-color: #80C4E8; padding: 8px; font-weight: bold; border-radius: 10px 10px 0 0;">
+            Top Node Down
+            <div style="font-size:18px; font-weight: bold; "></div>
+            <div class="button-holder" *ngIf="toggleOptions1">
+                <p-menu #menu [popup]="true" [model]="menuExportchartOptions1" appendTo="body" ></p-menu>
+                <button button pButton pRipple type="button" icon="pi pi-align-justify" class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;" (click)="menu.toggle($event)"></button>
+              </div>
+        </div>
+        
+        <div class="col-12" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'}">
+            <div><p-multiSelect [options]="deviceNames1" [(ngModel)]="selecteddatalist2" defaultLabel="Hide Item" display="chip"
+                    (onChange)="onChangechart2($event)"> </p-multiSelect>
+            </div>
+            <div id="container1"></div>
+            <!-- <highcharts-chart *ngIf="isHighcharts1" [Highcharts]="Highcharts1" [options]="chartOptions1"
+                style="width: 100%; height: 100%; display: block;" [(update)]="updateFlag1" [oneToOne]="true">
+            </highcharts-chart> -->
+
+            <p-accordion>
+                <p-accordionTab header="List" [selected]="false">
+                    <h5>Top Node Down</h5>
+                    <p-table [value]="portlink24" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {currentPage} of {totalPages} pages"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Alarm count</th>
+                                <th>Symbol Name</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-portlink>
+                            <tr>
+                                <td>{{portlink.alarm_count}}</td>
+                                <td>{{portlink.symbol_name1}}</td>
+
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div
+            style="height:40px; background-color: #E99797; padding: 8px; font-weight: bold; border-radius: 10px 10px 0 0;">
+            Today Remote Power off
+            <div style="font-size:18px; font-weight: bold; "></div>
+            <div class="button-holder" *ngIf="toggleOptions2">
+                <p-menu #menu [popup]="true" [model]="menuExportchartOptions2" appendTo="body" ></p-menu>
+                <button button pButton pRipple type="button" icon="pi pi-align-justify" class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;" (click)="menu.toggle($event)"></button>
+              </div>
+        </div>
+        <div class="col-12" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'}">
+            <div><p-multiSelect [options]="portlinkarrs_hand3" [(ngModel)]="selecteddatalist3" defaultLabel="Hide Item" display="chip"
+                    (onChange)="onChangechart3($event)"> </p-multiSelect>
+            </div>
+            <div id="container2"></div>
+            <!-- <highcharts-chart *ngIf="isHighcharts2" [Highcharts]="Highcharts2" [options]="chartOptions2"
+                style="width: 100%; height: 100%; display: block;" [(update)]="updateFlag2" [oneToOne]="true">
+            </highcharts-chart> -->
+
+            <p-accordion>
+                <p-accordionTab header="List" [selected]="false">
+                    <h5>Today Remote Power off</h5>
+                    <p-table [value]="portlinkremote" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {currentPage} of {totalPages} pages"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Alarm count</th>
+                                <th>Device Name</th>
+                                <th>strIPAddress</th>
+                                <th>strName</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-portlink>
+                            <tr>
+                                <td>{{portlink.alarm_count}}</td>
+                                <td>{{portlink.strDeviceName}}</td>
+                                <td>{{portlink.strIPAddress}}</td>
+                                <td>{{portlink.strName}}</td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12">
+        <div
+            style="height:40px; background-color: #80C4E8; padding: 8px; font-weight: bold; border-radius: 10px 10px 0 0;">
+            Top Remote Power off
+            <div style="font-size:18px; font-weight: bold; "></div>
+            <div class="button-holder" *ngIf="toggleOptions3">
+                <p-menu #menu [popup]="true" [model]="menuExportchartOptions3" appendTo="body" ></p-menu>
+                <button button pButton pRipple type="button" icon="pi pi-align-justify" class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;" (click)="menu.toggle($event)"></button>
+              </div>
+        </div>
+        <div class="col-12" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'}">
+            <div><p-multiSelect [options]="deviceNames1_hand4" [(ngModel)]="selecteddatalist4" defaultLabel="Hide Item" display="chip"
+                    (onChange)="onChangechart4($event)"> </p-multiSelect>
+            </div>
+            <div id="container3"></div>
+            <!-- <highcharts-chart *ngIf="isHighcharts3" [Highcharts]="Highcharts3" [options]="chartOptions3"
+                style="width: 100%; height: 100%; display: block;" [(update)]="updateFlag3" [oneToOne]="true">
+            </highcharts-chart> -->
+
+            <p-accordion>
+                <p-accordionTab header="List" [selected]="false">
+                    <h5>Top Remote Power off</h5>
+                    <p-table [value]="portlinkremote24" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+                        currentPageReportTemplate="Showing {currentPage} of {totalPages} pages"
+                        [rowsPerPageOptions]="[10,25,50]">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Alarm count</th>
+                                <th>Symbol Name</th>
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-portlink>
+                            <tr>
+                                <td>{{portlink.alarm_count}}</td>
+                                <td>{{portlink.symbol_name1}}</td>
+
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+                </p-accordionTab>
+            </p-accordion>
+        </div>
+    </div>
+</div>

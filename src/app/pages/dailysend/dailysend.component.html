@@ -1,0 +1,74 @@
+<div class="card">
+    <p-toast [style]="{marginTop: '80px'}"></p-toast>
+    <p-table #dt1 [value]="sentdaily.items" [lazy]="true" (onLazyLoad)="paginate($event)" responsiveLayout="scroll" [rows]="sentdaily.size"  [paginator]="true"  [pageLinks]="5"  [style]="{'width':'auto'}"  dataKey="no" 
+    [(selection)]="sentdaily"   [totalRecords]="sentdaily.total_records"   [loading]="loading" [rowsPerPageOptions]="pageSizeOptions" >
+    <!-- <p-table #dt [value]="sentdaily.items" [rows]="10" [paginator]="true"> -->
+        <ng-template pTemplate="caption">
+            <div class="d-flex p-ai-center justify-content-between">
+              <h5 class="p-m-0">Daily sent alarm</h5>
+              <div style="width: 1200px;">
+              <!-- <h6>ค้นหาวันที่เริ่มต้นและสิ้นสุด </h6> -->
+              <p-calendar [ngModel]="start" InputText id="start"  (onSelect)="onSelectMethod($event)" [dataType]="date" [showIcon]="true" dateFormat="yy-mm-dd" [style]="{'width':'30%'}"></p-calendar>
+                    &nbsp;
+                    <p-calendar [ngModel]="end" InputText id="end"  (onSelect)="onSelectMethod1($event)" [dataType]="date" [showIcon]="true" dateFormat="yy-mm-dd" [style]="{'width':'30%'}"></p-calendar>
+                  
+              <!-- <p-calendar [(ngModel)]="rangeDates" (onSelect)="onSelectMethod($event)" selectionMode="range" [readonlyInput]="true" inputId="range" [dataType]="date" [showIcon]="true" dateFormat="yy-mm-dd" [style]="{'width':'50%'}" ></p-calendar> -->
+              &nbsp;<input type="text" pInputText [style]="{'width': '200px'}" style="text-align: center;" [(ngModel)]="keyword" placeholder="keyword"/>&nbsp;
+              <button type="button" pButton pRipple label="Search" class="p-button-rounded p-button-rounded" icon="pi pi-search" [loading]="islogLoading" (click)="searchdate()" ></button>
+            </div>
+            </div>
+          </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 20%;">Send Time
+          </th>
+          <th style="width: 20%;">Line Name
+          </th>
+          <th style="width: 40%;">Message
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-daily>
+        <tr>
+          <td><div id="id">{{daily.send_time | date:'dd-MM-YYYY HH:mm:ss'}}</div></td>
+          <td><div id="myDIV2" title="{{sentdaily.items.group_name}}">{{daily.group_name}}</div></td>
+          <td><div id="myDIV1" title="{{sentdaily.items.message_to_line}}">{{daily.message_to_line}}</div></td>
+       <td><div id="mar"> <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+        <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(daily)" icon="pi pi-ellipsis-h"></button></div></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{sentdaily.total_records}} Alarm.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog [(visible)]="dailyreadDialog" [style]="{width: '600px'}" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="content" >
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+            <label for="name" style="font-weight:bold" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'}">Send Time</label>&nbsp;&nbsp;&nbsp;
+            <span>{{daily.send_time}}</span>
+            <br>
+            <label for="target" style="font-weight:bold" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'}">Line Name</label>&nbsp;&nbsp;&nbsp;
+            <span>{{daily.group_name}}</span>
+            <br>
+            <label for="target" style="font-weight:bold" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'}">Message</label>&nbsp;&nbsp;&nbsp;
+            <br>
+            <textarea type="text" rows="8" cols="30" autoResize="autoResize" pInputText id="command" [(ngModel)]="daily.message_to_line" autofocus readonly></textarea>
+          
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+

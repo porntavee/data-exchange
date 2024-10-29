@@ -1,0 +1,413 @@
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+      <p-calendar #cal2 [(ngModel)]="rangeDates" [showIcon]="true" inputId="time" [numberOfMonths]="2"
+        dateFormat="dd/mm/yy" timeFormat="'hh:mm'" (onSelect)="onChangeCalendarMuliti($event)" [class]="invalid_month"
+        placeholder="Select start and end date" selectionMode="range" [maxDate]="maxDateValue"  appendTo="body">
+      </p-calendar>
+      <!-- <p-calendar [(ngModel)]="datePicker_selected" view="month" dateFormat="mm/yy" [yearNavigator]="false"
+        [class]="invalid_month" [minDate]="minDateValue" [maxDate]="maxDateValue" styleClass="datePickerS"
+        [readonlyInput]="true" inputId="monthpicker" (onSelect)="onChangeCalendarMonth($event)"
+        placeholder="Select Month for PDF" [showIcon]="true"></p-calendar> -->
+      <button pButton pRipple class="p-button-success Exportbut" [disabled]="!selecteddata || !selecteddata.length"
+        (click)="exportToExcel()"><i class="pi pi-file-excel"></i><span class="Exporttxt">Export to
+          Excel</span></button>
+      <button pButton pRipple class="p-button-danger Exportbut" [disabled]="!selecteddata || !selecteddata.length"
+        (click)="exportPDF()"><i class="pi pi-file-pdf"></i><span class="Exporttxt">Export to PDF</span></button>
+      <button pButton pRipple class="p-button-info Exportbut" [disabled]="!selecteddata || !selecteddata.length"
+        (click)="exportToword()"><i class="pi pi-file"></i><span class="Exporttxt">Export to Word</span></button>
+    </div>
+    <div class="p-toolbar-group-right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+          placeholder="Search..." />
+      </span>
+    </div>
+  </p-toolbar>
+
+
+
+  <p-table #dt [value]="datacustomlist" [lazy]="true" (onLazyLoad)="paginate($event)" responsiveLayout="scroll"
+    [rows]="size" [paginator]="true" [pageLinks]="5" [style]="{'width':'auto'}" selectionMode="single" dataKey="id"
+    [(selection)]="selecteddata" [showJumpToPageDropdown]="true" [rowHover]="true" [totalRecords]="total_records"
+    [loading]="loading" [rowsPerPageOptions]="pageSizeOptions"
+    [globalFilterFields]="['circuit_id','service_name','ip_address','if_name']">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+
+        </th>
+        <th pSortableColumn="circuit_id">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            CIRCUIT ID<p-sortIcon field="circuit_id"></p-sortIcon>
+
+          </div>
+        </th>
+        <th pSortableColumn="project_name">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Project Name<p-sortIcon field="project_name"></p-sortIcon>
+
+          </div>
+        </th>
+        <th pSortableColumn="service_name">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Service Name<p-sortIcon field="service_name"></p-sortIcon>
+
+          </div>
+        </th>
+        <th pSortableColumn="ip_address">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            IP Address<p-sortIcon field="ip_address"></p-sortIcon>
+
+          </div>
+        </th>
+
+        <th pSortableColumn="if_name">Port<p-sortIcon field="if_name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="created_at">Create At<p-sortIcon field="created_at"></p-sortIcon>
+        </th>
+        <!-- <th></th> -->
+        <!-- <th></th> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-data let-i="rowIndex">
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="data" *ngIf="!exportState[data.id]"></p-tableCheckbox>
+          <i class="pi pi-spin pi-spinner" *ngIf="exportState[data.id]"></i>
+        </td>
+        <td>{{data.circuit_id}}</td>
+        <td>{{data.project_name}}</td>
+        <td>{{data.service_name}}</td>
+        <td>{{data.ip_address}}</td>
+        <td>{{data.if_name}}</td>
+        <td>{{data.created_at | date:'YYYY-MM-dd HH:mm:ss'}}
+        </td>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{total_records }} Reports.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog [(visible)]="addDialog" [style]="{width: '650px'}" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideDialog()">
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="ip_address" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">IP Address</label>
+          <p-dropdown [options]="ip_addressList" [(ngModel)]="selectedIP" [filter]="true" filterBy="ip_address"
+            placeholder="Select IP Address" optionLabel="ip_address" [showClear]="true"
+            (onChange)="onChangeip_address($event)" [class]="invalidip_address" [(showClear)]="clearipAdd"
+            (onClear)="onClearIP()"></p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label for="ip_address" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Port</label>
+          <p-dropdown [options]="PortList" [(ngModel)]="selectedPort" [class]="invalidPort" [filter]="true"
+            filterBy="Port" placeholder="Select Port" optionLabel="Port" [showClear]="true"
+            (onChange)="onChangePort($event)" [(showClear)]="clearportAdd" (onClear)="onClearport()">
+            <ng-template let-localIPs pTemplate="item">
+              <div class="item-drop1">
+                <span class="item-value1"
+                  [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange','theme-saga-text': themeService.theme === 'saga-orange'}">{{
+                  localIPs.Port }} |
+                  {{ localIPs.if_descr }}</span>
+              </div>
+            </ng-template></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Discription</label>
+          <input type="text" [class]="invalidDiscription" pInputText id="name" [(ngModel)]="Discription" autofocus
+            required />
+
+        </div>
+
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">CIRCUIT ID</label>
+          <input type="text" [class]="invalidid" pInputText id="name" [(ngModel)]="cat_id"
+            (keyup)="onKeyUpcat_id($event.target.value)" autofocus required />
+
+        </div>
+        <div class="col pr-0">
+
+          <button pButton pRipple type="button" icon="pi pi-replay" class="p-button-rounded p-button-warning"
+            style="margin-top: 35px;" (click)="Searchdata()" [disabled]="disabledreload"></button>
+          <!-- <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target</label>
+          <input type="text" pInputText id="target" [(ngModel)]="task.target" [class]="invalidtarget"
+            placeholder="192.168.1.75, 192.168.1.76, 192.168.0.0/28" required autofocus /> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="project_name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Project Name</label>
+          <input type="text" pInputText id="project_name" [(ngModel)]="project_name" [class]="invalidproject_name"
+            required autofocus />
+        </div>
+        <div class="col pr-0">
+          <label for="service_name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Service Name</label>
+          <input type="text" pInputText id="service_name" [(ngModel)]="service_name" [class]="invalidservice_name"
+            required autofocus />
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="speed" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Speed</label>
+          <input type="text" pInputText id="speed" [(ngModel)]="speed" [class]="invalidspeed" required autofocus />
+        </div>
+        <div class="col pr-0">
+
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-cancel" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="Savedata()"
+      [disabled]="disabledsave"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="editDialog" [style]="{width: '650px'}" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideDialog()">
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="ip_address" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">IP Address</label>
+          <p-dropdown [options]="ip_addressList" [(ngModel)]="selectedIP" [filter]="true" filterBy="ip_address"
+            placeholder="Select IP Address" optionLabel="ip_address" [showClear]="true"
+            (onChange)="onChangeip_addressedit($event)" [(showClear)]="clearip" [class]="invalidip_address"
+            (onClear)="onClearIP()"></p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label for="ip_address" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Port</label>
+          <p-dropdown [options]="PortList" [(ngModel)]="selectedPort" [(showClear)]="clearport"
+            (onClear)="onClearport()" [class]="invalidPort" placeholder="Select Port" [filter]="true" filterBy="Port"
+            optionLabel="Port" [showClear]="true" (onChange)="onChangePortedit($event)">
+            <ng-template let-localIPs pTemplate="item">
+              <div class="item-drop1">
+                <span class="item-value1"
+                  [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange','theme-saga-text': themeService.theme === 'saga-orange'}">{{
+                  localIPs.Port }} |
+                  {{ localIPs.if_descr }}</span>
+              </div>
+            </ng-template></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Discription</label>
+          <input type="text" [class]="invalidDiscription" pInputText id="name" [(ngModel)]="Discription" autofocus
+            required />
+
+        </div>
+
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">CIRCUIT ID</label>
+          <input type="text" [class]="invalidid" pInputText id="name" [(ngModel)]="cat_id"
+            (keyup)="onKeyUpcat_id($event.target.value)" autofocus required />
+        </div>
+        <div class="col pr-0">
+          <button pButton pRipple type="button" icon="pi pi-replay" class="p-button-rounded p-button-warning"
+            style="margin-top: 35px;" (click)="Searchdata()" [disabled]="disabledreload"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="project_name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Project Name</label>
+          <input type="text" pInputText id="project_name" [(ngModel)]="project_name" [class]="invalidproject_name"
+            required autofocus />
+        </div>
+        <div class="col pr-0">
+          <label for="service_name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Service Name</label>
+          <input type="text" pInputText id="service_name" [(ngModel)]="service_name" [class]="invalidservice_name"
+            required autofocus />
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="speed" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'}">Speed</label>
+          <input type="text" pInputText id="speed" [(ngModel)]="speed" [class]="invalidspeed" required autofocus />
+        </div>
+        <div class="col pr-0">
+
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-cancel" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="Editdata()"
+      [disabled]="disabledsave"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="readDialog" [style]="{ 'width': '600px', 'height': '450px' }" [(header)]="dialogHeader"
+  [modal]="true" styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'visible'}">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">CIRCUIT ID:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.circuit_id}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Project Name:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.project_name}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Service Name:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.service_name}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Speed:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.speed}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Carrier:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.carrier}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Order Type:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.order_type}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Service Status:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.service_status}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Address:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_address}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Tumbon:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_tumbon}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Amphur:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_amphur}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Provice:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_provice}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Postcode:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_postcode}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Latitude:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_lat}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Source Longitude:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.source_lon}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target Address:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.address_target}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target Tumbon:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.target_tumbon}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target Amphur:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.target_amphur}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target Provice:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.target_province}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target Postcode:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.target_postcode}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Order Date:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.order_date | date:'YYYY-MM-dd HH:mm:ss'}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Install Date:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.install_date | date:'YYYY-MM-dd HH:mm:ss'}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                    'theme-saga-text': themeService.theme === 'saga-orange'}">Onservice Date:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.onservice_date | date:'YYYY-MM-dd HH:mm:ss'}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Terminate Date:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.terminate_date | date:'YYYY-MM-dd HH:mm:ss'}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Response Area:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.response_area}}</span>
+          <br>
+          <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Response
+            Department:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{Resultview.response_department}}</span>
+
+
+
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

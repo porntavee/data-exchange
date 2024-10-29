@@ -1,0 +1,520 @@
+/* You can add global styles to this file, and also import other style files */
+@charset "UTF-8";
+
+/* topoicon */
+@font-face {
+  font-family: "topoicon";
+  src:url("../fonts/topoicon.eot");
+  src:url("../fonts/topoicon.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/topoicon.woff") format("woff"),
+    url("../fonts/topoicon.ttf") format("truetype"),
+    url("../fonts/topoicon.svg#topoicon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[data-icon]:before {
+  font-family: "topoicon" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  font-size: 18px !important;
+  /* speak: none; */
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="nt-"]:before,
+[class*=" nt-"]:before {
+  font-family: "topoicon" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  font-size: 30px !important;
+  /* color: green; */
+  /* speak: none; */
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.nt-11-nms-none::before {
+  content: "a";
+  color: #50D0BC !important;
+}
+  
+.nt-11-nms-Critical::before {
+  content: "a";
+  color: #BF73CC !important;
+}
+.nt-11-nms-Major::before {
+  content: "a";
+  color: #FF7782 !important;
+}
+.nt-11-nms-Minor::before {
+  content: "a";
+  color: #FFBB55 !important;
+}
+.nt-11-nms-Warning::before {
+  content: "a";
+  color: #45BFFF !important;
+}
+.nt-11-nms-Unknown::before {
+  content: "a";
+  color: #50D0BC !important;
+}
+
+.nt-area-none::before {
+  content: "b";
+  color: #50D0BC !important;
+}
+  
+.nt-area-Critical::before {
+  content: "b";
+  color: #BF73CC !important;
+}
+.nt-area-Major::before {
+  content: "b";
+  color: #FF7782 !important;
+}
+.nt-area-Minor::before {
+  content: "b";
+  color: #FFBB55 !important;
+}
+.nt-area-Warning::before {
+  content: "b";
+  color: #45BFFF !important;
+}
+.nt-area-Unknown::before {
+  content: "b";
+  color: #50D0BC !important;
+}
+
+.nt-chassis-none::before {
+  content: "c";
+  color: #50D0BC !important;
+}
+  
+.nt-chassis-Critical::before {
+  content: "c";
+  color: #BF73CC !important;
+}
+.nt-chassis-Major::before {
+  content: "c";
+  color: #FF7782 !important;
+}
+.nt-chassis-Minor::before {
+  content: "c";
+  color: #FFBB55 !important;
+}
+.nt-chassis-Warning::before {
+  content: "c";
+  color: #45BFFF !important;
+}
+.nt-chassis-Unknown::before {
+  content: "c";
+  color: #50D0BC !important;
+}
+
+.nt-city-none::before {
+  content: "d";
+  color: #50D0BC !important;
+}
+  
+.nt-city-Critical::before {
+  content: "d";
+  color: #BF73CC !important;
+}
+.nt-city-Major::before {
+  content: "d";
+  color: #FF7782 !important;
+}
+.nt-city-Minor::before {
+  content: "d";
+  color: #FFBB55 !important;
+}
+.nt-city-Warning::before {
+  content: "d";
+  color: #45BFFF !important;
+}
+.nt-city-Unknown::before {
+  content: "d";
+  color: #50D0BC !important;
+}
+
+.nt-hostpital-none::before {
+  content: "e";
+  color: #50D0BC !important;
+}
+  
+.nt-hostpital-Critical::before {
+  content: "e";
+  color: #BF73CC !important;
+}
+.nt-hostpital-Major::before {
+  content: "e";
+  color: #FF7782 !important;
+}
+.nt-hostpital-Minor::before {
+  content: "e";
+  color: #FFBB55 !important;
+}
+.nt-hostpital-Warning::before {
+  content: "e";
+  color: #45BFFF !important;
+}
+.nt-hostpital-Unknown::before {
+  content: "e";
+  color: #50D0BC !important;
+}
+
+.nt-rack-none::before {
+  content: "f";
+  color: #50D0BC !important;
+}
+  
+.nt-rack-Critical::before {
+  content: "f";
+  color: #BF73CC !important;
+}
+.nt-rack-Major::before {
+  content: "f";
+  color: #FF7782 !important;
+}
+.nt-rack-Minor::before {
+  content: "f";
+  color: #FFBB55 !important;
+}
+.nt-rack-Warning::before {
+  content: "f";
+  color: #45BFFF !important;
+}
+.nt-rack-Unknown::before {
+  content: "f";
+  color: #50D0BC !important;
+}
+
+.nt-school-none::before {
+  content: "g";
+  color: #50D0BC !important;
+}
+  
+.nt-school-Critical::before {
+  content: "g";
+  color: #BF73CC !important;
+}
+.nt-school-Major::before {
+  content: "g";
+  color: #FF7782 !important;
+}
+.nt-school-Minor::before {
+  content: "g";
+  color: #FFBB55 !important;
+}
+.nt-school-Warning::before {
+  content: "g";
+  color: #45BFFF !important;
+}
+.nt-school-Unknown::before {
+  content: "g";
+  color: #50D0BC !important;
+}
+
+.nt-29xx-none::before {
+  content: "h";
+  color: #50D0BC !important;
+}
+  
+.nt-29xx-Critical::before {
+  content: "h";
+  color: #BF73CC !important;
+}
+.nt-29xx-Major::before {
+  content: "h";
+  color: #FF7782 !important;
+}
+.nt-29xx-Minor::before {
+  content: "h";
+  color: #FFBB55 !important;
+}
+.nt-29xx-Warning::before {
+  content: "h";
+  color: #45BFFF !important;
+}
+.nt-29xx-Unknown::before {
+  content: "h";
+  color: #50D0BC !important;
+}
+
+.nt-30xx-none::before {
+  content: "i";
+  color: #50D0BC !important;
+}
+  
+.nt-30xx-Critical::before {
+  content: "i";
+  color: #BF73CC !important;
+}
+.nt-30xx-Major::before {
+  content: "i";
+  color: #FF7782 !important;
+}
+.nt-30xx-Minor::before {
+  content: "i";
+  color: #FFBB55 !important;
+}
+.nt-30xx-Warning::before {
+  content: "i";
+  color: #45BFFF !important;
+}
+.nt-30xx-Unknown::before {
+  content: "i";
+  color: #50D0BC !important;
+}
+
+.nt-rax700-none::before {
+  content: "j";
+  color: #50D0BC !important;
+}
+  
+.nt-rax700-Critical::before {
+  content: "j";
+  color: #BF73CC !important;
+}
+.nt-rax700-Major::before {
+  content: "j";
+  color: #FF7782 !important;
+}
+.nt-rax700-Minor::before {
+  content: "j";
+  color: #FFBB55 !important;
+}
+.nt-rax700-Warning::before {
+  content: "j";
+  color: #45BFFF !important;
+}
+.nt-rax700-Unknown::before {
+  content: "j";
+  color: #50D0BC !important;
+}
+
+.nt-rax711c-none::before {
+  content: "k";
+  color: #50D0BC !important;
+}
+  
+.nt-rax711c-Critical::before {
+  content: "k";
+  color: #BF73CC !important;
+}
+.nt-rax711c-Major::before {
+  content: "k";
+  color: #FF7782 !important;
+}
+.nt-rax711c-Minor::before {
+  content: "k";
+  color: #FFBB55 !important;
+}
+.nt-rax711c-Warning::before {
+  content: "k";
+  color: #45BFFF !important;
+}
+.nt-rax711c-Unknown::before {
+  content: "k";
+  color: #50D0BC !important;
+}
+
+.nt-default-none::before {
+  content: "l";
+  color: #50D0BC !important;
+}
+  
+.nt-default-Critical::before {
+  content: "l";
+  color: #BF73CC !important;
+}
+.nt-default-Major::before {
+  content: "l";
+  color: #FF7782 !important;
+}
+.nt-default-Minor::before {
+  content: "l";
+  color: #FFBB55 !important;
+}
+.nt-default-Warning::before {
+  content: "l";
+  color: #45BFFF !important;
+}
+.nt-default-Unknown::before {
+  content: "l";
+  color: #50D0BC !important;
+}
+
+.nt-other-none::before {
+  content: "m";
+  color: #50D0BC !important;
+}
+  
+.nt-other-Critical::before {
+  content: "m";
+  color: #BF73CC !important;
+}
+.nt-other-Major::before {
+  content: "m";
+  color: #FF7782 !important;
+}
+.nt-other-Minor::before {
+  content: "m";
+  color: #FFBB55 !important;
+}
+.nt-other-Warning::before {
+  content: "m";
+  color: #45BFFF !important;
+}
+.nt-other-Unknown::before {
+  content: "m";
+  color: #50D0BC !important;
+}
+
+.nt-21xx-none::before {
+  content: "n";
+  color: #50D0BC !important;
+}
+  
+.nt-21xx-Critical::before {
+  content: "n";
+  color: #BF73CC !important;
+}
+.nt-21xx-Major::before {
+  content: "n";
+  color: #FF7782 !important;
+}
+.nt-21xx-Minor::before {
+  content: "n";
+  color: #FFBB55 !important;
+}
+.nt-21xx-Warning::before {
+  content: "n";
+  color: #45BFFF !important;
+}
+.nt-21xx-Unknown::before {
+  content: "n";
+  color: #50D0BC !important;
+}
+
+.nt-26xx-none::before {
+  content: "o";
+  color: #50D0BC !important;
+}
+  
+.nt-26xx-Critical::before {
+  content: "o";
+  color: #BF73CC !important;
+}
+.nt-26xx-Major::before {
+  content: "o";
+  color: #FF7782 !important;
+}
+.nt-26xx-Minor::before {
+  content: "o";
+  color: #FFBB55 !important;
+}
+.nt-26xx-Warning::before {
+  content: "o";
+  color: #45BFFF !important;
+}
+.nt-26xx-Unknown::before {
+  content: "o";
+  color: #50D0BC !important;
+}
+
+.nt-rax711l-none::before {
+  content: "p";
+  color: #50D0BC !important;
+}
+  
+.nt-rax711l-Critical::before {
+  content: "p";
+  color: #BF73CC !important;
+}
+.nt-rax711l-Major::before {
+  content: "p";
+  color: #FF7782 !important;
+}
+.nt-rax711l-Minor::before {
+  content: "p";
+  color: #FFBB55 !important;
+}
+.nt-rax711l-Warning::before {
+  content: "p";
+  color: #45BFFF !important;
+}
+.nt-rax711l-Unknown::before {
+  content: "p";
+  color: #50D0BC !important;
+}
+/* .nt-city::before {
+  content: "f";
+} */
+
+/* .nt-server::before {
+  content: "g";
+} */
+
+/* .nt-switch::before {
+  content: "e";
+} */
+
+/* .nt-rax7xx::before {
+  content: "c";
+} */
+
+/* .nt-rax711c::before {
+  content: "d";
+} */
+
+/* .nt-21xx::before {
+  content: "a";
+} */
+
+/* .nt-30xx::before {
+  content: "i";
+} */
+
+/* .nt-26xx::before {
+  content: "b";
+} */
+
+/* .nt-29xx::before {
+  content: "h";
+} */
+
+
+/* .nt-default::before {
+  content: "j";
+} */
+
+/* .nt-cloud:before {
+  content: "\62";
+}
+.nt-switch:before {
+  content: "\61";
+}
+.nt-city:before {
+  content: "\66";
+}
+.nt-alert:before {
+  content: "\63";
+}
+.nt-area:before {
+  content: "\64";
+}
+.nt-server:before {
+  content: "\67";
+}
+.nt-iscomrax-01:before {
+  content: "\65";
+} */

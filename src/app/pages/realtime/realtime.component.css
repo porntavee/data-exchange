@@ -1,0 +1,90 @@
+.hexagon-container {
+    width: 100%;
+    height: 129vh;
+    position: relative;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/img/m79.png');
+    background-size: 100%; /* หรือใช้ 'cover' ขึ้นอยู่กับความต้องการ */
+    background-position: top;
+    background-repeat: no-repeat;
+}
+
+.f-color-w {
+    color: white;
+}
+
+.p0 {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 25px !important;
+    padding-left: 5px !important;
+}
+
+.row.custom-spacing {
+    margin-bottom: -20px !important; /* กำหนดระยะห่างที่คุณต้องการ */
+}
+
+.c-btn {
+    padding-left: 10px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px; /* Adjust the radius as needed */
+    overflow: hidden; /* Ensures that the corners are rounded and no content spills out */
+}
+
+th, td {
+    /* border: 1px solid #ddd; */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #2f20fd;
+    color: white; /* Optional: Better readability for text on dark background */
+}
+
+tr:nth-child(even) {
+    background-color: #4b87ff;
+}
+
+tr:nth-child(odd) {
+    background-color: #2f20fd;
+    color: white; /* Optional: Better readability for text on dark background */
+}
+
+thead th:first-child {
+    border-top-left-radius: 10px; /* Rounded corner for top-left */
+}
+
+thead th:last-child {
+    border-top-right-radius: 10px; /* Rounded corner for top-right */
+}
+
+tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Rounded corner for bottom-left */
+}
+
+tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Rounded corner for bottom-right */
+}
+
+.green-background {
+    background-color: #d4edda; /* Light green */
+}
+
+.yellow-background {
+    background-color: #fff3cd; /* Light yellow */
+}
+
+.red-background {
+    background-color: #f8d7da; /* Light red */
+}

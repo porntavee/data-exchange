@@ -1,0 +1,203 @@
+<div class="mg-top-12">
+  <!-- <h5>Network Topo</h5> -->
+  <!-- <p (click)="test()">click</p> -->
+  <div>
+    <!-- <button pButton type="button" label="Expand all" (click)="expandAll()" style="margin-right: .5rem"></button> -->
+    <button pButton type="button" label="Collapse all" (click)="collapseAll()"></button>
+    <!-- <div class="mg-top-12"> -->
+    <span *ngIf="load_data" style="margin-left: 8px;">
+      LOADING DATA
+      <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; margin-left: 8px" *ngIf="load_data"></i>
+    </span>
+    <!-- </div> -->
+    <br />
+  </div>
+</div>
+&nbsp; &nbsp;
+<!-- <i
+    class="pi pi-spin pi-spinner"
+    style="font-size: 2rem"
+    *ngIf="load_data"
+  ></i> -->
+<div class="container">
+  <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+    <p-splitter [panelSizes]="[25, 75]">
+      <ng-template pTemplate>
+        <div style="width: 100%">
+          <p-tree #tree [value]="mainTree" [(selection)]="selectedNode" (onNodeSelect)="remote($event)"
+            (onNodeCollapse)="onNodeCollapse($event)" (onNodeExpand)="nodeExpandMain($event)" selectionMode="single"
+            [contextMenu]="cm" (contextmenu)="onContextMenu($event, selectedNode)">
+            <ng-template let-node>
+              <span>{{ node.label }}</span>
+              <!-- &nbsp;
+              <span *ngIf="node.data.ISPINGOK == 0"><i class="pi pi-circle-fill" style="color: red;"> </i></span>
+              <span *ngIf="node.data.ISPINGOK == 1"><i class="pi pi-circle-fill" style="color: #21EE0C;"> </i></span>
+              &nbsp;
+              <span>{{ node.label }}</span>
+              <span style="border-radius: 5px 5px 5px; border: 1px solid rgb(0, 0, 0); margin-left: 5px;">{{
+                node.data.ircType }}</span>
+
+
+              <span *ngIf="node.data.ISPINGOK == null"></span> -->
+            </ng-template>
+            <ng-template let-node pTemplate="NE">
+              <!-- &nbsp;
+              <span *ngIf="node.data.ISPINGOK == 0"><i class="pi pi-circle-fill" style="color: red;"> </i></span>
+              <span *ngIf="node.data.ISPINGOK == 1"><i class="pi pi-circle-fill" style="color: #21EE0C;"> </i></span>
+              &nbsp; -->
+              <span >{{ node.label }}</span>
+              <!-- <span *ngIf="node.data.ircType != undefined && node.data.ircType != '' && node.data.ircType != null"
+                style="border-radius: 5px 5px 5px; border: 1px solid rgb(0, 0, 0); margin-left: 5px;">{{
+                node.data.ircType }}</span> -->
+
+
+              <span *ngIf="node.data.ISPINGOK == null"></span>
+            </ng-template>
+            
+          </p-tree>
+
+        </div>
+      </ng-template>
+      <ng-template pTemplate>
+        <div class="mg-left-24 mg-right-12 fullwidthMap">
+          <div>
+            <div class="flex">
+              <p-selectButton></p-selectButton>
+              <div class="mapButton"></div>
+              <div class="col-12 flex ">
+                <p-selectButton [options]="stateOptions" [(ngModel)]="value1" optionLabel="label" optionValue="value"
+                  (onChange)="showPanel($event)"></p-selectButton>
+              </div>
+            </div>
+            <p-breadcrumb [model]="breadcrumb_items" [home]="home"></p-breadcrumb>
+          </div>
+          <p-toast [style]="{ marginTop: '80px' }"></p-toast>
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 pr-2">
+              <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'}" [(class)]="classMap">
+                <div class="py-3 flex">
+                  <span class="mx-2 mt-2" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'}">Vlan filter</span>
+                  <span class="p-float-label mr-2">
+                    <input type="text" pInputText [(ngModel)]="vlan" [class]="invalid_vlan" />
+                    <label style="line-height: 1.5;" for="vlan">Vlan</label>
+
+                  </span>
+                  <span class="p-float-label mr-2">
+                    <p-chips [(ngModel)]="vlan_name" separator="," [class]="invalid_vlanname"></p-chips>
+                    <label style="line-height: 1.5;" for="vlan_name">Vlan Name</label>
+                  </span>
+                  <button pButton pRipple type="button" [loading]="isVlanLoading" (click)="searchVlan($event)"
+                    label="Search VLAN" class="p-button-sm p-button-rounded p-button-secondary"></button>
+                </div>
+
+                <div>
+                  <p-gmap #gmap [options]="options" [overlays]="overlays" [style]="{ width: '100%', height: '700px' }"
+                    (onOverlayClick)="handleOverlayClick($event)" (onMapReady)="setMap($event)" ></p-gmap>
+                </div>
+                <div class="mt-2 mr-2" style="text-align: right;">
+                  แสดง {{ marker_show ? marker_show : 0 }}/{{
+                  marker_should_show ? marker_should_show : 0
+                  }}
+                </div>
+              </div>
+
+
+              <div class="card card-stats p-2" [ngClass]="focusOnPanel ? 'map-show' : 'map-hidden'" style="background:none; overflow: auto; max-width: 1020px; margin-left: 10px;">
+                <div #container class="fullwidth" style="height: 960px; overflow: auto;">
+                  <canvas #canvasEl id="canvas" width="2048px" height="2048px"></canvas>
+                </div>
+              </div>
+              
+              
+            </div>
+          </div>
+          <p-contextMenu #cm [model]="contextItems" appendTo="body"></p-contextMenu>
+          <p-contextMenu #cm2 [model]="contextItems2" appendTo="body"></p-contextMenu>
+          <p-contextMenu #cm4 [model]="contextItems4" appendTo="body"></p-contextMenu>
+        </div>
+      </ng-template>
+    </p-splitter>
+    <p-contextMenu #cm [model]="contextItems" appendTo="body" triggerEvent=""></p-contextMenu>
+  </div>
+  <p-toast></p-toast>
+</div>
+
+<p-dialog [(visible)]="iconSettingDialog" [style]="{ width: '700px' }" header="Icon setting" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="hideDialog()">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name">latitude</label>
+          <input type="text" pInputText id="name" [(ngModel)]="icondata.latitude" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !icondata.latitude">
+            latitude required.</small>
+        </div>
+        <div class="col pr-0">
+          <label for="surname">longitude</label>
+          <input type="text" pInputText id="surname" [(ngModel)]="icondata.longitude" required />
+          <small class="p-invalid" *ngIf="submitted && !icondata.longitude">longitude is required.</small>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="mapIcon">Map Icon</label>
+          <p-dropdown [options]="mapIcon" [(ngModel)]="selectedMapIcon" [filter]="false" filterBy="name"
+            [(showClear)]="showClear" id="mapIcon" placeholder="Select map icon" >
+            <ng-template pTemplate="selectedItem">
+              <div class="mapIcon-item mapIcon-item-value" *ngIf="selectedMapIcon">
+                <div [class]="'mr-1 nt-' + selectedMapIcon.icon_name.toLowerCase()"
+                  style="display: inline-block; font-size: 20px;">
+                </div>
+                <div style="display: inline-block;">
+                  {{ selectedMapIcon.icon_name }}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template let-mapIcon pTemplate="item">
+              <div class="mapIcon-item">
+                
+                <div [class]="'mr-1 nt-' + mapIcon.icon_name.toLowerCase()"
+                  style="display: inline-block; font-size: 20px;">
+                </div>
+                
+                <div style="display: inline-block;">
+                  {{ mapIcon.icon_name }}
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col pl-0">
+          <label for="topoIcon">Topo Icon</label>
+          <p-dropdown [options]="topoIcon" [(ngModel)]="selectedtopoIcon" [filter]="false" filterBy="name"
+            [showClear]="true" id="topoIcon" placeholder="Select topo icon">
+            <ng-template pTemplate="selectedItem">
+              <div class="topoIcon-item topoIcon-item-value" *ngIf="selectedtopoIcon">
+                <div [class]="'mr-1 nt-' + selectedtopoIcon.toLowerCase()"
+                  style="display: inline-block; font-size: 20px;"></div>
+                <div style="display: inline-block;">{{ selectedtopoIcon }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-topoIcon pTemplate="item">
+              <div class="topoIcon-item">
+                <div [class]="'mr-1 nt-' + topoIcon.toLowerCase()" style="display: inline-block; font-size: 20px;">
+                </div>
+                <div style="display: inline-block;">{{ topoIcon }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+    </div> -->
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="seveSetting()"></button>
+  </ng-template>
+</p-dialog>

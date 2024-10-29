@@ -1,0 +1,261 @@
+<p-toast></p-toast>
+
+<div class="row">
+  <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+  'theme-saga': themeService.theme === 'saga-orange'
+}">
+    <div class="row card-body">
+      <div class="col-lg-3 col-md-4 col-sm-4">
+        <div class="card card-filter" [ngStyle]="{ opacity: cardOpacity[0] }" (click)="addLevelFilter(0,'critical')"
+          style="background-color:#FEF0EC;">
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-12 flex align-items-center justify-content-center">
+                <div class="numbers align-items-center justify-content-center" style="text-align: center;">
+                  <p class="card-category" style="font-size: 0.5em; color:#F96A44">
+                    Critical
+                  </p>
+                  <p class="card-title" style="color:#F96A44;">{{ CriticalCard }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4 col-sm-4">
+        <div class="card card-filter" [ngStyle]="{ opacity: cardOpacity[4] }" (click)="addLevelFilter(4, 'warning')"
+          style="background-color: #F6F8FF;">
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-12 flex align-items-center justify-content-center">
+                <div class="numbers align-items-center justify-content-center" style="text-align: center;">
+                  <p class="card-category" style="font-size: 0.5em; color:#5D87FF">Warning</p>
+                  <p class="card-title" style="color:#5D87FF">{{ WarningCard }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-4">
+        <div class="card card-filter" [ngStyle]="{ opacity: cardOpacity[2] }" (click)="addLevelFilter(2,'ok')"
+          style="background-color:#EDF9FF">
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-12 flex align-items-center justify-content-center">
+                <div class="numbers align-items-center justify-content-center" style="text-align: center;">
+                  <p class="card-category" style="font-size: 0.5em; color:#50D0BC">Recovered</p>
+                  <p class="card-title" style="color:#50D0BC">{{ OKCard }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-4">
+        <div class="card card-filter" [ngStyle]="{ opacity: cardOpacity[3] }" (click)="clearAllFilter()"
+          style="background-color: #F2F6FA">
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-12 flex align-items-center justify-content-center">
+                <div class="numbers align-items-center justify-content-center" style="text-align: center;">
+                  <p class="card-category" style="font-size: 0.5em; color:#52595F">Total</p>
+                  <p class="card-title" style="color:#52595F">{{ totalCard }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12">
+    <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+      <div style="text-align: center;" *ngIf="loading">
+        <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+      </div>
+      <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          <span
+            [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange','theme-saga-text': themeService.theme === 'saga-orange'}"
+            class="reponsive-font">Alarm Threshold</span>
+
+        </div>
+        <div class="p-toolbar-group-right" style="text-align: center;">
+          <p-calendar #cal2 [(ngModel)]="rangeDates" [showIcon]="true" inputId="time" [numberOfMonths]="2"
+            style="margin-right:8px" dateFormat="dd/mm/yy" timeFormat="'hh:mm'" [class]="invalidmulti"
+            placeholder="Select start and end date" selectionMode="range">
+
+            <ng-template pTemplate="footer">
+              <div
+                style="background-color: grey; width:100%; border-top: 1px dashed grey; margin-bottom: 15px; opacity: 0.4;">
+              </div>
+              <div style="margin-left: 70px; text-align: center;" class="row">
+                <div style="display: inline-block;">
+                  <label for="startTimeH">Hour</label>
+                  <p-inputNumber [(ngModel)]="startTimeH" inputId="minmax" mode="decimal" [min]="0" [max]="23"
+                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidstartH">
+                  </p-inputNumber>
+                </div>
+                <div style="display: inline-block; margin: 0 10px;">
+                  <label for="startTimeM">Min</label>
+                  <p-inputNumber [(ngModel)]="startTimeM" inputId="minmax" mode="decimal" [min]="0" [max]="59"
+                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidstartM">
+                  </p-inputNumber>
+                </div>
+                <p-divider layout="vertical">to</p-divider>
+                <div style="display: inline-block; margin: 0 10px;">
+                  <label for="EndTimeH">Hour</label>
+                  <p-inputNumber [(ngModel)]="EndTimeH" inputId="minmax" mode="decimal" [min]="0" [max]="23"
+                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidendH">
+                  </p-inputNumber>
+                </div>
+                <div style="display: inline-block;">
+                  <label for="EndTimeM">Min</label>
+                  <p-inputNumber [(ngModel)]="EndTimeM" inputId="minmax" mode="decimal" [min]="0" [max]="59"
+                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidendM">
+                  </p-inputNumber>
+                </div>
+              </div>
+
+
+              <!-- <div >
+                <span style="margin-right:24px">IP Address:</span>
+                <input style="width:200px; align-items: center; justify-content: center;" type="text" pInputText
+                  styleClass="styletimeMin" maxlength="15" [(ngModel)]="inputIP" placeholder="xxx.xxx.xxx.xxx" />
+              </div> -->
+              <div
+                style="background-color: grey; width:100%; border-top: 1px dashed grey; margin-bottom: 15px; margin-top: 15px; opacity: 0.4;">
+              </div>
+
+              <div class="p-field" style="text-align: center;">
+                <div class="row mx-0">
+                  <div class="col-12"> <!-- Use the full width of the row -->
+                    <button pButton pRipple type="button" label="Submit" class="p-button-raised p-button-success"
+                      (click)="onSaveCalendar()"></button>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </p-calendar>
+          <!-- <button style="margin-right:8px;" pButton pRipple type="button" label="Download PDF"
+            class="p-button-raised p-button-danger Exportbut" (click)="exportPDFDialog()"></button> -->
+          <button style="margin-right:8px;" pButton pRipple type="button" label="Present Data"
+            class="p-button-raised p-button-success Exportbut" (click)="showPresentData()"></button>
+          <button pButton pRipple class="p-button-info Exportbut" style="margin-right:8px"
+            (click)="exportToExcelHistory()"><i class="pi pi-file"><span
+                style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export
+                to excel</span></i></button>
+
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+              placeholder="Search..." />
+          </span>
+
+
+          <!-- Export button -->
+
+        </div>
+
+      </p-toolbar>
+      <!-- <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          <span
+            [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange','theme-saga-text': themeService.theme === 'saga-orange'}"
+            class="reponsive-font">Alarm Threshold</span>
+
+        </div>
+        <div class="p-toolbar-group-right">
+          <button pButton pRipple class="p-button-info Exportbut" style="margin-right:8px"
+            (click)="exportToExcelHistory()"><i class="pi pi-file"><span class="Exporttxt"
+                style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export
+                to excel</span></i></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+              placeholder="Search..." />
+          </span>
+        </div>
+      </p-toolbar> -->
+      <p-table #dt2 [value]="alarm_listHistory" [scrollable]="true" [resizableColumns]="true" [rows]="100"
+        scrollHeight="500px" [contextMenu]="cm3" [rowHover]="true" [(contextMenuSelection)]="selecteAlarmHistory"
+        [globalFilterFields]="['severity',['model'],['ip_address'],['alarm_message'],]">
+
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pSortableColumn="severity" pResizableColumn class="col-1">
+              Level<p-sortIcon field="severity"></p-sortIcon>
+            </th>
+            <th pSortableColumn="model" pResizableColumn [style]="{ width: 'auto' }">
+              Device Type<p-sortIcon field="model"></p-sortIcon>
+            </th>
+            <th pSortableColumn="ip_address" pResizableColumn [style]="{ width: 'auto' }">
+              IP Address<p-sortIcon field="ip_address"></p-sortIcon>
+            </th>
+            <th pSortableColumn="alarm_message" pResizableColumn [style]="{ width: 'auto' }">
+              Alarm name<p-sortIcon field="alarm_message"></p-sortIcon>
+            </th>
+            <th pSortableColumn="device_name" pResizableColumn [style]="{ width: 'auto' }">
+              Device Name<p-sortIcon field="device_name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="update_time" pResizableColumn [style]="{ width: 'auto' }">
+              Time<p-sortIcon field="update_time"></p-sortIcon>
+            </th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+          <tr [pContextMenuRow]="rowData" style="height:40px">
+            <td class="col-1">
+              <div class="card flex align-items-center justify-content-center mb-0" *ngIf="rowData.severity == 'ok'"
+                class="Alarm_ok">
+                <span class="block">{{rowData.id}}</span>
+              </div>
+              <div class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.severity == 'warning'" class="Alarm_Warning">
+                <span class="block">{{rowData.id}}</span>
+              </div>
+              <div class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.severity == 'critical'" class="Alarm_Critical">
+                <span class="block">{{rowData.id}}</span>
+              </div>
+            </td>
+            <td>
+              {{rowData.model}}
+            </td>
+            <td>
+              {{rowData.ip_address}}
+            </td>
+            <td>
+              {{rowData.alarm_message}}
+            </td>
+            <td>
+              {{rowData.device_name}}
+            </td>
+            <td>
+              {{rowData.update_time}}
+            </td>
+            <td>
+
+              <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+              <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(rowData)"
+                icon="pi pi-ellipsis-h"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<!-- <p-contextMenu #cm [model]="contextItems" appendTo="body"></p-contextMenu>
+<p-contextMenu #cm2 [model]="contextItems2" appendTo="body"></p-contextMenu>
+<p-contextMenu #cm3 [model]="contextItemsHistory" appendTo="body"></p-contextMenu> -->

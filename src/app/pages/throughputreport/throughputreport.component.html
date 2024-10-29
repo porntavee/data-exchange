@@ -1,0 +1,177 @@
+<p-toast></p-toast>
+<div
+  class="col-12 card card-stats p-2"
+  [ngClass]="{
+    'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'
+  }"
+>
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+      <button
+        pButton
+        pRipple
+        class="p-button-success Exportbut"
+        style="margin-left:8px"
+        (click)="exportToExcel()"
+      >
+        <i class="pi pi-file"
+          ><span
+            class="Exporttxt"
+            style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;"
+            >Export to excel</span
+          ></i
+        >
+      </button>
+    </div>
+    <div class="p-toolbar-group-right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target.value, 'contains')"
+          class="Searchtxt"
+          placeholder="Search..."
+        />
+      </span>
+    </div>
+  </p-toolbar>
+  <p-table
+    #dt
+    [value]="resultthroughput"
+    [rows]="10"
+    [paginator]="true"
+    [(selection)]="selectedthroughputResult"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [globalFilterFields]="[
+      ['ipaddress'],
+      ['remote_ipaddress'],
+      ['vlan'],
+      ['test_status']
+    ]"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem"></th>
+        <th pSortableColumn="ipaddress">
+          Local Device<p-sortIcon field="ipaddress"></p-sortIcon>
+        </th>
+        <th pSortableColumn="remote_ipaddress">
+          Remote Device<p-sortIcon field="remote_ipaddress"></p-sortIcon>
+        </th>
+        <th pSortableColumn="vlan">
+          VLAN<p-sortIcon field="vlan"></p-sortIcon>
+        </th>
+        <th pSortableColumn="inserttime">
+          Create at<p-sortIcon field="inserttime"></p-sortIcon>
+        </th>
+        <th pSortableColumn="testtime">
+          Test Time<p-sortIcon field="testtime"></p-sortIcon>
+        </th>
+        <th pSortableColumn="test_status">
+          Status<p-sortIcon field="test_status"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-resultthroughput>
+      <tr>
+        <td></td>
+        <td>{{ resultthroughput.ipaddress }}</td>
+        <td>{{ resultthroughput.remote_ipaddress }}</td>
+        <td>{{ resultthroughput.vlan }}</td>
+        <td>
+          {{ resultthroughput.inserttime.substring(0, 10) + " "
+          }}{{ resultthroughput.inserttime.substring(11, 16) }}
+        </td>
+        <td>
+          {{
+            (resultthroughput.process_timestamp?.substring(0, 10) || "") +
+              " " +
+              (resultthroughput.process_timestamp?.substring(11, 16) || "")
+          }}
+        </td>
+        <td>
+          <!-- {{ resultthroughput.status }} -->
+          <div *ngIf="resultthroughput.status === 'Waiting'" class="waiting">
+            <!-- {{ resultthroughput.status }} -->
+            waiting
+          </div>
+          <div *ngIf="resultthroughput.status === 'Done'" class="done">
+            <!-- {{ resultthroughput.status }} -->
+            done
+          </div>
+          <div *ngIf="resultthroughput.status === 'Failed'" class="failed">
+            <!-- {{ resultthroughput.status }} -->
+            failed
+          </div>
+          <div *ngIf="resultthroughput.status === 'Fail'" class="failed">
+            <!-- {{ resultthroughput.status }} -->
+            failed
+          </div>
+          <div *ngIf="resultthroughput.status === 'Testing'" class="testing">
+            <!-- {{ resultthroughput.status }} -->
+            testing
+          </div>
+        </td>
+        <td>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsAction"
+            appendTo="body"
+          ></p-menu>
+          <button
+            pButton
+            type="text"
+            (click)="menu.toggle($event)"
+            (click)="menuVlue(resultthroughput)"
+            icon="pi pi-ellipsis-h"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are
+        {{ resultthroughput ? resultthroughput.length : 0 }} results.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="reportLogDialog"
+  position="center"
+  [style]="{ width: '60vw' }"
+  [(header)]="dialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="row mx-0" style="margin-top:24px">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span class="p-float-label">
+            <textarea
+              style="overflow-y:scroll;"
+              rows="5"
+              cols="200"
+              pInputTextarea
+              [autoResize]="true"
+              [disabled]="true"
+              readonly
+              >{{ throughputLog }}</textarea
+            >
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

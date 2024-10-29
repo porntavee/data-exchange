@@ -1,0 +1,112 @@
+<p-toast></p-toast>
+
+
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+<p-toolbar styleClass="p-mb-4">
+  <div class="p-toolbar-group-left">
+    
+    <button pButton pRipple class="p-button-success Exportbut"
+    (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+   
+  </div>
+  <div class="p-toolbar-group-right">
+    <button pButton pRipple icon="pi pi-trash" class="p-button-danger" title="Delete Schedule" style="margin-right: 15px;"
+    (click)="deleteSelectedSchedules()" [disabled]="!selectedSchedule || !selectedSchedule.length"></button>
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+        placeholder="Search..." />
+    </span>
+  </div>
+</p-toolbar>
+<p-table #dt [value]="scheduleTasks" [rows]="10" [paginator]="true"
+  [globalFilterFields]="['schedule_name','country.name','representative.name','status']"
+  [(selection)]="selectedSchedule" [rowHover]="true" dataKey="id"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th pSortableColumn="schedule_name">Schedule Name<p-sortIcon field="schedule_name"></p-sortIcon></th>
+      <th pSortableColumn="schedule_type">Schedule Type<p-sortIcon field="schedule_type"></p-sortIcon></th>
+      <th pSortableColumn="trigger">Start Date<p-sortIcon field="trigger"></p-sortIcon></th>
+      <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-scheduleTasks>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="scheduleTasks"></p-tableCheckbox>
+      </td>
+      <td>{{scheduleTasks.schedule_name}}</td>
+      <td>{{scheduleTasks.schedule_type }}</td>
+      <td>{{scheduleTasks.trigger}}</td>
+      <td>{{scheduleTasks.status }}</td>
+      <td>
+        <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+        <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(scheduleTasks)" icon="pi pi-ellipsis-h"></button>
+        <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
+            (click)="editSchedule(scheduleTasks)" title="Edit Schedule"></button> -->
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are {{scheduleTasks ? scheduleTasks.length : 0 }} tasks.
+    </div>
+  </ng-template>
+</p-table>
+</div>
+<p-dialog [(visible)]="scheduleTaskDialog" [style]="{width: '700px'}" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Schedule Name</label>
+          <input type="text" pInputText id="name" [(ngModel)]="scheduleTask.schedule_name" required autofocus />
+        </div>
+        <div class="col pr-0">
+          <label for="scheduleMode" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Mode</label>
+          <p-dropdown class="mx-2" (onChange)="onChangeScheduleMode($event)" [options]="scheduleModes"
+            [(ngModel)]="selectedScheduleMode" value="one time" optionLabel="name" required>
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label class="mx-2" for="start_date" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Start Date</label>
+          <!-- <input type="text" pInputText id="start_date" [(ngModel)]="scheduleTask.start_date" disabled="true" required autofocus /> -->
+          <p-calendar [ngModel]="scheduleTasks.start_date" InputText id="start_date" (onSelect)="onSelectMethod($event)"
+            [dataType]="date" [showIcon]="true" required autofocus>
+          </p-calendar>
+        </div>
+        <div class="col pr-0">
+          <label class="mx-2" for="start_time" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Start time</label>
+          <p-calendar [ngModel]="scheduleTasks.start_time" InputText id="start_time"
+            (onSelect)="onSelectMethod2($event)" [dataType]="Date" [showIcon]="true" [icon]="'pi pi-clock'"
+            [timeOnly]="true"></p-calendar>
+        </div>
+      </div>
+    </div>
+
+
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="saveSchedule()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

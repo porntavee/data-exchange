@@ -1,0 +1,79 @@
+<p-toast></p-toast>
+
+<!-- <p-toolbar styleClass="p-mb-4"> -->
+<!-- <ng-template pTemplate="left">
+            <h5 class="p-m-0">Web Access Log List</h5>
+        </ng-template> -->
+
+
+<!-- </p-toolbar> -->
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+    <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+            <div class="col-12 justify-content-between flex">
+                <div class="row">
+            <p-calendar [ngModel]="accessed_ata" InputText id="accessed_ata" (onSelect)="onSelectMethod($event)"
+             [showIcon]="true" dateFormat="yy-mm-dd" class="calenderright"></p-calendar>
+            <input type="text" pInputText placeholder="User ID" [style]="{'width': '100px'}"
+                            style="text-align: center;" [(ngModel)]="UserID" class="p-column-filter" />&nbsp;
+                            <input type="text" pInputText style="text-align: center;" class="Usernametxt"
+                                [(ngModel)]="Username" placeholder="Username" />&nbsp;
+                            <input type="text" pInputText placeholder="Role" [style]="{'width': '120px'}"
+                                style="text-align: center;" [(ngModel)]="Role" />&nbsp;
+                            <input type="text" pInputText placeholder="API" [style]="{'width': '120px'}" style="text-align: center;"
+                                [(ngModel)]="API" />&nbsp;
+                            <input type="text" pInputText placeholder="Payload" [style]="{'width': '130px'}"
+                                style="text-align: center;" [(ngModel)]="Payload" />&nbsp;
+                            <button type="button" pButton pRipple label="Search" class="p-button" icon="pi pi-search"
+                                [loading]="islogLoading" (click)="searchlog()"></button>&nbsp;
+                            <button pButton label="Clear" class="p-button-danger" icon="pi pi-times" (click)="handleClear()"
+                                (click)="clearlog()"></button>
+                </div>
+            </div>
+        </div>
+      </p-toolbar>
+ 
+<p-table #dt1 [value]="log_pages.items" [lazy]="true" (onLazyLoad)="paginate($event)" responsiveLayout="scroll"
+    [rows]="log_pages.size" [paginator]="true" [pageLinks]="5" [style]="{'width':'auto'}" selectionMode="single"
+    dataKey="user_id" [(selection)]="log_pages" [showJumpToPageDropdown]="true" [rowHover]="true" 
+    [totalRecords]="log_pages.total_records" [loading]="loading" [rowsPerPageOptions]="pageSizeOptions">
+
+    
+    <ng-template pTemplate="header">
+        <tr>
+
+            <th pSortableColumn="accessed_at">Timestamp<p-sortIcon field="accessed_at"></p-sortIcon>
+            </th>
+            <th pSortableColumn="user_id">User ID<p-sortIcon field="user_id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="username">Username<p-sortIcon field="username"></p-sortIcon>
+            </th>
+            <th pSortableColumn="role">Role<p-sortIcon field="role"></p-sortIcon>
+            </th>
+            <th pSortableColumn="api">API<p-sortIcon field="api"></p-sortIcon>
+            </th>
+
+        </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-log_page>
+        <tr>
+
+            <td>{{log_page.accessed_at.substring(0, 10) + " "}} {{log_page.accessed_at.substring(11, 16)}}</td>
+            <td>{{log_page.user_id}}</td>
+            <td>{{log_page.username}}</td>
+            <td>{{log_page.role}}</td>
+            <td>{{log_page.api}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            In total there are {{log_pages.total_records}} log.
+        </div>
+    </ng-template>
+</p-table>
+</div>
+
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

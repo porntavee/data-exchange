@@ -1,0 +1,37 @@
+
+.bodyClass {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+        background-color: #17212F;
+    }
+}
+.bodyClassX {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+        position: absolute;
+        background-color: #17212F;
+    }
+}
+.bodyClassdevice {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+        background-color: #17212F;
+    }
+}
+@media screen and (max-width: 580px) {
+    .bodyClassdevice {
+        .p-card .p-card-body {
+            padding: 1.5rem;
+            position: absolute;
+            background-color: #17212F;
+            width: 580px;
+        }
+    } 
+   
+}
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-treenode-icon {
+    margin-bottom: auto;
+    vertical-align: text-top;
+}
+@import "primeng/resources/themes/vela-blue/theme.css"
+

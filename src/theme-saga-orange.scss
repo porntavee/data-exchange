@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'Raleway';
+    src: url('/assets/fonts/Raleway-Regular.ttf') format('truetype'),
+         url('/assets/fonts/Raleway-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Raleway';
+    src: url('/assets/fonts/Raleway-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}  
+
+@media screen and (max-width: 580px) {
+    .bodyClassdevice {
+        .p-card .p-card-body {
+            padding: 1.5rem;
+            position: absolute;
+            width: 580px;
+        }
+    } 
+   
+}
+.bodyClass {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+        
+    }
+}
+.bodyClassX {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+        position: absolute;
+    }
+}
+.bodyClassdevice {
+    .p-card .p-card-body {
+        padding: 1.5rem;
+    }
+}
+
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-treenode-icon {
+    margin-bottom: auto;
+    vertical-align: text-top;
+}
+@import "primeng/resources/themes/saga-orange/theme.css"
+

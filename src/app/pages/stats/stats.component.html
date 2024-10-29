@@ -1,0 +1,505 @@
+<div *ngIf="navId == '/stats1'" class="row mx-0 bgcolor">
+  <div class="col-12">
+    <p class="f-color-w">
+      ดัชนีชี้วัด (KPI) การจัดการอุบัติการณ์ได้เปรียบเทียบค่าเฉลี่ยสามปีที่แล้ว
+    </p>
+  </div>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-3">
+        <label class="f-color-w c-btn">ข้อกำหนด</label>
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="จุดสนใจ"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+      <div class="col-3">
+        <label class="f-color-w c-btn">ประเภท</label>
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="จุดสนใจ"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+      <div class="col-3">
+        <label class="f-color-w c-btn">ปี</label>
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="จุดสนใจ"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="image-container">
+    <img style="user-select: none;" src="assets/img/KPI.png" alt="KPI Image" />
+    <div
+      class="rectangle"
+      [ngStyle]="{ 'background-color': currentColor1 }"
+      (click)="toggleColor1()"
+    ></div>
+    <div
+      class="rectangle2"
+      [ngStyle]="{ 'background-color': currentColor2 }"
+      (click)="toggleColor2()"
+    ></div>
+    <div
+      class="rectangle3"
+      [ngStyle]="{ 'background-color': currentColor3 }"
+      (click)="toggleColor3()"
+    ></div>
+  </div>
+  <div>
+    <div #graphContainer></div>
+    <!-- <img src="assets/img/m-stats2.png" alt="" (click)="isShowGraph = !isShowGraph"> -->
+  </div>
+  <div *ngIf="isShowGraph" (click)="isShowGraph = !isShowGraph">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-10">
+          <!-- <img src="assets/img/m-stats3.png" alt="" (click)="isShowGraph = !isShowGraph"> -->
+          <highcharts-chart
+            [Highcharts]="Highcharts"
+            [options]="chartOptions"
+            style="width: 900px; display: block;"
+          ></highcharts-chart>
+        </div>
+        <div class="col-2">
+          <p class="f-color-w">
+            ค่าเฉลี่ยรวม
+            <br />
+            + 12%
+          </p>
+          <p class="f-color-w">
+            ค่าสูงสุดตามข้อกำหนด
+            <br />
+            15 นาที
+          </p>
+          <p class="f-color-w">
+            เดือนที่ไม่ผ่านเกณฑ์
+          </p>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="navId == '/stats2'" class="row mx-0 bgcolor">
+  <div class="col-12">
+    <p class="f-color-w">
+      กราฟเปรียบเทียบความถี่การเกิดอุบัติเหตุกับค่าเฉลี่ย 30 วันล่าสุด
+    </p>
+  </div>
+  <div class="col-12">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-3">
+        <label class="f-color-w c-btn">ตัวกรอง</label>
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="ประเภทอุบัติเหตุ: ทั้งหมด"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+      <div class="col-3">
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="ประเภทอุบัติการณ์: ทั้งหมด"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+      <div class="col-3">
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="สายทาง:"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="row">
+      <highcharts-chart
+        [Highcharts]="Highcharts2_1"
+        [options]="chartOptions2_1"
+        [callbackFunction]="chartCallback"
+        style="width: 100%; height: 400px; display: block;"
+      >
+      </highcharts-chart>
+      <!-- <img src="assets/img/m-stats5.png" alt=""> -->
+    </div>
+  </div>
+</div>
+
+<div *ngIf="navId == '/stats3'" class="row mx-0 bgcolor">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-9">
+        <p class="f-color-w">
+          อัตราการระบายรถผ่านด่านเก็บเงินโดยเฉลี่ยในชั่วโมงเร่งด่วนลาดกระบังเปรียบเทียบค่าเฉลี่ยสามปีที่แล้ว
+        </p>
+      </div>
+      <div class="col-3">
+        <label class="f-color-w c-btn">ปี</label>
+        <p-dropdown
+          class="mx-2"
+          id="taskType"
+          (onChange)="onChangeModel($event)"
+          [options]="kmNo"
+          [(ngModel)]="selectedKmNo"
+          placeholder="จุดสนใจ"
+          optionLabel="name"
+          [style]="{ width: '200px' }"
+          autofocus
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="row">
+      <div class="col-9">
+        <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          style="width: 100%; display: block;"
+        ></highcharts-chart>
+      </div>
+      <div class="col-3">
+        <p class="f-color-w">
+          ค่าเฉลี่ยรวม
+          <br />
+          + 12%
+        </p>
+        <p class="f-color-w">
+          ค่าสูงสุดตามข้อกำหนด
+          <br />
+          15 นาที
+        </p>
+        <p class="f-color-w">
+          เดือนที่ไม่ผ่านเกณฑ์
+        </p>
+        <div class="row">
+          <div class="col-4 f-color-w">มิถุนายน</div>
+          <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+          <div class="col-4 f-color-w" align="right">
+            87/ 81
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4 f-color-w">มิถุนายน</div>
+          <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+          <div class="col-4 f-color-w" align="right">
+            87/ 81
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4 f-color-w">มิถุนายน</div>
+          <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+          <div class="col-4 f-color-w" align="right">
+            87/ 81
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-9">
+          <highcharts-chart
+            [Highcharts]="Highcharts"
+            [options]="chartOptions"
+            style="width: 100%; display: block;"
+          ></highcharts-chart>
+        </div>
+        <div class="col-3">
+          <p class="f-color-w">
+            ค่าเฉลี่ยรวม
+            <br />
+            + 12%
+          </p>
+          <p class="f-color-w">
+            ค่าสูงสุดตามข้อกำหนด
+            <br />
+            15 นาที
+          </p>
+          <p class="f-color-w">
+            เดือนที่ไม่ผ่านเกณฑ์
+          </p>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 f-color-w">มิถุนายน</div>
+            <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+            <div class="col-4 f-color-w" align="right">
+              87/ 81
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+        <div class="col-10">
+            <img src="assets/img/m-stats3.png" alt="" (click)="isShowGraph = !isShowGraph">
+        </div>
+        <div class="col-2">
+            <p class="f-color-w">
+                ค่าเฉลี่ยรวม
+                <br>
+                + 12%
+            </p>
+            <p class="f-color-w">
+                ค่าสูงสุดตามข้อกำหนด
+                <br>
+                15 นาที
+            </p>
+            <p class="f-color-w">
+                เดือนที่ไม่ผ่านเกณฑ์
+            </p>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10">
+            <img src="assets/img/m-stats3.png" alt="" (click)="isShowGraph = !isShowGraph">
+        </div>
+        <div class="col-2">
+            <p class="f-color-w">
+                ค่าเฉลี่ยรวม
+                <br>
+                + 12%
+            </p>
+            <p class="f-color-w">
+                ค่าสูงสุดตามข้อกำหนด
+                <br>
+                15 นาที
+            </p>
+            <p class="f-color-w">
+                เดือนที่ไม่ผ่านเกณฑ์
+            </p>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 f-color-w">มิถุนายน</div>
+                <div class="col-4 f-color-w" align="right">ร้อยละ</div>
+                <div class="col-4 f-color-w" align="right">
+                    87/ 81
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<div *ngIf="navId == '/stats4'" class="row mx-0 bgcolor">
+  <div class="col-3">
+    <label class="f-color-w c-btn">ลาดกระบัง</label>
+    <label class="f-color-w c-btn">พัทยา</label>
+    <p-dropdown
+      class="mx-2"
+      id="taskType"
+      (onChange)="onChangeModel($event)"
+      [options]="kmNo"
+      [(ngModel)]="selectedKmNo"
+      placeholder="จุดสนใจ"
+      optionLabel="name"
+      [style]="{ width: '200px' }"
+      autofocus
+    ></p-dropdown>
+  </div>
+  <div class="col-6">
+    <div>
+      <img [src]="'assets/img/m79.png'" [title]="'realtime-map'" />
+    </div>
+  </div>
+  <div class="col-3">
+    <p class="f-color-w">
+      ข้อมูล Black Spot รวบรวมทั้งปี 2567
+    </p>
+  </div>
+</div>
+
+<div *ngIf="navId == '/stats5'" class="row mx-0 bgcolor">
+  <div class="col-12">
+    <highcharts-chart
+      [Highcharts]="Highcharts5_1"
+      [options]="chartOptions5_1"
+      style="width: 100%; display: block;"
+    ></highcharts-chart>
+  </div>
+  <div class="col-12">
+    <highcharts-chart
+      [Highcharts]="Highcharts5_2"
+      [options]="chartOptions5_2"
+      style="width: 100%; display: block;"
+    ></highcharts-chart>
+  </div>
+  <div class="col-12">
+    <highcharts-chart
+      [Highcharts]="Highcharts5_3"
+      [options]="chartOptions5_3"
+      style="width: 100%; display: block;"
+    ></highcharts-chart>
+  </div>
+</div>
+
+<div *ngIf="navId == '/stats6'">
+  <div class="row">
+    <div class="col-12">
+      <p class="f-color-w">
+        ส่งออกข้อมูลรายงาน
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <label class="f-color-w c-btn">ประเภทรายงาน</label>
+      <p-dropdown
+        class="mx-2"
+        id="taskType"
+        (onChange)="onChangeModel($event)"
+        [options]="kmNo"
+        [(ngModel)]="selectedKmNo"
+        placeholder="รายงานประจำวัน"
+        optionLabel="name"
+        [style]="{ width: '200px' }"
+        autofocus
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <label class="f-color-w c-btn">ช่วงวัน</label>
+      <p-dropdown
+        class="mx-2"
+        id="taskType"
+        (onChange)="onChangeModel($event)"
+        [options]="kmNo"
+        [(ngModel)]="selectedKmNo"
+        placeholder="จาก"
+        optionLabel="name"
+        [style]="{ width: '200px' }"
+        autofocus
+      ></p-dropdown>
+      <p-dropdown
+        class="mx-2"
+        id="taskType"
+        (onChange)="onChangeModel($event)"
+        [options]="kmNo"
+        [(ngModel)]="selectedKmNo"
+        placeholder="ถึง"
+        optionLabel="name"
+        [style]="{ width: '200px' }"
+        autofocus
+      ></p-dropdown>
+    </div>
+  </div>
+</div>

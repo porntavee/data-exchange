@@ -1,0 +1,109 @@
+<p-toast></p-toast>
+<!-- <button style="margin-bottom: 18px;" pButton pRipple label="Export to excel" icon="pi pi-file" class="p-button-success"
+    (click)="exportToExcel()"></button> -->
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+    <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          
+          <button pButton pRipple class="p-button-success Exportbut"
+          (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+         
+        </div>
+        <div class="p-toolbar-group-right">
+          <button pButton pRipple icon="pi pi-trash" class="p-button-danger" title="Delete task" style="margin-right: 15px;"
+          (click)="deleteSelectedtaskResult()" [disabled]="!selectedtaskResult || !selectedtaskResult.length"></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+              placeholder="Search..." />
+          </span>
+        </div>
+      </p-toolbar>
+<p-table #dt [value]="taskResults" [rows]="10" [paginator]="true"
+    [globalFilterFields]="['schedule_name','country.name','representative.name','status']"
+    [(selection)]="selectedtaskResult" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="schedule_name">Task<p-sortIcon field="schedule_name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="run_time">Run time<p-sortIcon field="run_time"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="command_name">Command Name<p-sortIcon field="command_name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="target">Target<p-sortIcon field="target"></p-sortIcon>
+            </th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-taskResult>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="taskResult"></p-tableCheckbox>
+            </td>
+            <td>{{taskResult.schedule_name}}</td>
+            <td>{{taskResult.run_time.substring(0, 10) + " "}} {{taskResult.run_time.substring(11,
+                16)}}</td>
+            <td>{{taskResult.status}}</td>
+            <td>{{taskResult.command_name}}</td>
+            <td>{{taskResult.target}}</td>
+            <td>
+                <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+                    <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(taskResult)" icon="pi pi-ellipsis-h"></button>
+                <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
+                        (click)="taskResultread(taskResult)" title="View"></button>&nbsp; &nbsp;&nbsp;
+                    <button icon="pi pi-download" pButton pRipple class="p-button-rounded p-button-success p-mr-2"
+                        (click)="downloadResult(taskResult.session_id, taskResult.schedule_name)"
+                        title="Download"></button> -->
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            In total there are {{taskResults ? taskResults.length : 0 }} tasks.
+        </div>
+    </ng-template>
+</p-table>
+</div>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+
+<p-dialog [(visible)]="taskResultreadDialog" [style]="{width: '600px'}" [(header)]="dialogHeader" [modal]="true"
+    styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <div class="row mx-0">
+                <div class="col pl-0">
+                    <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Task:</label>&nbsp;&nbsp;&nbsp;
+                    <span>{{taskResult.schedule_name}}</span>
+                    <br>
+                    <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Run time:</label>&nbsp;&nbsp;&nbsp;
+                    <span>{{taskResult.run_time.substring(0, 10) + " "}} {{taskResult.run_time.substring(11,
+                        16)}}</span>
+                    <br>
+                    <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Status:</label>&nbsp;&nbsp;&nbsp;
+                    <span>{{taskResult.status}}</span>
+                    <br>
+                    <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Target:</label>&nbsp;&nbsp;&nbsp;
+                    <span>{{taskResult.target}}</span>
+                    <br>
+                    <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Results:</label>&nbsp;&nbsp;&nbsp;
+                    <br>
+                    <textarea type="text" rows="8" cols="30" autoResize="autoResize" pInputText id="command_name"
+                        [(ngModel)]="result_preview" autofocus readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

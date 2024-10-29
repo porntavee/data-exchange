@@ -1,0 +1,1940 @@
+<div style="min-width:1300px">
+  <p-toast [style]="{ marginTop: '80px' }"></p-toast>
+
+  <p-tabView (onChange)="changetab($event)">
+    <p-tabPanel [header]="headertabPanel[0]">
+      <div class="row mx-0" style="justify-content: flex-end;">
+        <button [disabled]="loading_Run" class="btn btn-default" style="background-color: #ef8157;" (click)="
+            RunTestDialog(
+              cfm,
+              local_device,
+              remote_device,
+              loopback,
+              createthroghtput,
+              Throughput
+            )
+          ">
+          <span *ngIf="loading_Run" class="spinner-border spinner-border-sm mr-1"></span>
+          Run Throughput</button>&nbsp; &nbsp;
+        <button icon="pi pi-plus" class="btn btn-default" style="background-color: #689f38;"
+          (click)="openScheduleTaskDialog(local_device, Throughput)">
+          <i class="pi pi-plus"></i> &nbsp; Create Schedule
+        </button>
+      </div>
+      <p-timeline [value]="valueTimeline" align="right">
+        <ng-template pTemplate="opposite" let-event>
+          <div class="py-2">
+            <div class="col-12 card card-stats p-2" [ngClass]="{
+                'theme-arya-panel': themeService.theme === 'arya-orange',
+                'theme-saga': themeService.theme === 'saga-orange'
+              }">
+              <h5 [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }" style="margin-top: 20px; margin-left:8px; font-weight: 600; ">
+                {{ event.step }}
+              </h5>
+              <div *ngIf="event.step == 'CFM'" style="margin-bottom: 50px;">
+                <div class="p-field">
+                  <div class="row mx-0">
+                    <div class="col-5 pr-1, local_device, remote_device">
+                      <div class="row mx-0" style="align-items: center; height:58px">
+                        <div class="col-4"> <span [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">Local device</span></div>
+                        <div class="col-8">
+                          <p-dropdown [options]="IPADDRESS_Array" [(ngModel)]="selectedIPLocal"
+                            [autoDisplayFirst]="false" [class]="validator_class_local_device"
+                            [style]="{ width: '100%' }" (onChange)="onChangeLocalIP($event)" optionLabel="IPADDRESS"
+                            placeholder="Select IP Address" [(showClear)]="clear" [filter]="true" filterBy="IPADDRESS"
+                            required (onClear)="onClear_IPADDRESS_Array()" *ngIf="!load_ipLocal2func"
+                            [disabled]="load_ipLocal2func">
+                            <ng-template let-localIPs pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                'theme-arya-text': themeService.theme === 'arya-orange',
+                                'theme-saga-text': themeService.theme === 'saga-orange'
+                              }">{{ localIPs.IPADDRESS }} |
+                                  {{ localIPs.iRCNETypeID }} | {{ refTableMapper(localIPs.ref_table) }}</span>
+                              </div>
+                            </ng-template>
+                          </p-dropdown>
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                            <i class="pi pi-spin pi-spinner" *ngIf="load_ipLocal2func"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="label" style="align-items: center; height:58px">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">Device Info</span>
+                        </div>
+                        <div class="col-8">
+                          <span [ngClass]="{
+                              'theme-arya-text': themeService.theme === 'arya-orange',
+                              'theme-saga-text': themeService.theme === 'saga-orange'
+                            }">{{ IPADDRES_Localobject.iRCNETypeID }} || {{
+                            refTableMapper(IPADDRES_Localobject.ref_table) }}</span>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="isShowUplinkDownlink_local" style="align-items: center;">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange' 
+                          }">Uplink</span>
+                        </div>
+                        <div class="col-8">
+                          <p-dropdown *ngIf="isShowUplinkDownlink_local" [style]="{ width: '100%' }"
+                            placeholder="Select Portname" (onChange)="onChangePortNameCFMUplink($event)"
+                            [options]="portname_options_local_CFM" optionLabel="port_name" [(showClear)]="clearremote"
+                            [filter]="true" filterBy="IPADDRESS" [autoDisplayFirst]="false"
+                            [class]="validator_class_local_uplink" required>
+                            <ng-template let-portNames pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                  'theme-arya-text':
+                                    themeService.theme === 'arya-orange',
+                                  'theme-saga-text':
+                                    themeService.theme === 'saga-orange'
+                                }">{{ portNames.port_name }}</span>
+                              </div>
+                            </ng-template></p-dropdown>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="isShowVLAN" style="align-items: center; height:58px">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">VLAN Local</span>
+                        </div>
+                        <div class="col-8">
+                          <p-dropdown *ngIf="!loadVlan" [style]="{ width: '100%' }" placeholder="Select VLAN"
+                            [(ngModel)]="selectedLocalVLAN" [options]="options_local_VLAN" [(showClear)]="clearremote"
+                            [autoDisplayFirst]="false" [class]="validator_class_local_VLAN" required
+                            (onChange)="onChangeVLANLocal($event)">
+                            <ng-template let-allVLANs pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                  'theme-arya-text':
+                                    themeService.theme === 'arya-orange',
+                                  'theme-saga-text':
+                                    themeService.theme === 'saga-orange'
+                                }">{{ allVLANs }}
+                                </span>
+                              </div>
+                            </ng-template>
+                          </p-dropdown>
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                            <i class="pi pi-spin pi-spinner" *ngIf="loadVlan"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <p-divider class="col-1" layout="vertical"></p-divider>
+                    <div class="col-5">
+                      <div class="row mx-0" style="align-items: center; height:58px">
+                        <div class="col-4"> <span [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">Remote device</span></div>
+                        <div class="col-8">
+                          <p-dropdown *ngIf="!load_ipsRemote2func" (onChange)="onChangeRemoteIP($event)"
+                            [style]="{ width: '100%' }" placeholder="Select IP Address" [options]="IPADDRES"
+                            optionLabel="IPADDRESS" [(ngModel)]="selectIP_remote" [(showClear)]="clearremote"
+                            [filter]="true" filterBy="IPADDRESS" [autoDisplayFirst]="false"
+                            [class]="validator_class_remote_device" (onClear)="onClearlabelremote()" required>
+                            <ng-template let-remoteIPs pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                  'theme-arya-text':
+                                    themeService.theme === 'arya-orange',
+                                  'theme-saga-text':
+                                    themeService.theme === 'saga-orange'
+                                }">{{ remoteIPs.IPADDRESS }} |
+                                  {{ remoteIPs.iRCNETypeID }} | {{refTableMapper(remoteIPs.ref_table)}}</span>
+                              </div>
+                            </ng-template>
+                          </p-dropdown>
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                            <i class="pi pi-spin pi-spinner" *ngIf="load_ipsRemote2func"></i>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="labelremote" style="align-items: center; height:58px">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">Device Info</span>
+                        </div>
+                        <div class="col-8">
+                          <span [ngClass]="{
+                              'theme-arya-text': themeService.theme === 'arya-orange',
+                              'theme-saga-text': themeService.theme === 'saga-orange'
+                            }">{{ IPADDRES_Remoteobject.iRCNETypeID }} || {{
+                            refTableMapper(IPADDRES_Remoteobject.ref_table) }}</span>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="isShowUplinkDownlink_remote" style="align-items: center;">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange' 
+                          }">Uplink</span>
+                        </div>
+                        <div class="col-8">
+                          <p-dropdown (onChange)="onChangePortNameRemote($event)" [style]="{ width: '100%' }"
+                            placeholder="Select Portname" [options]="portname_options_remote_CFM"
+                            optionLabel="port_name" [(showClear)]="clearremote" [filter]="true"
+                            [autoDisplayFirst]="false" [class]="validator_class_remote_uplink" required>
+                            <ng-template let-portNames pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                  'theme-arya-text':
+                                    themeService.theme === 'arya-orange',
+                                  'theme-saga-text':
+                                    themeService.theme === 'saga-orange'
+                                }">{{ portNames.port_name }}</span>
+                              </div>
+                            </ng-template></p-dropdown>
+                        </div>
+                      </div>
+                      <div class="row mx-0" *ngIf="isShowVLAN" style="align-items: center; height:58px">
+                        <div class="col-4">
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">VLAN Remote</span>
+                        </div>
+                        <div class="col-8">
+                          <p-dropdown *ngIf="!loadVlanAdvanced" [style]="{ width: '100%' }" placeholder="Select VLAN"
+                            [options]="options_remote_VLAN" [(ngModel)]="selectedRemoteVLAN" [(showClear)]="clearremote"
+                            [autoDisplayFirst]="false" (onChange)="onChangeVLANRemote($event)"
+                            [class]="validator_class_remote_VLAN" required>
+                            <ng-template let-allVLANs pTemplate="item">
+                              <div class="item-drop1">
+                                <span class="item-value1" [ngClass]="{
+                                        'theme-arya-text':
+                                          themeService.theme === 'arya-orange',
+                                        'theme-saga-text':
+                                          themeService.theme === 'saga-orange'
+                                      }">{{ allVLANs }}
+                                </span>
+                              </div>
+                            </ng-template>
+                          </p-dropdown>
+                          <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                            <i class="pi pi-spin pi-spinner" *ngIf="loadVlanAdvanced"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mx-0" style="justify-content: flex-end;">
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="event.step == 'Throughput test'">
+                <i class="pi pi-check" *ngIf="isSave" style="color: green"></i>
+                <div class="col pl-0">
+                  <div class="row mx-0">
+                    <div class="col-6 pl-0">
+                      <div class="row mx-0">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mx-0">
+                    <div class="col-6 pl-0">
+                      <span for="duration" style="margin-right: 8px;  margin-left:8px;" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">Duration</span>
+                      <p-dropdown style="width: 20%;" id="duration" [(ngModel)]="duration" [ngClass]="{
+                          'is-invalid':
+                            submitted_duration && (!duration || duration <= 5)
+                        }" [options]="durationOptions" optionLabel="label" optionValue="value"
+                        [required]="true"></p-dropdown>
+                      <div *ngIf="
+                          submitted_duration && (!duration || duration < 5)
+                        " class="invalid-feedback">
+                        <div *ngIf="
+                            submitted_duration && (!duration || duration < 5)
+                          " [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                          Duration must be greater than 5
+                        </div>
+                      </div>
+                      <div *ngIf="submitted_duration2func && !duration_ad" class="invalid-feedback">
+                        <div *ngIf="submitted_duration2func && !duration_ad" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">
+                          Duration is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mx-0">
+                    <div class="col-12 pl-0">
+                      <span for="frame_length" style="margin-right:8px;  margin-left:8px;" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">Performance Banwidth (Kbps)</span>
+                      <input type="number" mode="integer" pInputText pKeyFilter="int" id="frame_length"
+                        placeholder="10000 (Default)" style="width:10%; margin-right:24px;"
+                        [(ngModel)]="performance_bandwidth" maxlength="4" />
+                      <span for="frame_length" style="margin-right:8px" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">Frame Length (Byte)</span>
+                      <input type="frame_length" mode="integer" pInputText pKeyFilter="int" id="frame_length"
+                        style="width:10%" [(ngModel)]="newFrameLength" maxlength="4" />
+                      <button pButton type="button" label="Add Frame Length (Optional)" (click)="addFrameLength()"
+                        class="p-button-success" style="margin-left:8px"></button>
+                      <div *ngIf="frameLengths.length > 0" class="frame-length-container"
+                        style="margin-top:30px; margin-bottom: 40px;">
+                        <span [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">Added Frame Lengths (Byte):</span>
+                        <ul>
+                          <button pButton type="button" *ngFor="
+                              let frameLength of frameLengths;
+                              let i = index
+                            "
+                            style="margin-top:12px; margin-right: 8px; border-radius: 32px; background: transparent; color:grey; border-color: rgb(103, 103, 103);">
+                            {{ frameLength + " " + "Byte" }}
+                            <button pButton type="button" icon="pi pi-times" class="p-button-danger"
+                              (click)="removeFrameLength(i)"
+                              style="width: 24px; height: 24px; margin-left: 24px; background: transparent; border: none; color: red;"></button>
+                          </button>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mx-0" style="justify-content: flex-end;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-timeline>
+    </p-tabPanel>
+    <p-tabPanel [header]="headertabPanel[1]">
+      <p-toolbar>
+        <div class="p-toolbar-group-left" *ngIf="cfmbutton"></div>
+        <div class="p-toolbar-group-left" *ngIf="loopbackbutton"></div>
+        <div class="p-toolbar-group-left" *ngIf="throughtputbutton">
+          <p-button label="Create Schedule" icon="pi pi-plus" styleClass="p-button-success"
+            (click)="openScheduleTaskDialog_ad(local_device, Throughput)"></p-button>
+        </div>
+
+        <div class="p-toolbar-group-right" *ngIf="cfmbutton">
+          <button pButton pRipple label="Create CFM" class="p-button-text"
+            (click)="callCFMTest_ad(local_device_Object, remote_device_Object)"></button>
+        </div>
+        <div class="p-toolbar-group-right" *ngIf="loopbackbutton">
+          <button pButton pRipple label="Create Loopback" class="p-button-text"
+            (click)="callLoopbackTest_ad(loopback_Object)"></button>
+        </div>
+        <div class="p-toolbar-group-right" *ngIf="throughtputbutton">
+          <button pButton pRipple label="Create throughput test" class="p-button-text"
+            (click)="callcreatethroghtputTest_ad(createthroghtput)"></button>
+          <button pButton pRipple label="Start throughput test" class="p-button-text"
+            (click)="callStartthroughputTest_ad(Throughput)"></button>
+          <button pButton pRipple label="Show throughput test result" class="p-button-text"
+            (click)="callShowthroughputTestresult_ad(Throughput)"></button>
+        </div>
+      </p-toolbar>
+
+      <br />
+      <div class="p-field">
+        <div class="row mx-0 responsiveAd">
+          <div class="col-5">
+            <div class="col-12 card card-stats p-2" [ngClass]="{
+                'theme-arya-panel': themeService.theme === 'arya-orange',
+                'theme-saga': themeService.theme === 'saga-orange'
+              }">
+              <h5 align="center" [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }">
+                <b>Local device</b>
+              </h5>
+              <div style="text-align: center;" *ngIf="iconshow">
+                <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+              </div>
+              <p style="text-align:center;">
+                <img [src]="device_image_local" alt="Local Device" *ngIf="imageshow" />
+              </p>
+              <br />
+
+              <p style="text-align:center;">
+                <p-dropdown [options]="IPADDRESS_Array2func" [autoDisplayFirst]="false"
+                  [class]="validator_class_local_device2func" [style]="{ width: '50%' }" [(ngModel)]="selectedIPLocal"
+                  (onChange)="onChangeLocalIP_ad($event)" optionLabel="IPADDRESS" placeholder="Select IP Address"
+                  [(showClear)]="clear_ad" [filter]="true" filterBy="IPADDRESS" [(required)]="required"
+                  (onClear)="onClear_IPADDRESS_Array2func()">
+                  <ng-template let-localIPs_2func pTemplate="item">
+                    <div class="item-drop1">
+                      <span class="item-value1" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">{{ localIPs_2func.IPADDRESS }} |
+                        {{ localIPs_2func.iRCNETypeID }} | {{refTableMapper(localIPs_2func.ref_table)}}</span>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+                <button *ngIf="cfmbutton" pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded"
+                  style="width: 30px; height: 30px; margin-bottom: 6px; margin-left: 6px"
+                  (click)="callThroughputTest_ad()"></button>
+                <button *ngIf="throughtputbutton" pButton pRipple type="button" icon="pi pi-search"
+                  class="p-button-rounded" style="width: 30px; height: 30px; margin-bottom: 6px; margin-left: 6px"
+                  (click)="callShowthroughputTestresult_ad()"></button>
+                &nbsp;
+                <i class="pi pi-spin pi-spinner" *ngIf="loadip_Local"></i>
+              </p>
+
+              <div *ngIf="label_ad" style="text-align:center; margin-top: 10px;">
+                <span style="border-radius: 5px 5px 5px; border: 1px solid rgb(0, 0, 0); margin-right: 30px; "
+                  [ngClass]="{
+                    'theme-arya-text': themeService.theme === 'arya-orange',
+                    'theme-saga-text': themeService.theme === 'saga-orange'
+                  }">{{ IPADDRES_Localobject2func.iRCNETypeID }}</span>
+              </div>
+              <div class="row mx-0" *ngIf="cfmbutton">
+                <div class="p-field">
+                </div>
+                <div class="col-6 pl-0">
+                  <span *ngIf="isShowUplinkDownlink_local" for="localDecviceNni" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">Uplink</span>
+                  <p-dropdown *ngIf="isShowUplinkDownlink_local"
+                    (onChange)="onChangePortNameAdvancedLocalUplink($event)" placeholder="Select Port Name"
+                    [options]="portname_options_local_CFM" [style]="{ width: '100%' }" optionLabel="port_name"
+                    [(showClear)]="clearremote" [filter]="true" filterBy="IPADDRESS" [autoDisplayFirst]="false"
+                    [class]="validator_class_remote_device" (onClear)="onClearlabelremote()" required>
+                    <ng-template let-portNames pTemplate="item">
+                      <div class="item-drop1">
+                        <span class="item-value1" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">{{ portNames.port_name }}</span>
+                      </div>
+                    </ng-template></p-dropdown>
+                  <div *ngIf="submitted_CFM2func && !local_device_Object.nni" class="invalid-feedback">
+                    <div *ngIf="submitted_CFM2func && !local_device_Object.nni" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">
+                      uplink is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 pl-0">
+                  <span *ngIf="isShowUplinkDownlink_local" for="localDecviceNni" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">Downlink</span>
+                  <p-dropdown *ngIf="isShowUplinkDownlink_local"
+                    (onChange)="onChangePortNameAdvancedLocalDownlink($event)" placeholder="Select Port Name"
+                    [options]="portname_options_local_CFM" [style]="{ width: '100%' }" optionLabel="port_name"
+                    [(showClear)]="clearremote" [filter]="true" filterBy="IPADDRESS" [autoDisplayFirst]="false"
+                    [class]="validator_class_remote_device" (onClear)="onClearlabelremote()" required>
+                    <ng-template let-portNames pTemplate="item">
+                      <div class="item-drop1">
+                        <span class="item-value1" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">{{ portNames.port_name }}</span>
+                      </div>
+                    </ng-template></p-dropdown>
+                </div>
+                <div class="row mx-0">
+                  <div class="col-6 pl-0">
+                    <span *ngIf="isShowMEP_local" for="localDecviceMep" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">MEP</span>
+                    <input *ngIf="isShowMEP_local" type="localDecviceMep" pInputText pKeyFilter="int"
+                      id="localDecviceMep" [(ngModel)]="MEPLocalSuggested" required readonly disabled />
+                  </div>
+                  <div class="col-6 pl-0">
+                    <span *ngIf="isShowVLAN" for="vlan" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">VLAN</span>
+                    <i class="pi pi-spin pi-spinner" *ngIf="loadVlanAdvanced" style="margin-left: 15px;"></i>
+                    <p-dropdown *ngIf="isShowVLAN" [style]="{ width: '100%' }" placeholder="Select VLAN"
+                      [options]="options_local_VLAN" [(ngModel)]="selectedVLAN" [(showClear)]="clearremote"
+                      [autoDisplayFirst]="false" [class]="validator_class_remote_device"
+                      (onClear)="onClearlabelremote()" required>
+                      <ng-template let-allVLANs pTemplate="item">
+                        <div class="item-drop1">
+                          <span class="item-value1" [ngClass]="{
+                              'theme-arya-text':
+                                themeService.theme === 'arya-orange',
+                              'theme-saga-text':
+                                themeService.theme === 'saga-orange'
+                            }">{{ allVLANs }}
+                          </span>
+                        </div>
+                      </ng-template>></p-dropdown>
+
+                    <div *ngIf="submitted_CFMbut && !vlan_add" class="invalid-feedback">
+                      <div *ngIf="submitted_CFMbut && !vlan_add" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">
+                        VLAN is required
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="row mx-0" style="justify-content: center;" *ngIf="loopbackbutton">
+                <div class="col-4 pl-0">
+                  <span for="mac" align="left" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">MAC</span>
+                  <input type="text" pInputText id="mac_ad" [(ngModel)]="mac_ad" [style]="{ width: '100%' }" [ngClass]="{
+                      'is-invalid': submitted_macLoopbackbut && !mac_ad
+                    }" placeholder="AA:BB:CC:DD:EE:FF" required readonly />
+                  <div *ngIf="submitted_macLoopbackbut && !mac_ad" class="invalid-feedback" align="left">
+                    <div *ngIf="submitted_macLoopbackbut && !mac_ad" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">
+                      MAC is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mx-0 responsiveAd2" *ngIf="throughtputbutton">
+                <div class="col-4 pl-0">
+                  <span for="localDecviceNni" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">Uplink</span>
+                  <p-dropdown (onChange)="onChangePortNameRemoteThroughputUplink($event)" [style]="{ width: '100%' }"
+                    placeholder="Select Portname" [options]="portname_options_local_CFM" optionLabel="port_name"
+                    [(showClear)]="clearremote" [filter]="true" [autoDisplayFirst]="false"
+                    [class]="validator_class_remote_device" required>
+                    <ng-template let-portNames pTemplate="item">
+                      <div class="item-drop1">
+                        <span class="item-value1" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">{{ portNames.port_name }}</span>
+                      </div>
+                    </ng-template></p-dropdown>
+                </div>
+                <div class="col-4 pl-0">
+                  <span for="uni" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">Downlink</span>
+                  <p-dropdown (onChange)="
+                      onChangePortNameRemoteThroughputDownlink($event)
+                    " [style]="{ width: '100%' }" placeholder="Select Portname" [options]="portname_options_local_CFM"
+                    optionLabel="port_name" [(showClear)]="clearremote" [filter]="true" [autoDisplayFirst]="false"
+                    [class]="validator_class_remote_device" required>
+                    <ng-template let-portNames pTemplate="item">
+                      <div class="item-drop1">
+                        <span class="item-value1" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">{{ portNames.port_name }}</span>
+                      </div>
+                    </ng-template></p-dropdown>
+                </div>
+                <div class="col-3 pl-0">
+                  <span for="vlan" [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }">VLAN</span>
+                  <i class="pi pi-spin pi-spinner" *ngIf="loadVlanAdvanced" style="margin-left: 15px;"></i>
+                  <p-dropdown [style]="{ width: '100%' }" placeholder="Select VLAN" [options]="options_local_VLAN"
+                    [(ngModel)]="selectedVLAN" [(showClear)]="clearremote" [autoDisplayFirst]="false"
+                    [class]="validator_class_remote_device" (onClear)="onClearlabelremote()" required>
+                    <ng-template let-allVLANs pTemplate="item">
+                      <div class="item-drop1">
+                        <span class="item-value1" [ngClass]="{
+                            'theme-arya-text':
+                              themeService.theme === 'arya-orange',
+                            'theme-saga-text':
+                              themeService.theme === 'saga-orange'
+                          }">{{ allVLANs }}
+                        </span>
+                      </div>
+                    </ng-template>></p-dropdown>
+
+                  <div *ngIf="submitted_throughtputbut2func && !vlan_ad1" class="invalid-feedback">
+                    <div *ngIf="submitted_throughtputbut2func && !vlan_ad1" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">
+                      VLAN is required
+                    </div>
+                  </div>
+                </div>
+                <div class="row mx-0 responsiveAd2">
+                  <div class="col-2 pl-0">
+                    <span for="service" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Service</span>
+                    <input type="text" pInputText pKeyFilter="int" id="service" [(ngModel)]="service_ad" required />
+                  </div>
+                  <div class="col-4 pl-0">
+                    <span [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Mode</span><br />
+
+                    <p-dropdown (onChange)="onChangeMode_ad($event)" [options]="Mode" placeholder="Select Mode"
+                      [style]="{ width: '100%' }" [(ngModel)]="selectedMode_2func" [autoDisplayFirst]="false"
+                      [class]="invinvalid_selectedMode_2func" optionLabel="name">
+                    </p-dropdown>
+                  </div>
+                  <div class="col-2 pl-0" *ngIf="activate_ad">
+                    <span for="duration" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Duration</span>
+                    <input type="number" pInputText pKeyFilter="int" id="duration" [(ngModel)]="duration" [ngClass]="{
+                        'is-invalid':
+                          submitted_duration && (!duration || duration <= 5)
+                      }" required min="5" />
+                    <div *ngIf="submitted_duration && (!duration || duration < 5)" class="invalid-feedback">
+                      <div *ngIf="
+                          submitted_duration && (!duration || duration < 5)
+                        " [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">
+                        Duration must be greater than 5
+                      </div>
+                    </div>
+                    <div *ngIf="submitted_duration2func && !duration_ad" class="invalid-feedback">
+                      <div *ngIf="submitted_duration2func && !duration_ad" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">
+                        duration is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-3 pl-0">
+                    <span for="flow_profile" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Flow profile</span>
+                    <input type="flow_profile" pInputText pKeyFilter="int" id="flow_profile"
+                      [(ngModel)]="flow_profile_ad" required />
+                  </div>
+                </div>
+                <div *ngIf="activates_ad"></div>
+                <div class="row mx-0 responsiveAd2">
+                  <div class="col-3 pl-0">
+                    <span for="frame_length" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">MTU (Byte)</span>
+                    <input type="frame_length" pInputText pKeyFilter="int" id="frame_length"
+                      [(ngModel)]="frame_length_ad" required />
+                  </div>
+                  <div class="col-3 pl-0">
+                    <span for="performance_bandwidth" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Bandwidth (Kbps)</span>
+                    <input type="performance_bandwidth" pInputText pKeyFilter="int" id="performance_bandwidth"
+                      [(ngModel)]="performance_bandwidth_ad" required />
+                  </div>
+                  <div class="col-3 pl-0">
+                    <span for="cir" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">CIR (Kbps)</span>
+                    <input type="cir" pInputText pKeyFilter="int" id="cir" [(ngModel)]="cir_ad" required />
+                  </div>
+                  <div class="col-2 pl-0">
+                    <span for="eir" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">EIR (Kbps)</span>
+                    <input type="eir" pInputText pKeyFilter="int" id="eir" [(ngModel)]="eir_ad" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2" align="center">
+            <p-dropdown id="deviceTypes" (onChange)="onChangeDeviceType($event)" [options]="deviceTypes"
+              [(ngModel)]="selectedDeviceType" optionLabel="name" [style]="{ 'margin-top': '100px', width: '80%' }"
+              autofocus>
+            </p-dropdown>
+            <div class="dash-dot"></div>
+          </div>
+          <div class="col-5">
+            <div class="col-12 card card-stats p-2" [ngClass]="{
+                'theme-arya-panel': themeService.theme === 'arya-orange',
+                'theme-saga': themeService.theme === 'saga-orange'
+              }">
+              <h5 align="center" [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }">
+                <b>Remote device</b>
+              </h5>
+              <div style="text-align: center;" *ngIf="iconshow2">
+                <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+              </div>
+              <p style="text-align:center;">
+                <img [src]="device_image_remote" alt="Remote Device" *ngIf="imageshow2" />
+              </p>
+              <br />
+              <p style="text-align:center;">
+                <p-dropdown (onChange)="onChangeRemoteIP_ad($event)" [style]="{ width: '50%' }"
+                  placeholder="Select IP Address" [options]="IPADDRES" optionLabel="IPADDRESS"
+                  [(showClear)]="clearremote_ad" [filter]="true" filterBy="IPADDRESS" [(ngModel)]="selectIP_remote"
+                  [autoDisplayFirst]="false" [class]="validator_class_remote_device2func"
+                  (onClear)="onClear_IPADDRES_RemoteArray()" required>
+                  <ng-template let-remoteIPs_2func pTemplate="item">
+                    <div class="item-drop1">
+                      <span class="item-value1" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">{{ remoteIPs_2func.IPADDRESS }} |
+                        {{ remoteIPs_2func.iRCNETypeID }} | {{refTableMapper(remoteIPs_2func.ref_table)}}</span>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+
+                <button *ngIf="cfmbutton" pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded"
+                  style="width: 30px; height: 30px; margin-bottom: 6px; margin-left: 6px"
+                  (click)="callThroughputTest_ad2()"></button>
+                <button *ngIf="loopbackbutton" pButton pRipple type="button" icon="pi pi-search"
+                  class="p-button-rounded" style="width: 30px; height: 30px; margin-bottom: 6px; margin-left: 6px"
+                  (click)="callshowLoopback_ad2()"></button>
+                &nbsp;
+                <i class="pi pi-spin pi-spinner" *ngIf="loadip_Remote"></i>
+              </p>
+              <div *ngIf="labelremote_ad" style="text-align:center;">
+                <span style="border-radius: 5px 5px 5px; border: 1px solid rgb(0, 0, 0); margin-right: 30px;" [ngClass]="{
+                    'theme-arya-text': themeService.theme === 'arya-orange',
+                    'theme-saga-text': themeService.theme === 'saga-orange'
+                  }">{{ IPADDRES_Remoteobject2func.iRCNETypeID }}</span>
+              </div>
+              <div *ngIf="cfmbutton">
+                <!-- <div class="row mx-0">
+                <div class="col-5 pl-0">
+                  <span for="remoteDeviceUsername">Username</span>
+                  <input type="remoteDeviceUsername" pInputText id="remoteDeviceUsername" [(ngModel)]="user_remote"
+                    [ngClass]="{
+                      'is-invalid': submitteds_CFMremotesimple && !user_remote
+                    }" required autofocus readonly disabled />
+                  <div *ngIf="submitteds_CFMremotesimple && !user_remote" class="invalid-feedback">
+                    <div *ngIf="submitteds_CFMremotesimple && !user_remote">
+                      username is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5 pl-0">
+                  <span for="remoteDevicePassword">Password</span>
+                  <input type="remoteDevicePassword" pInputText id="remoteDevicePassword" [(ngModel)]="password_remote"
+                    [ngClass]="{
+                      'is-invalid':
+                        submitteds_CFMremotesimple && !password_remote
+                    }" required readonly disabled />
+                  <div *ngIf="submitteds_CFMremotesimple && !password_remote" class="invalid-feedback">
+                    <div *ngIf="submitteds_CFMremotesimple && !password_remote">
+                      password is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 pl-0" style="padding-top: 40px;" align="center">
+                  <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded"
+                    style="width: 30px; height: 30px;" (click)="callThroughputTest_ad2()"></button>
+                </div>
+              </div> -->
+                <div class="row mx-0">
+                  <div class="col-6 pl-0">
+                    <span *ngIf="isShowUplinkDownlink_remote" for="remoteDecviceNni" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Uplink</span>
+                    <p-dropdown *ngIf="isShowUplinkDownlink_remote" (onChange)="onChangePortNameRemoteCFM($event)"
+                      [style]="{ width: '100%' }" placeholder="Select Portname" [options]="portname_options_remote_CFM"
+                      optionLabel="port_name" [(showClear)]="clearremote" [filter]="true" [autoDisplayFirst]="false"
+                      [class]="validator_class_remote_device" required>
+                      <ng-template let-portNames pTemplate="item">
+                        <div class="item-drop1">
+                          <span class="item-value1" [ngClass]="{
+                              'theme-arya-text':
+                                themeService.theme === 'arya-orange',
+                              'theme-saga-text':
+                                themeService.theme === 'saga-orange'
+                            }">{{ portNames.port_name }}</span>
+                        </div>
+                      </ng-template></p-dropdown>
+                  </div>
+                  <div class="col-4 pl-0">
+                    <span *ngIf="isShowMEP_local" for="remoteDecviceMep" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">MEP</span>
+                    <input *ngIf="isShowMEP_local" type="remoteDecviceMep" pInputText pKeyFilter="int"
+                      id="remoteDecviceMep" [(ngModel)]="MEPRemoteSuggested" required readonly disabled />
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="loopbackbutton">
+                <!-- <div class="row mx-0">
+                <div class="col-5 pl-0">
+                  <span for="remoteDeviceUsername">Username</span>
+                  <input type="remoteDeviceUsername" pInputText id="remoteDeviceUsername" [(ngModel)]="user_remote2"
+                    [ngClass]="{
+                      'is-invalid': submitteds_loopbackbut && !user_remote2
+                    }" required autofocus />
+                  <div *ngIf="submitteds_loopbackbut && !user_remote2" class="invalid-feedback">
+                    <div *ngIf="submitteds_loopbackbut && !user_remote2">
+                      username is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5 pl-0">
+                  <span for="remoteDevicePassword">Password</span>
+                  <input type="remoteDevicePassword" pInputText id="remoteDevicePassword" [(ngModel)]="password_remote2"
+                    [ngClass]="{
+                      'is-invalid': submitteds_loopbackbut && !password_remote2
+                    }" required />
+                  <div *ngIf="submitteds_loopbackbut && !password_remote2" class="invalid-feedback">
+                    <div *ngIf="submitteds_loopbackbut && !password_remote2">
+                      password is required
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 pl-0" style="padding-top: 40px;" align="center">
+                  <button pButton pRipple type="button" icon="pi pi-search" class="p-button-rounded"
+                    style="width: 30px; height: 30px;" (click)="callshowLoopback_ad2()"></button>
+                </div>
+              </div> -->
+                <div class="row mx-0">
+                  <div class="col-4 pl-0">
+                    <span for="vlan" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">VLAN</span>
+                    <i class="pi pi-spin pi-spinner" *ngIf="loadVlanAdvanced" style="margin-left: 15px;"></i>
+                    <p-dropdown [style]="{ width: '100%' }" placeholder="Select Port Name"
+                      [options]="options_remote_VLAN" [(showClear)]="clearremote" [autoDisplayFirst]="false"
+                      [(ngModel)]="selectedVLAN" [class]="validator_class_remote_device"
+                      (onClear)="onClearlabelremote()" required>
+                      <ng-template let-allVLANs pTemplate="item">
+                        <div class="item-drop1">
+                          <span class="item-value1" [ngClass]="{
+                              'theme-arya-text':
+                                themeService.theme === 'arya-orange',
+                              'theme-saga-text':
+                                themeService.theme === 'saga-orange'
+                            }">{{ allVLANs }}
+                          </span>
+                        </div>
+                      </ng-template>></p-dropdown>
+
+                    <div *ngIf="submitted__loopbackbut2past && !vlan_ad" class="invalid-feedback">
+                      <div *ngIf="submitted__loopbackbut2past && !vlan_ad" [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }">
+                        VLAN is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4 pl-0">
+                    <span for="ethertype" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Ethertype</span>
+                    <input type="ethertype" pInputText id="ethertype" [(ngModel)]="ethertype_ad" />
+                  </div>
+
+                  <div class="col-4 pl-0">
+                    <span for="service_name" [ngClass]="{
+                        'theme-arya-text': themeService.theme === 'arya-orange',
+                        'theme-saga-text': themeService.theme === 'saga-orange'
+                      }">Interface</span>
+                    <p-dropdown [style]="{ width: '100%' }" placeholder="Select Portname"
+                      (onChange)="onChangePortNameCFMUplink($event)" [options]="portname_options_remote_CFM"
+                      optionLabel="port_name" [(showClear)]="clearremote" [filter]="true" filterBy="IPADDRESS"
+                      [autoDisplayFirst]="false" [class]="validator_class_remote_device"
+                      (onClear)="onClearlabelremote()" required>
+                      <ng-template let-portNames pTemplate="item">
+                        <div class="item-drop1">
+                          <span class="item-value1" [ngClass]="{
+                              'theme-arya-text':
+                                themeService.theme === 'arya-orange',
+                              'theme-saga-text':
+                                themeService.theme === 'saga-orange'
+                            }">{{ portNames.port_name }}</span>
+                        </div>
+                      </ng-template></p-dropdown>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="throughtputbutton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+    <br /><br />
+
+    <div [class]="show">
+      <p-accordion>
+        <p-accordionTab header="Local" [selected]="true">
+          <ng-terminal #term></ng-terminal>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+    <br />
+    <div [class]="show2">
+      <p-accordion>
+        <p-accordionTab header="Remote" [selected]="true">
+          <ng-terminal #term2></ng-terminal>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+    <div [class]="show3">
+      <p-accordion>
+        <p-accordionTab header="ethernetSAM" [selected]="true">
+          <ng-terminal #term3></ng-terminal>
+          <br />
+          <div class="row mx-0" style="align-items: center; padding-left: 60px;">
+            <div class="col-4 pl-0">
+              <span [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }">Remove ethernet SAM</span>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <input type="RemoveethernetSAM" pInputText id="RemoveethernetSAM" placeholder="ID" style="width: 80px;"
+                [(ngModel)]="id_ethernet" [ngClass]="{
+                  'is-invalid': submitteds_loopbackbut && !user_remote2
+                }" required autofocus />&nbsp; &nbsp;
+              <p-button icon="pi pi-trash" styleClass="p-button-danger"
+                (click)="RemoveethernetSAM(local_device)"></p-button>
+            </div>
+            <div class="col-4 pl-0">
+              <span [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }">Remove flow profile</span>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <input type="Removeflowprofile" pInputText id="Removeflowprofile" placeholder="ID" style="width: 80px;"
+                [(ngModel)]="id_flowprofile" [ngClass]="{
+                  'is-invalid': submitteds_loopbackbut && !user_remote2
+                }" required autofocus />&nbsp; &nbsp;
+              <p-button icon="pi pi-trash" styleClass="p-button-danger"
+                (click)="Removeflowprofile(local_device)"></p-button>
+            </div>
+            <div class="col-4 pl-0">
+              <span [ngClass]="{
+                  'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'
+                }">Remove bandwidth profile</span>
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <input type="Removebandwidthprofile" pInputText id="Removebandwidthprofile" placeholder="ID"
+                style="width: 80px;" [(ngModel)]="id_bandwidth" [ngClass]="{
+                  'is-invalid': submitteds_loopbackbut && !user_remote2
+                }" required autofocus />&nbsp; &nbsp;
+              <p-button icon="pi pi-trash" styleClass="p-button-danger"
+                (click)="Removebandwidthprofile(local_device)"></p-button>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+    <div [class]="show4">
+      <p-accordion>
+        <p-accordionTab header="Remote" [selected]="true">
+          <ng-terminal #term4></ng-terminal>
+          <div class="col-4 pl-0">
+            <span [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">Remove interface</span>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <input type="Removeinterface" pInputText id="Removeeinterface" placeholder="interface" style="width: 200px;"
+              [(ngModel)]="interface_remote" [ngClass]="{
+                'is-invalid': submitteds_loopbackbut && !user_remote2
+              }" required autofocus />&nbsp; &nbsp;
+            <p-button icon="pi pi-trash" styleClass="p-button-danger"
+              (click)="Removeinterface_Remote(remote_device)"></p-button>
+            &nbsp; &nbsp;
+            <i class="pi pi-spin pi-spinner" *ngIf="iconshow3"></i>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+  </p-tabView>
+</div>
+
+<p-dialog [(visible)]="action_Dialog_ResultCFM" position="center" [style]="{ width: '70vw' }" [header]="dialogHeader"
+  [modal]="true" styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="col-5 pr-1" style="margin-right: -2px;">
+        <div class="row mx-0" style="align-items: center;">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Local device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_Result">
+              <span for="result">Result</span>&nbsp; &nbsp;
+
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultlocal" [(ngModel)]="resultlocal" autofocus
+              readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <p-divider class="col-2" layout="vertical"></p-divider>
+      <div class="col-5 pr-1">
+        <div class="row mx-0">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Remote device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_re">
+              <span for="result">Result</span>&nbsp; &nbsp;
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultremote" [(ngModel)]="resultremote" autofocus
+              readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_Showthroughputtestresult" position="center" [style]="{ width: '700px' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span for="result">Result</span>
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <div *ngIf="activatechart">
+            <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"
+              style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+          </div>
+          <div *ngIf="activatechart">
+            <highcharts-chart [Highcharts]="Highcharts2" [options]="chartOptions2"
+              style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+          </div>
+          <div *ngIf="activatechart">
+            <highcharts-chart [Highcharts]="Highcharts3" [options]="chartOptions3"
+              style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_Showthroughputtestresult2func" position="center" [style]="{ width: '700px' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span for="result">Result</span>
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+
+        <div *ngIf="activatechart">
+          <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions"
+            style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+        </div>
+        <div *ngIf="activatechart">
+          <highcharts-chart [Highcharts]="Highcharts2" [options]="chartOptions2"
+            style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+        </div>
+        <div *ngIf="activatechart">
+          <highcharts-chart [Highcharts]="Highcharts3" [options]="chartOptions3"
+            style="width: 100%; height: 100%; display: block;"></highcharts-chart>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0"></div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_CFMtest2func" position="center" [style]="{ width: '70vw' }" [header]="dialogHeader"
+  [modal]="true" styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="col-5 pr-1" style="margin-right: -2px;">
+        <div class="row mx-0" style="align-items: center;">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Local device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_Result">
+              <span for="result">Result</span>&nbsp; &nbsp;
+
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultlocal" [(ngModel)]="resultCFMtest_local"
+              autofocus readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <p-divider class="col-2" layout="vertical"></p-divider>
+      <div class="col-5">
+        <div class="row mx-0">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Remote device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_Result">
+              <span for="result">Result</span>&nbsp; &nbsp;
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultremote" [(ngModel)]="resultCFMtest_remote"
+              autofocus readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_CFMtest" position="center" [style]="{ width: '70vw' }" [header]="dialogHeader"
+  [modal]="true" styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="col-5 pr-1" style="margin-right: -2px;">
+        <div class="row mx-0" style="align-items: center;">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Local device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_Result">
+              <span for="result">Result</span>&nbsp; &nbsp;
+
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultlocal"
+              [(ngModel)]="resultCFMtest_local2func" autofocus readonly></textarea>
+          </div>
+        </div>
+      </div>
+      <p-divider class="col-2" layout="vertical"></p-divider>
+      <div class="col-5">
+        <div class="row mx-0">
+          <span [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style=" font-weight:bold">Remote device</span>
+          &nbsp; &nbsp; &nbsp; &nbsp;
+        </div>
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <div *ngIf="loading_Result">
+              <span for="result">Result</span>&nbsp; &nbsp;
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <br />
+            <textarea type="text" rows="18" cols="150" pInputText id="resultremote"
+              [(ngModel)]="resultCFMtest_remote2func" autofocus readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_Loopbackconfiguration" position="center" [style]="{ width: '40vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultloopback" [(ngModel)]="resultloopback"
+            autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_Loopbackconfiguration2func" position="center" [style]="{ width: '40vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultloopback_2func"
+            [(ngModel)]="resultloopback_2func" autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_CreateThroughputtest" position="center" [style]="{ width: '40vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultcreate" [(ngModel)]="resultcreate" autofocus
+            readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_CreateThroughputtest2func" position="center" [style]="{ width: '40vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultcreate" [(ngModel)]="resultcreate_2func"
+            autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="action_Dialog_StartThroughputtest" position="center" [style]="{ width: '35vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="12" cols="80" pInputText id="resultstart" [(ngModel)]="resultstart" autofocus
+            readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_StartThroughputtest2func" position="center" [style]="{ width: '35vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Result</span>&nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Result">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="12" cols="80" pInputText id="resultstart_2func" [(ngModel)]="resultstart_2func"
+            autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="scheduleTaskDialog" [style]="{ width: '700px' }" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }">
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span for="name">Schedule Name</span>
+          <input type="text" pInputText id="name" [(ngModel)]="scheduleTask.name" required autofocus />
+        </div>
+
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span class="mx-2" for="">Start Date</span>
+          <p-calendar [(ngModel)]="scheduleTask.startDate" [maxDate]="maxDate" [showIcon]="true" inputId="time"
+            [showTime]="true" [dateFormat]="'yy-mm-dd'" [timeFormat]="'hh:mm'"></p-calendar>
+        </div>
+
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="
+        saveScheduleTask(
+          local_device,
+          Throughput,
+          scheduleTask,
+          cfm,
+          remote_device,
+          loopback,
+          createthroghtput
+        )
+      "></button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="TPRunTestDialog" [style]="{ width: '800px', height: '600px' }" [(header)]="dialogHeader"
+  [modal]="true" styleClass="p-fluid" (onHide)="hideDialog()"
+  [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'visible' }">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col-5">
+          <div class="col pl-0">
+            <label for="id" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style="font-weight: bold;">Local Device</label><br />
+            <label for="IPADDRESS" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">IP Address:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ local_device.IPADDRESS }}</span>
+            <br />
+            <label for="Uplink" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">Uplink:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ local_device.nni }}</span>
+            <br />
+            <label for="Uplink" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">VLAN:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ selectedLocalVLAN }}</span>
+            <br />
+          </div>
+        </div>
+        <p-divider class="col-2" layout="vertical"></p-divider>
+        <div class="col-5">
+          <div class="col pl-0">
+            <label for="id" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style="font-weight: bold;">Remote Device</label><br />
+            <label for="Uplink" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">Uplink:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ remote_device.IPADDRESS }}</span>
+            <br />
+            <label for="Uplink" [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }">Uplink:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ remote_device.nni }}</span>
+            <br />
+            <label for="Uplink" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">VLAN:</label>&nbsp;&nbsp;&nbsp;
+            <span>{{ selectedRemoteVLAN }}</span>
+            <br />
+          </div>
+        </div>
+      </div>
+      <p-divider></p-divider>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="id" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style="font-weight: bold;">Loop Back</label><br />
+          <label for="ethertype" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Ethertype:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ loopback.ethertype }}</span>
+          <br />
+          <label for="username" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Username:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ loopback.username }}</span>
+          <br />
+          <label for="password" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Password:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ loopback.password }}</span>
+          <br />
+          <label for="mac" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Mac:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ loopback.mac }}</span>
+          <br />
+        </div>
+      </div>
+      <p-divider></p-divider>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="id" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }" style="font-weight: bold;">Throughput Test</label><br />
+          <label for="flow_profile" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Flow Profile:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.flow_profile }}</span>
+          <br />
+          <label for="ethernetsam_service" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Ethernetsam Service:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.ethernetsam_service }}</span>
+          <br />
+          <label for="latency" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Latency:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.latency }}</span>
+          <br />
+          <label for="availability" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Availability:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.availability }}</span>
+          <br />
+          <label for="duration" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Duration:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ Throughput.duration }}</span>
+          <br />
+          <label for="performance_bandwidth" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Performance Bandwidth:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.performance_bandwidth }}</span>
+          <br />
+          <label for="frame_length" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Frame Length:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.frame_length }}</span>
+          <br />
+          <label for="cir" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">cir:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.cir }}</span>
+          <br />
+          <label for="eir" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">eir:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.eir }}</span>
+          <br />
+          <label for="cbs" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">cbs:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.cbs }}</span>
+          <br />
+          <label for="ebs" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">ebs:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ createthroghtput.ebs }}</span>
+          <br />
+          <label for="service" [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }">Service:</label>&nbsp;&nbsp;&nbsp;
+          <span>{{ Throughput.service }}</span>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-cancel" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Run" icon="pi pi-check" class="p-button-success" (click)="
+        callRunTest(
+          cfm,
+          local_device,
+          remote_device,
+          loopback,
+          createthroghtput,
+          Throughput
+        )
+      "></button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="scheduleTaskDialog_ad" [style]="{ width: '700px' }" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="col-5 pl-0">
+        <span>mode</span><br />
+
+        <p-dropdown (onChange)="onChangeMode($event)" [options]="Mode" placeholder="Select Mode"
+          [style]="{ width: '100%' }" [(ngModel)]="selectedMode" [autoDisplayFirst]="false"
+          [class]="invinvalid_selectedMode" optionLabel="name">
+        </p-dropdown>
+      </div>
+      <div class="col-2 pl-0" *ngIf="activate">
+        <span for="duration">duration</span>
+        <input type="duration" pInputText pKeyFilter="int" id="duration" [(ngModel)]="duration_ad"
+          [ngClass]="{ 'is-invalid': submitted_duration && !duration_ad }" required />
+        <div *ngIf="submitted_duration && !duration_ad" class="invalid-feedback">
+          <div *ngIf="submitted_duration && !duration_ad">
+            duration is required
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activates"></div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span for="name">Schedule Name</span>
+          <input type="text" pInputText id="name" [(ngModel)]="scheduleTask.name" required autofocus />
+        </div>
+        <div class="col pr-0">
+          <span for="scheduleMode">Mode</span>
+          <p-dropdown class="mx-2" id="scheduleMode" (onChange)="onChangeScheduleMode($event)" [options]="scheduleModes"
+            [(ngModel)]="selectedScheduleMode" value="one time" optionLabel="name" required>
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span for="name">Email (Optional)</span>
+          <input type="text" pInputText id="email" [(ngModel)]="scheduleTask.email" required autofocus />
+        </div>
+        <div class="col pl-0">
+          <span for="name">Phone (Optional)</span>
+          <input type="text" pInputText id="phone" [(ngModel)]="scheduleTask.phone" required autofocus />
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <span class="mx-2" for="">Start Date</span>
+          <p-calendar [(ngModel)]="scheduleTask.startDate" [showIcon]="true" [stepHour]="1"></p-calendar>
+        </div>
+        <div class="col pr-0">
+          <span class="mx-2" for="">Start time</span>
+          <p-calendar [(ngModel)]="scheduleTask.startTime" [timeOnly]="true" [showIcon]="true" [icon]="'pi pi-clock'">
+          </p-calendar>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+      (click)="saveScheduleTask_ad(Throughput, scheduleTask)"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="action_Dialog_ResultThroughputtest" position="center" [style]="{ width: '60vw' }"
+  [header]="dialogHeader" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }" (onHide)="cancel()">
+  <ng-template pTemplate="content">
+    <div class="row mx-0" style="justify-content: flex-end;">
+      <button class="btn btn-default" style="background-color: #ef8157;" (click)="stoprun()">
+        Stop
+      </button>
+    </div>
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">CFM test</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_CFMtest">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col-5 pr-1" style="margin-right: -2px;">
+          <div class="row mx-0" style="align-items: center;">
+            <span [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style=" font-weight:bold">Local device</span>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <span for="result">Result</span><br />
+              <textarea type="text" rows="18" cols="150" pInputText id="resultlocal" [(ngModel)]="resultCFMtest_local"
+                [(placeholder)]="resultCFMerror" autofocus readonly></textarea>
+            </div>
+          </div>
+        </div>
+        <p-divider class="col-2" layout="vertical"></p-divider>
+        <div class="col-5">
+          <div class="row mx-0">
+            <span [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style=" font-weight:bold">Remote device</span>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <span for="result">Result</span><br />
+              <textarea type="text" rows="18" cols="150" pInputText id="resultremote" [(ngModel)]="resultCFMtest_remote"
+                [(placeholder)]="resultCFMerror" autofocus readonly></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">CFM Result</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+      </div>
+      <div class="row mx-0">
+        <div class="col-5 pr-1" style="margin-right: -2px;">
+          <div class="row mx-0" style="align-items: center;">
+            <span [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style=" font-weight:bold">Local device</span>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div style="text-align: center;" *ngIf="loading_Localdevice">
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <span for="result">Result</span><br />
+              <textarea type="text" rows="18" cols="150" pInputText id="resultlocal" [(ngModel)]="resultlocal"
+                [(placeholder)]="showCFMerror" autofocus readonly></textarea>
+            </div>
+          </div>
+        </div>
+        <p-divider class="col-2" layout="vertical"></p-divider>
+        <div class="col-5">
+          <div class="row mx-0">
+            <span [ngClass]="{
+                'theme-arya-text': themeService.theme === 'arya-orange',
+                'theme-saga-text': themeService.theme === 'saga-orange'
+              }" style=" font-weight:bold">Remote device</span>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div style="text-align: center;" *ngIf="loading_Remotedevice">
+              <i class="pi pi-spin pi-spinner"></i>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <span for="result">Result</span><br />
+              <textarea type="text" rows="18" cols="150" pInputText id="resultremote" [(ngModel)]="resultremote"
+                [(placeholder)]="showCFMerror1" autofocus readonly></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Loopback configuration</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_Loopbackconfiguration">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultloopback" [(ngModel)]="resultloopback"
+            [(placeholder)]="resultLoopbackerror" autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Create Throughput test</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_CreateThroughputtest">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultcreate" [(ngModel)]="resultcreate"
+            [(placeholder)]="createthroghtputerror" autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Start Throughput test</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+        <div style="text-align: center;" *ngIf="loading_StartThroughputtest">
+          <i class="pi pi-spin pi-spinner"></i>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultstart" [(ngModel)]="resultstart"
+            [(placeholder)]="startthroghtputerror" autofocus readonly></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-0">
+      <div class="row mx-0" style="align-items: center;">
+        <span [ngClass]="{
+            'theme-arya-text': themeService.theme === 'arya-orange',
+            'theme-saga-text': themeService.theme === 'saga-orange'
+          }" style=" font-weight:bold">Throughput Result</span>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col pl-0">
+        <div class="row mx-0" style="align-items: center;">
+          <span for="result">Result</span> &nbsp; &nbsp; &nbsp; &nbsp;
+          <div style="text-align: center;" *ngIf="loading_ThroughputResult">
+            <i class="pi pi-spin pi-spinner"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

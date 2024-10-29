@@ -1,0 +1,92 @@
+<div class="row mx-0 bgcolor">
+    <div class="col-12">
+        <p class="f-color-w">จุดสนใจ</p>
+    </div>
+
+    <div class="col-12">
+        <div class="row mx-0" style="margin-top: 20px; ">
+            <div class="col-12">
+                <label class="f-color-w">กม.ที่</label>
+                <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+                    [(ngModel)]="selectedKmNo" placeholder="เลือกเลขที่กม." optionLabel="name"
+                    [style]="{ width: '200px' }" autofocus></p-dropdown>
+
+                <label class="f-color-w">เส้นทาง</label>
+                <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+                    [(ngModel)]="selectedRoute" placeholder="เลือกเส้นทาง" optionLabel="name"
+                    [style]="{ width: '200px' }" autofocus></p-dropdown>
+
+                    <!-- <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="'เพิ่มจุดสนใจ'"> -->
+                    <label class="f-color-w">เพิ่มจุดสนใจ</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="row mx-0" style="margin-top: 20px; ">
+            <div class="col-6 col-xs-12" *ngFor="let item of model">
+                <div class="row">
+                    <div class="col-6 col-xs-12">
+                        <img [src]="item.imageUrl" style="width: 100%; " [title]="'เพิ่มจุดสนใจ'">
+                    </div>
+                    <div class="col-6 col-xs-12">
+                        <div class="row custom-spacing">
+                            <div class="col-12">
+                                <p class="f-color-w"><b>{{item.title}}</b></p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>กิโลเมตรที่</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.km}}</p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>รหัสกล้องวงจรปิด</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.cameraNo}}</p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>ปริมาณจราจร</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.traffic}}</p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>ระดับการให้บริการ</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.level}}</p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>ความเร็ว</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.speed}}</p>
+                            </div>
+                        </div>
+                        <div class="row p0 custom-spacing">
+                            <div class="col-7 col-xs-12 p0">
+                                <p>ค่าดัชนีการติดขัด</p>
+                            </div>
+                            <div class="col-5 col-xs-12 p0" align="right">
+                                <p>{{item.stats}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

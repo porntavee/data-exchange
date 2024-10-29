@@ -1,0 +1,165 @@
+:root{
+  --color-bg: white;
+}
+
+.mg-left-24 {
+  margin-left: 24px;
+}
+
+.mg-right-12 {
+  margin-right: 12px;
+}
+
+.mg-top-12 {
+  margin-top: 12px;
+}
+
+.fullwidth {
+  width: 100%;
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+::ng-deep .fullwidth::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+ }
+
+::ng-deep .fullwidth::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
+
+::ng-deep .fullwidth::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+}
+.panel-wrapper {
+  background-color: red;
+  width: 2048px;
+  height: 1080px;
+}
+
+.fullwidthMap {
+  width: 100%;
+  margin-right: 24px;
+  margin-left: 24px;
+}
+
+.flex {
+  display: flex;
+}
+
+.card {
+  overflow: hidden;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active,
+.btn:hover {
+  background-color: #666;
+  color: white;
+}
+.mapButton {
+  background: none;
+}
+.mapButton:active {
+  background-color: lightblue;
+  width: fit-content;
+}
+
+.panelButton {
+  background: none;
+}
+.panelButton:active {
+  background-color: lightblue;
+  width: fit-content;
+}
+.theme-arya {
+  background-color:  #1F2D40;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
+  
+}
+.theme-saga {
+  background-color: #FFFFFF;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
+}
+.theme-arya-text{
+  color: #FFFFFF;
+}
+.theme-saga.text{
+  color: black;
+}
+.map-hidden {
+  display: none;
+}
+
+.map-show {
+  display: block;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.selectButtonStyle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.backtoHome {
+  background: linear-gradient(90deg, rgba(205,205,212,1) 0%, rgba(176,176,176,1) 60%, rgba(204,204,204,1) 100%);
+  color: white;
+  font-weight: bold;
+  width: 100px;
+  height: 36px;
+  margin-right: 24px;
+  font-size: 14px;
+  border: 1px solid black;
+}
+.backtoPrevious {
+  /* background-color: black; */
+  background: linear-gradient(90deg, rgba(205,205,212,1) 0%, rgba(176,176,176,1) 60%, rgba(204,204,204,1) 100%);
+  color: white;
+  font-weight: bold;
+  width: 32px;
+  height: 36px;
+  margin-right: 6px;
+  font-size: 14px;
+  border: 1px solid black;
+}
+
+.goNext {
+  background: linear-gradient(90deg, rgba(205,205,212,1) 0%, rgba(176,176,176,1) 60%, rgba(204,204,204,1) 100%);
+  color: white;
+  font-weight: bold;
+  width: 32px;
+  height: 36px;
+  font-size: 14px;
+  border: 1px solid black;
+}
+
+.container{
+  min-width:1535px
+}
+
+@media only screen and (min-width: 1500px) {
+  canvas {
+    width: 2048px;
+    height: 1080px;
+  }
+}
+
+
+

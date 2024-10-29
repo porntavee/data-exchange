@@ -1,0 +1,31 @@
+{
+    "data": [
+      {
+        "id": "1",
+        "schedule_name": "ping to Klongluand",
+        "schedule_type": "ping -c 4",
+        "trigger": "ISCOM2924GF-4C",
+        "crete_time": "202.192.50.2-202.192.50.59",
+        "modify_time": "3/11/2021 14:16:02.451",
+        "status" : "enable"
+      },
+      {
+        "id": "2",
+        "schedule_name": "ping to Minburi",
+        "schedule_type": "ping -c 4",
+        "trigger": "ISCOM2110EA-MA",
+        "crete_time": "202.156.50.2-202.156.50.59",
+        "modify_time": "3/11/2021 14:16:02.451",
+        "status" : "enable"
+      }
+      ,{
+        "id": "3",
+        "schedule_name": "ping check 195.72.83.22",
+        "schedule_type": "ping -c 4",
+        "trigger": "ISCOM-RAX711",
+        "crete_time": "195.72.83.22",
+        "modify_time": "3/11/2021 14:16:02.451",
+        "status" : "enable"
+      }
+    ]
+  }

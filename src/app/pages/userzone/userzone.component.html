@@ -1,0 +1,138 @@
+<p-toast></p-toast>
+
+<!-- <p-toolbar styleClass="p-mb-4">
+    </p-toolbar> -->
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+    <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          <button pButton pRipple class="p-button-success mr-2 Newbut" (click)="openDailog()" ><i class="pi pi-plus"><span class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Create new group</span></i></button>
+          <button pButton pRipple class="p-button-success Exportbut" style="margin-left:8px"
+            (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+        </div>
+        <div class="p-toolbar-group-right">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+                placeholder="Search..." />
+            </span>
+          </div>
+      </p-toolbar>
+   
+    <p-table #dt [value]="alarmGroups" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['id','zone_name','description']" [(selection)]="alarmGroups" [rowHover]="true"
+        dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+        [showCurrentPageReport]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <!-- <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th> -->
+
+                <th style="text-align:center;" pSortableColumn="group_id" class="col-1">ID <p-sortIcon field="group_id">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="group_name" class="col-3">Group Name<p-sortIcon field="group_name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="group_description" class="col-4">Description<p-sortIcon field="group_description">
+                    </p-sortIcon>
+                </th>
+
+                <th class="col-1"></th>
+                <th class="col-1"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-group let-rowIndex>
+            <tr>
+                <!-- <td>
+                    <p-tableCheckbox [value]="group"></p-tableCheckbox>
+                </td> -->
+                <td style="text-align:center;">{{group.id}}</td>
+                <td>
+                    <div id="myDIV1" title="{{group.zone_name}}">{{group.zone_name}}</div>
+                </td>
+                <td>
+                    <div id="myDIV2" title="{{group.description}}">{{group.description}}</div>
+                </td>
+                <!-- <td>
+                    <div id="myDIV2" title="{{group.symbol_name}}">{{group.symbol_name}}</div>
+                </td> -->
+                <!--<td>{{group.symbol_name}}</td>-->
+                <td style="width: 12rem; display: flex; justify-content: space-between;">
+                    <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+                    <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(group)"
+                        icon="pi pi-ellipsis-h"></button>
+
+                </td>
+                <td></td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                In total there are {{alarmGroups ? alarmGroups.length : 0 }} zones.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="alarmGroupDialog" [style]="{width: '1000px'}" [(header)]="dialogHeader" [modal]="true"
+    styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden', 
+    'max-height': '70vh','min-height':'250px'}" (onHide)="closeDialog()">
+    <ng-template pTemplate="content">
+
+        <div class="p-field">
+            <div class="row mx-0">
+                <div class="col pr-0">
+                    <label for="TERW" style="font-weight: bold;">Zone Name</label>
+                    <input type="text" pInputText id="TERW" [(ngModel)]="alarmGroup.zone_name" required
+                        [class]="invinvalid" />
+                    <small class="p-error block" *ngIf="submitted && !alarmGroup.zone_name">Group Name is
+                        required.</small>
+                </div>
+                <div class="col pr-0">
+                    <label for="description" style="font-weight: bold;">Description</label>
+                    <input type="text" pInputText id="description" [(ngModel)]="alarmGroup.description" required
+                        [class]="invinvalid" />
+                    <small class="p-error block" *ngIf="submitted && !alarmGroup.description">Description is
+                        required.</small>
+                </div>
+                <div class="col-12 pr-2">
+                    <label for="TERW" style="font-weight: bold;">Assignation</label>
+                    <div class="col-12 pr-2" style="border: 1px solid black">
+                        <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="Topology" class="myDIV3"
+                            targetHeader="Assign Topology" [responsive]="true" [sourceStyle]="{'height':'30rem'}"
+                            [targetStyle]="{'height':'30rem'}" filterBy="SYMBOL_NAME1" [dragdrop]="false"
+                            [showSourceControls]="false" [showTargetControls]="false"
+                            sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name">
+                            <ng-template let-product pTemplate="item">
+                                <div class="product-item">
+                                    <div class="product-list-detail">
+
+                                        <span class="product-category">{{product.SYMBOL_NAME1}}</span>
+
+                                    </div>
+                                </div>
+                            </ng-template>
+
+
+                        </p-pickList>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger"
+            (click)="closeDialog()"></button>
+        <button pButton pRipple label="Create" icon="pi pi-check" class="p-button-success" *ngIf="check1"
+            (click)="createGroup()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-waring" *ngIf="check"
+            (click)="editlistGroup(alarmGroup.id)"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

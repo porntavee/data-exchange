@@ -1,0 +1,112 @@
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+'theme-saga': themeService.theme === 'saga-orange'}">
+  <p-toast [style]="{marginTop: '80px'}"></p-toast>
+  <div style="text-align: center;" *ngIf="loading">
+    <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+  </div>
+  <!-- <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+    </div>
+    <div class="p-toolbar-group-right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+          placeholder="Filter..." />
+      </span>
+    </div>
+  </p-toolbar> -->
+  <div *ngIf="loading_table">
+    <p-table #dt [value]="deviceList" [rows]="10" [paginator]="true" [rowsPerPageOptions]="pageSizeOptions" [showJumpToPageDropdown]="true"
+      [globalFilterFields]="['symbol_name1','symbol_name3','MACADDRESS','IRCNETypeID','REMARK','ref_table']" [rowHover]="true">
+      <ng-template pTemplate="caption">
+
+
+        <div class="row mx-0" style="justify-content: flex-end;">
+          <button pButton pRipple class="p-button-success Exportbut" style="margin-right:8px"
+        (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+              placeholder="Filter..." />
+          </span>
+        </div>
+        <!-- <span class="p-input-icon-left">
+                <i class="pi pi-search" style="padding-bottom: 20px;"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Filter..." />
+            </span> -->
+
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="symbol_name1">Device Name<p-sortIcon field="symbol_name1"></p-sortIcon>
+          </th>
+          <th pSortableColumn="symbol_name3" style="width: 10%;">IP<p-sortIcon field="symbol_name3"></p-sortIcon>
+          </th>
+          <th pSortableColumn="MACADDRESS" style="width: 10%;">MAC Address<p-sortIcon field="MACADDRESS"></p-sortIcon>
+          </th>
+          <th pSortableColumn="IRCNETypeID" style="width: 10%;">Device Type<p-sortIcon field="IRCNETypeID"></p-sortIcon>
+          </th>
+          <th pSortableColumn="REMARK" style="width: 15%;">
+            Remark<p-sortIcon field="REMARK"></p-sortIcon>
+          </th>
+          <th pSortableColumn="ref_table" style="width: 15%;">
+            Server<p-sortIcon field="ref_table"></p-sortIcon>
+          </th>
+          <th style="width: 15%;"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-device>
+        <tr>
+          <td>{{device.symbol_name1}}</td>
+          <td>{{device.symbol_name3}}</td>
+          <td>{{device.MACADDRESS}}</td>
+          <td>{{device.IRCNETypeID}}</td>
+          <td>{{device.REMARK}}</td>
+          <td> 
+            <span *ngIf="device.ref_table === 'renetnode'">Nview</span>
+            <span *ngIf="device.ref_table === 'rcview'">RCview</span>
+            <span *ngIf="device.ref_table !== 'renetnode' && device.ref_table !== 'rcview'">{{ device.ref_table }}</span>
+          </td>
+          <td >
+            <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+            <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(device)" icon="pi pi-ellipsis-h"></button>
+            <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
+              title="View device" (click)="viewDevice(device)"></button>
+            <button pButton pRipple icon="pi pi pi-cog" class="p-button-rounded p-button-warning p-mr-2"
+              title="Get config" (click)="getConfig(device)"></button>
+            <button pButton pRipple icon="pi pi-download" class="p-button-rounded p-button-help" title="Download"
+              (click)="downloadResult(device)"></button> -->
+          </td>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          In total there are {{deviceList ? deviceList.length : 0 }} device.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog [(visible)]="getConfigDialog" [style]="{width: '500px'}" header="Authentication" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="username">Username</label>
+          <input type="text" pInputText id="username" [(ngModel)]="username" required autofocus />
+        </div>
+        <div class="col pr-0">
+          <label for="password">Password</label>
+          <p-password type="password" id="password" [(ngModel)]="password" required [toggleMask]="true"></p-password>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="OK" [(icon)]="iconsave" class="p-button-text" (click)="saveConfig()"></button>
+  </ng-template>
+</p-dialog>

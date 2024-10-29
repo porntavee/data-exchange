@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "249892Y865.me.sk13.EDD-Connect",
+        "paths": [
+          "/app/*"
+        ]
+      }
+    ]
+  }
+}

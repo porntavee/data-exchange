@@ -1,0 +1,264 @@
+<div class="col-md-12">
+  <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+  'theme-saga': themeService.theme === 'saga-orange'}">
+    <div class="card-header">
+      <h5 class="card-title" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+      'theme-saga-text': themeService.theme === 'saga-orange'}">Command</h5>
+    </div>
+    <div class="card-body">
+      <!-- <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Command console</label>
+                <textarea class="form-control inputtextarea" [ngModel]="consoleM | async" rows="50" style="max-height:500px; font-size:16px;" id="console"></textarea>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="">Input Command</label>
+                    <div class="row mx-0 justify-content-between">
+                        <input type="text" class="form-control mr-5" id="console_input" style="flex:0.9;" placeholder="Enter Here" (keyup.enter)="sendMsg()">
+                        <button class="btn btn btn-round my-0" type="submit" style="flex: 0.1;" (click)="sendMsg()" ><i class="nc-icon nc-button-play"></i> Send</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <label for="">This prompt connect to main server ip:192.168.1.230 before connect to other device.</label> -->
+          <!-- <p-terminal  welcomeMessage="Type 'connect to server' for connecting" [prompt]="terminal_prompt"></p-terminal> -->
+        </div>
+        <div class="col-md-12">
+          <ng-terminal #term></ng-terminal>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="col-md-12">
+  <div class="card card-user">
+      <div class="card-header">
+        <h5 class="card-title">Schedule task</h5>
+      </div>
+      <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <h5>Setting</h5>
+                <div class="mr-5" style="display: inline-block;">
+                    <label for="">schedule mode</label>
+                    <p-dropdown class="mx-2" (onChange)="onChangeMode($event)" [options]="mode" [(ngModel)]="selectMode" value="One time" optionLabel="name">
+                    </p-dropdown>
+                </div>
+                <div class="mr-5" style="display: inline-block;">
+                  <label for="">Start date</label>
+                  <p-calendar [(ngModel)]="start_date" [showIcon]="true" [stepHour]="7"></p-calendar>
+                </div>
+                <div class="mr-5" style="display: inline-block;">
+                  <label for="">Start time</label>
+                  <p-calendar [(ngModel)]="start_time" [timeOnly]="true" [showIcon]="true" [icon]="'pi pi-clock'"></p-calendar>
+                </div> -->
+<!--<p-inputNumber [(ngModel)]="daily_recur"></p-inputNumber>
+                <div id="setting_panel_daily">
+                    <span>Recur every:</span><p-inputNumber [(ngModel)]="daily_recur"></p-inputNumber><span>days</span>
+                </div>
+                <div id="setting_panel_weekly">
+                  <span>Recur every:</span><p-inputNumber [(ngModel)]="weekly_recur"></p-inputNumber>
+                    <span> weeks on</span>
+                    <div class="p-field-checkbox justify-content-between">
+                      <div>
+                        <p-checkbox name="groupname" value="val1" [(ngModel)]="selectedValues" inputId="ny"></p-checkbox>
+                        <label for="la">Monday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Tuesday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val1" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Wednesday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Thursday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Friday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Saterday</label>
+                      </div>
+                      <div>
+                        <p-checkbox name="groupname" value="val2" [(ngModel)]="selectedValues"></p-checkbox>
+                        <label for="la">Sunday</label>
+                      </div>
+                      
+                    </div>
+                </div>-->
+<!-- </div>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-md-2">
+            <div class="p-field-radiobutton ">
+                <p-radioButton name="ping" value="ping -c 4" [(ngModel)]="selectedCommand" inputId="ping" checked></p-radioButton>
+                <label class="radio-label" for="ping">ping</label>
+            </div> -->
+<!-- <div class="p-field-radiobutton">
+                <p-radioButton name="city" value="Los Angeles" [(ngModel)]="city" inputId="city2"></p-radioButton>
+                <label class="radio-label" for="city2">throughput</label>
+            </div> -->
+<!-- </div>
+          <div class="col-md-10">
+            <div class="form-group">
+            <textarea class="form-control inputtextarea" [(ngModel)]="console_output"  style="max-height:200px; font-size:16px;" id="console" placeholder="address1,address2"></textarea>
+          </div>
+          </div>
+        </div>
+    </div>
+    <div class="card-footer" style="text-align: center;">
+      <button class="btn btn btn-round my-0" type="submit" (click)="saveSchedule()">create task</button>
+    </div>
+  </div>
+</div> -->
+
+<!-- <div class="col-md-12">
+  <div class="card card-user">
+      <div class="card-header">
+        <h5 class="card-title">send some email</h5>
+      </div>
+      
+        <div class="m-0 p-5 row form-group">
+        <div class="col-md-3 pl-0">
+            <label for="receiver">Receiver: </label>
+            <input type="text" pInputText id="receiver" [(ngModel)]="receiver" required autofocus />
+        </div>
+          <div class="col-md-3 pr-0">
+            <label for="subject">Subject: </label>
+            <input type="text" pInputText id="subject" [(ngModel)]="subject" required />
+          </div>
+        <div class="col-md-3 pr-0">
+          <label for="message">Message: </label>
+          <input type="text" pInputText id="message" [(ngModel)]="message" required />
+        </div>
+        <div class="col-md-2 pr-0">
+        <button class="btn btn btn-round my-0" type="submit" (click)="sendemail()">send email</button>
+      </div>
+      </div>
+  </div>
+</div> -->
+
+<!-- <p-toast></p-toast>
+
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedSchedules()" [disabled]="!selectedSchedule || !selectedSchedule.length"></button>
+        </ng-template>
+
+    </p-toolbar>
+
+    <p-table #dt [value]="schedule_tasks" [rows]="10" [paginator]="true" [globalFilterFields]="['schedule_name','country.name','representative.name','status']"
+        [(selection)]="selectedSchedule" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+            <div class="d-flex p-ai-center justify-content-between">
+                <h5 class="p-m-0">Manage Schedule Task</h5>
+                <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="name">Schedule Name<p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="price">Schedule Type<p-sortIcon field="price"></p-sortIcon></th>
+                <th pSortableColumn="name">Schedule Name<p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="price">Schedule Type<p-sortIcon field="price"></p-sortIcon></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-schedule_task>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="schedule_task"></p-tableCheckbox>
+                </td>
+                <td>{{schedule_task.schedule_name}}</td>
+                <td>{{schedule_task.schedule_type }}</td>
+                <td>{{schedule_task.modify_time}}</td>
+                <td>{{schedule_task.status }}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editSchedule(schedule_task)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteSchedule(schedule_task)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                In total there are {{schedule_tasks ? schedule_tasks.length : 0 }} tasks.
+            </div>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="schedule_task_Dialog" [style]="{width: '700px'}" [(header)]="dailog_header" [modal]="true" styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="content">
+      <div class="p-field">
+        <div class="row mx-0">
+          <div class="col pl-0">
+            <label for="name">Name</label>
+            <input type="text" pInputText id="name" [(ngModel)]="user.firstname" required autofocus />
+          </div>
+          <div class="col pr-0">
+            <label for="surname">Surname</label>
+            <input type="text" pInputText id="surname" [(ngModel)]="user.lastname" required />
+          </div>
+        
+        </div>
+      </div>
+      <div class="p-field">
+          <label for="username">Username</label>
+          <input type="text" pInputText id="username" [(ngModel)]="user.username" required />
+          <small class="p-invalid" *ngIf="submitted && !user.username">Username is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="name">Password</label>
+        <input type="password" pPassword id="password" [(ngModel)]="user.password" required [toggleMask]="true"/>
+        
+        <small class="p-invalid" *ngIf="submitted && !user.password">Password is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="name">Role</label>
+        <p-dropdown  (onChange)="onChangeMode($event)" [options]="roles" [(ngModel)]="cities.name"></p-dropdown>
+      </div>
+        <label for="area_of_responsibility">Area of Responsibility</label>
+        <p-multiSelect [options]="cities" id="area_of_responsibility" [(ngModel)]="selectedCities" optionLabel="name" ></p-multiSelect>
+      
+      
+      <div class="mr-5" style="display: inline-block;">
+        <label for="">Start time</label>
+        <p-calendar [(ngModel)]="time_value" [timeOnly]="true" [showIcon]="true" [icon]="'pi pi-clock'"></p-calendar>
+      </div>
+  </ng-template>
+  
+  <div class="mr-5" style="display: inline-block;">
+    <label for="">Start time</label>
+    <p-calendar [(ngModel)]="time_value" [timeOnly]="true" [showIcon]="true" [icon]="'pi pi-clock'"></p-calendar>
+  </div>
+  <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveuser()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog> -->

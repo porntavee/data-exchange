@@ -1,0 +1,497 @@
+<p-toast></p-toast>
+
+<div class="row">
+  <div
+    class="col-12 card card-stats p-2"
+    [ngClass]="{
+      'theme-arya': themeService.theme === 'arya-orange',
+      'theme-saga': themeService.theme === 'saga-orange'
+    }"
+  >
+    <div class="row card-body">
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[1] }"
+          (click)="addLevelFilter(1)"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color: #BF73CC;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">
+                    Critical
+                  </p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ critical_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[2] }"
+          (click)="addLevelFilter(2)"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color: #FF7782;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">Major</p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ major_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[3] }"
+          (click)="addLevelFilter(3)"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color: #FFBB55;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">Minor</p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ minor_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[4] }"
+          (click)="addLevelFilter(4)"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color:#45BFFF;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">Warning</p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ warning_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[0] }"
+          (click)="addLevelFilter(0)"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color:#50D0BC;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">Unknown</p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ unknown_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-sm-4">
+        <div
+          class="card card-filter"
+          [ngStyle]="{ opacity: cardOpacity[5] }"
+          (click)="clearAllFilter()"
+          [ngClass]="{
+            'theme-arya-panel': themeService.theme === 'arya-orange',
+            'theme-saga': themeService.theme === 'saga-orange'
+          }"
+        >
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-6">
+                <div
+                  class="card flex align-items-center justify-content-center mb-0"
+                  style="background-color: #D3D3D3;font-size: 2em;color: white;height: auto;"
+                >
+                  <span class="block" style="font-size: 1.25em;">&nbsp;</span>
+                </div>
+              </div>
+              <div class="col-6 flex align-items-center justify-content-center">
+                <div
+                  class="numbers align-items-center justify-content-center"
+                  style="text-align: center;"
+                >
+                  <p class="card-category" style="font-size: 0.5em;">Total</p>
+                  <p
+                    class="card-title"
+                    [ngClass]="{
+                      'theme-arya-text': themeService.theme === 'arya-orange',
+                      'theme-saga-text': themeService.theme === 'saga-orange'
+                    }"
+                  >
+                    {{ total_alarm }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12">
+    <div
+      class="col-12 card card-stats p-2"
+      [ngClass]="{
+        'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'
+      }"
+    >
+      <div style="text-align: center;" *ngIf="loading">
+        <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+      </div>
+      <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          <span
+            [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }"
+            class="reponsive-font"
+            >Alarm Trap</span
+          >
+        </div>
+        <div class="p-toolbar-group-right">
+          <button
+            pButton
+            pRipple
+            class="p-button-success Exportbut"
+            style="margin-right:8px"
+            (click)="exportToExcel()"
+          >
+            <i class="pi pi-file"
+              ><span
+                class="Exporttxt"
+                style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;"
+                >Export to excel</span
+              ></i
+            >
+          </button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($event.target.value, 'contains')"
+              class="Searchtxt"
+              placeholder="Search..."
+            />
+          </span>
+        </div>
+      </p-toolbar>
+      <p-table
+        #dt
+        [value]="alarm_list"
+        [scrollable]="true"
+        [resizableColumns]="true"
+        [rows]="100"
+        scrollHeight="500px"
+        [rowHover]="true"
+        [globalFilterFields]="['iRCAlarmLogID',['iRCNETypeID'],['strIPAddress'],['strName'],['port_name']]"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pSortableColumn="iLevel" pResizableColumn class="col-1">
+              Level<p-sortIcon field="iLevel"></p-sortIcon>
+            </th>
+            <!-- <th pSortableColumn="iRCAlarmLogID" pResizableColumn class="col-1">
+              Alarm ID<p-sortIcon field="iRCAlarmLogID"></p-sortIcon>
+            </th> -->
+            <th
+              pSortableColumn="iRCNETypeID"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              Device Type<p-sortIcon field="iRCNETypeID"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="strIPAddress"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              IP Address<p-sortIcon field="strIPAddress"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="port_name"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              Port Name<p-sortIcon field="port_name"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="strName"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              Alarm name<p-sortIcon field="strName"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="strDeviceName"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              Device Name<p-sortIcon field="strDeviceName"></p-sortIcon>
+            </th>
+            <th
+              pSortableColumn="strUptime"
+              pResizableColumn
+              [style]="{ width: 'auto' }"
+            >
+              Uptime<p-sortIcon field="strUptime"></p-sortIcon>
+            </th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-columns="columns"
+        >
+          <tr [pContextMenuRow]="rowData" style="height:40px">
+            <td class="col-1">
+              <div
+                class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.iLevel == 1"
+                class="Critical"
+              >
+                <span class="block">{{ rowData.iRCAlarmLogID }}</span>
+              </div>
+              <div
+                class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.iLevel == 2"
+                class="Major"
+              >
+                <span class="block">{{ rowData.iRCAlarmLogID }}</span>
+              </div>
+              <div
+                class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.iLevel == 3"
+                class="Minor"
+              >
+                <span class="block">{{ rowData.iRCAlarmLogID }}</span>
+              </div>
+              <div
+                class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.iLevel == 4"
+                class="Warning"
+              >
+                <span class="block">{{ rowData.iRCAlarmLogID }}</span>
+              </div>
+              <div
+                class="card flex align-items-center justify-content-center mb-0"
+                *ngIf="rowData.iLevel == 5"
+                class="Unknow"
+              >
+                <span class="block">{{ rowData.iRCAlarmLogID }}</span>
+              </div>
+            </td>
+            <!-- <td class="col-1">
+              {{rowData.iRCAlarmLogID}}
+            </td> -->
+            <td>
+              {{ rowData.iRCNETypeID }}
+            </td>
+            <td>
+              {{ rowData.strIPAddress }}
+            </td>
+            <td>
+              {{ rowData.port_name }}
+            </td>
+            <td>
+              {{ rowData.strName }}
+            </td>
+            <td>
+              {{ rowData.strDeviceName }}
+            </td>
+            <td>
+              {{ rowData.strUptime }}
+            </td>
+            <td>
+              <p-menu
+                #menu
+                [popup]="true"
+                [model]="itemsAction"
+                appendTo="body"
+              ></p-menu>
+              <button
+                pButton
+                type="text"
+                (click)="menu.toggle($event)"
+                (click)="menuVlue(rowData)"
+                icon="pi pi-ellipsis-h"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12 pr-2">
+    <div
+      class="col-12 card card-stats p-2"
+      [ngClass]="{
+        'theme-arya': themeService.theme === 'arya-orange',
+        'theme-saga': themeService.theme === 'saga-orange'
+      }"
+    >
+      <div>
+        <p-gmap
+          #gmap
+          [options]="options"
+          [overlays]="overlays"
+          [style]="{ width: '100%', height: '800px' }"
+          (onOverlayClick)="handleOverlayClick($event)"
+          (onMapReady)="setMap($event)"
+        ></p-gmap>
+      </div>
+      <div
+        class="mt-2 mr-2"
+        style="text-align: right;"
+        [ngClass]="{
+          'theme-arya-text': themeService.theme === 'arya-orange',
+          'theme-saga-text': themeService.theme === 'saga-orange'
+        }"
+      >
+        แสดง {{ alarm_marker_show }}/{{ alarm_marker_should_show }} จุด จาก
+        {{ device }} อุปกรณ์ (ยังไม่ได้ระบุในฐานข้อมูล {{ unsync_device }} )
+      </div>
+    </div>
+  </div>
+</div>

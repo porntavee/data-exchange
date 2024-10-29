@@ -1,0 +1,239 @@
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+      <button pButton pRipple class="p-button-success Exportbut" style="margin-left:8px"
+        (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+    </div>
+    <div class="p-toolbar-group-right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+          placeholder="Search..." />
+      </span>
+    </div>
+  </p-toolbar>
+
+  <p-table #dt [value]="Alarms" [rows]="10" [paginator]="true" [globalFilterFields]="['severity','name','oid_config']"
+    [(selection)]="selectedAlarms" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <!-- <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th> -->
+        <th pSortableColumn="severity">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Level<p-sortIcon field="severity"></p-sortIcon>
+           
+          </div>
+        </th>
+        <!-- <th pSortableColumn="ref_code">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Ref Code<p-sortIcon field="ref_code"></p-sortIcon>
+            
+          </div>
+        </th> -->
+        <th pSortableColumn="display_name">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Display Name<p-sortIcon field="display_name"></p-sortIcon>
+              
+            </div>
+          </th>
+        <th pSortableColumn="alarm_type">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            Type<p-sortIcon field="alarm_type"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="alarm_value">
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Value<p-sortIcon field="alarm_value"></p-sortIcon>
+            </div>
+          </th>
+      <!-- <th pSortableColumn="created_at">Created At<p-sortIcon field="created_at"></p-sortIcon>
+      </th>
+      <th pSortableColumn="updated_at">Updated At<p-sortIcon field="updated_at"></p-sortIcon>
+      </th> -->
+      <!-- <th pSortableColumn="active">Active<p-sortIcon field="active"></p-sortIcon>
+      </th> -->
+      <th></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-data>
+    <tr>
+      <!-- <td>
+        <p-tableCheckbox [value]="data"></p-tableCheckbox>
+      </td> -->
+      <td >
+        <div class="card flex align-items-center justify-content-center mb-0" *ngIf="data.severity == 'ok'" class="Alarm_ok" >
+          <span class="block" >&nbsp;</span>
+        </div>
+        <div class="card flex align-items-center justify-content-center mb-0" *ngIf="data.severity == 'warning'" class="Warning" >
+          <span class="block" >&nbsp;</span>
+        </div>
+        <div class="card flex align-items-center justify-content-center mb-0" *ngIf="data.severity == 'critical'" class="Critical" >
+          <span class="block" >&nbsp;</span>
+        </div>
+      </td>
+      <!-- <td><div class="myDIV1" title="{{data.ref_code}}">{{data.ref_code}}</div></td> -->
+      <td><div class="myDIV3" title="{{data.display_name}}">{{data.display_name}}</div></td>
+      <td>{{data.alarm_type}}</td>
+      <td>{{data.alarm_value}}</td>
+      <!-- <td>
+        <div class="myDIV1" title="{{data.created_at}}">{{data.created_at}}</div>
+      </td>
+       <td>
+        <div class="myDIV1" title="{{data.updated_at}}">{{data.updated_at}}</div>
+       </td> -->
+       <!-- <td>{{data.active}}</td> -->
+      <td style="display: flex; justify-content: space-between;">
+          <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+          <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(data)" icon="pi pi-ellipsis-h"></button>
+        <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
+            (click)="taskread(task)" title="View"></button>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2" title="Edit task"
+            (click)="editTask(task)"></button>
+          <button pButton pRipple icon="pi pi-calendar-plus" class="p-button-rounded p-button-success"
+            title="Schedule task" (click)="openScheduleTaskDialog(task)"></button> -->
+        </td>
+        <td></td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{Alarms ? Alarms.length : 0 }} Data.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+
+<p-dialog [(visible)]="showEditDialog" [style]="{width: '700px'}" [(header)]="dialogHeader" [modal]="true"
+styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideDialog()"> 
+  <ng-template pTemplate="content">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="severity" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Serverity</label>
+          <p-dropdown class="mx-2" id="severity" (onChange)="onChangeseverity($event)" [options]="severitys"
+            [(ngModel)]="selectedseverity" optionLabel="name" [style]="{'width':'250px'}" autofocus></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="p-field" style="margin-top: -10px;">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="display_name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Display Name</label>
+          <input type="text" [class]="invinvalid_display_name" pInputText id="display_name" [(ngModel)]="display_name" autofocus required />
+        </div>
+        <div class="col pr-0">
+          <label for="alarm_type" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Type</label>
+          <input type="text" pInputText id="alarm_type" [(ngModel)]="alarm_type" [class]="invinvalid_alarm_type" 
+            disabled autofocus />
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="alarm_level" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Level</label>
+          <input type="text" pInputText id="alarm_level" [(ngModel)]="alarm_level" [class]="invinvalid_alarm_level" required
+            autofocus />
+        </div>
+        <div class="col pr-0">
+          <label for="alarm_value" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}">Value</label>
+            <input type="text" pInputText id="alarm_value" [(ngModel)]="alarm_value" [class]="invinvalid_alarm_value" required
+                  autofocus />
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template pTemplate="footer">
+    <div>
+      <div pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger button-cancel"
+        (click)="hideDialog()" style="margin-right:16px">
+      </div>
+      <div pButton pRipple label="Save" icon="pi pi-check" class="p-button-success button-save" (click)="saveEdit()">
+      </div>
+    </div>
+    <!-- <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text "
+      (click)="saveEdit()"
+    ></button> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Title" [(visible)]="showViewDialog" [style]="{ width: '700px' }" [(header)]="dialogHeader" (onHide)="hideDialog()"
+  [modal]="true">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div style="display: flex; justify-content: flex-start">
+    <div class="row">
+    <div style="margin-right:16px; margin-left: 15px; margin-top: 5px;">
+      <span style="font-weight: bold;">Serverity: </span> {{selectedseverity}}
+    </div>
+    <div class="card flex align-items-center justify-content-center mb-0" *ngIf="selectedseverity == 'ok'" class="Alarm_ok" >
+        <span class="block" >&nbsp;</span>
+      </div>
+      <div class="card flex align-items-center justify-content-center mb-0" *ngIf="selectedseverity == 'warning'" class="Warning" >
+        <span class="block" >&nbsp;</span>
+      </div>
+      <div class="card flex align-items-center justify-content-center mb-0" *ngIf="selectedseverity == 'critical'" class="Critical" >
+        <span class="block" >&nbsp;</span>
+      </div>
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+      <span style="font-weight: bold; ">Ref Code: </span> {{editedID}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+      <span style="font-weight: bold; ">Display Name: </span> {{display_name}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+        <span style="font-weight: bold;">Type: </span> {{alarm_type}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+        <span style="font-weight: bold;">Value: </span> {{alarm_value}}
+    </div>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+        <span style="font-weight: bold;">Created By: </span> {{CreatedBy}}
+    </div>
+
+    <span style="font-weight: bold; margin-top: 15px; margin-right: 10px;">Created At: </span>  <span style="margin-top: 15px;"> {{CreatedAt}}</span>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+        <span style="font-weight: bold;">Updated By: </span> {{UpdatedBy}}
+    </div>
+
+    <span style="font-weight: bold; margin-top: 15px; margin-right: 10px;">Updated At: </span> <span style="margin-top: 15px;"> {{UpdatedAt}}</span>
+  </div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px; margin-top: 15px;">
+        <span style="font-weight: bold;">Active: </span> {{Activestatus}}
+    </div>
+  </div>
+
+</p-dialog>
+<p-toast></p-toast>

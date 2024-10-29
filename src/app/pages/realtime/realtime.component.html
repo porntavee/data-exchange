@@ -1,0 +1,192 @@
+<div *ngIf="navId == '/realtime1'" class="row mx-0 bgcolor">
+    <div class="col-3">
+        <label class="f-color-w c-btn">ลาดกระบัง</label>
+        <label class="f-color-w c-btn">พัทยา</label>
+        <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+        [(ngModel)]="selectedKmNo" placeholder="จุดสนใจ" optionLabel="name"
+        [style]="{ width: '200px' }" autofocus></p-dropdown>
+       
+    </div>
+    <div class="col-6">
+        <div id="hexagon-container" class="hexagon-container">
+        </div>
+        <div id="hexagon-container2" class="hexagon-container">
+        </div>
+       
+    </div>
+    <div class="col-3">
+        <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+        [(ngModel)]="selectedKmNo" placeholder="จำนวนรถผ่านด่านวันนี้" optionLabel="name"
+        [style]="{ width: '200px' }" autofocus></p-dropdown>
+        <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+        [(ngModel)]="selectedKmNo" placeholder="ข้อมูลจราจรอื่นๆ" optionLabel="name"
+        [style]="{ width: '200px' }" autofocus></p-dropdown>
+    </div>
+    
+</div>
+
+<div *ngIf="navId == '/realtime2'" class="row mx-0 bgcolor">
+    <div class="col-6">
+        <img [src]="'assets/img/m79.png'" [title]="'realtime-map'"> 
+    </div>
+    <div class="col-6">
+        <img [src]="'assets/img/m38.bmp'" [title]="'realtime-map'"> 
+    </div>
+</div>
+
+<div *ngIf="navId == '/realtime3'" class="row mx-0 bgcolor">
+    <div class="col-12">
+        <p class="f-color-w">กดไอคอนบนแผนที่เพื่อดูภาพจากกล้อง</p>
+    </div>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6">
+                <!-- <img src="assets/img/m-realtime-map3.png"> -->
+                <div>
+                    <p-gmap
+                      #gmap
+                      [options]="options"
+                      [overlays]="overlays"
+                      [style]="{ width: '100%', height: '800px' }"
+                      (onOverlayClick)="handleOverlayClick($event)"
+                      (onMapReady)="setMap($event)"
+                    ></p-gmap>
+                  </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
+                        <div>
+                            <p class="f-color-w">รหัสกล้อง: DC 113</p>
+                        </div>
+                        <div>
+                            <img src="assets/img/m-realtime-map4.png">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div>
+                            <p class="f-color-w">รหัสกล้อง: DC 113</p>
+                        </div>
+                        <div>
+                            <img src="assets/img/m-realtime-map4.png">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="f-color-w" style="width: 100%;">
+                        <tr>
+                            <th>
+                                ลำดับ
+                            </th>
+                            <th>
+                                ชื่อที่จอดรถ
+                            </th>
+                            <th>
+                                จำนวนที่จอดรถ
+                            </th>
+                            <th>
+                                จำนวนที่ว่าง
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                จุดพักรถ (Rest Stop) กับช้าง 2
+                            </td>
+                            <td>
+                                14
+                            </td>
+                            <td>
+                                5
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div *ngIf="navId == '/realtime4'" class="row mx-0 bgcolor">
+    <div class="row">
+        <div class="col-3">
+            <label class="f-color-w c-btn">ลาดกระบัง</label>
+            <label class="f-color-w c-btn">พัทยา</label>
+            <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="kmNo"
+            [(ngModel)]="selectedKmNo" placeholder="จุดสนใจ" optionLabel="name"
+            [style]="{ width: '200px' }" autofocus></p-dropdown>
+           
+        </div>
+        <div class="col-6">
+            <div>
+                <img [src]="'assets/img/m79.png'" [title]="'realtime-map'">
+            </div>
+           
+        </div>
+        <div class="col-3">
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="f-color-w" style="width: 100%;">
+                <tr>
+                    <th>
+                        ลำดับ
+                    </th>
+                    <th>
+                        เส้นทาง
+                    </th>
+                    <th>
+                        ทางแยกต่างระดับ
+                    </th>
+                    <th>
+                        ID ต่่างระดับ
+                    </th>
+                    <th>
+                        ชื่อทางแยก / จุดติดตั้ง
+                    </th>
+                    <th>
+                        Ramp ID
+                    </th>
+                    <th>
+                        Zone
+                    </th>
+                    <th>
+                        Last Date
+                    </th>
+                    <th>
+                        ts_count
+                    </th>
+                    <th>
+                        Data availability
+                    </th>
+                    <th>
+                        Last Update
+                    </th>
+                </tr>
+                <tr *ngFor="let item of model4; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.route }}</td>
+                    <td>{{ item.level }}</td>
+                    <td>{{ item.level_id }}</td>
+                    <td>{{ item.route_name }}</td>
+                    <td>{{ item.ramp_id }}</td>
+                    <td>{{ item.zone }}</td>
+                    <td>{{ item.last_date }}</td>
+                    <td>{{ item.ts_count }}</td>
+                    <td>{{ item.data_availability }}</td>
+                    <td [ngClass]="{
+                        'green-background': item.last_update === '15 นาที',
+                        'yellow-background': item.last_update === '1 วัน',
+                        'red-background': item.last_update !== '15 นาที' && item.last_update !== '1 วัน'
+                    }">{{ item.last_update }}</td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</div>

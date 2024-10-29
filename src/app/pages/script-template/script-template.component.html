@@ -1,0 +1,221 @@
+<p-toast></p-toast>
+
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+<p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <button pButton pRipple class="p-button-success mr-2 Newbut" (click)="openAddScript()" ><i class="pi pi-plus"><span class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">New Script</span></i></button>
+        <button pButton pRipple class="p-button-success Exportbut" style="margin-left:8px"
+          (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+      </div>
+      <div class="p-toolbar-group-right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="data.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+            placeholder="Search..." />
+        </span>
+      </div>
+</p-toolbar>
+
+
+<p-table #data [value]="scripts" [rows]="10" [paginator]="true" [globalFilterFields]="[
+      'name',
+      ['script'],
+      ['supported_models'],
+      ['created_at'],
+      ['modified_at']
+    ]" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+  [globalFilterFields]="[
+      'name',
+      ['script'],
+      ['supported_models'],
+      ['created_at'],
+      ['modified_at']
+    ]" [rowsPerPageOptions]="[10, 25, 50]"  responsiveLayout="scroll"
+  [rowHover]="true">
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="name">
+        Name <p-sortIcon field="nameSort"></p-sortIcon>
+      </th>
+      <th pSortableColumn="script">
+        Script <p-sortIcon field="scriptSort"></p-sortIcon>
+      </th>
+      <th pSortableColumn="supported_models">
+        Supported model <p-sortIcon field="modelSort"></p-sortIcon>
+      </th>
+      <th pSortableColumn="created_at">
+        Created at <p-sortIcon field="createdSort"></p-sortIcon>
+      </th>
+      <th pSortableColumn="modified_at">
+        Modified at <p-sortIcon field="modifiedSort"></p-sortIcon>
+      </th>
+      <th>Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-script>
+    <tr>
+      <td>{{ script.name }}</td>
+      <td class="ellipsisScript" title="{{ script.script }}">
+        {{ script.script }}
+      </td>
+      <td class="ellipsisSupported">{{ script.supported_models }}</td>
+      <td>
+        {{ script.created_at.substring(0, 10) }}
+        {{ script.created_at.substring(11, 16) }}
+      </td>
+      <td>
+        {{ script.modified_at.substring(0, 10) }}
+        {{ script.modified_at.substring(11, 16) }}
+      </td>
+      <td>
+
+        <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body" ></p-menu>
+          <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(script)" icon="pi pi-ellipsis-h"></button>
+
+        <!-- <button pButton pRipple type="button" icon="pi pi-play" class="p-button-secondary marker"
+            (click)="openPlayScript(script)"></button>
+          <button pButton pRipple type="button" icon="pi pi-info-circle" class="p-button-info info"
+            (click)="showInfo(script)"></button>
+          <button pButton pRipple type="button" icon="pi pi-pencil" class="p-button-warning pencil"
+            (click)="editDialog(script)"></button>
+          <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-danger delete"
+            (click)="deleteScript(script)"></button> -->
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    <div class="p-d-flex p-ai-center p-jc-between">
+      In total there are
+      {{ scripts ? scripts.length : 0 }} scripts.
+    </div>
+  </ng-template>
+</p-table>
+</div>
+<p-dialog header="Title" [(visible)]="display" [style]="{ width: '900px' }" [(header)]="dialogHeader" [modal]="true">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div style="margin-bottom:12px"><span>Name:</span> {{ script.name }}</div>
+  <div style="margin-bottom:12px"><span>Script:</span></div>
+  <textarea class="terminal" style="width: 100%; font-size: 18px; overflow-x: hidden;">{{ script.script }}</textarea>
+  <div style="background-color: rgb(154, 154, 154); margin-top: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div>
+    <!-- <div style="margin-top:12px"></div>
+    <span>Supported Models:</span>
+    {{ script.supported_models }}
+  </div>
+  <div>
+    <span>Created at:</span>
+    {{ script.created_at }}
+  </div>
+  <div>
+    <span>Modified at:</span>
+    {{ script.modified_at }} -->
+  </div>
+</p-dialog>
+
+<p-dialog header="Title" [(visible)]="addNewScriptDialog" [style]="{ width: '900px' }" [(header)]="dialogHeader"
+  [modal]="true" (onHide)="hideDialog()">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div style="display: flex; margin-bottom: 12px;">
+    <div style="margin-top:8px;  ">
+      Name:
+    </div>
+    <input style="margin-left: 8px;" type="text" id="inputtext" pInputText [(ngModel)]="newScriptName"
+      [class]="invinvalid" oninput="onchangeNameInput($event)" required autofocus />
+  </div>
+  <div>
+    Supported Models:
+    <p-multiSelect class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="deviceTypes"
+      [(ngModel)]="selectedDeviceType" defaultLabel="Select Model" optionLabel="model" [style]="{ width: '200px' }"
+       display="chip" [class]="invinvalid2" required autofocus></p-multiSelect>
+  </div>
+  <div style="margin-bottom: 24px;"></div>
+  <textarea [class]="invinvalid3" class="terminal" rows="10" cols="25" pInputTextarea placeholder="Type script here!"
+    style="width: 500px; height: 500px; font-size: 18px;" spellcheck="false" [(ngModel)]="newScriptScript" required
+    autofocus style="width: 100%; font-size: 18px; overflow-x: hidden;"></textarea>
+  <div style="background-color: rgb(154, 154, 154); margin-top: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger button-cancel"
+      (click)="hideDialog()">
+    </button>
+    &nbsp;&nbsp;
+    <button pButton pRipple label="Create template" icon="pi pi-check" class="p-button-success"
+      (click)="createScriptTemplate()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Title" [(visible)]="playScriptDialog" [style]="{ width: '700px' }" [(header)]="dialogHeader"
+  [modal]="true" (onHide)="hideDialog()">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div>
+    Run on
+    <input type="text" id="inputtext" pInputText class="ng-invalid" [(ngModel)]="ipAddress" style="margin-left: 24px; margin-bottom: 24px;
+    " />
+    <textarea [(ngModel)]="editedScript" style="width: 100%; overflow-x: hidden;" class="terminal"></textarea>
+  </div>
+
+  <textarea class="terminal" style="width: 100%; overflow-x: hidden;">{{
+    resultScript
+  }}</textarea>
+
+  <ng-template pTemplate="footer">
+    <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+    </div>
+    <div style="margin-top: 24px;"></div>
+    <button pButton pRipple style="margin-right: 16px;" label="Cancel" icon="pi pi-times" class="p-button-danger mr-2"
+      (click)="hideDialog()"></button>
+    <button pButton pRipple label="RUN SCRIPT" icon="pi pi-power-off" class="p-button-secondary mr-2"
+      (click)="runScript()"></button>
+
+    <!-- <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveEdit()"
+    ></button> -->
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Title" [(visible)]="showEditDialog" [style]="{ width: '700px' }" [(header)]="dialogHeader"
+  [modal]="true">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <div style="display: flex; justify-content: flex-start">
+    <div style="margin-right:16px;">
+      Name:
+      <input type="text" id="inputtext" pInputText class="ng-invalid" [(ngModel)]="editedName" required />
+    </div>
+
+    <span>Supported model:
+      <input type="text" id="inputtext" pInputText class="ng-invalid" [(ngModel)]="editedSupportedModels"
+        required /></span>
+  </div>
+  <div>
+    Script:
+
+    <textarea class="terminal" type="text" id="inputtext" pInputText [(ngModel)]="editedScript"
+      style="width: 100%;  overflow-x: hidden;">
+    </textarea>
+  </div>
+  <div style="background-color: rgb(154, 154, 154); margin-top: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <ng-template pTemplate="footer">
+    <div>
+      <div pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger button-cancel"
+        (click)="hideDialog()" style="margin-right:16px">
+      </div>
+      <div pButton pRipple label="Save" icon="pi pi-check" class="p-button-success button-save" (click)="saveEdit()">
+      </div>
+    </div>
+    <!-- <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text "
+      (click)="saveEdit()"
+    ></button> -->
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

@@ -1,0 +1,243 @@
+<!-- SECTION DEVICE PROFILE -->
+
+<!-- <div style="display: flex; justify-content: flex-end;">
+    <div class="p-inputgroup" style="width:15%; margin-bottom: 16px; margin-top:16px">
+        <span class="p-inputgroup-addon"><p-checkbox></p-checkbox></span>
+        <input type="text" pInputText placeholder="IP Filter">
+    </div>
+</div> -->
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <button pButton pRipple class="p-button-info Newbut" (click)="showAddProfileDiaglog()" ><i class="pi pi-plus"><span class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Add</span></i></button>
+        <button pButton pRipple class="p-button-success Exportbut" style="margin-left:8px"
+          (click)="exportToExcel()"><i class="pi pi-file"><span class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button>
+      </div>
+      <div class="p-toolbar-group-right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+            placeholder="Search..." />
+        </span>
+      </div>
+    </p-toolbar>
+
+
+  <p-table #dt  [value]="dataprofile" [rows]="10" [paginator]="true" [rowHover]="true" dataKey="id" [globalFilterFields]="['device_profile_name','username','description']"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="device_profile_name" for="device_profile_name">Device profile name<p-sortIcon field="device_profile_name"></p-sortIcon></th>
+        <th pSortableColumn="description" for="description">Description<p-sortIcon field="description"></p-sortIcon></th>
+        <th pSortableColumn="username" for="username">Username<p-sortIcon field="username"></p-sortIcon></th>
+        <!-- <th for="id">Management VLAN</th> -->
+        <th pSortableColumn="update_time" for="update_time">Update Time<p-sortIcon field="update_time"></p-sortIcon></th>
+        <th >Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td>{{ rowData.device_profile_name}}</td>
+        <td>{{ rowData.description }}</td>
+        <td>{{ rowData.username }}</td>
+        <!-- <td>{{ rowData.management_vlan }}</td> -->
+        <td>{{ rowData.update_time | date:'dd-MM-YYYY HH:mm:ss'}}</td>
+        <td>
+          <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+          <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(rowData)"
+            icon="pi pi-ellipsis-h"></button>
+          <!-- <button pButton label="Edit" type="button" class="p-button-info"
+          (click)="showEditprofileDialog(rowData)"></button> -->
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<p-dialog header="Update All" [(visible)]="displayAddDeviceProfile" [style]="{ 'width': '500px', 'height': '500px' }">
+  <div style="margin-bottom: 32px;">
+    <p-dropdown [options]="brands" [(ngModel)]="selected_brand" optionLabel="name"></p-dropdown> <br>
+  </div>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown> <br>
+  <p-dropdown [options]="devices" [(ngModel)]="selected_device" optionLabel="deviceName"></p-dropdown>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmit()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Edit" [(visible)]="displayEdit" [style]="{ 'width': '500px', 'height': '350px' }"
+  (onHide)="hideDialog()">
+  <!-- <div style="margin-bottom: 32px;">
+        <p-dropdown [options]="brands" [(ngModel)]="selected_brand" optionLabel="name"></p-dropdown> <br>
+    </div> -->
+  <p-dropdown [options]="device_profile_nameArrlist" [(ngModel)]="selecteddevice_profile" optionLabel="deviceName"
+    [scrollHeight]="scrollHeight" placeholder="Select Device profile name"
+    (onChange)="listvalueprofile($event.value)"><ng-template let-device pTemplate="item">
+      <div class="item-drop1">
+        <span class="item-value1">{{device.deviceName}} | {{device.deviceDesc}}</span>
+
+      </div>
+    </ng-template></p-dropdown>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Submit" (click)="onSubmitlistdeviceprofile()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Edit" [(visible)]="displayEditprofile" [style]="{ 'width': '550px', 'height': '500px' }">
+  <ng-template pTemplate="content" (onHide)="hideDialog()">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Device profile name">Device profile name</label>
+          <input type="text" [class]="invalidprofilename" pInputText id="name"
+            [(ngModel)]="profileid.device_profile_name" style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <small class=" p-invalid" *ngIf="checkduplicatename"
+        style="color:red ; font-weight: bold;">{{messageduplicatename}}</small>
+
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Description">Description</label>
+          <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileid.description"
+            style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Username">Username</label>
+          <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileid.username"
+            style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field" style="margin-top: 10px;">
+      <div class="row mx-0">
+        <!-- <div class="col pl-0"> -->
+        <label for="password" style="margin-top: 10px; margin-right: 15px;">Password</label>
+        <p-password type="password" id="password" [class]="invalidPassword" [(ngModel)]="profileid.password" required
+          [toggleMask]="true" (keyup)="checkPassword()">
+        </p-password>
+        <!-- </div> -->
+      </div>
+    </div>
+    <div class="p-field">
+
+      <small class=" p-invalid" *ngIf="!isValid">
+        Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase
+        letter,
+        one special letter and one number. <i class="pi pi-info-circle" style="font-size: 1rem; margin-left: 8px;"
+          title="One of this special characters is required in your password #$%^&*+_"></i>
+      </small>
+      <small class=" p-invalid" *ngIf="isValid" style="color:seagreen ; font-weight: bold;">Strong Password
+        !</small>
+      <small class="p-invalid" *ngIf="submitted && !profileid.password">New
+        Password is required.</small>
+
+    </div>
+    <!-- <div class="p-field" style="margin-top: 10px;">
+            <div class="row mx-0">
+              <div class="col pl-0">
+                <label for="Management Vlan" >Management Vlan</label>
+                 <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileid.management_vlan" style="margin-left: 15px;" autofocus required />
+              </div>
+            </div>
+          </div> -->
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Submit" icon="pi pi-check" class="p-button-text"
+      (click)="savedisplayEditprofile()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Add" [(visible)]="displayAddprofile" [style]="{ 'width': '550px', 'height': '500px' }">
+  <ng-template pTemplate="content" (onHide)="hideDialog()">
+
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Device profile name">Device profile name</label>
+          <input type="text" [class]="invalidprofilename" pInputText id="name"
+            [(ngModel)]="profileidAdd.device_profile_name" style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <small class=" p-invalid" *ngIf="checkduplicatename"
+        style="color:red ; font-weight: bold;">{{messageduplicatename}}</small>
+
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Description">Description</label>
+          <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileidAdd.description"
+            style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="Username">Username</label>
+          <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileidAdd.username"
+            style="margin-left: 15px;" autofocus required />
+        </div>
+      </div>
+    </div>
+    <div class="p-field" style="margin-top: 10px;">
+      <div class="row mx-0">
+        <!-- <div class="col pl-0"> -->
+        <label for="password" style="margin-top: 10px; margin-right: 15px;">Password</label>
+        <p-password type="password" id="password" [class]="invalidPassword" [(ngModel)]="profileidAdd.password" required
+          [toggleMask]="true" (keyup)="checkPassword()">
+        </p-password>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <div class="p-field">
+
+      <small class=" p-invalid" *ngIf="!isValid">
+        Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase
+        letter,
+        one special letter and one number. <i class="pi pi-info-circle" style="font-size: 1rem; margin-left: 8px;"
+          title="One of this special characters is required in your password #$%^&*+_"></i>
+      </small>
+      <small class=" p-invalid" *ngIf="isValid" style="color:seagreen ; font-weight: bold;">Strong Password
+        !</small>
+      <small class="p-invalid" *ngIf="submitted && !profileidAdd.password">New
+        Password is required.</small>
+
+    </div>
+    <!-- <div class="p-field" style="margin-top: 10px;">
+            <div class="row mx-0">
+              <div class="col pl-0">
+                <label for="Management Vlan" >Management Vlan</label>
+                 <input type="text" [class]="invalid" pInputText id="name" [(ngModel)]="profileidAdd.management_vlan" style="margin-left: 15px;" autofocus required />
+              </div>
+            </div>
+          </div> -->
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Submit" icon="pi pi-check" class="p-button-text"
+      (click)="savedisplayAddprofile()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-toast></p-toast>

@@ -1,0 +1,790 @@
+<p-toast></p-toast>
+<!-- <button (click)="exportToExcel()">Export to Excel</button> -->
+<p-dialog [(visible)]="display" [style]="{ width: '700px' }" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="hideDialog()">
+
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name">Export with</label>
+          <input type="text" pInputText id="name" placeholder=".XLS (excel)" readonly required autofocus />
+        </div>
+        <div class="col pr-0">
+          <label>Date type</label>
+          <p-dropdown [options]="dateTypeModes" [(ngModel)]="selectedDateTypeMode" value="daily" optionLabel="name"
+            (onChange)="onChangeDateTypeMode($event)"></p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field">
+      <div class="row mx-0" *ngIf="selectedDateTypeMode.name == 'daily'">
+        <div class="col pl-0">
+          <label class="mx-2" for="start_time">Start Date</label>
+          <p-calendar [(ngModel)]="startValue" value="startDate" [showIcon]="true" [readonlyInput]="true"
+            dateFormat="dd.mm.yy" (onSelect)="onSelectMethodForDaily($event)" [class]="invalid"></p-calendar>
+        </div>
+        <div class="col pr-0">
+          <label class="mx-2" for="start_time">End Date</label>
+          <p-calendar [(ngModel)]="startValue" dateFormat="dd.mm.yy" [showIcon]="true" [readonlyInput]="true"
+            [class]="invalid">
+            ></p-calendar>
+        </div>
+      </div>
+      <div class="row mx-0" *ngIf="selectedDateTypeMode.name == 'weekly'">
+        <div class="col pl-0">
+          <label class="mx-2" for="start_time">Start Date</label>
+          <p-calendar [(ngModel)]="startValue" [showIcon]="true" [readonlyInput]="true" dateFormat="dd.mm.yy"
+            (onSelect)="onSelectMethodForWeekly($event)" [class]="invalid"></p-calendar>
+        </div>
+        <div class="col pr-0">
+          <label class="mx-2" for="start_time">End Date</label>
+          <input type="text" pInputText readonly [value]="endDayWeekly" />
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0" *ngIf="selectedDateTypeMode.name == 'monthly'">
+      <div class="col pl-0">
+        <label class="mx-2" for="start_time">Month</label>
+        <p-calendar [(ngModel)]="startValue" [showIcon]="true" [readonlyInput]="true" view="month" dateFormat="mm/yy"
+          (onSelect)="onSelectMethodForMonthly($event)" [class]="invalid"></p-calendar>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Export" icon="pi pi-check" class="p-button-warning" (click)="exportExcel()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'}">
+
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+      <button pButton pRipple class="p-button-success mr-2 Newbut" (click)="openNew()"><i class="pi pi-plus"><span
+            class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Add New Schedule</span></i></button>
+      <button pButton pRipple class="p-button-help mr-2 Newbut" (click)="openNewZTP()"><i class="pi pi-power-off"><span
+            class="Newtxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Enable ZTP</span></i></button>
+      <!-- <button pButton pRipple class="p-button-success Exportbut" (click)="exportToExcel()"><i class="pi pi-file"><span
+            class="Exporttxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Export to excel</span></i></button> -->
+    </div>
+    <div class="p-toolbar-group-right">
+      <button pButton class="p-button-outlined Clearbut" (click)="clear(data)"><i class="pi pi-filter-slash"><span
+            class="Cleartxt" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;">Clear</span></i></button>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="data.filterGlobal($event.target.value, 'contains')" class="Searchtxt"
+          placeholder="Search with Suggest IP" />
+      </span>
+      <button pButton pRipple (click)="showDialog()" title="Export with Excel" class="p-button-success mr-2 Editbut"><i
+          class="pi pi-file-excel"></i></button>
+    </div>
+  </p-toolbar>
+  <p-table #data [value]="provisioningHistory"
+    [globalFilterFields]="['suggested_ip',['mac'],['model'],['uplink_ip'],['created_by'],['state']]" [rows]="10"
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [rowHover]="true">
+    >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="suggested_ip">Suggested IP <p-sortIcon field="suggested_ip"></p-sortIcon>
+        </th>
+        <th pSortableColumn="mac">MAC <p-sortIcon field="mac"></p-sortIcon>
+        </th>
+        <th pSortableColumn="model">Model <p-sortIcon field="model"></p-sortIcon>
+        </th>
+        <th pSortableColumn="uplink_ip">Uplink IP <p-sortIcon field="uplink_ip"></p-sortIcon>
+        </th>
+        <th pSortableColumn="start_at">Start At<p-sortIcon field="start_at"></p-sortIcon>
+        </th>
+        <!-- <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
+        </th> -->
+        <th pSortableColumn="state">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            State<p-sortIcon field="state"></p-sortIcon>
+            <p-columnFilter field="state" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false"
+              [showAddButton]="false">
+              <ng-template pTemplate="header">
+                <div class="p-px-3 p-pt-3 p-pb-0" style="margin-top: 15px; margin-left: 10px;">
+                  <span class="p-text-bold">State Picker</span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                <p-multiSelect [ngModel]="value" [options]="provisioningStateArr" placeholder="Any"
+                  (onChange)="filter($event.value)">
+                  <ng-template let-option pTemplate="item">
+                    <div *ngIf="option === 'waiting for location'" class="p-multiselect-representative-option">
+                      <span class="waiting">{{option}}</span>
+                    </div>
+                    <div *ngIf="option === 'ZTP DHCP enabled'" class="p-multiselect-representative-option">
+                      <span class="enabled">{{option}}</span>
+                    </div>
+                    <div *ngIf="option === 'done'" class="done" class="p-multiselect-representative-option">
+                      <span class="done">confirmed location</span>
+                    </div>
+                    <div *ngIf="
+                  option != 'done' &&
+                  option != 'waiting for location' &&
+                  option!= 'ZTP DHCP enabled'
+                    " class="p-multiselect-representative-option">
+                      <span class="others">{{option}}</span>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </ng-template>
+            </p-columnFilter>
+          </div>
+        </th>
+        <!-- <th pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon>
+        </th> -->
+        <th>Tools</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-provisionHistory>
+      <tr>
+        <td><div  title="{{ provisionHistory.suggested_ip }}">{{ provisionHistory.suggested_ip }}</div></td>
+        <td><div  title="{{ provisionHistory.mac }}">{{ provisionHistory.mac }}</div></td>
+        <td><div  title="{{ provisionHistory.model }}">{{ provisionHistory.model }}</div></td>
+        <td><div  title="{{ provisionHistory.uplink_ip }}">{{ provisionHistory.uplink_ip }}</div></td>
+        <td><div  title="{{ provisionHistory.start_at }}">{{ provisionHistory.start_at | date:'dd-MM-YYYY HH:mm:ss' }}</div></td>
+        <!-- <td><div class="myDIV1" title="{{ provisionHistory.username }}">{{ provisionHistory.username }}</div></td>
+        <td><div class="myDIV2" title="{{ provisionHistory.created_at.substring(0, 10) + ' '
+        }}{{ provisionHistory.created_at.substring(11, 16) }}">{{ provisionHistory.created_at.substring(0, 10) + " "
+        }}{{ provisionHistory.created_at.substring(11, 16) }}</div>
+          
+        </td> -->
+        <td>
+          <div *ngIf="provisionHistory.state === 'waiting for location'" class="waiting">
+            {{ provisionHistory.state }}
+          </div>
+          <div *ngIf="provisionHistory.state === 'ZTP DHCP enabled'" class="enabled">
+            {{ provisionHistory.state }}
+          </div>
+          <div *ngIf="provisionHistory.state === 'done'" class="done">
+            confirmed location
+          </div>
+          <div *ngIf="
+              provisionHistory.state != 'done' &&
+              provisionHistory.state != 'waiting for location' &&
+              provisionHistory.state != 'ZTP DHCP enabled'
+            " class="others">
+            {{ provisionHistory.state }}
+          </div>
+          <!-- <div *ngIf="rovisionHistory.state === 'waiting for scheduler'" class="others">
+            {{ provisionHistory.state }}
+          </div> -->
+        </td>
+        <td>
+
+          <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+          <button pButton type="text" (click)="menu.toggle($event)" (click)="menuVlue(provisionHistory)"
+            icon="pi pi-ellipsis-h" styleClass="menuList"></button>
+          <!-- <button *ngIf="
+              provisionHistory.latitude === null &&
+              provisionHistory.longitude === null
+            " pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+            class="p-button-rounded p-button-danger" (click)="provisionTaskShowLocation(provisionHistory)"></button>
+          <button *ngIf="
+              provisionHistory.latitude !== null &&
+              provisionHistory.longitude !== null
+            " pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+            class="p-button-rounded p-button-danger" (click)="provisionTaskShowLocation(provisionHistory)"></button>
+          &nbsp;&nbsp;
+          <button pButton pRipple type="button" icon="pi pi-info-circle" class="p-button-rounded p-button-primary"
+            title="Information" (click)="provisionTaskRead(provisionHistory)"></button>
+          &nbsp;&nbsp;
+          <button pButton pRipple type="button" icon="pi pi-refresh" class="p-button-rounded p-button-success"
+            title="Recovery" (click)="provisionTaskRecovery(provisionHistory)"></button>  -->
+
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are
+        {{ provisioningHistory ? provisioningHistory.length : 0 }} Provisioning
+        history.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<!-- Dialog Part -->
+
+<p-dialog header="Title" [(visible)]="provisionTaskDialogLocation" [style]="{ width: '900px' }"
+  [(header)]="dialogHeader" [modal]="true" (onHide)="cancel()">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+  </div>
+  <div *ngIf="checkmap">
+    <div class="col-12 justify-content-between flex">
+      <div class="row" style="margin-left: 30%;">
+
+        <button pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+          class="p-button-rounded p-button-danger" style="height:1.5rem; width:1.5rem"></button>
+        <span style="margin-left: 1rem; font-weight: bold;" title="latitude">{{ latitude }}</span>
+        <span>,</span>
+
+        <span style="margin-left: 1rem; font-weight: bold;" title="longitude">{{ longitude }}</span>
+
+      </div>
+    </div>
+    <div>
+      <p-gmap [style]="{ width: '100%', height: '480px' }" [overlays]="overlays1" [options]="options1"
+        (onMapReady)="setMap($event)" (onMapClick)="handleMapClick($event)"></p-gmap>
+    </div>
+    <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+    </div>
+    <div class="row mx-0" style="margin-top: 20px;" class="flex-end">
+      <!-- <div class="flex-end"> -->
+      <button pButton pRipple type="button" label="Done" class="p-button-success" (click)="Save_SNMP()">
+        <i class="pi pi-spin pi-spinner" *ngIf="spinner" style="margin-right: 5px;"></i>
+      </button>
+      <!-- </div> -->
+    </div>
+  </div>
+  <div *ngIf="checkmaps">
+    <div class="row mx-0">
+      <div *ngIf="checkmapDialog">
+        <div class="p-field">
+          <div class="col-12 flex align-items-center justify-content-center"
+            style="margin-bottom: 0.5rem; margin-top: 2rem; margin-left: 10rem;">
+            <button pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+              class="p-button-rounded p-button-danger" style="height:1.5rem; width:1.5rem"></button>
+            <span style="margin-left: 1rem; font-weight: bold;" title="latitude">{{ latitude }}</span>
+            <span>,</span>
+            <span style="margin-left: 1rem; font-weight: bold;" title="longitude">{{ longitude }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="invalidcheckmap">
+        <div class="p-field">
+          <div class="col-12 flex align-items-center justify-content-center"
+            style="margin-bottom: 0.5rem; margin-top: 2rem; margin-left: 10rem;">
+            <button pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+              class="p-button-rounded p-button-danger" style="height:1.5rem; width:1.5rem"></button>
+
+            <span style="margin-left: 1rem; font-weight: bold;" title="latitude">Waiting for location, please select
+              location</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p-gmap [style]="{ width: '100%', height: '480px' }" [overlays]="overlays1" [options]="options1"
+        (onMapReady)="setMap($event)" (onMapClick)="handleMapClick2($event)"></p-gmap>
+    </div>
+    <div class="row mx-0" style="margin-top: 20px;" class="flex-end">
+      <!-- <div class="flex-end"> -->
+      <button pButton pRipple type="button" label="Done" class="p-button-success" (click)="Save_SNMP()">
+        <i class="pi pi-spin pi-spinner" *ngIf="spinner" style="margin-right: 5px;"></i>
+      </button>
+      <!-- </div> -->
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Title" [(visible)]="provisionTaskDialog" [style]="{ width: '700px' }" [(header)]="dialogHeader"
+  [modal]="true">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+  </div>
+  <div class="p-field">
+    <div class="row mx-0">
+      <div class="col pl-0">
+        <div class="flex">
+          <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" style="font-size: 16px;">State: &nbsp;
+          </label>
+          <!-- *ngIf="provisionHistory.state === 'waiting for location'" -->
+          <!-- class="waiting" -->
+          <div *ngIf="provisionTask.state === 'waiting for location'" class="waiting">
+            <span>{{ provisionTask.state }}</span>
+            <br />
+          </div>
+          <div *ngIf="provisionTask.state === 'ZTP DHCP enabled'" class="enabled">
+            <span>ZTP DHCP enabled</span>
+            <br />
+          </div>
+          <div *ngIf="provisionTask.state === 'done'" class="done">
+            <span>confirmed location</span>
+            <br />
+          </div>
+          <div *ngIf="
+                provisionTask.state != 'done' &&
+                provisionTask.state != 'waiting for location' &&
+                provisionTask.state != 'ZTP DHCP enabled'
+              " class="others">
+            <span>{{ provisionTask.state }}</span>
+            <br />
+          </div>
+        </div>
+
+        <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" style="font-size: 16px;">Script: &nbsp;
+        </label>&nbsp;&nbsp;&nbsp;
+        <br />
+        <div class="textarea-header">
+          <textarea class="textarea" type="text" rows="10" cols="70" [style]="{ width: '100%' }" autoResize="autoResize"
+            pInputText id="script" [(ngModel)]="provisionTask.script" readonly></textarea>
+        </div>
+        <br />
+      </div>
+    </div>
+  </div>
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+  </div>
+  <div style="display: flex;">
+    <button class="col-8" (click)="runningConfig()"
+      style="width:140px; height:42px; border-radius: 100px; border:none; font-weight: bold; background-color: #475569; color:white; font-size: 14px;">
+      Config result
+    </button>
+    <button class="col-4" (click)="pingResult()"
+      style="width:140px; height:42px; margin-left: 24px; ; border-radius: 100px; border:none ; font-weight: bold; background-color: #475569; color:white;  font-size: 14px;">
+      PING
+    </button>
+  </div>
+  <br />
+  <div style="display: flex;">
+    <div class="terminal col-8" style="margin-right:4px">
+      <div *ngIf="beforeLoading">Waiting command to show run config...</div>
+      <div *ngIf="afterClick">
+        Loading config result...
+        <i class="pi pi-spin pi-spinner" *ngIf="loadingspiner" style="margin-right: 15px;"></i>
+      </div>
+
+      <textarea rows="12" cols="150" class="terminal" style="width:100%; color: #00ff41;
+        font-weight: bold;
+        font-family: monospace;
+        border: none;" readonly>
+      {{ this.configResults }}</textarea>
+    </div>
+
+    <div class="terminal col-4" style="margin-right:4px">
+      <div *ngIf="beforeLoadingPing">Waiting command to pinging...</div>
+      <div *ngIf="afterClickPing">
+        Loading ping status...
+        <i class="pi pi-spin pi-spinner" *ngIf="loadspinnerPing" style="margin-right: 15px;"></i>
+      </div>
+      <div *ngIf="pingResults === true && pingcheck" style="color: #00ff41;
+      font-weight: bold;
+      font-family: monospace;">
+        PING OK...
+      </div>
+      <div *ngIf="pingResults === false && pingcheck" style="color: red;
+      font-weight: bold;
+      font-family: monospace;">
+        PING FAILED...
+      </div>
+      <div style="color: #00ff41">
+        {{command_results}}
+      </div>
+      <!-- <br> {{uplink_ip}}
+        <br> {{suggested_ip}} -->
+    </div>
+  </div>
+  <div style="background-color: rgb(154, 154, 154); margin-top: 24px; width: 100%; height: 1px; opacity: 0.5;"></div>
+  <br />
+  <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" style="font-size: 16px;">Updated by: {{
+    provisionTask.username
+    }}&nbsp;</label><br />
+  <span>{{ provisionTask.updated_by }} </span>
+  <label for="target" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" style="font-size: 16px;">Created At: &nbsp;
+  </label>
+  <span>{{ provisionTask.created_at }}</span>
+</p-dialog>
+
+<!-- --- provisioning --- -->
+<p-dialog [(visible)]="provissionDialog" position="center" [style]="{ width: '800px' }" [header]="dialogHeader"
+  (onHide)="cancel()" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '70vh',
+      'min-height': '250px'
+    }">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+  </div>
+  <ng-template pTemplate="content">
+    <div class="col-12 justify-content-between flex">
+      <div class="row">
+
+        <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}"
+          style=" margin-top: 12px; margin-left:24px; margin-right: 15px;">Uplink Device:
+        </label>
+        <p-dropdown [options]="uplink" [(ngModel)]="selectedUplink" [autoDisplayFirst]="false" [class]="invinvalid"
+          [style]="{ width: '200px' }" (onChange)="onChangeIP($event)" optionLabel="IPADDRESS"
+          placeholder="Select IP Address" [filter]="true" filterBy="IPADDRESS" required>
+          <ng-template let-uplinkList pTemplate="item">
+            <div class="item-drop1">
+              <span class="item-value1"><span *ngIf="uplinkList.ISPINGOK == 0"><i class="pi pi-circle-fill"
+                    style="color: red; margin-right: 8px;">
+                  </i></span>
+                <span *ngIf="uplinkList.ISPINGOK == 1"><i class="pi pi-circle-fill"
+                    style="color: #21EE0C; margin-right: 8px">
+                  </i></span>
+                <span *ngIf="uplinkList.ISPINGOK == null"></span>{{ uplinkList.IPADDRESS }} | {{ uplinkList.HOSTNAME
+                }} |
+                {{ uplinkList.iRCNETypeID }}</span>
+              <!-- <span *ngIf="car.value != '(TODO)'">{{car.label}}</span> -->
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}"
+          style=" margin-top: 12px;  margin-left:10px;">Model:
+        </label>
+
+
+        <p-dropdown class="mx-2" id="taskType" (onChange)="onChangeModel($event)" [options]="deviceTypes"
+          [(ngModel)]="selectedDeviceTypes" placeholder="Select Model" optionLabel="name" [style]="{ width: '200px' }"
+          autofocus></p-dropdown>
+
+
+      </div>
+    </div>
+    <div class="col-12 justify-content-between flex">
+      <div class="row">
+        <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}"
+          style=" margin-top: 12px; margin-left:24px; margin-right: 5px;">Except IP: &nbsp;
+        </label>
+        <input style="width: 250px; margin-left: 30px;" type="text" pInputText id="exceptIP" [(ngModel)]="exceptIP"
+          autofocus />
+        <!-- <button style="width:150px; margin-left: 15px;" pButton pRipple type="button" label="Generate" [loading]="loadingspiner"
+          class="p-button-secondary" (click)="generateConfig()">
+         
+        </button> -->
+      </div>
+    </div>
+    <!-- <div class="col-12 justify-content-between flex">
+      <div class="row">
+        <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+        'theme-saga-text': themeService.theme === 'saga-orange'}"
+          style="margin-top: 12px; margin-left:24px; margin-right: 15px;">Suggested IP:
+        </label>
+        <input style="width: 250px; margin-left: 4px;" type="text" pInputText id="management_ip" 
+          [(ngModel)]="management_ip" required autofocus readonly />
+      </div>
+    </div> -->
+
+    <!-- <div class="col-12 justify-content-between flex">
+      <div class="row">
+        <div *ngIf="loading" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}"
+          style=" font-weight: bold; margin-bottom: 12px;">
+          Generating...
+          <i class="pi pi-spin pi-spinner" *ngIf="spinner" style="margin-left:12px"></i>
+        </div>
+        <textarea type="text" rows="12" cols="150" pInputText id="script" [(ngModel)]="script" readonly
+          style="background-color: black;   color: #00ff41;   font-weight: bold;   font-family: monospace; padding: 12px;">
+          </textarea>
+      </div>
+
+    </div> -->
+    <div class="col-12 " >
+        <div class="row mx-0" style="margin-top: 20px; ">
+          <div class="col-4 ">
+            <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'}">Port</label>
+            
+            <p-dropdown  [options]="array_data" [(ngModel)]="selectedPort" optionLabel="port"  appendTo="body"
+              [autoDisplayFirst]="false" [class]="invinvalid3" (onChange)="onChangePort($event)" 
+              placeholder="Select Port" required >
+            </p-dropdown>
+          </div>
+          <div class="col-4" *ngIf="showportgenerate">
+            <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'}" >MAC</label>
+            <input type="text" pInputText id="MACremote" [(ngModel)]="MACremote" required autofocus
+              [class]="invinvalid1" />
+          </div>
+          <div class="col-4" >
+            <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'}" >Start at</label>
+              <p-calendar [(ngModel)]="scheduleTask.start_date" [showTime]="true" (onSelect)="onSelectMethod($event)"
+              inputId="time" [showIcon]="true" [class]="invinvalidDate" appendTo="body">
+              <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" >Start at</label>
+            </p-calendar>
+          </div>
+        </div>
+    </div>
+    
+    <div class="row mx-0" style="margin-top: 20px;">
+      <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+      </div>
+    </div>
+
+    <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+                  'theme-saga-text': themeService.theme === 'saga-orange'}" >Set Device location</label>
+    <div class="row mx-0">
+      <div *ngIf="checkmapDialog">
+        <div class="col-12 justify-content-between flex">
+          <div class="row" style="margin-left: 30%;">
+            <div class="col-12 flex align-items-center justify-content-center"
+              style="margin-bottom: 0.5rem; margin-top: 2rem; margin-left: 1.5rem;">
+              <button pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+                class="p-button-rounded p-button-danger" style="height:1.5rem; width:1.5rem"></button>
+              <!-- <div for="target" style="color:black;font-weight:bold">lat:</div> -->
+              <span style="margin-left: 1rem; font-weight: bold;" title="latitude">{{ latitude }}</span>
+              <span>,</span>
+              <!-- <div for="target" style="color:black;font-weight:bold">lng:</div> -->
+              <span style="margin-left: 1rem; font-weight: bold;" title="longitude">{{ longitude }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="invalidcheckmap">
+        <div class="col-12 justify-content-between flex">
+          <div class="row" >
+            <div class="col-12 flex align-items-center justify-content-center"
+              style="margin-bottom: 0.5rem; margin-top: 2rem; margin-left: 8rem">
+              <button pButton pRipple type="button" title="Location" icon="pi pi-map-marker"
+                class="p-button-rounded p-button-danger" style="height:1.5rem; width:1.5rem"></button>
+              <!-- <div for="target" style="color:black;font-weight:bold">lat:</div> -->
+              <span style="margin-left: 1rem; font-weight: bold;" title="latitude">Waiting for location, please select
+                location</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-0" style="margin-top: 20px;">
+      <div class="col-md-12">
+        <p-gmap #gmap [style]="{
+              width: '100%',
+              height: '500px',
+              'margin-bottom': '10px'
+            }" [options]="options1" [overlays]="overlays1" (onMapClick)="handleMapClick($event)"></p-gmap>
+        <!-- <p-gmap [options]="options" [style]="{'width':'100%','height':'320px'}" [overlays]="overlays" (onMapClick)="handleMapClick($event)"></p-gmap> -->
+      </div>
+    </div>
+    <div style="background-color: rgb(154, 154, 154); margin-top: 24px; width: 100%; height: 1px; opacity: 0.5;">
+    </div>
+    <div class="row mx-0" style="margin-top: 20px;"></div>
+    <div class="row mx-0" style="margin-top: 20px;" class="flex-end">
+      <!-- <div class="flex-end"> -->
+
+      <button pButton pRipple type="button" label="Done" class="p-button-success" (click)="Done_provisioning()">
+        <i class="pi pi-spin pi-spinner" *ngIf="spinner"></i>
+      </button>
+      <!-- </div> -->
+    </div>
+  </ng-template>
+  <!-- <ng-template pTemplate="footer">
+      <button pButton pRipple type="button" label="Done" class="p-button-secondary" (click)="Done_provisioning()"><i class="pi pi-spin pi-spinner" *ngIf="spinner"></i></button>
+
+
+    </ng-template> -->
+</p-dialog>
+
+<p-dialog [(visible)]="displayRecovery" position="center" [style]="{ width: '800px' }" [header]="dialogHeader"
+  (onHide)="cancel()" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+      'overflow-y': 'auto',
+      'overflow-x': 'hidden',
+      'max-height': '70vh',
+      'min-height': '250px'
+    }">
+  <div style="background-color: rgb(154, 154, 154); margin-bottom: 24px; width: 100%; height: 1px; opacity: 0.5;">
+  </div>
+  <ng-template pTemplate="content">
+    <div style="display: flex;">
+      <label [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
+        'theme-saga-text': themeService.theme === 'saga-orange'}"
+        style="font-weight:bold; margin-top: 16px; margin-left:24px">Recovery IP:
+      </label>
+
+      <div class="col-4 flex " style="margin-bottom: 12px;">
+        <p-dropdown [options]="uplink" [(ngModel)]="selectedUplink" [autoDisplayFirst]="false" [class]="invinvalid"
+          [style]="{ width: '200px' }" (onChange)="onChangeIPRecovery($event)" optionLabel="symbol_name3"
+          placeholder="Select IP Address" [filter]="true" filterBy="symbol_name3" required>
+          <ng-template let-uplinkList pTemplate="item">
+            <div class="item-drop1">
+              <span class="item-value1">
+                <!-- <span *ngIf="uplinkList.ISPINGOK == 0"><i class="pi pi-circle-fill"
+                      style="color: red; margin-right: 8px;">
+                    </i></span>
+                  <span *ngIf="uplinkList.ISPINGOK == 1"><i class="pi pi-circle-fill"
+                      style="color: #21EE0C; margin-right: 8px">
+                    </i></span>
+                  <span *ngIf="uplinkList.ISPINGOK == null"></span> -->
+                {{ uplinkList.symbol_name3 }}
+                <!-- | {{uplinkList.HOSTNAME}}  -->
+                | {{ uplinkList.IRCNETypeID}}
+              </span>
+              <!-- <span *ngIf="car.value != '(TODO)'">{{car.label}}</span> -->
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+      </div>
+
+    </div>
+    <p-accordion>
+      <p-accordionTab header="Configuration History" [(selected)]="activeState[0]">
+
+        <p-table [value]="getconfig_tables" [rows]="5" [paginator]="true" responsiveLayout="scroll" [rowHover]="true">
+          <ng-template pTemplate="header">
+            <tr>
+              <th class="col-5">
+                File
+              </th>
+
+              <th class="col-1"></th>
+              <th class="col-2"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-getconfig_table>
+            <tr>
+              <td>{{ getconfig_table.filename }}</td>
+
+              <td></td>
+              <td>
+                <button pButton pRipple title="Push" icon="pi pi-upload" class="p-button-rounded p-button-help"
+                  (click)="callPush(getconfig_table)"></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              In total there are
+              {{ getconfig_tables ? getconfig_tables.length : 0 }} file.
+            </div>
+          </ng-template>
+        </p-table>
+
+
+      </p-accordionTab>
+
+    </p-accordion>
+  </ng-template>
+
+</p-dialog>
+<p-dialog [(visible)]="action_Dialog2" position="center" [style]="{ width: '60vw' }" [header]="dialogHeader"
+  (onHide)="hideDialog1()" [modal]="true" styleClass="p-fluid" [contentStyle]="{
+    'overflow-y': 'auto',
+    'overflow-x': 'hidden',
+    'max-height': '70vh',
+    'min-height': '250px'
+  }">
+  <ng-template pTemplate="content">
+    <div class="row mx-0">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <textarea type="text" rows="18" cols="150" pInputText id="resultView" [(ngModel)]="resultView" autofocus
+            readonly></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col-4">
+          <label for="username">Device Username</label>
+          <input type="text" pInputText id="username" [(ngModel)]="username1" required autofocus />
+        </div>
+        <div class="col-4">
+          <label for="password">Device Password</label>
+          <p-password type="password" id="password" [(ngModel)]="password1" required [toggleMask]="true"></p-password>
+          <!-- <input type="password" pInputText id="password" [(ngModel)]="password" autofocus /> -->
+        </div>
+        <div class="col-4">
+          <!-- <p-checkbox [(ngModel)]="checked" binary="true" inputId="binary" label="reboot after upload"
+            style="margin-top: 35px;" (onChange)="checkbox($event)"></p-checkbox> -->
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog1()"></button>
+
+    <button pButton pRipple label="Push" class="p-button-text" (click)="verify()">
+      <i class="pi pi pi-check" style="margin-right: 15px;" *ngIf="loadingcheck"></i><i class="pi pi-spin pi-spinner"
+        *ngIf="loadingspiner" style="margin-right: 15px;"></i>
+    </button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="getverifyDialog" [style]="{ width: '500px' }" header="Authentication" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="hideDialog2()">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pr-4">
+          <label for="password">User Password</label>
+          <p-password type="password" id="password" [class]="invalid" [(ngModel)]="password_verify" [toggleMask]="true"
+            required autofocus>
+          </p-password>
+          <!-- <input type="password" pInputText id="password" [(ngModel)]="password" autofocus /> -->
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog2()"></button>
+    <button pButton pRipple label="Confirm" icon="pi pi-check" class="p-button-success"
+      (click)="reboot(getconfig_table)"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="displayZTP" [style]="{ width: '700px' }" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }" (onHide)="hideDialog()">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name">Mode</label>
+          <p-dropdown [options]="ztpTypeModes" [(ngModel)]="selectedZTPMode" value="Custom" optionLabel="name"
+            (onChange)="onChangeZTPMode($event)">
+          </p-dropdown>
+        </div>
+        <div class="col pr-0">
+          <label>Uplink IP</label>
+          <p-dropdown [options]="uplink" [(ngModel)]="selectedUplink" [autoDisplayFirst]="false" [class]="invinvalid"
+            [style]="{ width: '200px' }" (onChange)="onChangeIP($event)" optionLabel="IPADDRESS"
+            placeholder="Select IP Address" [filter]="true" filterBy="IPADDRESS" required>
+            <ng-template let-uplinkList pTemplate="item">
+              <div class="item-drop1">
+                <span class="item-value1"><span *ngIf="uplinkList.ISPINGOK == 0"><i class="pi pi-circle-fill"
+                      style="color: red; margin-right: 8px;">
+                    </i></span>
+                  <span *ngIf="uplinkList.ISPINGOK == 1"><i class="pi pi-circle-fill"
+                      style="color: #21EE0C; margin-right: 8px">
+                    </i></span>
+                  <span *ngIf="uplinkList.ISPINGOK == null"></span>{{ uplinkList.IPADDRESS }} | {{ uplinkList.HOSTNAME
+                  }} |
+                  {{ uplinkList.iRCNETypeID }}</span>
+                <!-- <span *ngIf="car.value != '(TODO)'">{{car.label}}</span> -->
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row mx-0">
+      <div class="col-6 pl-0">
+        <label class="mx-2" for="start_time">Edge Model</label>
+        <p-dropdown [options]="ztpEdgeModels" [(ngModel)]="selectedEdgeModels" value="Custom" optionLabel="model">
+        </p-dropdown>
+      </div>
+      <div class="p-field" *ngIf="atOnceOption">
+        <div class="col-6 pl-0">
+          <label class="mx-2" for="start_time">Start Date</label>
+          <p-calendar [(ngModel)]="startValue" value="startDate" [showIcon]="true" [readonlyInput]="true"
+            [showTime]="true" (onSelect)="onSelectMethodForZTP($event)" [class]="invinvalid2"></p-calendar>
+        </div>
+      </div>
+
+
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Done" icon="pi pi-check" class="p-button-success"
+      (click)="doneZTPSchedule()"></button>
+  </ng-template>
+</p-dialog>

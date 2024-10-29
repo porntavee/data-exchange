@@ -1,0 +1,463 @@
+<p-toast></p-toast>
+
+<!-- <ul class="navbar-nav horizontal-nav">
+  <li class="nav-item" *ngIf="userRole == 'super admin'">
+    <a class="navbar-brand" href="javascript:void(0)" hidden="true">{{getTitle()}}</a>
+  </li>
+  <li class="nav-item">
+    <a class="navbar-brand c-btn" *ngFor="let nav of listNav" (click)="onNavClick(nav.id)" [class]="'nav-item-' + nav.id">
+      {{ nav.title }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="logout()">
+      <i class="nc-icon pi pi-sign-out"></i>
+      <p>
+        <span class="d-lg-none d-md-block">Logout</span>
+      </p>
+    </a>
+  </li>
+</ul> -->
+
+<nav [(class)]="styleClassTheme" style="z-index: 10 !important;">
+  <div class="container-fluid">
+    <div class="navbar-wrapper">
+      <!-- <div class="navbar-toggle">
+        <button type="button" class="navbar-toggler" (click)="sidebarToggle()" *ngIf="showbuttonSide">
+          <i class="pi pi-align-left" style="font-size: 1.5rem" [ngClass]="{ 'theme-arya-icon': themeService.theme === 'arya-orange',
+          'theme-saga-icon': themeService.theme === 'saga-orange'}" *ngIf="HambergerIcon"></i>
+          <i class="pi pi-align-right" style="font-size: 1.5rem" [ngClass]="{ 'theme-arya-icon': themeService.theme === 'arya-orange',
+          'theme-saga-icon': themeService.theme === 'saga-orange'}" *ngIf="!HambergerIcon"></i>
+        </button>
+      </div> -->
+      <div style="width: 200px;">
+        <div>
+          <h5 style="color: white;">Data Exchange</h5>
+        </div>
+        
+      </div>
+      <div >
+        <!-- <a class="navbar-brand" href="javascript:void(0)" >{{getTitle()}}</a> -->
+        <!-- (click)="onNavClick(nav.id)" -->
+        <!-- [routerLink]="'/realtime'" -->
+        <!-- <a class="navbar-brand c-btn" *ngFor="let nav of listNav" (click)="onNavClick(nav.id)" [class]="'nav-item-' + nav.id">
+          {{ nav.title }}
+        </a> -->
+        <ul class="navbar-nav" *ngIf="isCurrentPage('/realtime')">
+
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('1')" [class]="'nav-item-1'">
+              สภาพการจราจร
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('2')" [class]="'nav-item-2'">
+              เปรียบเทียบ
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('3')" [class]="'nav-item-3'">
+              ที่จอดรถ
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('4')" [class]="'nav-item-4'">
+              สถานะเซ็นเซอร์
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav" *ngIf="isCurrentPage('/stats')">
+
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('1')" [class]="'nav-item-1'">
+              การจัดการอุบัติการณ์
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('2')" [class]="'nav-item-2'">
+              ความถี่การเกิดอุบัติเหตุ
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('3')" [class]="'nav-item-3'">
+              อัตรารถผ่านด่าน
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('4')" [class]="'nav-item-4'">
+              จุด Black Spot
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('5')" [class]="'nav-item-5'">
+              จำนวนผู้ใช้
+            </a>
+          </li>
+          <li >
+            <a class="navbar-brand c-btn" href="javascript:void(0)" (click)="onNavClick('6')" [class]="'nav-item-6'">
+              รายงาน
+            </a>
+          </li>
+        </ul>
+       
+      </div>
+
+      
+
+
+      <!-- <a class="navbar-brand" href="javascript:void(0)" *ngIf="themestrlinkS">{{getTitle()}}</a> -->
+    </div>
+    <!-- <button class="navbar-toggler" type="button" (click)="collapse()" [attr.aria-expanded]="!isCollapsed"
+      aria-controls="collapseExample">
+      <i class="pi pi-ellipsis-v" style="font-size: 1rem" [ngClass]="{ 'theme-arya-icon': themeService.theme === 'arya-orange',
+      'theme-saga-icon': themeService.theme === 'saga-orange'}"></i>
+    </button> -->
+    <div class="collapse navbar-collapse justify-content-end" id="collapseExample" [ngbCollapse]="isCollapsed">
+      <!-- <form (submit)="searchGobalData($event)">
+        <div class="input-group no-border">
+          <input type="text" [value]="gobalSearch" (input)="gobalSearch = $event.target.value" class="form-control"
+            placeholder="Search..." style="color: white;"
+            oninput="this.style.color = this.value.length > 0 ? '#FFFFFF  ' : 'white'">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <i class="nc-icon nc-zoom-split" (click)="searchGobalData($event)" style="color: #FFFFFF;"></i>
+            </div>
+          </div>
+        </div>
+      </form> -->
+      <ul class="navbar-nav">
+
+        <!-- <li class="nav-item" *ngIf="userRole == 'super admin'">
+          <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="openSyncDialog()">
+            <i class="nc-icon pi pi-sync"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Sync</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="openChangePasswordDialog()">
+            <i class="nc-icon pi pi-user"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Change Password</span>
+            </p>
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link btn-rotate" href="javascript:void(0)" (click)="logout()">
+            <i class="nc-icon pi pi-sign-out"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Logout</span>
+            </p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<p-dialog [(visible)]="changePasswordDialog" [style]="{width: '500px', height: 'auto'}" header="Change Password/Email"
+  [modal]="true" styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideChangePasswordDialog()">
+  <ng-template pTemplate="content" >
+    <div class="p-field">
+      <div style="display:flex; justify-content: space-around;">
+        <label id="passwordLabel"
+          style="font-weight: bold; color: #FFD546; text-decoration: underline #FFD546; text-underline-position: under;"
+          (click)="switchToChangePassword()">Change
+          Password</label>
+        <label id="emailLabel" style="font-weight: bold;" (click)="switchToChangeEmail()">Change E-mail</label>
+      </div>
+      <div *ngIf="showChangePassword">
+        <div class="row mx-0">
+          <div class="col pr-0">
+            <label>Old Password* <i class="pi pi-spin pi-spinner" *ngIf="spinner"></i> <i class="pi pi-check"
+                *ngIf="checkcorrect" style="color: green; font-weight: bold;"></i><i class="pi pi-times"
+                *ngIf="checkwrong" style="color: red; font-weight: bold;"></i></label>
+            <!-- <input type="password" pInputText id="newPassword" [(ngModel)]="oldPassword" required /> -->
+            <div class="card flex justify-content-center">
+              <p-password id="newPassword" [(ngModel)]="oldPassword" [toggleMask]="true" required
+                [feedback]="false"></p-password>
+            </div>
+            <small class="p-invalid"
+              *ngIf="submitted && !oldPassword && submitted && newPassword  && submitted && user_password && submitted && !emailchange ">Old
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !oldPassword && submitted && !newPassword  && submitted && !user_password && submitted && !emailchange && submitted && !emailchek">Old
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !oldPassword && submitted && !newPassword  && submitted && user_password && submitted && !emailchange ">Old
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !oldPassword && submitted && newPassword  && submitted && !user_password && submitted && !emailchange ">Old
+              Password is required.</small>
+          </div>
+        </div>
+
+
+        <div class="row mx-0">
+          <div class="col pr-0">
+            <label for="newPassword">New Password*</label>
+
+            <p-password id="newPassword" [(ngModel)]="newPassword" [toggleMask]="true" required [class]="invinvalid3"
+              (keyup)="checkPassword(event)" [feedback]="false"></p-password>
+            <!-- <small class=" p-invalid" *ngIf="!isValid">
+              Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase
+              letter,
+              one special letter and one number. <i class="pi pi-info-circle" style="font-size: 1rem; margin-left: 8px;"
+                title="One of this special characters is required in your password #$%^&*+_"></i>
+            </small> -->
+            <!-- <small class=" p-invalid" *ngIf="isValid" style="color:seagreen ; font-weight: bold;">Strong Password
+              !</small> -->
+            <small class="p-invalid"
+              *ngIf="submitted && !newPassword && submitted && oldPassword && submitted && user_password  && submitted && !emailchange">New
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !newPassword && submitted && !oldPassword && submitted && !user_password  && submitted && !emailchange && submitted && !emailchek">New
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !newPassword && submitted && oldPassword && submitted && !user_password  && submitted && !emailchange">New
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !newPassword && submitted && !oldPassword && submitted && user_password  && submitted && !emailchange">New
+              Password is required.</small>
+          </div>
+        </div>
+        <div class="checkbox-container">
+          <div class="row">
+            <div class="column">
+              <p-checkbox name="groupname" value="val1" label="8 characters" [(ngModel)]="correctedCharacters"
+                disabled="true"></p-checkbox>
+              <p-checkbox name="groupname" value="val2" label="1 number" [(ngModel)]="correctedNumeric"
+                disabled="true"></p-checkbox>
+              <p-checkbox name="groupname" value="val3" label="1 uppercase letter" [(ngModel)]="correctedUpperCase"
+                disabled="true"></p-checkbox>
+            </div>
+            <div class="column">
+              <p-checkbox name="groupname" value="val4" label="1 lowercase letter" [(ngModel)]="correctedLowerCase"
+                disabled="true"></p-checkbox>
+              <p-checkbox name="groupname" value="val5" label="1 special letter" [(ngModel)]="correctedSpecial"
+                disabled="true"></p-checkbox>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mx-0">
+          <div class="col pr-0">
+            <label for="name">Confirm Password*</label>
+            <p-password [(ngModel)]="user_password" id="passwords" [toggleMask]="true" #passwordField
+              [feedback]="false">
+            </p-password>
+            <!-- <p-password  [(ngModel)]="user_password" [toggleMask]="true" required [class]="invinvalid3"
+              (keyup)="checkPassword()"></p-password> -->
+            <small class="p-invalid"
+              *ngIf="submitted && !user_password && submitted && oldPassword && submitted && newPassword && submitted && !emailchange">Confirm
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !user_password && submitted && !oldPassword && submitted && !newPassword && submitted && !emailchange && submitted && !emailchek">Confirm
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !user_password && submitted && oldPassword && submitted && !newPassword && submitted && !emailchange">Confirm
+              Password is required.</small>
+            <small class="p-invalid"
+              *ngIf="submitted && !user_password && submitted && !oldPassword && submitted && newPassword && submitted && !emailchange">Confirm
+              Password is required.</small>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="showChangeEmail">
+        <div class="row mx-0">
+          <div class="col pr-0">
+            <label for="email">New E-mail*</label>
+            <input type="text" pInputText id="email" [(ngModel)]="emailchange" required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+            <small class="p-invalid"
+              *ngIf="submitted && !emailchange && submitted && emailchek && submitted && !oldPassword && submitted && !newPassword && submitted && !user_password">Email
+              is required.</small>
+          </div>
+
+        </div>
+        <div class="row mx-0">
+          <div class="col pr-0">
+            <label for="email">Confirm E-mail*</label>
+            <input type="text" pInputText id="email" [(ngModel)]="emailchek" required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+            <small class="p-invalid"
+              *ngIf="submitted && !emailchek && submitted && emailchange && submitted && !oldPassword && submitted && !newPassword && submitted && !user_password">Confirm
+              Email is required.</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger"
+      (click)="hideChangePasswordDialog()"></button>
+    <button pButton pRipple label="Submit" icon="pi pi-check" class="p-button-success"
+      (click)="changeEmailPassword()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="sycnDialog" [style]="{width: '500px'}" header="Data synchronize" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideDialogEdit()">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col-12 pb-0 justify-content-between flex">
+          <label for="sycnDevice" style="margin-top: 10px;">Nview Sync</label>
+          <button pButton pRipple id="sycnDevice" icon="pi pi-sync" (click)="sycnDevice()"></button>
+        </div>
+        <div class="col-12 p-0" [style]="{'height': '6px'}" style="margin-top: 10px;">
+          <p-progressBar mode="indeterminate" *ngIf="sycnDeviceProgressBar" [style]="{'height': '6px'}"></p-progressBar>
+        </div>
+        <div class="col-12 pb-0 justify-content-between flex">
+          <label for="sycnDevice" style="margin-top: 10px;">Rcview Sync</label>
+          <button pButton pRipple id="sycnDevice" icon="pi pi-sync" (click)="sycn_rcviewDevice()"></button>
+        </div>
+        <div class="col-12 p-0" [style]="{'height': '6px'}" style="margin-top: 10px;">
+          <p-progressBar mode="indeterminate" *ngIf="sycnDevicercviewProgressBar"
+            [style]="{'height': '6px'}"></p-progressBar>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="throughputDialog" [style]="{width: '1200px'}" header="Throughput test" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}" (onHide)="hideDialogEdit()">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="grid mx-0">
+        <div class="col-5 pr-1" style="margin-right: -10px;">
+          <div class="row mx-0">
+            <label>Local devive</label>
+            <p-dropdown (onChange)="onChangeLocalIP($event)" [options]="localIP" [(ngModel)]="selectedLocalIP">
+            </p-dropdown>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <label for="localDeviceUsername">Username</label>
+              <input type="localDeviceUsername" pInputText id="localDeviceUsername" [(ngModel)]="localDeviceUsername"
+                required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+            <div class="col pl-0">
+              <label for="localDevicePassword">Password</label>
+              <input type="localDevicePassword" pInputText id="localDevicePassword" [(ngModel)]="localDevicePassword"
+                required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <label for="localDecviceNni">nni</label>
+              <input type="localDecviceNni" pInputText id="localDecviceNni" [(ngModel)]="localDecviceNni" required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+            <div class="col pl-0">
+              <label for="uni">uni</label>
+              <input type="localDecviceUni" pInputText id="localDecviceUni" [(ngModel)]="localDecviceUni" required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+          </div>
+        </div>
+        <p-divider class="col-2" layout="vertical"></p-divider>
+        <div class="col-5">
+          <div class="row mx-0">
+            <label>Remote devive</label>
+            <p-dropdown (onChange)="onChangeRemoteIP($event)" [options]="RemoteIP" [(ngModel)]="selectedRemoteIP">
+            </p-dropdown>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <label for="remoteDeviceUsername">Username</label>
+              <input type="remoteDeviceUsername" pInputText id="remoteDeviceUsername" [(ngModel)]="remoteDeviceUsername"
+                required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+            <div class="col pl-0">
+              <label for="remoteDevicePassword">Password</label>
+              <input type="remoteDevicePassword" pInputText id="remoteDevicePassword" [(ngModel)]="remoteDevicePassword"
+                required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col pl-0">
+              <label for="remoteDecviceNni">nni</label>
+              <input type="remoteDecviceNni" pInputText id="remoteDecviceNni" [(ngModel)]="remoteDecviceNni" required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+            <div class="col pl-0">
+              <label for="uni">uni</label>
+              <input type="remoteDecviceUni" pInputText id="remoteDecviceUni" [(ngModel)]="remoteDecviceUni" required />
+              <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-tabView>
+        <p-tabPanel header="CFM">
+          <div class="col pl-0">
+            <div class="row mx-0">
+              <div class="col-3 pl-0">
+                <label for="vlan">vlan</label>
+                <input type="vlan" pInputText id="vlan" [(ngModel)]="vlan" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+              <div class="col-3 pl-0">
+                <label for="service_name">service name</label>
+                <input type="service_name" pInputText id="service_name" [(ngModel)]="service_name" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+              <div class="col-3 pl-0">
+                <label for="vlan">ethernettype</label>
+                <input type="vlan" pInputText id="vlan" [(ngModel)]="vlan" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+
+              <div class="col-3 pl-0">
+                <label for="service_name">flow_profile</label>
+                <input type="service_name" pInputText id="service_name" [(ngModel)]="service_name" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-3 pl-0">
+                <label for="vlan">frame_length</label>
+                <input type="vlan" pInputText id="vlan" [(ngModel)]="vlan" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+              <div class="col-3 pl-0">
+                <label for="service_name">ethernetsam_service</label>
+                <input type="service_name" pInputText id="service_name" [(ngModel)]="service_name" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+              <div class="col-3 pl-0">
+                <label for="vlan">performance_bandwidth</label>
+                <input type="vlan" pInputText id="vlan" [(ngModel)]="vlan" required />
+                <small class="p-invalid" *ngIf="submitted && !newPassword">Password is required.</small>
+              </div>
+            </div>
+            <div class="row mx-0" align="right">
+              <button pButton pRipple label="CFM" class="p-button-text" (click)="callCFMTest()"></button>
+              <button pButton pRipple label="Throughput" class="p-button-text" (click)="callThroughputTest()"></button>
+            </div>
+          </div>
+
+        </p-tabPanel>
+        <p-tabPanel header="Loopback configuration">
+          Content 2
+        </p-tabPanel>
+        <p-tabPanel header="Throughput test">
+          Content 3
+        </p-tabPanel>
+      </p-tabView>
+
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

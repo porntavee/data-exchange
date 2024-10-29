@@ -1,0 +1,97 @@
+<h5>Network Topo</h5>
+<div style="margin-bottom: 1rem">
+  <!-- <button pButton type="button" label="Expand all" (click)="expandAll()" style="margin-right: .5rem"></button> -->
+  <button pButton type="button" label="Collapse all" (click)="collapseAll()"></button>
+  &nbsp; &nbsp;
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem" *ngIf="load_data"></i>
+</div>
+<p-tree [value]="topology" [(selection)]="selectedNode" (onNodeSelect)="remote($event)"
+  (onNodeExpand)="nodeExpand($event)" selectionMode="single" [contextMenu]="cm"
+  (contextmenu)="onContextMenu($event, selectedNode)">
+  <ng-template let-node pTemplate="NE">
+    <span>{{ node.label }}</span>
+    <span style="border-radius: 5px 5px 5px; border: 1px solid rgb(0, 0, 0); margin-left: 5px;">{{ node.ircType
+      }}</span>
+    &nbsp;
+    <span *ngIf="node.ISPINGOK == 0"><i class="pi pi-circle-fill" style="color: red;"> </i></span>
+    <span *ngIf="node.ISPINGOK == 1"><i class="pi pi-circle-fill" style="color: #21EE0C;"> </i></span>
+    <span *ngIf="node.ISPINGOK == null"></span>
+  </ng-template>
+</p-tree>
+
+<p-contextMenu #cm [model]="contextItems" appendTo="body" triggerEvent=""></p-contextMenu>
+
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="iconSettingDialog" [style]="{ width: '700px' }" header="Icon setting" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="name">latitude</label>
+          <input type="text" pInputText id="name" [(ngModel)]="icondata.latitude" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !icondata.latitude">
+            latitude required.</small>
+        </div>
+        <div class="col pr-0">
+          <label for="surname">longitude</label>
+          <input type="text" pInputText id="surname" [(ngModel)]="icondata.longitude" required />
+          <small class="p-invalid" *ngIf="submitted && !icondata.longitude">longitude is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="mapIcon">Map Icon</label>
+          <p-dropdown [options]="mapIcon" [(ngModel)]="selectedMapIcon" [filter]="false" filterBy="name"
+            [showClear]="true" id="mapIcon" placeholder="Select map icon">
+            <ng-template pTemplate="selectedItem">
+              <div class="mapIcon-item mapIcon-item-value" *ngIf="selectedMapIcon">
+                <img [src]="baseURL + 'icons' + selectedMapIcon.icon_path" class="mr-1" />
+                <div style="display: inline-block;">
+                  {{ selectedMapIcon.icon_name }}
+                </div>
+              </div>
+            </ng-template>
+            <ng-template let-mapIcon pTemplate="item">
+              <div class="mapIcon-item">
+                <img [src]="baseURL + 'icons' + mapIcon.icon_path" class="mr-1" />
+                <div style="display: inline-block;">
+                  {{ mapIcon.icon_name }}
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="col pl-0">
+          <label for="topoIcon">Topo Icon</label>
+          <p-dropdown [options]="topoIcon" [(ngModel)]="selectedtopoIcon" [filter]="false" filterBy="name"
+            [showClear]="true" id="topoIcon" placeholder="Select topo icon">
+            <ng-template pTemplate="selectedItem">
+              <div class="topoIcon-item topoIcon-item-value" *ngIf="selectedtopoIcon">
+                <div [class]="'mr-1 nt-' + selectedtopoIcon.toLowerCase()"
+                  style="display: inline-block; font-size: 20px;"></div>
+                <div style="display: inline-block;">{{ selectedtopoIcon }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-topoIcon pTemplate="item">
+              <div class="topoIcon-item">
+                <div [class]="'mr-1 nt-' + topoIcon.toLowerCase()" style="display: inline-block; font-size: 20px;">
+                </div>
+                <div style="display: inline-block;">{{ topoIcon }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="seveSetting()"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog> -->

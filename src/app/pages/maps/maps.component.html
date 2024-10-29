@@ -1,0 +1,65 @@
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+<div class="row">
+  <div class="col-12 col-sm-12 col-md-12 pr-2">
+    <div class="card card-stats p-2">
+      <div class="py-3 flex">
+        <span class="mx-2 mt-2">Vlan filter</span>
+        <span class="p-float-label mr-2">
+          <input type="text" id="vlan" pInputText [(ngModel)]="vlan">
+          <label style="line-height: 1.5;" for="vlan">Vlan</label>
+        </span>
+        <span class="p-float-label mr-2">
+          <p-chips [(ngModel)]="vlan_name" separator=","></p-chips>
+          <label style="line-height: 1.5;" for="vlan_name">Vlan Name</label>
+        </span>
+        <button pButton pRipple type="button" [loading]="isVlanLoading" (click)="searchVlan($event)" label="Search VLAN"
+          class="p-button-sm p-button-rounded p-button-secondary"></button>
+      </div>
+      <div>
+        <p-breadcrumb [model]="breadcrumb_items" [home]="home"></p-breadcrumb>
+      </div>
+      <div>
+        <p-gmap #gmap [options]="options" [overlays]="overlays" [style]="{'width':'100%','height':'700px'}"
+          (onOverlayClick)="handleOverlayClick($event)" (onMapReady)="setMap($event)"></p-gmap>
+        
+      </div>
+      <div class="mt-2 mr-2" style="text-align: right;">
+        แสดง {{marker_show ? marker_show : 0 }}/{{marker_should_show ? marker_should_show : 0 }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="action_Dialog" [style]="{width: '700px'}" [header]="'Action'" [modal]="true" styleClass="p-fluid"
+  [contentStyle]="{'overflow':'visible'}">
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label for="username">Username</label>
+          <input type="text" pInputText id="username" [(ngModel)]="username" required autofocus />
+          <small class="p-invalid" *ngIf="submitted && !username">Username is required.</small>
+        </div>
+        <div class="col pr-0">
+          <label for="password">Password</label>
+          <input type="password" pInputText id="password" [(ngModel)]="password" required />
+          <small class="p-invalid" *ngIf="submitted && !password">Password is required.</small>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col pr-0">
+          <label for="result">Result</label>
+          <p id="result" style="white-space: pre-wrap;">{{action_result}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer" [style]="{'text-align': 'center'}">
+    <div [style]="{'text-align': 'center'}">
+      <button pButton pRipple label="CPU load" class="p-button-text" (click)="get_cpu_load()"></button>
+      <button pButton pRipple label="Memory" class="p-button-text" (click)="get_memory()"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-contextMenu #cm [model]="contextItems" appendTo="body"></p-contextMenu>
+<p-contextMenu #cm2 [model]="contextItems2" appendTo="body"></p-contextMenu>
