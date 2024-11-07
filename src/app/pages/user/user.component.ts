@@ -105,7 +105,9 @@ export class UserComponent implements OnInit {
     this.maxDate = new Date();
     this.userService.getUser().subscribe({
       next: data => {
-        this.users = data.result;
+        console.log(data.data);
+        this.users = data.data;
+        console.log(this.users);
       },
       error: error => {
         if (error.status == 401) {
@@ -342,56 +344,56 @@ export class UserComponent implements OnInit {
           life: 3000
         });
       } else {
-        var filter = this.users.filter(data => data.username == this.user.username)
-        if (filter.length == 0){
-        this.submitted = true;
-        if (this.isValid == true) {
-          if (this.user.firstname.trim()) {
-            this.userService.createUser(this.user).subscribe(data => {
-              this.userService.getUser().subscribe({
-                next: data => {
-                  this.users = data.result;
-                },
-                error: error => {
-                  if (error.status == 401) {
-                    this.messageService.add({
-                      severity: "error",
-                      summary: "Error",
-                      detail: "Session expired, please logout and login again."
-                    });
+        var filter = this.users.filter(
+          data => data.username == this.user.username
+        );
+        if (filter.length == 0) {
+          this.submitted = true;
+          if (this.isValid == true) {
+            if (this.user.firstname.trim()) {
+              this.userService.createUser(this.user).subscribe(data => {
+                this.userService.getUser().subscribe({
+                  next: data => {
+                    this.users = data.result;
+                  },
+                  error: error => {
+                    if (error.status == 401) {
+                      this.messageService.add({
+                        severity: "error",
+                        summary: "Error",
+                        detail:
+                          "Session expired, please logout and login again."
+                      });
+                    }
                   }
-                }
+                });
+                this.messageService.add({
+                  severity: "success",
+                  summary: "Successful",
+                  detail: "Account Successfully Created",
+                  life: 3000
+                });
+
+                this.userDialog = false;
               });
-              this.messageService.add({
-                severity: "success",
-                summary: "Successful",
-                detail: "Account Successfully Created",
-                life: 3000
-              });
-  
-            
-              this.userDialog = false;
+            }
+          } else {
+            this.messageService.add({
+              severity: "error",
+              summary: "Failed",
+              detail: "Please Check your password !!",
+              life: 3000
             });
-           
-            
           }
         } else {
+          this.invalidUserName = "ng-invalid ng-dirty";
           this.messageService.add({
             severity: "error",
             summary: "Failed",
-            detail: "Please Check your password !!",
+            detail: "Username is duplicate.Please fill new username agian.",
             life: 3000
           });
         }
-      }else {
-        this.invalidUserName = "ng-invalid ng-dirty";
-        this.messageService.add({
-          severity: "error",
-          summary: "Failed",
-          detail: "Username is duplicate.Please fill new username agian.",
-          life: 3000
-        });
-      }
       }
     } else {
       this.messageService.add({
@@ -437,117 +439,125 @@ export class UserComponent implements OnInit {
             life: 3000
           });
         } else {
-          var filter = this.users.filter(data => data.username == this.user.username && data.id == this.user.id)
-          if (filter.length != 0){
-          this.submitted = true;
-          if (this.isValid == true) {
-            if (this.user.firstname.trim()) {
-              if (this.user.id) {
-                this.users[this.findIndexById(this.user.id)] = this.user;
-
-                this.userService.editUser(this.user).subscribe(
-                  response => {
-                    this.userService.getUser().subscribe({
-                      next: data => {
-                        this.users = data.result;
-                      },
-                      error: error => {
-                        if (error.status == 401) {
-                          this.messageService.add({
-                            severity: "error",
-                            summary: "Error",
-                            detail: "Session expired, please logout and login again."
-                          });
+          var filter = this.users.filter(
+            data =>
+              data.username == this.user.username && data.id == this.user.id
+          );
+          if (filter.length != 0) {
+            this.submitted = true;
+            if (this.isValid == true) {
+              if (this.user.firstname.trim()) {
+                if (this.user.id) {
+                  this.users[this.findIndexById(this.user.id)] = this.user;
+                  this.userService.editUser(this.user).subscribe(
+                    response => {
+                      this.userService.getUser().subscribe({
+                        next: data => {
+                          this.users = data.result;
+                          console.log(this.users);
+                        },
+                        error: error => {
+                          if (error.status == 401) {
+                            this.messageService.add({
+                              severity: "error",
+                              summary: "Error",
+                              detail:
+                                "Session expired, please logout and login again."
+                            });
+                          }
                         }
-                      }
-                    });
-                    // this.users = [...this.users];
-                    this.userDialogs = false;
-                    this.user = {};
-                    this.messageService.add({
-                      severity: "success",
-                      summary: "Successful",
-                      detail: "Account Successfully Created",
-                      life: 3000
-                    });
-                  },
-                  (error: HttpErrorResponse) => {
-                    this.messageService.add({
-                      severity: "error",
-                      summary: "Failed",
-                      detail: "Account Unsuccessfully Created",
-                      life: 3000
-                    });
-                  }
-                );
-              }
+                      });
+                      // this.users = [...this.users];
+                      this.userDialogs = false;
+                      this.user = {};
+                      this.messageService.add({
+                        severity: "success",
+                        summary: "Successful",
+                        detail: "Account Successfully Created",
+                        life: 3000
+                      });
+                    },
+                    (error: HttpErrorResponse) => {
+                      this.messageService.add({
+                        severity: "error",
+                        summary: "Failed",
+                        detail: "Account Unsuccessfully Created",
+                        life: 3000
+                      });
+                    }
+                  );
+                }
 
-              this.users = [...this.users];
-              this.userDialogs = false;
-              this.user = {};
+                this.users = [...this.users];
+                this.userDialogs = false;
+                this.user = {};
+              }
+            } else {
+              this.invalidPassword = "ng-invalid ng-dirty";
+              this.messageService.add({
+                severity: "error",
+                summary: "Failed",
+                detail: "Please Check your password !!",
+                life: 3000
+              });
             }
           } else {
-            this.invalidPassword = "ng-invalid ng-dirty";
+            this.invalidUserName = "ng-invalid ng-dirty";
             this.messageService.add({
               severity: "error",
               summary: "Failed",
-              detail: "Please Check your password !!",
+              detail: "Username is duplicate.Please fill new username agian.",
               life: 3000
             });
           }
-        } else {
-          this.invalidUserName = "ng-invalid ng-dirty";
-          this.messageService.add({
-            severity: "error",
-            summary: "Failed",
-            detail: "Username is duplicate.Please fill new username agian.",
-            life: 3000
-          });
-        }
         }
       } else {
         if (this.user.firstname.trim()) {
           if (this.user.id) {
-            var filter = this.users.filter(data => data.username == this.user.username && data.id == this.user.id)
-            if (filter.length != 0){
-            this.users[this.findIndexById(this.user.id)] = this.user;
-
-            this.userService.editUser(this.user).subscribe(
-              response => {
-                this.userService.getUser().subscribe({
-                  next: data => {
-                    this.users = data.result;
-                  },
-                  error: error => {
-                    if (error.status == 401) {
-                      this.messageService.add({
-                        severity: "error",
-                        summary: "Error",
-                        detail: "Session expired, please logout and login again."
-                      });
-                    }
-                  }
-                });
-                // this.users = [...this.users];
-                this.userDialogs = false;
-                this.user = {};
-                this.messageService.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: "Account Successfully Created",
-                  life: 3000
-                });
-              },
-              (error: HttpErrorResponse) => {
-                this.messageService.add({
-                  severity: "error",
-                  summary: "Failed",
-                  detail: "Account Unsuccessfully Created",
-                  life: 3000
-                });
-              }
+            var filter = this.users.filter(
+              data =>
+                data.username == this.user.username && data.id == this.user.id
             );
-             } else {
+            if (filter.length != 0) {
+              this.users[this.findIndexById(this.user.id)] = this.user;
+
+              this.userService.editUser(this.user).subscribe(
+                response => {
+                  this.userService.getUser().subscribe({
+                    next: data => {
+                      this.users = data.data;
+                    },
+                    error: error => {
+                      if (error.status == 401) {
+                        this.messageService.add({
+                          severity: "error",
+                          summary: "Error",
+                          detail:
+                            "Session expired, please logout and login again."
+                        });
+                      }
+                    }
+                  });
+                  // this.users = [...this.users];
+                  this.userDialogs = false;
+                  this.user = {};
+                  this.messageService.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Account Successfully Created",
+                    life: 3000
+                  });
+                },
+                (error: HttpErrorResponse) => {
+                  this.messageService.add({
+                    severity: "error",
+                    summary: "Failed",
+                    detail: "Account Unsuccessfully Created",
+                    life: 3000
+                  });
+                }
+              );
+            } else {
               this.invalidUserName = "ng-invalid ng-dirty";
               this.messageService.add({
                 severity: "error",
@@ -557,7 +567,6 @@ export class UserComponent implements OnInit {
               });
             }
           }
-          
         }
       }
     } else {
@@ -578,7 +587,7 @@ export class UserComponent implements OnInit {
       //   this.invalidFirstName = "ng-invalid ng-dirty";
     }
   }
-  checkusername(){
+  checkusername() {
     this.invalidUserName = "";
   }
   findIndexById(id: string): number {

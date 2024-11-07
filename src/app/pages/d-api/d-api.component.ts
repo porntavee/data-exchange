@@ -65,9 +65,9 @@ export interface editGroup {
       }
     `
   ],
-  selector: 'app-d-api',
-  templateUrl: './d-api.component.html',
-  styleUrls: ['./d-api.component.css']
+  selector: "app-d-api",
+  templateUrl: "./d-api.component.html",
+  styleUrls: ["./d-api.component.css"]
 })
 export class DApiComponent implements OnInit {
   minutes = [
@@ -345,33 +345,32 @@ export class DApiComponent implements OnInit {
     // console.log(this.selectedValues)
 
     let model = {
-      "id": 0,
-      "tag": this.alarmGroup.tag,
-      "methods":  this.alarmGroup.methods,
-      "endpoints": this.alarmGroup.endpoints,
-      "request": this.alarmGroup.request,
-      "response": this.alarmGroup.response,
-      "query": this.alarmGroup.query,
-      "type": this.alarmGroup.type,
-      "created_by": "string",
-      "updated_by": "string",
-      "active": 1
+      id: 0,
+      tag: this.alarmGroup.tag,
+      methods: this.alarmGroup.methods,
+      endpoints: this.alarmGroup.endpoints,
+      request: this.alarmGroup.request,
+      response: this.alarmGroup.response,
+      query: this.alarmGroup.query,
+      type: this.alarmGroup.type,
+      created_by: "string",
+      updated_by: "string",
+      active: 1
     };
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = 'http://127.0.0.1:8000/route/create';
+    const apiUrl = "http://127.0.0.1:8000/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
-      (data) => {
-        console.log('Received data:', data);
+      data => {
+        console.log("Received data:", data);
         this.hideDialog();
         this.readRoute();
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
 
     // if (
     //   this.alarmGroup.group_name != undefined &&
@@ -433,25 +432,23 @@ export class DApiComponent implements OnInit {
   }
   readRoute() {
     // console.log(this.selectedValues)
-
-    const apiUrl = 'http://127.0.0.1:8000/route/read';
-    this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        debugger
-        this.alarmGroups = data.data;
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
-
+    // const apiUrl = 'http://127.0.0.1:8000/route/read';
+    // this.http.get<any>(apiUrl).subscribe(
+    //   data => {
+    //     console.log("Received data:", data.data);
+    //     debugger;
+    //     this.alarmGroups = data.data;
+    //   },
+    //   error => {
+    //     console.error("Error fetching polygon data:", error);
+    //   }
+    // );
   }
   editlistGroup() {
     this.submitted = true;
     const ids = this.symbolDataAdded.map(obj => obj.SYMBOL_ID);
     if (this.editGroup.group_name !== "") {
-      if (this.emailsendline == null){
+      if (this.emailsendline == null) {
         this.emailsendline = "";
       }
       // this.lineGroupService
@@ -603,21 +600,17 @@ export class DApiComponent implements OnInit {
       header: "ยืนยันการลบ",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        this.alarmGroups = this.alarmGroups.filter(
-          val => val.id !== group.id
-        );
+        this.alarmGroups = this.alarmGroups.filter(val => val.id !== group.id);
         this.alarmGroup = {};
-        this.lineGroupService
-          .deleteMessageGroup(group.id)
-          .subscribe(result => {
-            this.messageService.add({
-              severity: "success",
-              summary: "Successful",
-              detail: result.message,
-              life: 3000
-            });
-            this.changeDetection.detectChanges();
+        this.lineGroupService.deleteMessageGroup(group.id).subscribe(result => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Successful",
+            detail: result.message,
+            life: 3000
           });
+          this.changeDetection.detectChanges();
+        });
       }
     });
   }

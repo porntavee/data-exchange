@@ -42,7 +42,7 @@ export class AuthService {
     const body = JSON.stringify({ username: username, password: password });
     return this.http
       .post<any>(
-        `${environment.apiUrl}/authen/login`,
+        `${environment.loginURL}/authen/login`,
         JSON.stringify({ username: username, password: password }),
         { headers: headers }
       )
@@ -76,6 +76,14 @@ export class AuthService {
     localStorage.setItem("token", token);
   }
 
+  createUser(userdata) {
+    const headers = { "content-type": "application/json" };
+    const body = JSON.stringify(userdata);
+    return this.http.post<any>(environment.loginURL + "/user/register", body, {
+      headers: headers
+    });
+  }
+
   logout() {
     localStorage.clear();
     this.router.navigate(["/login"]);
@@ -105,7 +113,7 @@ export class AuthService {
     const headers = { "content-type": "application/json" };
     return this.http
       .post<string>(
-        `${environment.apiUrl}/authen/verify2FA`,
+        `${environment.loginURL}/authen/verify2FA`,
         JSON.stringify({ username: username, password: password, code: pin }),
         {
           headers: headers
@@ -120,7 +128,7 @@ export class AuthService {
     };
     return this.http
       .post<string>(
-        `${environment.apiUrl}/authen/generateKey`,
+        `${environment.loginURL}/authen/generateKey`,
         JSON.stringify({ username: username, password: password }),
         {
           headers: headers

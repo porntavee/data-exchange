@@ -60,9 +60,9 @@ export interface editGroup {
       }
     `
   ],
-  selector: 'app-d-api-use',
-  templateUrl: './d-api-use.component.html',
-  styleUrls: ['./d-api-use.component.css']
+  selector: "app-d-api-use",
+  templateUrl: "./d-api-use.component.html",
+  styleUrls: ["./d-api-use.component.css"]
 })
 export class DApiUseComponent implements OnInit {
   minutes = [
@@ -332,58 +332,56 @@ export class DApiUseComponent implements OnInit {
   }
   readRoute() {
     // console.log(this.selectedValues)
-
-    const apiUrl = 'http://127.0.0.1:8000/route/read/-1';
-    this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        this.alarmGroups = data.data;
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
-
+    // const apiUrl = 'http://127.0.0.1:8000/route/read/-1';
+    // this.http.get<any>(apiUrl).subscribe(
+    //   (data) => {
+    //     console.log('Received data:', data.data);
+    //     this.alarmGroups = data.data;
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching polygon data:', error);
+    //   }
+    // );
   }
 
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = 'http://127.0.0.1:8000/token/read/-1';
+    const apiUrl = "http://127.0.0.1:8000/token/read/-1";
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        debugger
+      data => {
+        console.log("Received data:", data.data);
+        debugger;
         this.tokenList = data.data;
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   createToken(param) {
     // console.log(this.selectedValues)
-    debugger
-    const apiUrl = 'http://127.0.0.1:8000/token/create';
-    this.http.post<any>(apiUrl, {
-      user_id: -1,
-      route_id: param
-    }).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        
-        this.readRoute();
-        this.readToken();
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
+    debugger;
+    const apiUrl = "http://127.0.0.1:8000/token/create";
+    this.http
+      .post<any>(apiUrl, {
+        user_id: -1,
+        route_id: param
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+
+          this.readRoute();
+          this.readToken();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
   }
 
-  
   menuVlue(task) {
     this.lineGroupService.valueSource(task);
   }
@@ -508,21 +506,17 @@ export class DApiUseComponent implements OnInit {
       header: "ยืนยันการลบ",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        this.alarmGroups = this.alarmGroups.filter(
-          val => val.id !== group.id
-        );
+        this.alarmGroups = this.alarmGroups.filter(val => val.id !== group.id);
         this.alarmGroup = {};
-        this.lineGroupService
-          .deleteMessageGroup(group.id)
-          .subscribe(result => {
-            this.messageService.add({
-              severity: "success",
-              summary: "Successful",
-              detail: result.message,
-              life: 3000
-            });
-            this.changeDetection.detectChanges();
+        this.lineGroupService.deleteMessageGroup(group.id).subscribe(result => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Successful",
+            detail: result.message,
+            life: 3000
           });
+          this.changeDetection.detectChanges();
+        });
       }
     });
   }

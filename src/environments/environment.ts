@@ -6,6 +6,7 @@
 export const environment = {
   production: false,
   apiUrl: "https://dsslocal.linkflow.co.th/api/staging",
+  loginURL: "https://mpub.linkflow.co.th:4433/api",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
   // serviceURL: "http://localhost:8040/api/staging/callapi",
   // serviceURL:"http://10.11.2.179:3009",

@@ -70,6 +70,15 @@ export const ROUTES: RouteInfo[] = [
     role: ["super admin"],
     hidden: false
   },
+  {
+    title: "USER MANAGEMENT",
+    path: "/user",
+    icon: "assets/img/user-icon.png",
+    class: "",
+    role: ["super admin"],
+    hidden: false
+  }
+
   // {
   //   title: "DASHBOARD",
   //   icon: "assets/img/Dashboard-icon.png",
@@ -193,30 +202,7 @@ export const ROUTES: RouteInfo[] = [
   //   role: ["super admin", "admin", "monitor"],
   //   hidden: false
   // },
-  {
-    title: "USER MANAGEMENT",
-    icon: "assets/img/user-icon.png",
-    icon_drop: "fa fa-caret-down",
-    class: "",
-    role: ["super admin"],
-    hidden: false,
-    children: [
-      {
-        path: "/user",
-        title: "USER MANAGEMENT",
-        class: "",
-        role: ["super admin"],
-        parent: "USER MANAGEMENT"
-      },
-      // {
-      //   path: "/userzone",
-      //   title: "USER ZONE MANAGEMENT",
-      //   class: "",
-      //   role: ["super admin"],
-      //   parent: "USER MANAGEMENT"
-      // }
-    ]
-  },
+
   // // {
   // //   title: "REMOTE",
   // //   path: "/telnet",
@@ -423,10 +409,10 @@ export class SidebarComponent implements OnInit {
   }
 
   submenu(value, path) {
-    if (value == 'เรียลไทม์'){
-      this.navService.setNavId('/realtime1');
-    } else if (value == 'สถิติ'){
-      this.navService.setNavId('/stats1');
+    if (value == "เรียลไทม์") {
+      this.navService.setNavId("/realtime1");
+    } else if (value == "สถิติ") {
+      this.navService.setNavId("/stats1");
     }
     this.menuItems.forEach(data => {
       if (data.title == value) {
@@ -1464,7 +1450,7 @@ export class SidebarComponent implements OnInit {
     // let role = userdata["role"];
     // this.role = role;
     var items = [];
-    this.menuItems = ROUTES
+    this.menuItems = ROUTES;
     var ii = this.menuItems;
     var currentURL = this.router.url;
     var children = ROUTES.map(data => data["children"]);
@@ -2985,10 +2971,10 @@ export class SidebarComponent implements OnInit {
     }
   }
   link(event, value, title) {
-    if (title == 'เรียลไทม์'){
-      this.navService.setNavId('/realtime1');
-    } else if (title == 'สถิติ'){
-      this.navService.setNavId('/stats1');
+    if (title == "เรียลไทม์") {
+      this.navService.setNavId("/realtime1");
+    } else if (title == "สถิติ") {
+      this.navService.setNavId("/stats1");
     }
     event.preventDefault();
     this.AdminLayoutService.sideiconClass("Defult");

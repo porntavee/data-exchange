@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     Validators.required,
     Validators.pattern(/^(08\d|09\d|0[2-5])\d{8}$/)
   ]);
-
+  displayDialog: boolean = false;
   otp = ["", "", "", "", "", ""];
   twoFA = ["", "", "", "", "", ""];
   form: FormGroup;
@@ -52,7 +52,22 @@ export class LoginComponent implements OnInit {
   otp_input: string;
   twoFA_input: string;
   themeValue: string = this.themeService.theme;
-
+  // user = {
+  //   firstName: "",
+  //   lastName: "",
+  //   username: "",
+  //   password: "",
+  //   confirmPassword: "",
+  // };
+  userData = {
+    username: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+    zone: 0,
+    role: "monitor",
+    confirmPassword: ""
+  };
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -86,68 +101,106 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  openDialog() {
+    this.displayDialog = true;
+  }
+
+  // ฟังก์ชันปิด Dialog
+  closeDialog() {
+    this.displayDialog = false;
+  }
+
   onLogin() {
-    debugger
-    this.authservice.settoken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyX2Vhc3QiLCJpZCI6MTg3LCJyb2xlIjoic3VwZXIgYWRtaW4iLCJ6b25lIjoxNiwiZXhwIjoxNzUzNTE3NDE5fQ.eEPjaMkew65T7QvpIhTzVVrGN4xFhjZfN-rvp831izA');
-    const returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/d-api";
-    this.router.navigateByUrl(returnUrl);
-    this.otpState = false;
-    this.twoFAState = false;
-    this.loginState = false;
-    this.loading = false;
+    // debugger;
+    // this.authservice.settoken(
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyX2Vhc3QiLCJpZCI6MTg3LCJyb2xlIjoic3VwZXIgYWRtaW4iLCJ6b25lIjoxNiwiZXhwIjoxNzUzNTE3NDE5fQ.eEPjaMkew65T7QvpIhTzVVrGN4xFhjZfN-rvp831izA"
+    // );
+    // const returnUrl =
+    //   this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+    // this.router.navigateByUrl(returnUrl);
+    // this.otpState = false;
+    // this.twoFAState = false;
+    // this.loginState = false;
+    // this.loading = false;
 
     // this.errorMessage = "";
-    // if (this.form.invalid) return;
-    // this.loading = true;
-    // this.authservice
-    //   .login(this.f.username.value, this.f.password.value)
-    //   .subscribe({
-    //     next: response => {
-    //       this.loading = false;
-    //       this.submitted = true;
-    //       this.loginState = false;
-          
-    //       // let firstTimeLogin = "true";
-    //       let isFirstTime = response["firstLogin"]
-    //         ? response["firstLogin"]
-    //         : "true";
-    //       localStorage.setItem("temp", response["token"]);
-    //       localStorage.setItem("firsttime", isFirstTime);
-          
-    //       if (isFirstTime === "true") {
-    //         this.firstTimeLogin = true;
-    //         const token = JSON.stringify(response);
-    //       } else if (isFirstTime === "false") {
-    //         this.otpState = false;
-    //         this.twoFAState = true;
-    //         this.isGenQRCode = false;
-    //       }
-    //       error: response => {
-    //         if (response.error.status === 401) {
-    //           this.messageService.add({
-    //             severity: "error",
-    //             summary: response.error.statusText,
-    //             detail: response.error.error.detail,
-    //             life: 3000
-    //           });
-    //           this.loading = false;
-    //           this.submitted = false;
-    //           this.loginState = true;
-    //           this.otpState = false;
-    //           this.twoFAState = false;
-    //         }
-    //       };
-    //     }, error: error => {
-    //       if (error.error.status == 401) {
-    //         this.loading = false;
-    //         this.messageService.add({
-    //           severity: "error",
-    //           summary: "Error",
-    //           detail: error.error.error.detail
-    //         });
-    //       }
-    //     }
-    //   });
+    if (this.form.invalid) return;
+    this.loading = true;
+    this.authservice
+      .login(this.f.username.value, this.f.password.value)
+      .subscribe({
+        next: response => {
+          this.loading = false;
+          this.submitted = true;
+          this.loginState = false;
+
+          // let firstTimeLogin = "true";
+          let isFirstTime = response["firstLogin"]
+            ? response["firstLogin"]
+            : "true";
+          localStorage.setItem("temp", response["token"]);
+          localStorage.setItem("firsttime", isFirstTime);
+
+          if (isFirstTime === "true") {
+            this.twoFAState = true;
+            const token = JSON.stringify(response);
+            this.authservice
+              .generateKey2FA(this.f.username.value, this.f.password.value)
+              .subscribe({
+                next: response => {
+                  if (response["base64_qrcode"] === null) {
+                    this.isGenQRCode = false;
+                  } else {
+                    this.isGenQRCode = true;
+                    this.QRBase64 = response["base64_qrcode"];
+                  }
+
+                  error: response => {};
+                }
+              });
+          } else if (isFirstTime === "false") {
+            this.otpState = false;
+            this.twoFAState = true;
+            this.isGenQRCode = false;
+          }
+          // if (isFirstTime) {
+          //   const token = JSON.stringify(response);
+          //   this.authservice.settoken(token);
+          //   console.log(token);
+          //   this.otpState = false;
+          //   this.twoFAState = false;
+          //   this.isGenQRCode = false;
+          //   const returnUrl =
+          //     this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+          //   this.router.navigateByUrl(returnUrl);
+          // }
+          error: response => {
+            if (response.error.status === 401) {
+              this.messageService.add({
+                severity: "error",
+                summary: response.error.statusText,
+                detail: response.error.error.detail,
+                life: 3000
+              });
+              this.loading = false;
+              this.submitted = false;
+              this.loginState = true;
+              this.otpState = false;
+              this.twoFAState = false;
+            }
+          };
+        },
+        error: error => {
+          if (error.error.status == 401) {
+            this.loading = false;
+            this.messageService.add({
+              severity: "error",
+              summary: "Error",
+              detail: error.error.error.detail
+            });
+          }
+        }
+      });
   }
 
   myFunction(e) {
@@ -244,49 +297,54 @@ export class LoginComponent implements OnInit {
     var joinpin = twoFA.join("");
     // this.otpState = false;
     // this.twoFAState = true;
-    if (this.otp_input != undefined || this.otp_input != ""){
-    this.authservice
-      .submitOTP(this.userName, this.phoneNumber, this.refCode, this.otp_input)
-      .subscribe({
-        next: response => {
-          if (response.valid == true) {
-            this.otpState = false;
-            this.twoFAState = true;
-            var firsttime = localStorage.getItem("firsttime");
-            if (firsttime == "true"){
-              this.authservice
-              .generateKey2FA(this.f.username.value, this.f.password.value)
-              .subscribe({
-                next: response => {
-                  if (response["base64_qrcode"] === null) {
-                    this.isGenQRCode = false;
-                  } else {
-                    this.isGenQRCode = true;
-                    this.QRBase64 = response["base64_qrcode"];
-                  }
+    if (this.otp_input != undefined || this.otp_input != "") {
+      this.authservice
+        .submitOTP(
+          this.userName,
+          this.phoneNumber,
+          this.refCode,
+          this.otp_input
+        )
+        .subscribe({
+          next: response => {
+            if (response.valid == true) {
+              this.otpState = false;
+              this.twoFAState = true;
+              var firsttime = localStorage.getItem("firsttime");
+              if (firsttime == "true") {
+                this.authservice
+                  .generateKey2FA(this.f.username.value, this.f.password.value)
+                  .subscribe({
+                    next: response => {
+                      if (response["base64_qrcode"] === null) {
+                        this.isGenQRCode = false;
+                      } else {
+                        this.isGenQRCode = true;
+                        this.QRBase64 = response["base64_qrcode"];
+                      }
 
-                  error: response => {};
-                }
+                      error: response => {};
+                    }
+                  });
+              }
+              this.messageService.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Success",
+                life: 3000
+              });
+              this.otp_input = undefined;
+            } else {
+              this.otp_input = undefined;
+              this.messageService.add({
+                severity: "warn",
+                summary: "Warning",
+                detail: "OTP is incorrect, please try again",
+                life: 3000
               });
             }
-            this.messageService.add({
-              severity: "success",
-              summary: "Success",
-              detail: "Success",
-              life: 3000
-            });
-            this.otp_input = undefined;
-          } else {
-            this.otp_input = undefined;
-            this.messageService.add({
-              severity: "warn",
-              summary: "Warning",
-              detail: "OTP is incorrect, please try again",
-              life: 3000
-            });
           }
-        }
-      });
+        });
     } else {
       this.messageService.add({
         severity: "error",
@@ -296,29 +354,28 @@ export class LoginComponent implements OnInit {
       });
     }
   }
-  countdownnumber:any = "(" + 180 + ")";
-  countdown(){
+  countdownnumber: any = "(" + 180 + ")";
+  countdown() {
     let seconds: number = 179;
 
-  const makeIteration = (): void => {
-    if (seconds > 0) {
+    const makeIteration = (): void => {
+      if (seconds > 0) {
         // console.log(seconds);
-        this.countdownnumber = "(" +seconds + ")";
+        this.countdownnumber = "(" + seconds + ")";
         setTimeout(makeIteration, 1000); // 1 second waiting
-    }
-    seconds -= 1;
-    if (seconds == 1){
-      setTimeout(() => {
-        this.countdownnumber = "(0)";
-        this.countdownnumber = "";
-      }, 1000);
-    }
-  };
+      }
+      seconds -= 1;
+      if (seconds == 1) {
+        setTimeout(() => {
+          this.countdownnumber = "(0)";
+          this.countdownnumber = "";
+        }, 1000);
+      }
+    };
 
-  setTimeout(makeIteration, 1000); // 1 second waiting
+    setTimeout(makeIteration, 1000); // 1 second waiting
   }
   startCountdown() {
-    
     const countdownElement = document.getElementById("countdown");
     this.showTimer = true;
     this.countdownTimer = 180;
@@ -334,6 +391,55 @@ export class LoginComponent implements OnInit {
         // Optionally, re-enable the "Resend OTP" button here if it was disabled.
       }
     }, 1000); // Update the countdown every 1 second (1000 milliseconds)
+  }
+
+  createUser() {
+    const password = this.userData.password;
+    const confirmPassword = this.userData.confirmPassword;
+
+    // ตรวจสอบว่าพาสเวิร์ดตรงกัน
+    if (password !== confirmPassword) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Passwords do not match."
+      });
+      return;
+    }
+
+    // ตรวจสอบความแข็งแรงของพาสเวิร์ด
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character."
+      });
+      return;
+    }
+
+    // ดำเนินการสร้างผู้ใช้ถ้าผ่านเงื่อนไขทั้งหมด
+    this.authservice.createUser(this.userData).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Account Successfully Created",
+          life: 3000
+        });
+        this.displayDialog = false;
+      },
+      error: error => {
+        if (error.status === 401) {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Session expired, please logout and login again."
+          });
+        }
+      }
+    });
   }
 
   resendOTP(event) {
