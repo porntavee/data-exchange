@@ -8,6 +8,7 @@ export const environment = {
   apiUrl: "https://dsslocal.linkflow.co.th/api/staging",
   loginURL: "https://mpub.linkflow.co.th:4433/api",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
+  DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
   // serviceURL: "http://localhost:8040/api/staging/callapi",
   // serviceURL:"http://10.11.2.179:3009",
   // websocketUrl: 'ws://localhost/api/v1/device/remote'
@@ -26,6 +27,7 @@ export const environment = {
     "localhost:8042",
     "192.168.1.230:8001",
     "192.168.43.210:8080",
-    "192.168.1.31"
+    "192.168.1.31",
+    "dss.motorway.go.th"
   ]
 };

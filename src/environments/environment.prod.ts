@@ -5,11 +5,18 @@
 
 export const environment = {
   production: true,
-  rountURL: 'https://dsslocal.linkflow.co.th/',
-  serviceURL:"https://dsslocal.linkflow.co.th/api/staging/callapi",
-  apiUrl: 'https://dsslocal.linkflow.co.th/api/v1',
+  rountURL: "https://dsslocal.linkflow.co.th/",
+  serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
+  apiUrl: "https://dsslocal.linkflow.co.th/api/v1",
   // serviceURL:"10.11.2.73:3009",
-  baseUrl: 'https://dsslocal.linkflow.co.th/',
-  websocketUrl: 'wss://dsslocal.linkflow.co.th/websocket/v1/remote',
-  allowedDomains: ["dsslocal.linkflow.co.th","edims.infitel.co.th","edd.linkflow.co.th", "10.4.2.250", "localhost"]
+  baseUrl: "https://dsslocal.linkflow.co.th/",
+  websocketUrl: "wss://dsslocal.linkflow.co.th/websocket/v1/remote",
+  allowedDomains: [
+    "dsslocal.linkflow.co.th",
+    "edims.infitel.co.th",
+    "edd.linkflow.co.th",
+    "10.4.2.250",
+    "localhost",
+    "dss.motorway.go.th"
+  ]
 };

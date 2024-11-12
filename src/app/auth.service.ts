@@ -37,6 +37,33 @@ export class AuthService {
     return throwError({ error });
   }
 
+  // loginWithDSS(user: string, password: string) {
+  //   const headers = { "content-type": "application/x-www-form-urlencoded" };
+  //   const body = `user=${encodeURIComponent(
+  //     user
+  //   )}&password=${encodeURIComponent(password)}`;
+
+  //   return this.http
+  //     .post<any>(
+  //       `${environment.DSSURL}/login_for_dssdataentry?user=${user}&password=${password}`,
+  //       {
+  //         headers
+  //       }
+  //     )
+  //     .pipe(retry(0), catchError(this.handleError));
+  // }
+
+  loginWithDSS(username: string, password: string) {
+    const headers = { "content-type": "application/json" };
+    const body = JSON.stringify({ user: username, password: password });
+
+    return this.http
+      .post<any>(`${environment.DSSURL}/login_for_dssdataentry`, body, {
+        headers: headers
+      })
+      .pipe(retry(0), catchError(this.handleError));
+  }
+
   login(username, password) {
     const headers = { "content-type": "application/json" };
     const body = JSON.stringify({ username: username, password: password });
