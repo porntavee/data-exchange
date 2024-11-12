@@ -8,6 +8,7 @@ export const environment = {
   rountURL: "https://dsslocal.linkflow.co.th/",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
   apiUrl: "https://dsslocal.linkflow.co.th/api/staging",
+  DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
   // serviceURL:"10.11.2.73:3009",
   baseUrl: "https://dsslocal.linkflow.co.th/",
   websocketUrl: "wss://dsslocal.linkflow.co.th/websocket/v1/remote",

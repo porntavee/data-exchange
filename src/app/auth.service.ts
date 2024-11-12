@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse,HttpHeaders } from "@angular/common/http";
 //import { JwtHelperService } from '@auth0/angular-jwt';
 import { retry, catchError } from "rxjs/operators";
 import { User } from "./user";
@@ -54,15 +54,23 @@ export class AuthService {
   // }
 
   loginWithDSS(username: string, password: string) {
-    const headers = { "content-type": "application/json" };
-    const body = JSON.stringify({ user: username, password: password });
-
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+    });
+  
+    // สร้าง URL พร้อมพารามิเตอร์
+    const url = `https://dss.motorway.go.th/dssadmin/api/login_for_dssdataentry?user=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+  
     return this.http
-      .post<any>(`${environment.DSSURL}/login_for_dssdataentry`, body, {
-        headers: headers
-      })
+      .get<any>(url, { headers: headers })
       .pipe(retry(0), catchError(this.handleError));
   }
+  
+  
+
+ 
+
+
 
   login(username, password) {
     const headers = { "content-type": "application/json" };
