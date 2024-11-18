@@ -112,29 +112,36 @@ export class LoginComponent implements OnInit {
 
   onLogin() {
     // debugger;
-    // this.authservice.settoken(
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyX2Vhc3QiLCJpZCI6MTg3LCJyb2xlIjoic3VwZXIgYWRtaW4iLCJ6b25lIjoxNiwiZXhwIjoxNzUzNTE3NDE5fQ.eEPjaMkew65T7QvpIhTzVVrGN4xFhjZfN-rvp831izA"
-    // );
-    // const returnUrl =
-    //   this.route.snapshot.queryParams["returnUrl"] || "/realtime";
-    // this.router.navigateByUrl(returnUrl);
-    // this.otpState = false;
-    // this.twoFAState = false;
-    // this.loginState = false;
-    // this.loading = false;
-    // this.errorMessage = "";
-    if (this.form.invalid) return;
-    this.loading = true;
-    this.authservice
-      .loginWithDSS(this.f.username.value, this.f.password.value)
-      .subscribe({
-        next: response => {
-          console.log(response);
-          this.loading = false;
-          this.submitted = true;
-          this.loginState = false;
-        }
-      });
+    this.authservice.settoken(
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyX2Vhc3QiLCJpZCI6MTg3LCJyb2xlIjoic3VwZXIgYWRtaW4iLCJ6b25lIjoxNiwiZXhwIjoxNzUzNTE3NDE5fQ.eEPjaMkew65T7QvpIhTzVVrGN4xFhjZfN-rvp831izA"
+    );
+    const returnUrl =
+      this.route.snapshot.queryParams["returnUrl"] || "/d-api";
+    this.router.navigateByUrl(returnUrl);
+    this.otpState = false;
+    this.twoFAState = false;
+    this.loginState = false;
+    this.loading = false;
+    this.errorMessage = "";
+
+
+
+    // if (this.form.invalid) return;
+    // this.loading = true;
+    // this.authservice
+    //   .loginWithDSS(this.f.username.value, this.f.password.value)
+    //   .subscribe({
+    //     next: response => {
+    //       console.log(response);
+    //       this.loading = false;
+    //       this.submitted = true;
+    //       this.loginState = false;
+    //     }
+    //   });
+
+
+
+
     // this.authservice
     //   .login(this.f.username.value, this.f.password.value)
     //   .subscribe({
