@@ -28,15 +28,27 @@ export interface alarmGroup {
   email?: string;
 }
 
+
 export interface routeAPI {
   id?: number;
   tag?: string;
+  datasets?: string;
   endpoints?: string;
   methods?: string;
   request?: string;
   response?: string;
   query?: string;
   type?: string;
+  param1?: string;
+  param2?: string;
+  param3?: string;
+  param4?: string;
+  param5?: string;
+  param6?: string;
+  param7?: string;
+  param8?: string;
+  param9?: string;
+  param10?: string;
 }
 export interface editlistGroup {
   symbol_id?: string[];
@@ -75,6 +87,19 @@ export class DApiComponent implements OnInit {
     { value: 120, name: "120 Minute" },
     { value: 180, name: "180 Minute" }
   ];
+  fieldConditions: number[] = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, 3, ..., 10]
+  // ตัวเลือกเงื่อนไขสำหรับ Dropdown
+  conditionOptions = [
+    { label: '=', value: '=' },
+    { label: '>', value: '>' },
+    { label: '<', value: '<' },
+    { label: '>=', value: '>=' },
+    { label: '<=', value: '<=' },
+    { label: '!=', value: '!=' }
+  ];
+  dataSets: any = [ { "title": 'dss_2020', "value": '2'}, { "title": 'atms_2020', "value": '3'}, { "title": 'dss_vecivle', "value": '4'}  ];
+  selectedDataSets: any;
+
   selectedValue: any;
   itemsAction: MenuItem[];
   alarmGroupDialog: boolean;
@@ -341,26 +366,64 @@ export class DApiComponent implements OnInit {
     this.lineGroupService.valueSource(task);
   }
 
+  // Method ที่มีให้เลือก
+  availableMethods: string[] = ['POST', 'GET', 'PUT', 'DELETE'];
+
+  // เก็บ Method ที่ถูกเลือก
+  selectedMethods: string[] = [];
+
+  // เก็บข้อมูล Methods ที่ถูกสร้างเป็น JSON String
+  methods: string = '';
+
+  // ฟังก์ชันสำหรับเพิ่ม/ลบ Method ที่ถูกเลือก
+  toggleMethodSelection(method: string): void {
+    const index = this.selectedMethods.indexOf(method);
+    if (index > -1) {
+      // ลบออกถ้าถูกเลือกซ้ำ
+      this.selectedMethods.splice(index, 1);
+    } else {
+      // เพิ่ม Method ที่ถูกเลือก
+      this.selectedMethods.push(method);
+    }
+
+    // อัปเดตข้อมูลในรูปแบบ JSON String
+    this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
+    console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
+  }
+
   createRoute() {
     // console.log(this.selectedValues)
 
     let model = {
-      id: 0,
-      tag: this.alarmGroup.tag,
-      methods: this.alarmGroup.methods,
-      endpoints: this.alarmGroup.endpoints,
-      request: this.alarmGroup.request,
-      response: this.alarmGroup.response,
-      query: this.alarmGroup.query,
-      type: this.alarmGroup.type,
-      created_by: "string",
-      updated_by: "string",
-      active: 1
+      "id": 0,
+      "tag": this.alarmGroup.tag,
+      "methods": this.alarmGroup.methods,
+      "datasets": this.selectedDataSets.value,
+      "endpoints": this.alarmGroup.endpoints,
+      "request": this.alarmGroup.request,
+      "response": this.alarmGroup.response,
+      "query": this.alarmGroup.query,
+      "type": this.alarmGroup.type,
+      "created_by": "string",
+      "updated_by": "string",
+      "active": 1,
+      "param1": this.alarmGroup.param1 ?? "",
+      "param2": this.alarmGroup.param2 ?? "",
+      "param3": this.alarmGroup.param3 ?? "",
+      "param4": this.alarmGroup.param4 ?? "",
+      "param5": this.alarmGroup.param5 ?? "",
+      "param6": this.alarmGroup.param6 ?? "",
+      "param7": this.alarmGroup.param7 ?? "",
+      "param8": this.alarmGroup.param8 ?? "",
+      "param9": this.alarmGroup.param9 ?? "",
+      "param10": this.alarmGroup.param10 ?? ""
     };
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = "http://127.0.0.1:8000/route/create";
+    debugger
+
+    const apiUrl = 'http://127.0.0.1:8000/route/create';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
@@ -432,17 +495,35 @@ export class DApiComponent implements OnInit {
   }
   readRoute() {
     // console.log(this.selectedValues)
-    // const apiUrl = 'http://127.0.0.1:8000/route/read';
-    // this.http.get<any>(apiUrl).subscribe(
-    //   data => {
-    //     console.log("Received data:", data.data);
-    //     debugger;
-    //     this.alarmGroups = data.data;
-    //   },
-    //   error => {
-    //     console.error("Error fetching polygon data:", error);
-    //   }
-    // );
+
+    const apiUrl = 'http://127.0.0.1:8000/route/read';
+    this.http.get<any>(apiUrl).subscribe(
+      (data) => {
+        console.log('Received data:', data.data);
+        this.alarmGroups = data.data;
+      },
+      (error) => {
+        console.error('Error fetching polygon data:', error);
+      }
+    );
+
+  }
+  readRouteById(param) {
+    // console.log(this.selectedValues)
+    debugger
+    const apiUrl = 'http://127.0.0.1:8000/route/read/' + param;
+    this.http.get<any>(apiUrl).subscribe(
+      (data) => {
+        debugger
+        console.log('Received data:', data.data);
+        this.openDailog();
+        this.alarmGroup = data.data;
+      },
+      (error) => {
+        console.error('Error fetching polygon data:', error);
+      }
+    );
+
   }
   editlistGroup() {
     this.submitted = true;
