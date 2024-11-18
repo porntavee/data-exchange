@@ -71,6 +71,14 @@ export const ROUTES: RouteInfo[] = [
     hidden: false
   },
   {
+    title: "API Log",
+    path: "/d-api-log",
+    icon: "assets/img/m-dashboard.png",
+    class: "",
+    role: ["super admin"],
+    hidden: false
+  },
+  {
     title: "USER MANAGEMENT",
     path: "/user",
     icon: "assets/img/user-icon.png",

@@ -49,6 +49,16 @@ export interface routeAPI {
   param8?: string;
   param9?: string;
   param10?: string;
+  operator1?: string;
+  operator2?: string;
+  operator3?: string;
+  operator4?: string;
+  operator5?: string;
+  operator6?: string;
+  operator7?: string;
+  operator8?: string;
+  operator9?: string;
+  operator10?: string;
 }
 export interface editlistGroup {
   symbol_id?: string[];
@@ -97,7 +107,12 @@ export class DApiComponent implements OnInit {
     { label: '<=', value: '<=' },
     { label: '!=', value: '!=' }
   ];
-  dataSets: any = [ { "title": 'dss_2020', "value": '2'}, { "title": 'atms_2020', "value": '3'}, { "title": 'dss_vecivle', "value": '4'}  ];
+  dataSets: any = [ 
+    { "title": 'DSS', "value": '2'}, 
+    { "title": 'ATMS', "value": '3'}, 
+    { "title": 'DSS Vehicle', "value": '4'},
+    { "title": 'M-INSIGHT', "value": '5'}
+  ];
   selectedDataSets: any;
 
   selectedValue: any;
@@ -211,6 +226,7 @@ export class DApiComponent implements OnInit {
       request: '[{"num": (int, None), "detail": (str, None)}]',
       response: '[{"num": (int, None), "detail": (str, None)}]'
     };
+    this.jsonData = [];
     this.symbolDataAdded = [];
     this.symbolString = [];
     this.nameSearch = null;
@@ -391,6 +407,37 @@ export class DApiComponent implements OnInit {
     console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
 
+  tryExecute() {
+    let model = {
+      "dataset_id": this.selectedDataSets.value,
+      "query_string": this.alarmGroup.query
+    };
+
+    let jsonStr = JSON.stringify(model);
+
+    
+
+    const apiUrl = 'http://127.0.0.1:8000/tryexecute';
+    this.http.post<any>(apiUrl, model).subscribe(
+      data => {
+        console.log("Received data:", data);
+        this.jsonData = data.data;
+        debugger
+      },
+      error => {
+        console.error("Error fetching polygon data:", error);
+      }
+    );
+
+  }
+
+  jsonData:any = [];
+
+  // ดึง keys ของ JSON (ใช้สำหรับหัวตาราง)
+  getKeys(): string[] {
+    return this.jsonData.length > 0 ? Object.keys(this.jsonData[0]) : [];
+  }
+
   createRoute() {
     // console.log(this.selectedValues)
 
@@ -416,12 +463,21 @@ export class DApiComponent implements OnInit {
       "param7": this.alarmGroup.param7 ?? "",
       "param8": this.alarmGroup.param8 ?? "",
       "param9": this.alarmGroup.param9 ?? "",
-      "param10": this.alarmGroup.param10 ?? ""
+      "param10": this.alarmGroup.param10 ?? "",
+      "operator1": this.alarmGroup.operator1 ?? "",
+      "operator2": this.alarmGroup.operator2 ?? "",
+      "operator3": this.alarmGroup.operator3 ?? "",
+      "operator4": this.alarmGroup.operator4 ?? "",
+      "operator5": this.alarmGroup.operator5 ?? "",
+      "operator6": this.alarmGroup.operator6 ?? "",
+      "operator7": this.alarmGroup.operator7 ?? "",
+      "operator8": this.alarmGroup.operator8 ?? "",
+      "operator9": this.alarmGroup.operator9 ?? "",
+      "operator10": this.alarmGroup.operator10 ?? "",
     };
 
     let jsonStr = JSON.stringify(model);
 
-    debugger
 
     const apiUrl = 'http://127.0.0.1:8000/route/create';
     this.http.post<any>(apiUrl, model).subscribe(
@@ -510,11 +566,11 @@ export class DApiComponent implements OnInit {
   }
   readRouteById(param) {
     // console.log(this.selectedValues)
-    debugger
+    
     const apiUrl = 'http://127.0.0.1:8000/route/read/' + param;
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
-        debugger
+        
         console.log('Received data:', data.data);
         this.openDailog();
         this.alarmGroup = data.data;
@@ -527,38 +583,58 @@ export class DApiComponent implements OnInit {
   }
   editlistGroup() {
     this.submitted = true;
-    const ids = this.symbolDataAdded.map(obj => obj.SYMBOL_ID);
-    if (this.editGroup.group_name !== "") {
-      if (this.emailsendline == null) {
-        this.emailsendline = "";
-      }
-      // this.lineGroupService
-      //   .editMessageGroup(
-      //     this.editalarmGroups1.group_id,
-      //     ids,
-      //     this.alarmGroup.group_name,
-      //     this.alarmGroup.group_description,
-      //     this.selectedValues,
-      //     this.emailsendline,
-      //     60
-      //   )
-      //   .subscribe(result => {
-      //     this.hideDialog();
-      //     this.messageService.add({
-      //       severity: "success",
-      //       summary: "Successful",
-      //       detail: result.message,
-      //       life: 3000
-      //     });
-      //     this.lineGroupService.getMessageGroup().subscribe(datas => {
-      //       this.alarmGroups = datas;
+    const apiUrl = 'http://127.0.0.1:8000/route/update/' + this.alarmGroup.id;
 
-      //       this.changeDetection.detectChanges();
-      //     });
-      //     // this.refresh();
-      //   });
-    } else {
-    }
+    let model = {
+      "id": 0,
+      "tag": this.alarmGroup.tag,
+      "methods": this.alarmGroup.methods,
+      "datasets": this.selectedDataSets.value,
+      "endpoints": this.alarmGroup.endpoints,
+      "request": this.alarmGroup.request,
+      "response": this.alarmGroup.response,
+      "query": this.alarmGroup.query,
+      "type": this.alarmGroup.type,
+      "created_by": "string",
+      "updated_by": "string",
+      "active": 1,
+      "param1": this.alarmGroup.param1 ?? "",
+      "param2": this.alarmGroup.param2 ?? "",
+      "param3": this.alarmGroup.param3 ?? "",
+      "param4": this.alarmGroup.param4 ?? "",
+      "param5": this.alarmGroup.param5 ?? "",
+      "param6": this.alarmGroup.param6 ?? "",
+      "param7": this.alarmGroup.param7 ?? "",
+      "param8": this.alarmGroup.param8 ?? "",
+      "param9": this.alarmGroup.param9 ?? "",
+      "param10": this.alarmGroup.param10 ?? "",
+      "operator1": this.alarmGroup.operator1 ?? "",
+      "operator2": this.alarmGroup.operator2 ?? "",
+      "operator3": this.alarmGroup.operator3 ?? "",
+      "operator4": this.alarmGroup.operator4 ?? "",
+      "operator5": this.alarmGroup.operator5 ?? "",
+      "operator6": this.alarmGroup.operator6 ?? "",
+      "operator7": this.alarmGroup.operator7 ?? "",
+      "operator8": this.alarmGroup.operator8 ?? "",
+      "operator9": this.alarmGroup.operator9 ?? "",
+      "operator10": this.alarmGroup.operator10 ?? "",
+    };
+
+    this.http.put<any>(`${apiUrl}`, model).subscribe(
+      (response) => {
+        if (response.status === 200) {
+          
+          console.log('Update successful:', response.message);
+        } else {
+          
+          console.warn('Update failed:', response.message);
+        }
+      },
+      (error) => {
+        
+        console.error('Error updating route:', error);
+      }
+    );
   }
   refresh(): void {
     window.location.reload();
