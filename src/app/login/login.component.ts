@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit {
                   this.authservice.settoken(localStorage.getItem("tk"));
                   // ไม่แน่ใจว่า Token ถูกรึยัง
                   const returnUrl =
-                    this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+                    this.route.snapshot.queryParams["returnUrl"] || "/d-api";
                   this.router.navigateByUrl(returnUrl);
                   // const isFirstTime = response["firstLogin"]
                   //   ? response["firstLogin"]
@@ -191,7 +191,7 @@ export class LoginComponent implements OnInit {
             this.authservice.settoken(localStorage.getItem("tk"));
             // ไม่แน่ใจว่า Token ถูกรึยัง
             const returnUrl =
-              this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+              this.route.snapshot.queryParams["returnUrl"] || "/d-api";
             this.router.navigateByUrl(returnUrl);
           }
         },
