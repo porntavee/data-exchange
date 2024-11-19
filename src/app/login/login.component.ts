@@ -119,17 +119,21 @@ export class LoginComponent implements OnInit {
       .loginWithDSS(this.f.username.value, this.f.password.value)
       .subscribe({
         next: response => {
-          console.log(response.login);
+          // console.log(response.login);
 
           // Step 2: Check if DSS login was unsuccessful
           if (response.login != true) {
-            console.log("IF");
+            // this.messageService.add({
+            //   severity: "success",
+            //   summary: "Sucess",
+            //   detail: "Login Success !"
+            // });
             // Proceed to normal login if DSS login fails
             this.authservice
               .login(this.f.username.value, this.f.password.value)
               .subscribe({
                 next: response => {
-                  alert("LOGIN WITH Data Exchange");
+                  // alert("LOGIN WITH Data Exchange");
                   this.loading = false;
                   this.submitted = true;
                   this.loginState = false;

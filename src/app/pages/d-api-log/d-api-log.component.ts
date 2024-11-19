@@ -6,7 +6,6 @@ import { LineGroupService } from "@app/linegroupservice";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
-import { threadId } from "worker_threads";
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -60,11 +59,11 @@ export interface editGroup {
       }
     `
   ],
-  selector: "app-d-api-use",
-  templateUrl: "./d-api-use.component.html",
-  styleUrls: ["./d-api-use.component.css"]
+  selector: 'app-d-api-log',
+  templateUrl: './d-api-log.component.html',
+  styleUrls: ['./d-api-log.component.css']
 })
-export class DApiUseComponent implements OnInit {
+export class DApiLogComponent implements OnInit {
   minutes = [
     { value: 60, name: "60 Minute" },
     { value: 120, name: "120 Minute" },
@@ -84,8 +83,8 @@ export class DApiUseComponent implements OnInit {
   editGroup1: editGroup[];
   editGroup2: group_list[];
   alarmGroups: routeAPI[];
-  alarmGroup: routeAPI;
-  AlarmGroup: routeAPI = {};
+  alarmGroup: alarmGroup;
+  AlarmGroup: alarmGroup = {};
   tokenList: any[];
   stringArray: string[];
   stringArrays: number;
@@ -112,7 +111,7 @@ export class DApiUseComponent implements OnInit {
     public themeService: ThemeService,
     private http: HttpClient
   ) {
-    this.titleService.setTitle("API Library");
+    this.titleService.setTitle("SED EAST-Line Manage");
     // this.actionItems = [
     //   {
     //     icon: "pi pi-fw pi-file",
@@ -141,6 +140,40 @@ export class DApiUseComponent implements OnInit {
     //     ]
     //   }
     // ];
+  }
+
+  readToken() {
+    // console.log(this.selectedValues)
+
+    const apiUrl = 'http://127.0.0.1:8000/log/read';
+    this.http.get<any>(apiUrl).subscribe(
+      (data) => {
+        console.log('Received data:', data.data);
+        
+        this.tokenList = data.data;
+      },
+      (error) => {
+        console.error('Error fetching polygon data:', error);
+      }
+    );
+
+  }
+
+  approve(param, param2) {
+    const apiUrl = 'http://127.0.0.1:8000/token/approve';
+    debugger
+    this.http.post<any>(apiUrl, {
+      user_id: param,
+      route_id: param2
+    }).subscribe(
+      (data) => {
+        console.log('Received data:', data.data);
+        this.readToken();
+      },
+      (error) => {
+        console.error('Error fetching polygon data:', error);
+      }
+    );
   }
 
   actionItem(AlarmGroup: alarmGroup) {
@@ -228,7 +261,7 @@ export class DApiUseComponent implements OnInit {
       });
   }
   changecheck(event) {
-    // this.alarmGroup.flag = event.checked;
+    this.alarmGroup.flag = event.checked;
     // console.log(event);
   }
   hideDialog() {
@@ -253,7 +286,6 @@ export class DApiUseComponent implements OnInit {
     //   methods: 'POST,GET'
     // }]
 
-    this.readRoute();
     this.readToken();
 
     this.isLoadingalarmGroups = false;
@@ -330,61 +362,103 @@ export class DApiUseComponent implements OnInit {
     //   }
     // });
   }
-  readRoute() {
-    // console.log(this.selectedValues)
-    const apiUrl = 'http://127.0.0.1:8000/route/read_library/-1';
-    this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        debugger
-        this.alarmGroups = data.data;
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
-  }
-
-  readToken() {
-    // console.log(this.selectedValues)
-
-    const apiUrl = "http://127.0.0.1:8000/token/read/-1";
-    this.http.get<any>(apiUrl).subscribe(
-      data => {
-        console.log("Received data:", data.data);
-        debugger;
-        this.tokenList = data.data;
-      },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
-    );
-  }
-
-  createToken(param) {
-    // console.log(this.selectedValues)
-    debugger;
-    const apiUrl = "http://127.0.0.1:8000/token/create";
-    this.http
-      .post<any>(apiUrl, {
-        user_id: -1,
-        route_id: param
-      })
-      .subscribe(
-        data => {
-          console.log("Received data:", data.data);
-
-          this.readRoute();
-          this.readToken();
-        },
-        error => {
-          console.error("Error fetching polygon data:", error);
-        }
-      );
-  }
-
   menuVlue(task) {
     this.lineGroupService.valueSource(task);
+  }
+  createGroup() {
+    // console.log(this.selectedValues)
+    if (
+      this.alarmGroup.group_name != undefined &&
+      this.alarmGroup.group_description != undefined
+    ) {
+      if (this.emailsendline == null){
+        this.emailsendline = "";
+      }
+      this.invalid = "";
+      this.submitted = false;
+      if (this.symbolString.length != 0) {
+        this.lineGroupService
+          .createMessageGroup(
+            this.symbolString,
+            this.alarmGroup.group_name,
+            this.alarmGroup.group_description,
+            this.selectedValues,
+            this.emailsendline,
+            60
+          )
+          .subscribe(result => {
+            this.hideDialog();
+            this.messageService.add({
+              severity: "success",
+              summary: "Successful",
+              detail: "Create Successful",
+              life: 3000
+            });
+            this.changeDetection.detectChanges();
+            this.lineGroupService.getMessageGroup().subscribe({
+              next: datas => {
+                this.alarmGroups = datas;
+                this.isLoadingalarmGroups = false;
+                this.changeDetection.detectChanges();
+              },
+              error: error => {
+                this.isLoadingalarmGroups = false;
+                if (error.status == 401) {
+                  this.messageService.add({
+                    severity: "error",
+                    summary: "Error",
+                    detail: "Session expired, please logout and login again."
+                  });
+                }
+              }
+            });
+          });
+      } else {
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Please Select SYMBOL ID	or IP Address."
+        });
+      }
+    } else {
+      this.invalid = "ng-invalid ng-dirty";
+      this.submitted = true;
+    }
+  }
+  editlistGroup() {
+    this.submitted = true;
+    const ids = this.symbolDataAdded.map(obj => obj.SYMBOL_ID);
+    if (this.editGroup.group_name !== "") {
+      if (this.emailsendline == null){
+        this.emailsendline = "";
+      }
+      this.lineGroupService
+        .editMessageGroup(
+          this.editalarmGroups1.group_id,
+          ids,
+          this.alarmGroup.group_name,
+          this.alarmGroup.group_description,
+          this.selectedValues,
+          this.emailsendline,
+          60
+        )
+        .subscribe(result => {
+          this.hideDialog();
+          this.messageService.add({
+            severity: "success",
+            summary: "Successful",
+            detail: result.message,
+            life: 3000
+          });
+          this.lineGroupService.getMessageGroup().subscribe(datas => {
+            this.alarmGroups = datas;
+
+            this.changeDetection.detectChanges();
+          });
+          // this.refresh();
+        });
+    } else {
+    }
   }
   refresh(): void {
     window.location.reload();
@@ -444,7 +518,7 @@ export class DApiUseComponent implements OnInit {
   }
 
   lineread(AlarmGroup: alarmGroup) {
-    // this.AlarmGroup = AlarmGroup;
+    this.AlarmGroup = AlarmGroup;
     this.lineDialog = true;
     this.selectedValues = AlarmGroup.flag;
     this.dialogHeader = "Alarm message group Manager";
@@ -507,17 +581,21 @@ export class DApiUseComponent implements OnInit {
       header: "ยืนยันการลบ",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        this.alarmGroups = this.alarmGroups.filter(val => val.id !== group.id);
+        this.alarmGroups = this.alarmGroups.filter(
+          val => val.id !== group.id
+        );
         this.alarmGroup = {};
-        this.lineGroupService.deleteMessageGroup(group.id).subscribe(result => {
-          this.messageService.add({
-            severity: "success",
-            summary: "Successful",
-            detail: result.message,
-            life: 3000
+        this.lineGroupService
+          .deleteMessageGroup(group.id)
+          .subscribe(result => {
+            this.messageService.add({
+              severity: "success",
+              summary: "Successful",
+              detail: result.message,
+              life: 3000
+            });
+            this.changeDetection.detectChanges();
           });
-          this.changeDetection.detectChanges();
-        });
       }
     });
   }

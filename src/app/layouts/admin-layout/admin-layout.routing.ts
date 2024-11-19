@@ -41,6 +41,7 @@ import { StatsComponent } from '@app/pages/stats/stats.component';
 import { DApiComponent } from '@app/pages/d-api/d-api.component';
 import { DApiUseComponent } from '@app/pages/d-api-use/d-api-use.component';
 import { DApiApproveComponent } from '@app/pages/d-api-approve/d-api-approve.component';
+import { DApiLogComponent } from '@app/pages/d-api-log/d-api-log.component';
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
     { path: 'user',           component: UserComponent },
@@ -84,4 +85,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: "d-api", component: DApiComponent },
     { path: "d-api-use", component: DApiUseComponent },
     { path: "d-api-approve", component: DApiApproveComponent },
+    { path: "d-api-log", component: DApiLogComponent },
 ];
