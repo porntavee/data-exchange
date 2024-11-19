@@ -427,6 +427,15 @@ export class LoginComponent implements OnInit {
           detail: "Account Successfully Created",
           life: 3000
         });
+        this.userData = {
+          username: "",
+          password: "",
+          firstname: "",
+          lastname: "",
+          zone: 0,
+          role: "monitor",
+          confirmPassword: ""
+        };
         this.displayDialog = false;
       },
       error: error => {
