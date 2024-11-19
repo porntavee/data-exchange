@@ -284,6 +284,8 @@ export class DApiComponent implements OnInit {
   hideDialog() {
     this.alarmGroupDialog = false;
     this.submitted = false;
+    this.selectedValues = undefined;
+    this.selectedDataSets = undefined;
   }
   hideDialog1() {
     this.alarmGroupDialog1 = false;
@@ -564,16 +566,23 @@ export class DApiComponent implements OnInit {
     );
 
   }
+
   readRouteById(param) {
-    // console.log(this.selectedValues)
-    
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param;
+
+    var index = this.dataSets.findIndex(data => data.value === param.dataset_id.toString());
+    this.selectedDataSets = this.dataSets[index]
+    const methodsArray = JSON.parse(param.methods);
+
+    // ตั้งค่า selectedValues ด้วยค่าที่ตรงใน availableMethods
+    this.selectedValues = this.availableMethods.filter(method => methodsArray.includes(method));
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         
         console.log('Received data:', data.data);
         this.openDailog();
         this.alarmGroup = data.data;
+        
       },
       (error) => {
         console.error('Error fetching polygon data:', error);

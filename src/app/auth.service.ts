@@ -54,15 +54,14 @@ export class AuthService {
   // }
 
   loginWithDSS(username: string, password: string) {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-    });
-  
-    // สร้าง URL พร้อมพารามิเตอร์
-    const url = `https://dss.motorway.go.th/dssadmin/api/login_for_dssdataentry?user=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-  
+    const headers = { "content-type": "application/json" };
+    const params = { user: username, password: password }; // ส่งผ่าน query string
+
     return this.http
-      .get<any>(url, { headers: headers })
+      .get<any>(`${environment.DSSURL}/login_for_dssdataentry`, {
+        headers: headers,
+        params: params
+      })
       .pipe(retry(0), catchError(this.handleError));
   }
   

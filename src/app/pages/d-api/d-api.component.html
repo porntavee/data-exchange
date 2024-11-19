@@ -48,7 +48,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-group let-rowIndex>
-            <tr (click)="readRouteById(group.id)">
+            <tr (click)="readRouteById(group)">
                 <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
@@ -171,7 +171,7 @@
 </p-dialog>
 
 <p-dialog [(visible)]="alarmGroupDialog" [style]="{width: '800px'}" styleClass="modalResponsivo" [(header)]="dialogHeader" [modal]="true"
-    styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'auto'}">
+    styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'auto'}" (onHide)="hideDialog()">
     <ng-template pTemplate="content">
 
         <div style="background-color: grey; width:100%; border-top: 1px dashed grey;"></div>
