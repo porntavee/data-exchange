@@ -205,16 +205,18 @@
                     </small>
                 </div>
                 <div class="col-6 pr-0">
-                    <label for="methods" style="font-weight: bold;">Type</label>
-                    <div class="p-field-radiobutton ">
-                        <p-radioButton name="public" value="public" [(ngModel)]="alarmGroup.type" inputId="public"
-                            checked></p-radioButton>
-                        <label class="radio-label" for="public">Public</label>
-                    </div>
-                    <div class="p-field-radiobutton">
-                        <p-radioButton name="private" value="private" [(ngModel)]="alarmGroup.type"
-                            inputId="private"></p-radioButton>
-                        <label class="radio-label" for="private">Private</label>
+                    <div class="row">
+                        <label for="methods" style="font-weight: bold; margin-right: 15px;">Type</label>
+                        <div class="p-field-radiobutton " style="margin-right: 15px;">
+                            <p-radioButton name="public" value="public" [(ngModel)]="alarmGroup.type" inputId="public"
+                                checked style="margin-right: 15px; margin-top: -15px;"></p-radioButton>
+                            <label class="radio-label" for="public" style="margin-right: 15px;">Public</label>
+                        </div>
+                        <div class="p-field-radiobutton">
+                            <p-radioButton name="private" value="private" [(ngModel)]="alarmGroup.type"
+                                inputId="private" style="margin-right: 15px; margin-top: -15px;"></p-radioButton>
+                            <label class="radio-label" for="private" style="margin-right: 15px;">Private</label>
+                        </div>
                     </div>
                 </div>
             </div>
