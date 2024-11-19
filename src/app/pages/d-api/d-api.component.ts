@@ -417,12 +417,12 @@ export class DApiComponent implements OnInit {
 
     
 
-    const apiUrl = 'http://127.0.0.1:8000/tryexecute';
-    this.http.post<any>(apiUrl, model).subscribe(
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    this.http.post<any>(apiUrl, jsonStr).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
-        debugger
+       // debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -479,7 +479,7 @@ export class DApiComponent implements OnInit {
     let jsonStr = JSON.stringify(model);
 
 
-    const apiUrl = 'http://127.0.0.1:8000/route/create';
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/create';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
@@ -552,7 +552,7 @@ export class DApiComponent implements OnInit {
   readRoute() {
     // console.log(this.selectedValues)
 
-    const apiUrl = 'http://127.0.0.1:8000/route/read';
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -567,7 +567,7 @@ export class DApiComponent implements OnInit {
   readRouteById(param) {
     // console.log(this.selectedValues)
     
-    const apiUrl = 'http://127.0.0.1:8000/route/read/' + param;
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param;
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         
@@ -583,7 +583,7 @@ export class DApiComponent implements OnInit {
   }
   editlistGroup() {
     this.submitted = true;
-    const apiUrl = 'http://127.0.0.1:8000/route/update/' + this.alarmGroup.id;
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/update/' + this.alarmGroup.id;
 
     let model = {
       "id": 0,

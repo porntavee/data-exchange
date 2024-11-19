@@ -145,7 +145,7 @@ export class DApiLogComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = 'http://127.0.0.1:8000/log/read';
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -160,8 +160,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   approve(param, param2) {
-    const apiUrl = 'http://127.0.0.1:8000/token/approve';
-    debugger
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve';
+   // debugger
     this.http.post<any>(apiUrl, {
       user_id: param,
       route_id: param2

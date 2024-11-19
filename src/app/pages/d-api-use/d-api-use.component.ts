@@ -332,11 +332,11 @@ export class DApiUseComponent implements OnInit {
   }
   readRoute() {
     // console.log(this.selectedValues)
-    const apiUrl = 'http://127.0.0.1:8000/route/read_library/-1';
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/-1';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
-        debugger
+       // debugger
         this.alarmGroups = data.data;
       },
       (error) => {
@@ -348,11 +348,11 @@ export class DApiUseComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = "http://127.0.0.1:8000/token/read/-1";
+    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/-1";
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        debugger;
+       // debugger;
         this.tokenList = data.data;
       },
       error => {
@@ -363,8 +363,8 @@ export class DApiUseComponent implements OnInit {
 
   createToken(param) {
     // console.log(this.selectedValues)
-    debugger;
-    const apiUrl = "http://127.0.0.1:8000/token/create";
+   // debugger;
+    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
     this.http
       .post<any>(apiUrl, {
         user_id: -1,
