@@ -55,11 +55,12 @@ export class AuthService {
 
   loginWithDSS(username: string, password: string) {
     const headers = { "content-type": "application/json" };
-    const body = JSON.stringify({ user: username, password: password });
+    const params = { user: username, password: password }; // ส่งผ่าน query string
 
     return this.http
-      .post<any>(`${environment.DSSURL}/login_for_dssdataentry`, body, {
-        headers: headers
+      .get<any>(`${environment.DSSURL}/login_for_dssdataentry`, {
+        headers: headers,
+        params: params
       })
       .pipe(retry(0), catchError(this.handleError));
   }

@@ -111,105 +111,91 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-    // debugger;
-    // this.authservice.settoken(
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyX2Vhc3QiLCJpZCI6MTg3LCJyb2xlIjoic3VwZXIgYWRtaW4iLCJ6b25lIjoxNiwiZXhwIjoxNzUzNTE3NDE5fQ.eEPjaMkew65T7QvpIhTzVVrGN4xFhjZfN-rvp831izA"
-    // );
-    // const returnUrl =
-    //   this.route.snapshot.queryParams["returnUrl"] || "/realtime";
-    // this.router.navigateByUrl(returnUrl);
-    // this.otpState = false;
-    // this.twoFAState = false;
-    // this.loginState = false;
-    // this.loading = false;
-    // this.errorMessage = "";
     if (this.form.invalid) return;
     this.loading = true;
+
+    // Step 1: Attempt login with DSS
     this.authservice
       .loginWithDSS(this.f.username.value, this.f.password.value)
       .subscribe({
         next: response => {
-          console.log(response);
+          console.log(response.login);
+
+          // Step 2: Check if DSS login was unsuccessful
+          if (response.login != true) {
+            console.log("IF");
+            // Proceed to normal login if DSS login fails
+            this.authservice
+              .login(this.f.username.value, this.f.password.value)
+              .subscribe({
+                next: response => {
+                  alert("LOGIN WITH Data Exchange");
+                  this.loading = false;
+                  this.submitted = true;
+                  this.loginState = false;
+                  localStorage.setItem("tk", response["token"]);
+                  this.authservice.settoken(localStorage.getItem("tk"));
+                  // ไม่แน่ใจว่า Token ถูกรึยัง
+                  const returnUrl =
+                    this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+                  this.router.navigateByUrl(returnUrl);
+                  // const isFirstTime = response["firstLogin"]
+                  //   ? response["firstLogin"]
+                  //   : "true";
+                  // localStorage.setItem("temp", response["token"]);
+                  // localStorage.setItem("firsttime", isFirstTime);
+
+                  // if (isFirstTime === "true") {
+                  //   this.twoFAState = true;
+                  //   this.authservice
+                  //     .generateKey2FA(
+                  //       this.f.username.value,
+                  //       this.f.password.value
+                  //     )
+                  //     .subscribe({
+                  //       next: response => {
+                  //         this.isGenQRCode = response["base64_qrcode"] !== null;
+                  //         this.QRBase64 = response["base64_qrcode"];
+                  //       },
+                  //       error: err => {
+                  //         console.error("Error generating 2FA key:", err);
+                  //       }
+                  //     });
+                  // } else {
+                  //   console.log("ELSE");
+                  //   this.twoFAState = true;
+                  //   this.otpState = false;
+                  //   this.isGenQRCode = false;
+                  // }
+                },
+                error: error => {
+                  if (error.error.status === 401) {
+                    this.messageService.add({
+                      severity: "error",
+                      summary: "Error",
+                      detail: error.error.error.detail
+                    });
+                    this.loading = false;
+                  }
+                }
+              });
+          } else {
+            this.loading = false;
+            this.submitted = true;
+            this.loginState = false;
+            localStorage.setItem("tk", response["token"]);
+            this.authservice.settoken(localStorage.getItem("tk"));
+            // ไม่แน่ใจว่า Token ถูกรึยัง
+            const returnUrl =
+              this.route.snapshot.queryParams["returnUrl"] || "/realtime";
+            this.router.navigateByUrl(returnUrl);
+          }
+        },
+        error: error => {
+          console.error("Error during DSS login:", error);
           this.loading = false;
-          this.submitted = true;
-          this.loginState = false;
         }
       });
-    // this.authservice
-    //   .login(this.f.username.value, this.f.password.value)
-    //   .subscribe({
-    //     next: response => {
-    //       this.loading = false;
-    //       this.submitted = true;
-    //       this.loginState = false;
-
-    //       // let firstTimeLogin = "true";
-    //       let isFirstTime = response["firstLogin"]
-    //         ? response["firstLogin"]
-    //         : "true";
-    //       localStorage.setItem("temp", response["token"]);
-    //       localStorage.setItem("firsttime", isFirstTime);
-
-    //       if (isFirstTime === "true") {
-    //         this.twoFAState = true;
-    //         const token = JSON.stringify(response);
-    //         this.authservice
-    //           .generateKey2FA(this.f.username.value, this.f.password.value)
-    //           .subscribe({
-    //             next: response => {
-    //               if (response["base64_qrcode"] === null) {
-    //                 this.isGenQRCode = false;
-    //               } else {
-    //                 this.isGenQRCode = true;
-    //                 this.QRBase64 = response["base64_qrcode"];
-    //               }
-
-    //               error: response => {};
-    //             }
-    //           });
-    //       } else if (isFirstTime === "false") {
-    //         this.otpState = false;
-    //         this.twoFAState = true;
-    //         this.isGenQRCode = false;
-    //       }
-    //       // if (isFirstTime) {
-    //       //   const token = JSON.stringify(response);
-    //       //   this.authservice.settoken(token);
-    //       //   console.log(token);
-    //       //   this.otpState = false;
-    //       //   this.twoFAState = false;
-    //       //   this.isGenQRCode = false;
-    //       //   const returnUrl =
-    //       //     this.route.snapshot.queryParams["returnUrl"] || "/realtime";
-    //       //   this.router.navigateByUrl(returnUrl);
-    //       // }
-    //       error: response => {
-    //         if (response.error.status === 401) {
-    //           this.messageService.add({
-    //             severity: "error",
-    //             summary: response.error.statusText,
-    //             detail: response.error.error.detail,
-    //             life: 3000
-    //           });
-    //           this.loading = false;
-    //           this.submitted = false;
-    //           this.loginState = true;
-    //           this.otpState = false;
-    //           this.twoFAState = false;
-    //         }
-    //       };
-    //     },
-    //     error: error => {
-    //       if (error.error.status == 401) {
-    //         this.loading = false;
-    //         this.messageService.add({
-    //           severity: "error",
-    //           summary: "Error",
-    //           detail: error.error.error.detail
-    //         });
-    //       }
-    //     }
-    //   });
   }
 
   myFunction(e) {
