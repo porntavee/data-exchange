@@ -420,7 +420,7 @@ export class DApiComponent implements OnInit {
     
 
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
-    this.http.post<any>(apiUrl, jsonStr).subscribe(
+    this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
