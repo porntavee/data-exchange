@@ -408,7 +408,22 @@ export class DApiComponent implements OnInit {
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
     console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
+  reboot(){
+    let model = {
+    };
+    const apiUrl = 'https://mpub.linkflow.co.th:4433/api/dynamic_api/reboot';
+    this.http.post<any>(apiUrl, model).subscribe(
+      data => {
+        console.log("Received data:", data);
+    
+       // debugger
+      },
+      error => {
+        console.error("Error fetching polygon data:", error);
+      }
+    );
 
+  }
   tryExecute() {
     let model = {
       "dataset_id": this.selectedDataSets.value,
