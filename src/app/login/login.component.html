@@ -18,10 +18,19 @@
           <img src="assets/img/SED-logo.png">
         </div> -->
         <div class="card-body">
+          <div class="flex-container">
+            <img
+              src="assets/img/data-exchange.png"
+              alt="M Insight"
+              class="centered-image"
+            />
+          </div>
+
           <form
             [formGroup]="form"
             (ngSubmit)="onLogin()"
             (keydown.enter)="$event.preventDefault()"
+            style="margin-top:-100px"
           >
             <div class="form-group">
               <label for="username">Username</label>
@@ -83,7 +92,11 @@
             </div>
           </form>
           <!-- <button pButton label="Sign up" (click)="openDialog()"></button> -->
-          <span (click)="openDialog()" class="link-like">สมัครสมาชิกใหม่</span>
+          <div class="flex-container">
+            <span (click)="openDialog()" class="link-like"
+              >สมัครสมาชิกใหม่</span
+            >
+          </div>
 
           <!-- Dialog ของ PrimeNG -->
           <p-dialog
