@@ -108,10 +108,11 @@
           <button
             pButton
             type="text"
-            (click)="approve(group.user_id, group.route_id)"
-            (click)="menuVlue(group)"
+            (click)="openMenuWithItems(group, $event, menu)"
             icon="pi pi-ellipsis-h"
           ></button>
+
+          <!-- (click)="approve(group.user_id, group.route_id)" -->
           <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
                           (click)="lineread(group)"></button>
                       <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"

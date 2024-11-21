@@ -59,9 +59,9 @@ export interface editGroup {
       }
     `
   ],
-  selector: 'app-d-api-approve',
-  templateUrl: './d-api-approve.component.html',
-  styleUrls: ['./d-api-approve.component.css']
+  selector: "app-d-api-approve",
+  templateUrl: "./d-api-approve.component.html",
+  styleUrls: ["./d-api-approve.component.css"]
 })
 export class DApiApproveComponent implements OnInit {
   minutes = [
@@ -102,6 +102,7 @@ export class DApiApproveComponent implements OnInit {
   selectedValues: string[];
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
+
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -112,6 +113,18 @@ export class DApiApproveComponent implements OnInit {
     private http: HttpClient
   ) {
     this.titleService.setTitle("SED EAST-Line Manage");
+    this.itemsAction = [
+      {
+        label: "เปิดใช้งาน",
+        icon: "pi pi-check"
+        // command: () => this.toggleStatus("เปิดใช้งาน")
+      },
+      {
+        label: "ปิดใช้งาน",
+        icon: "pi pi-times"
+        // command: () => this.toggleStatus("ปิดใช้งาน")
+      }
+    ];
     // this.actionItems = [
     //   {
     //     icon: "pi pi-fw pi-file",
@@ -142,38 +155,72 @@ export class DApiApproveComponent implements OnInit {
     // ];
   }
 
+  prepareMenu(group: any, event: Event, menu: any) {
+    // กำหนดรายการเมนูตามข้อมูลของ group
+    this.itemsAction = [
+      {
+        label: "เปิดใช้งาน",
+        icon: "pi pi-check",
+        command: () => this.toggleStatus("เปิดใช้งาน", group)
+      },
+      {
+        label: "ปิดใช้งาน",
+        icon: "pi pi-times",
+        command: () => this.toggleStatus("ปิดใช้งาน", group)
+      }
+    ];
+
+    // เปิดเมนู
+    menu.toggle(event);
+  }
+
+  toggleStatus(status: string, group: any) {
+    if (status === "เปิดใช้งาน") {
+      console.log(
+        `เรียกใช้งาน approve สำหรับ ${group.user_id} ด้วย route_id ${group.route_id}`
+      );
+      this.approve(group.user_id, group.route_id);
+    } else {
+      console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
+      // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
+    }
+  }
+
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0';
+    const apiUrl =
+      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0";
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        
+      data => {
+        console.log("Received data:", data.data);
+
         this.tokenList = data.data;
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   approve(param, param2) {
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve';
-   // debugger
-    this.http.post<any>(apiUrl, {
-      user_id: param,
-      route_id: param2
-    }).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        this.readToken();
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
+    const apiUrl =
+      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    // debugger
+    this.http
+      .post<any>(apiUrl, {
+        user_id: param,
+        route_id: param2
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.readToken();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
   }
 
   actionItem(AlarmGroup: alarmGroup) {
@@ -362,8 +409,24 @@ export class DApiApproveComponent implements OnInit {
     //   }
     // });
   }
-  menuVlue(task) {
-    this.lineGroupService.valueSource(task);
+  openMenuWithItems(group: any, event: Event, menu: any) {
+    this.menuVlue(group); // กำหนดค่าหรืออัปเดต itemsAction
+    menu.toggle(event); // เปิดเมนู
+  }
+  menuVlue(group: any) {
+    // อัปเดตรายการเมนู
+    this.itemsAction = [
+      {
+        label: "เปิดใช้งาน",
+        icon: "pi pi-check",
+        command: () => this.toggleStatus("เปิดใช้งาน", group)
+      },
+      {
+        label: "ปิดใช้งาน",
+        icon: "pi pi-times",
+        command: () => this.toggleStatus("ปิดใช้งาน", group)
+      }
+    ];
   }
   createGroup() {
     // console.log(this.selectedValues)
@@ -371,7 +434,7 @@ export class DApiApproveComponent implements OnInit {
       this.alarmGroup.group_name != undefined &&
       this.alarmGroup.group_description != undefined
     ) {
-      if (this.emailsendline == null){
+      if (this.emailsendline == null) {
         this.emailsendline = "";
       }
       this.invalid = "";
@@ -429,7 +492,7 @@ export class DApiApproveComponent implements OnInit {
     this.submitted = true;
     const ids = this.symbolDataAdded.map(obj => obj.SYMBOL_ID);
     if (this.editGroup.group_name !== "") {
-      if (this.emailsendline == null){
+      if (this.emailsendline == null) {
         this.emailsendline = "";
       }
       this.lineGroupService
@@ -581,21 +644,17 @@ export class DApiApproveComponent implements OnInit {
       header: "ยืนยันการลบ",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        this.alarmGroups = this.alarmGroups.filter(
-          val => val.id !== group.id
-        );
+        this.alarmGroups = this.alarmGroups.filter(val => val.id !== group.id);
         this.alarmGroup = {};
-        this.lineGroupService
-          .deleteMessageGroup(group.id)
-          .subscribe(result => {
-            this.messageService.add({
-              severity: "success",
-              summary: "Successful",
-              detail: result.message,
-              life: 3000
-            });
-            this.changeDetection.detectChanges();
+        this.lineGroupService.deleteMessageGroup(group.id).subscribe(result => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Successful",
+            detail: result.message,
+            life: 3000
           });
+          this.changeDetection.detectChanges();
+        });
       }
     });
   }
