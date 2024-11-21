@@ -18,7 +18,7 @@
           <img src="assets/img/SED-logo.png">
         </div> -->
         <div class="card-body">
-          <div class="flex-container">
+          <div class="flex-container" style="margin-top:-75px">
             <img
               src="assets/img/data-exchange.png"
               alt="M Insight"
@@ -30,7 +30,7 @@
             [formGroup]="form"
             (ngSubmit)="onLogin()"
             (keydown.enter)="$event.preventDefault()"
-            style="margin-top:-100px"
+            style="margin-top:-120px"
           >
             <div class="form-group">
               <label for="username">Username</label>
@@ -80,7 +80,7 @@
                 <button
                   [disabled]="loading"
                   class="btn btn-default"
-                  style="background-color: #ef8157;"
+                  style="background-color: #677F9A;"
                 >
                   <span
                     *ngIf="loading"
