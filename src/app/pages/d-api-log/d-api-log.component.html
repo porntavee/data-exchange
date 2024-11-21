@@ -51,23 +51,24 @@
         <!-- <th style="text-align:center;" pSortableColumn="row_number2" class="col-1">ลำดับ <p-sortIcon field="row_number2">
                     </p-sortIcon>
                 </th> -->
-                <th pSortableColumn="tag" class="col-2">Tag<p-sortIcon field="tag"></p-sortIcon>
-                </th>
-                <th pSortableColumn="endpint" class="col-4">Endpoint<p-sortIcon field="endpint">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="user_id" class="col-3">User<p-sortIcon field="user_id">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="created_at" class="col-3">วันที่<p-sortIcon field="created_at">
-                </p-sortIcon>
-            </th>
-                <!-- <th></th> -->
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-group let-rowIndex>
-            <tr (click)="openDailog()">
-                <!-- <td>
+        <th pSortableColumn="tag" class="col-2">
+          Tag<p-sortIcon field="tag"></p-sortIcon>
+        </th>
+        <th pSortableColumn="endpint" class="col-4">
+          Endpoint<p-sortIcon field="endpint"> </p-sortIcon>
+        </th>
+        <th pSortableColumn="user_id" class="col-3">
+          User<p-sortIcon field="user_id"> </p-sortIcon>
+        </th>
+        <th pSortableColumn="created_at" class="col-3">
+          วันที่<p-sortIcon field="created_at"> </p-sortIcon>
+        </th>
+        <!-- <th></th> -->
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-group let-rowIndex>
+      <tr>
+        <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
         <!-- <td style="text-align:center;">{{group.row_number2}}</td> -->
@@ -175,32 +176,236 @@
                 readonly="true"
               ></p-checkbox>
             </div>
-        </ng-template>
-    </p-table>
-</div>
-<p-dialog [(visible)]="lineDialog" [style]="{width: '650px'}" [(header)]="dialogHeader" [modal]="true"
-    styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
-    <ng-template pTemplate="content">
-        <div class="col-12">
-            <highcharts-chart
-              [Highcharts]="Highcharts5_1"
-              [options]="chartOptions5_1"
-              style="width: 100%; display: block;"
-            ></highcharts-chart>
           </div>
-    </ng-template>
+          <div class="col-12 col-sm-12 col-md-12 p-0">
+            <div class="row mx-0 mt-2">
+              <div class="col-12 pr-2">
+                <p-table
+                  [value]="stringArray"
+                  [scrollable]="true"
+                  responsiveLayout="scroll"
+                  scrollHeight="250px"
+                  width="650px"
+                >
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th
+                        [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }"
+                      >
+                        Monitor alarm of
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-stringArray>
+                    <tr>
+                      <td>
+                        <li>{{ stringArray }}</li>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <!-- <div class="col-12 pr-2" style="text-align: center; font-weight: bold; font-size: 2rem;"
+                            *ngIf="hasNoSearchResult">
+                            No seacrh result.
+                        </div> -->
+              </div>
+            </div>
+          </div>
+          <!-- <input type="text"  pInputText id="symbol_name" [(ngModel)]="AlarmGroup.symbol_name" required autofocus disabled /> -->
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="alarmGroupDialog" [style]="{width: '800px'}" styleClass="modalResponsivo" [(header)]="dialogHeader" [modal]="true"
-    styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'auto'}">
-    <ng-template pTemplate="content">
-        <div class="col-12">
-            <highcharts-chart
-              [Highcharts]="Highcharts5_1"
-              [options]="chartOptions5_1"
-              style="width: 100%; display: block;"
-            ></highcharts-chart>
-          </div>
+<p-dialog
+  [(visible)]="alarmGroupDialog"
+  styleClass="modalResponsivo"
+  [(header)]="dialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
+>
+  <ng-template pTemplate="content">
+    <!-- <div class="col-12 justify-content-between flex">
+            <div class="row">
+
+                <input type="text" pInputText id="nameSearch" [(ngModel)]="nameSearch" autofocus (input)="nameInput()"
+                    class="nameSearch" placeholder="Search by Symbol Name" />
+
+                <input type="text" pInputText id="ipSearch" [(ngModel)]="ipSearch" (input)="ipInput()" class="ipSearch"
+                    placeholder="Search by IP Address" />
+
+                <button pButton pRipple label="Search" icon="pi pi-search" class="p-button ml-1 butSearch"
+                    (click)="searchSymbol()"></button>
+
+            </div>
+        </div> -->
+    <!-- <div class="col-12 col-sm-12 col-md-12 p-0">
+            <div class="row mx-0 mt-2">
+                <div class="col-12 pr-2">
+                    <p-table [value]="symbolData" responsiveLayout="scroll" scrollHeight="200px">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="text-align:center;" class="col-2 pl-0">
+                                    SYMBOL ID
+                                </th>
+                                <th class="col-4 pl-0">
+                                    SYMBOL Name
+                                </th>
+                                <th class="col-4 pl-0">
+                                    IP Address
+                                </th>
+                                <th class="col-2 pl-0">
+                                    Action
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" *ngIf="hasNoSearchResult; else otherField">
+                            <tr>
+                                <td colspan="4">No seacrh result.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template #otherField pTemplate="body" let-rowData>
+
+                            <tr>
+                                <td class="col-2 pl-0">{{rowData.SYMBOL_ID}}</td>
+                                <td class="col-4 pl-0">
+                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME1}}">{{rowData.SYMBOL_NAME1}}</div>
+                                </td>
+                                <td class="col-4 pl-0">
+                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME3}}">{{rowData.SYMBOL_NAME3}}</div>
+                                </td>
+                                <td class="col-2 pl-0">
+                                    <button pButton pRipple class="Newbuttd" (click)="addSymbol(rowData)"><i
+                                            class="pi pi-plus"></i></button>
+                                    <button pButton pRipple class="oldbut" (click)="addSymbol(rowData)">Add</button>
+                                </td>
+                            </tr>
+
+                        </ng-template>
+                    </p-table>
+               
+                </div>
+            </div>
+        </div> -->
+    <div
+      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
+    ></div>
+    <div class="col-12 justify-content-between flex">
+      <div class="row mx-0">
+        <div class="col-6 pr-0">
+          <label for="tag" style="font-weight: bold;">Tag</label>
+          <input
+            type="text"
+            pInputText
+            id="tag"
+            [(ngModel)]="alarmGroup.tag"
+            required
+            class="tag"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.tag"
+            >Tag is required.</small
+          >
+        </div>
+        <div class="col-6 pr-0"></div>
+        <div class="col-6 pr-0">
+          <label for="endpoints" style="font-weight: bold;">Endpoints</label>
+          <input
+            type="text"
+            pInputText
+            id="endpoints"
+            [(ngModel)]="alarmGroup.endpoints"
+            required
+            class="endpoints"
+            [class]="invalid"
+          />
+          <small
+            class="p-error block"
+            *ngIf="submitted && !alarmGroup.endpoints"
+            >Endpoints is required.</small
+          >
+        </div>
+        <!-- <div class="col-1 pr-0"></div> -->
+        <div class="col-6 pr-0"></div>
+        <div class="col-6 pr-0">
+          <label for="methods" style="font-weight: bold;">Methods</label>
+          <input
+            type="text"
+            pInputText
+            id="methods"
+            [(ngModel)]="alarmGroup.methods"
+            required
+            class="methods"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.methods"
+            >Methods is required.</small
+          >
+        </div>
+        <div class="col-6 pr-0"></div>
+        <div class="col-6 pr-0">
+          <label for="request" style="font-weight: bold;">Request</label>
+          <input
+            type="text"
+            pInputText
+            id="request"
+            [(ngModel)]="alarmGroup.request"
+            required
+            class="request"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.request"
+            >Request is required.</small
+          >
+        </div>
+        <div class="col-6 pr-0"></div>
+        <div class="col-6 pr-0">
+          <label for="response" style="font-weight: bold;">Response</label>
+          <input
+            type="text"
+            pInputText
+            id="response"
+            [(ngModel)]="alarmGroup.response"
+            required
+            class="response"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.response"
+            >Response is required.</small
+          >
+        </div>
+        <div class="col-6 pr-0"></div>
+        <div class="col-6 pr-0">
+          <label for="table" style="font-weight: bold;">Table</label>
+          <input
+            type="text"
+            pInputText
+            id="table"
+            [(ngModel)]="alarmGroup.table"
+            required
+            class="table"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.table"
+            >Table is required.</small
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- <div style="padding-top: 30px;">
+            <label for="email" style="font-weight: bold;">Email: </label>
+            <input type="text" pInputText id="email" [(ngModel)]="emailsendline" style="width: 50%; margin-left: 15px;"
+                placeholder="Optional" />
+        </div> -->
+  </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
     <div style="display:flex">
