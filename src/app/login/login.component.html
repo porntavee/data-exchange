@@ -18,10 +18,19 @@
           <img src="assets/img/SED-logo.png">
         </div> -->
         <div class="card-body">
+          <div class="flex-container" style="margin-top:-75px">
+            <img
+              src="assets/img/data-exchange.png"
+              alt="M Insight"
+              class="centered-image"
+            />
+          </div>
+
           <form
             [formGroup]="form"
             (ngSubmit)="onLogin()"
             (keydown.enter)="$event.preventDefault()"
+            style="margin-top:-120px"
           >
             <div class="form-group">
               <label for="username">Username</label>
@@ -71,7 +80,7 @@
                 <button
                   [disabled]="loading"
                   class="btn btn-default"
-                  style="background-color: #ef8157;"
+                  style="background-color: #677F9A;"
                 >
                   <span
                     *ngIf="loading"
@@ -83,7 +92,11 @@
             </div>
           </form>
           <!-- <button pButton label="Sign up" (click)="openDialog()"></button> -->
-          <span (click)="openDialog()" class="link-like">สมัครสมาชิกใหม่</span>
+          <div class="flex-container">
+            <span (click)="openDialog()" class="link-like"
+              >สมัครสมาชิกใหม่</span
+            >
+          </div>
 
           <!-- Dialog ของ PrimeNG -->
           <p-dialog

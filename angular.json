@@ -16,14 +16,9 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "allowedCommonJsDependencies": [
-              "chart.js"
-            ],
-            
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ],
+            "allowedCommonJsDependencies": ["chart.js"],
+
+            "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap/scss/bootstrap.scss",
@@ -32,6 +27,9 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
+              "node_modules/primeng/resources/themes/vela-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/styles.css",
               {
                 "input": "src/theme-saga-green.scss",
                 "bundleName": "saga-green",
@@ -46,23 +44,25 @@
                 "input": "src/theme-vela-blue.scss",
                 "bundleName": "vela-blue",
                 "inject": false
-              },{
+              },
+              {
                 "input": "src/theme-md-light-indigo.scss",
                 "bundleName": "md-light-indigo",
                 "inject": false
-              },{
+              },
+              {
                 "input": "src/theme-arya-green.scss",
                 "bundleName": "arya-green",
                 "inject": false
-              },{
+              },
+              {
                 "input": "src/theme-arya-orange.css",
                 "bundleName": "arya-orange",
                 "inject": false
               }
             ],
-            
-            "scripts": [
-            ],
+
+            "scripts": [],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,
@@ -111,11 +111,9 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "pd-free-angularcli:build",
-            "allowedHosts": [
-              "localhost"
-            ]
+            "allowedHosts": ["localhost"]
           },
-          
+
           "configurations": {
             "production": {
               "browserTarget": "pd-free-angularcli:build:production"
@@ -147,19 +145,13 @@
               "src/styles.css",
               "src/assets/sass/paper-dashboard.scss"
             ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ]
+            "assets": ["src/assets", "src/favicon.ico"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
             "exclude": []
           }
         }
@@ -180,9 +172,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
+            "tsConfig": ["e2e/tsconfig.e2e.json"],
             "exclude": []
           }
         }

@@ -2,336 +2,517 @@
 <!-- <p-toolbar styleClass="p-mb-4">
     </p-toolbar> -->
 
-<div class="col-12 card card-stats p-6" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
-    'theme-saga': themeService.theme === 'saga-orange'}">
-    <div style="font-size: 18px; font-weight: 600;" class="text-color">API Manager</div>
-    <p-toolbar styleClass="p-mb-4">
-        <div class="p-toolbar-group-left">
+<p-card
+  style="background-color:#718096"
+  class="col-12 card card-stats p-6"
+  [ngClass]="{
+    'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'
+  }"
+>
+  <div style="font-size: 18px; font-weight: 600;" class="text-color">
+    API Manager
+  </div>
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left"></div>
+    <div class="p-toolbar-group-right">
+      <button
+        pButton
+        pRipple
+        class="p-button-warning mr-2 Newbut"
+        (click)="reboot()"
+      >
+        <i class="pi pi-refresh"><span class="Newtxt new-font">Reboot</span></i>
+      </button>
+      <button
+        pButton
+        pRipple
+        class="p-button-warning mr-2 Newbut"
+        (click)="openDailog()"
+      >
+        <i class="pi pi-plus"
+          ><span class="Newtxt new-font">Create Route API</span></i
+        >
+      </button>
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target.value, 'contains')"
+          class="Searchtxt new-font"
+          placeholder="Search..."
+        />
+      </span>
+    </div>
+  </p-toolbar>
 
-        </div>
-        <div class="p-toolbar-group-right">
-            <button pButton pRipple class="p-button-warning mr-2 Newbut" (click)="reboot()"><i
-                class="pi pi-refresh"><span class="Newtxt new-font">Reboot</span></i></button>
-            <button pButton pRipple class="p-button-warning mr-2 Newbut" (click)="openDailog()"><i
-                    class="pi pi-plus"><span class="Newtxt new-font">Create Route API</span></i></button>
-            <span class="p-input-icon-left">
-                <i class="pi pi-search"></i>
-                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                    class="Searchtxt new-font" placeholder="Search..." />
-            </span>
-        </div>
-    </p-toolbar>
-
-    <p-table #dt [value]="alarmGroups" [rows]="20" [paginator]="true" [loading]="isLoadingalarmGroups"
-        [globalFilterFields]="['id','tag','endpoints']" [(selection)]="alarmGroups" [rowHover]="true" dataKey="group_id"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
-
-        <ng-template pTemplate="header">
-            <tr>
-                <!-- <th style="width: 3rem">
+  <p-table
+    #dt
+    [value]="alarmGroups"
+    [rows]="10"
+    [paginator]="true"
+    [loading]="isLoadingalarmGroups"
+    [globalFilterFields]="['id', 'tag', 'endpoints']"
+    [(selection)]="alarmGroups"
+    [rowHover]="true"
+    dataKey="group_id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <!-- <th style="width: 3rem">
                       <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                   </th> -->
 
-                <th style="text-align:center;" pSortableColumn="id" class="col-1">ID <p-sortIcon field="id">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="tag" class="col-2">Tag<p-sortIcon field="tag"></p-sortIcon>
-                </th>
-                <th pSortableColumn="endpoints" class="col-4">Endpoints<p-sortIcon field="endpoints">
-                    </p-sortIcon>
-                </th>
-                <th pSortableColumn="type" class="col-2">Type<p-sortIcon field="type"></p-sortIcon>
-                </th>
-                <th pSortableColumn="methods" class="col-3">Methods<p-sortIcon field="methods">
-                    </p-sortIcon>
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-group let-rowIndex>
-            <tr (click)="readRouteById(group)">
-                <!-- <td>
+        <th style="text-align:center;" pSortableColumn="id" class="col-1">
+          ID <p-sortIcon field="id"> </p-sortIcon>
+        </th>
+        <th pSortableColumn="tag" class="col-2">
+          Tag<p-sortIcon field="tag"></p-sortIcon>
+        </th>
+        <th pSortableColumn="endpoints" class="col-4">
+          Endpoints<p-sortIcon field="endpoints"> </p-sortIcon>
+        </th>
+        <th pSortableColumn="type" class="col-2">
+          Type<p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="methods" class="col-3">
+          Methods<p-sortIcon field="methods"> </p-sortIcon>
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-group let-rowIndex>
+      <tr (click)="readRouteById(group)">
+        <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
-                <td style="text-align:center;">{{group.id}}</td>
-                <td>
-                    <div id="myDIV3" title="{{group.tag}}">{{group.tag}}</div>
-                </td>
-                <td>
-                    <div id="myDIV1" title="{{group.endpoints}}">{{group.endpoints}}</div>
-                </td>
-                <td>
-                    <div id="myDIV1" title="{{group.type}}">{{group.type}}</div>
-                </td>
-                <td>
-                    <div id="myDIV2" title="{{group.methods}}">{{group.methods}}</div>
-                </td>
-                <!--<td>{{group.symbol_name}}</td>-->
-                <td style="display: flex; justify-content: space-between;">
-                    <!-- <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+        <td style="text-align:center;">{{ group.id }}</td>
+        <td>
+          <div id="myDIV3" title="{{ group.tag }}">{{ group.tag }}</div>
+        </td>
+        <td>
+          <div id="myDIV1" title="{{ group.endpoints }}">
+            {{ group.endpoints }}
+          </div>
+        </td>
+        <td>
+          <div id="myDIV1" title="{{ group.type }}">{{ group.type }}</div>
+        </td>
+        <td>
+          <div id="myDIV2" title="{{ group.methods }}">{{ group.methods }}</div>
+        </td>
+        <!--<td>{{group.symbol_name}}</td>-->
+        <td style="display: flex; justify-content: space-between;">
+          <!-- <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
                     <button pButton type="text" (click)="menu.toggle($event)" 
                         icon="pi pi-ellipsis-h"></button> -->
 
-                        <!-- (click)="menuVlue(group)" -->
+          <!-- (click)="menuVlue(group)" -->
 
-
-                    <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
+          <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
                           (click)="lineread(group)"></button>
                       <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
                           (click)="editline(group)"></button>
                       <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                           (click)="deleteGroup(group)"></button> -->
-
-                </td>
-                <td></td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-            <div class="p-d-flex p-ai-center p-jc-between">
-                Total {{alarmGroups ? alarmGroups.length : 0 }} groups.
+        </td>
+        <td></td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+      </div>
+    </ng-template>
+  </p-table>
+</p-card>
+<p-dialog
+  [(visible)]="lineDialog"
+  [style]="{ width: '650px' }"
+  [(header)]="dialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <div class="row mx-0">
+        <div class="col pl-0">
+          <label
+            for="id"
+            [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }"
+            >ID:</label
+          >&nbsp;&nbsp;&nbsp;
+          <span>{{ AlarmGroup.group_id }}</span>
+          <br />
+          <label
+            for="name"
+            [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }"
+            >Group Name:</label
+          >&nbsp;&nbsp;&nbsp;
+          <span>{{ AlarmGroup.group_name }}</span>
+          <br />
+          <label
+            for="Drescription"
+            [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }"
+            >Description:</label
+          >&nbsp;&nbsp;&nbsp;
+          <span>{{ AlarmGroup.group_description }}</span>
+          <br />
+          <label
+            for="Email"
+            [ngClass]="{
+              'theme-arya-text': themeService.theme === 'arya-orange',
+              'theme-saga-text': themeService.theme === 'saga-orange'
+            }"
+            *nglf="AlarmGroup.email != '' || AlarmGroup.email != null"
+            >Email:</label
+          >&nbsp;&nbsp;&nbsp;
+          <span *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">{{
+            AlarmGroup.email
+          }}</span>
+          <br *nglf="AlarmGroup.email != '' || AlarmGroup.email != null" />
+          <br />
+          <div style="display: flex; justify-content: space-between;">
+            <!-- Left Footer Content -->
+            <div>
+              <p-checkbox
+                name="groupname"
+                value="recoveryNotification"
+                label="Recovery Notification"
+                (onChange)="changecheck($event)"
+                [(ngModel)]="selectedValues"
+                readonly="true"
+              ></p-checkbox>
+              &nbsp; &nbsp;
+              <p-checkbox
+                name="groupname"
+                value="resendNotification"
+                label="Resend Notification"
+                (onChange)="changecheck($event)"
+                [(ngModel)]="selectedValues"
+                readonly="true"
+              ></p-checkbox>
             </div>
-        </ng-template>
-    </p-table>
-</div>
-<p-dialog [(visible)]="lineDialog" [style]="{width: '650px'}" [(header)]="dialogHeader" [modal]="true"
-    styleClass="p-fluid" [contentStyle]="{'overflow':'visible'}">
-    <ng-template pTemplate="content">
-        <div class="p-field">
-            <div class="row mx-0">
-                <div class="col pl-0">
-                    <label for="id" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'}">ID:</label>&nbsp;&nbsp;&nbsp;
-                    <span>{{AlarmGroup.group_id}}</span>
-                    <br>
-                    <label for="name" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'}">Group Name:</label>&nbsp;&nbsp;&nbsp;
-                    <span>{{AlarmGroup.group_name}}</span>
-                    <br>
-                    <label for="Drescription" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'}">Description:</label>&nbsp;&nbsp;&nbsp;
-                    <span>{{AlarmGroup.group_description}}</span>
-                    <br>
-                    <label for="Email" [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'}"
-                        *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">Email:</label>&nbsp;&nbsp;&nbsp;
-                    <span *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">{{AlarmGroup.email}}</span>
-                    <br *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">
-                    <br>
-                    <div style="display: flex; justify-content: space-between;">
-                        <!-- Left Footer Content -->
-                        <div>
-                            <p-checkbox name="groupname" value="recoveryNotification" label="Recovery Notification"
-                                (onChange)="changecheck($event)" [(ngModel)]="selectedValues"
-                                readonly="true"></p-checkbox> &nbsp; &nbsp;
-                            <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
-                                (onChange)="changecheck($event)" [(ngModel)]="selectedValues"
-                                readonly="true"></p-checkbox>
-
-
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 p-0">
-                        <div class="row mx-0 mt-2">
-                            <div class="col-12 pr-2">
-                                <p-table [value]="stringArray" [scrollable]="true" responsiveLayout="scroll"
-                                    scrollHeight="250px" width="650px">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'}">
-                                                Monitor alarm of
-                                            </th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-stringArray>
-
-                                        <tr>
-                                            <td>
-                                                <li>{{stringArray}}</li>
-                                            </td>
-                                        </tr>
-
-                                    </ng-template>
-                                </p-table>
-                                <!-- <div class="col-12 pr-2" style="text-align: center; font-weight: bold; font-size: 2rem;"
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 p-0">
+            <div class="row mx-0 mt-2">
+              <div class="col-12 pr-2">
+                <p-table
+                  [value]="stringArray"
+                  [scrollable]="true"
+                  responsiveLayout="scroll"
+                  scrollHeight="250px"
+                  width="650px"
+                >
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th
+                        [ngClass]="{
+                          'theme-arya-text':
+                            themeService.theme === 'arya-orange',
+                          'theme-saga-text':
+                            themeService.theme === 'saga-orange'
+                        }"
+                      >
+                        Monitor alarm of
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-stringArray>
+                    <tr>
+                      <td>
+                        <li>{{ stringArray }}</li>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <!-- <div class="col-12 pr-2" style="text-align: center; font-weight: bold; font-size: 2rem;"
                             *ngIf="hasNoSearchResult">
                             No seacrh result.
                         </div> -->
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <input type="text"  pInputText id="symbol_name" [(ngModel)]="AlarmGroup.symbol_name" required autofocus disabled /> -->
-                </div>
+              </div>
             </div>
+          </div>
+          <!-- <input type="text"  pInputText id="symbol_name" [(ngModel)]="AlarmGroup.symbol_name" required autofocus disabled /> -->
         </div>
-
-
-
-
-    </ng-template>
+      </div>
+    </div>
+  </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="alarmGroupDialog" [style]="{width: '800px'}" styleClass="modalResponsivo" [(header)]="dialogHeader" [modal]="true"
-    styleClass="p-fluid" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'auto'}" (onHide)="hideDialog()">
-    <ng-template pTemplate="content">
-
-        <div style="background-color: grey; width:100%; border-top: 1px dashed grey;"></div>
-        <div class="col-12">
-
-            <div class="row">
-                <div class="col-4 pr-0">
-                    <label for="tag" style="font-weight: bold;">Tag</label>
-                    <input type="text" pInputText id="tag" [(ngModel)]="alarmGroup.tag" required class="tag"
-                        [class]="invalid" />
-                    <small class="p-error block" *ngIf="submitted && !alarmGroup.tag">Tag is
-                        required.</small>
-                </div>
-                <div class="col-8 pr-0">
-                    <label for="endpoints" style="font-weight: bold;">Endpoints</label>
-                    <input type="text" pInputText id="endpoints" [(ngModel)]="alarmGroup.endpoints" required
-                        class="endpoints" [class]="invalid" />
-                    <small class="p-error block" *ngIf="submitted && !alarmGroup.endpoints">Endpoints is
-                        required.</small>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 pr-0">
-                    <label for="methods" style="font-weight: bold;">Methods</label>
-                    <div class="form-check" *ngFor="let method of availableMethods">
-                        <p-checkbox name="method" value="{{method}}" label="{{method}}"
-                            (onChange)="toggleMethodSelection(method)" [(ngModel)]="selectedValues"></p-checkbox>
-                    </div>
-                    <small class="p-error block" *ngIf="submitted && selectedMethods.length === 0">
-                        At least one method is required.
-                    </small>
-                </div>
-                <div class="col-6 pr-0">
-                    <div class="row">
-                        <label for="methods" style="font-weight: bold; margin-right: 15px;">Type</label>
-                        <div class="p-field-radiobutton " style="margin-right: 15px;">
-                            <p-radioButton name="public" value="public" [(ngModel)]="alarmGroup.type" inputId="public"
-                                checked style="margin-right: 15px; margin-top: -15px;"></p-radioButton>
-                            <label class="radio-label" for="public" style="margin-right: 15px;">Public</label>
-                        </div>
-                        <div class="p-field-radiobutton">
-                            <p-radioButton name="private" value="private" [(ngModel)]="alarmGroup.type"
-                                inputId="private" style="margin-right: 15px; margin-top: -15px;"></p-radioButton>
-                            <label class="radio-label" for="private" style="margin-right: 15px;">Private</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 pr-0">
-                    <p-dropdown [options]="dataSets" [(ngModel)]="selectedDataSets" optionLabel="title"
-                    [scrollHeight]="scrollHeight" [filter]="true" filterBy="title" [showClear]="true" [showClear]="true"
-                    [scrollStrategy]="scrollStrategy" appendTo="body" [baseZIndex]="1000" placeholder="Select DataSets"
-                    (onChange)="onSelectedIpAddressChange()"></p-dropdown>
-                </div>
-                
-            </div>
-            <div class="row">
-                <div class="col-12 pr-0">
-                    <div class="row">
-                        <div class="col-8 pl-3">
-                            <label for="query" style="font-weight: bold;">SQL Command</label>
-                        </div>
-                        <div class="col-4">
-                            <button pButton pRipple label="Try Execute" class="p-button-primary" (click)="tryExecute()"></button>
-                        </div>
-                    </div>
-                    
-                   
-                    
-                    <textarea type="text" rows="8" cols="150" pInputText id="query" [(ngModel)]="alarmGroup.query" required class="query"
-                        [class]="invalid" ></textarea>
-                    <small class="p-error block" *ngIf="submitted && !alarmGroup.query">Table is
-                        required.</small>
-                        
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th *ngFor="let key of getKeys()">{{ key }}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let row of jsonData">
-                          <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-            </div>
-
-            <div class="row">
-                <div class="col-4 pr-0" *ngFor="let field of fieldConditions; let i = index">
-                    <label [for]="'param' + (i + 1)" style="font-weight: bold;">
-                        Field Condition {{ i + 1 }}
-                    </label>
-                    
-                    
-                    <!-- Input สำหรับใส่ค่า Field Condition -->
-                    <input 
-                        type="text" 
-                        pInputText 
-                        [id]="'param' + (i + 1)" 
-                        [(ngModel)]="alarmGroup['param' + (i + 1)]" 
-                        [class]="'param' + (i + 1)" 
-                    />
-
-                    <!-- Dropdown สำหรับเลือกเงื่อนไข -->
-                    <p-dropdown 
-                        [options]="conditionOptions" 
-                        [(ngModel)]="alarmGroup['operator' + (i + 1)]" 
-                        placeholder="เลือกเงื่อนไข" 
-                        [style]="{ width: '240px', marginRight: '5px' }">
-                    </p-dropdown>
-                </div>
-            </div>
-            
-
+<p-dialog
+  [(visible)]="alarmGroupDialog"
+  [style]="{ width: '800px' }"
+  styleClass="modalResponsivo"
+  [(header)]="dialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
+  (onHide)="hideDialog()"
+>
+  <ng-template pTemplate="content">
+    <div
+      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
+    ></div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-4 pr-0">
+          <label for="tag" style="font-weight: bold;">Tag</label>
+          <input
+            type="text"
+            pInputText
+            id="tag"
+            [(ngModel)]="alarmGroup.tag"
+            required
+            class="tag"
+            [class]="invalid"
+          />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.tag"
+            >Tag is required.</small
+          >
         </div>
+        <div class="col-8 pr-0">
+          <label for="endpoints" style="font-weight: bold;">Endpoints</label>
+          <input
+            type="text"
+            pInputText
+            id="endpoints"
+            [(ngModel)]="alarmGroup.endpoints"
+            required
+            class="endpoints"
+            [class]="invalid"
+          />
+          <small
+            class="p-error block"
+            *ngIf="submitted && !alarmGroup.endpoints"
+            >Endpoints is required.</small
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 pr-0">
+          <label for="methods" style="font-weight: bold;">Methods</label>
+          <div class="form-check" *ngFor="let method of availableMethods">
+            <p-checkbox
+              name="method"
+              value="{{ method }}"
+              label="{{ method }}"
+              (onChange)="toggleMethodSelection(method)"
+              [(ngModel)]="selectedValues"
+            ></p-checkbox>
+          </div>
+          <small
+            class="p-error block"
+            *ngIf="submitted && selectedMethods.length === 0"
+          >
+            At least one method is required.
+          </small>
+        </div>
+        <div class="col-6 pr-0">
+          <div class="row">
+            <label for="methods" style="font-weight: bold; margin-right: 15px;"
+              >Type</label
+            >
+            <div class="p-field-radiobutton " style="margin-right: 15px;">
+              <p-radioButton
+                name="public"
+                value="public"
+                [(ngModel)]="alarmGroup.type"
+                inputId="public"
+                checked
+                style="margin-right: 15px; margin-top: -15px;"
+              ></p-radioButton>
+              <label
+                class="radio-label"
+                for="public"
+                style="margin-right: 15px;"
+                >Public</label
+              >
+            </div>
+            <div class="p-field-radiobutton">
+              <p-radioButton
+                name="private"
+                value="private"
+                [(ngModel)]="alarmGroup.type"
+                inputId="private"
+                style="margin-right: 15px; margin-top: -15px;"
+              ></p-radioButton>
+              <label
+                class="radio-label"
+                for="private"
+                style="margin-right: 15px;"
+                >Private</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pr-0">
+          <p-dropdown
+            [options]="dataSets"
+            [(ngModel)]="selectedDataSets"
+            optionLabel="title"
+            [scrollHeight]="scrollHeight"
+            [filter]="true"
+            filterBy="title"
+            [showClear]="true"
+            [showClear]="true"
+            [scrollStrategy]="scrollStrategy"
+            appendTo="body"
+            [baseZIndex]="1000"
+            placeholder="Select DataSets"
+            (onChange)="onSelectedIpAddressChange()"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 pr-0">
+          <div class="row">
+            <div class="col-8 pl-3">
+              <label for="query" style="font-weight: bold;">SQL Command</label>
+            </div>
+            <div class="col-4">
+              <button
+                pButton
+                pRipple
+                label="Try Execute"
+                class="p-button-primary"
+                (click)="tryExecute()"
+              ></button>
+            </div>
+          </div>
 
-        
+          <textarea
+            type="text"
+            rows="8"
+            cols="150"
+            pInputText
+            id="query"
+            [(ngModel)]="alarmGroup.query"
+            required
+            class="query"
+            [class]="invalid"
+          ></textarea>
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.query"
+            >Table is required.</small
+          >
+        </div>
+      </div>
 
-            <!-- <div style="padding-top: 30px;">
+      <div class="row">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th *ngFor="let key of getKeys()">{{ key }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of jsonData">
+                <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div
+          class="col-4 pr-0"
+          *ngFor="let field of fieldConditions; let i = index"
+        >
+          <label [for]="'param' + (i + 1)" style="font-weight: bold;">
+            Field Condition {{ i + 1 }}
+          </label>
+
+          <!-- Input สำหรับใส่ค่า Field Condition -->
+          <input
+            type="text"
+            pInputText
+            [id]="'param' + (i + 1)"
+            [(ngModel)]="alarmGroup['param' + (i + 1)]"
+            [class]="'param' + (i + 1)"
+          />
+
+          <!-- Dropdown สำหรับเลือกเงื่อนไข -->
+          <p-dropdown
+            [options]="conditionOptions"
+            [(ngModel)]="alarmGroup['operator' + (i + 1)]"
+            placeholder="เลือกเงื่อนไข"
+            [style]="{ width: '240px', marginRight: '5px' }"
+          >
+          </p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div style="padding-top: 30px;">
             <label for="email" style="font-weight: bold;">Email: </label>
             <input type="text" pInputText id="email" [(ngModel)]="emailsendline" style="width: 50%; margin-left: 15px;"
                 placeholder="Optional" />
         </div> -->
+  </ng-template>
 
-    </ng-template>
-
-    <ng-template pTemplate="footer" class="footer">
-
-        <div style="display:flex">
-            <p-checkbox name="groupname" value="recoveryNotification" label="Active" (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"></p-checkbox> &nbsp; &nbsp;
-            <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
+  <ng-template pTemplate="footer" class="footer">
+    <div style="display:flex">
+      <p-checkbox
+        name="groupname"
+        value="recoveryNotification"
+        label="Active"
+        (onChange)="changecheck($event)"
+        [(ngModel)]="selectedValues"
+      ></p-checkbox>
+      &nbsp; &nbsp;
+      <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
                 (onChange)="changecheck($event)" [(ngModel)]="selectedValues"></p-checkbox> -->
-            <!-- <p-dropdown style="width: 120px; margin-left: 16px;" [options]="minutes" [(ngModel)]="selectedValue" optionLabel="name"
+      <!-- <p-dropdown style="width: 120px; margin-left: 16px;" [options]="minutes" [(ngModel)]="selectedValue" optionLabel="name"
                  placeholder="Resend interval"></p-dropdown> -->
-        </div>
+    </div>
 
-        <div style="float: right;">
-            
-            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger"
-                (click)="hideDialog()"></button>
-            <button pButton pRipple label="Create" icon="pi pi-check" class="p-button-success" *ngIf="alarmGroup.id == undefiend"
-                (click)="createRoute()"></button>
-            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" *ngIf="alarmGroup.id != undefiend"
-                (click)="editlistGroup()"></button>
-        </div>
-
-    </ng-template>
+    <div style="float: right;">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-danger"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Create"
+        icon="pi pi-check"
+        class="p-button-success"
+        *ngIf="alarmGroup.id == undefiend"
+        (click)="createRoute()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-success"
+        *ngIf="alarmGroup.id != undefiend"
+        (click)="editlistGroup()"
+      ></button>
+    </div>
+  </ng-template>
 </p-dialog>
 
-
-
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
