@@ -6,6 +6,7 @@ import { LineGroupService } from "@app/linegroupservice";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
+import * as Highcharts from "highcharts";
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -145,7 +146,8 @@ export class DApiLogComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';
+    const apiUrl = 'http://127.0.0.1:8000/log/read';
+    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -217,7 +219,7 @@ export class DApiLogComponent implements OnInit {
     this.submitted = false;
     this.alarmGroupDialog = true;
     this.hasNoSearchResult = false;
-    this.dialogHeader = "Add new";
+    this.dialogHeader = "Chart";
     this.check = false;
     this.check1 = true;
     this.emailsendline = "";
@@ -273,6 +275,7 @@ export class DApiLogComponent implements OnInit {
     this.submitted = false;
   }
   ngOnInit() {
+    
     // this.alarmGroups = [{
     //   id: 1,
     //   tag: 'Trafic Daily',
@@ -290,6 +293,89 @@ export class DApiLogComponent implements OnInit {
 
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
+
+    this.chartOptions5_1 = {
+      chart: {
+        type: "line",
+        backgroundColor: "#1a2d45", // Set the background color to dark blue
+        height: 400 // Set the height of the chart to 400px (you can adjust this value)
+      },
+      title: {
+        text: ""
+      },
+      xAxis: {
+        categories: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec"
+        ],
+        title: {
+          text: ""
+        },
+        labels: {
+          style: {
+            color: "#FFFFFF" // Set the color of xAxis labels to white
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          text: "จำนวน Session",
+          style: {
+            color: "#FFFFFF" // Set the color of yAxis title to white
+          }
+        },
+        labels: {
+          style: {
+            color: "#FFFFFF" // Set the color of yAxis labels to white
+          }
+        },
+        max: 100, // Set the maximum value for the yAxis
+        tickInterval: 20, // Set tick interval to 20
+        min: 0 // Ensure the minimum value is 0
+      },
+      series: [
+        {
+          type: "line",
+          name: "วัน",
+          data: [5, 8, 7, 2, 5, 0, 8, 4, 8, 8, 8, 9], // Sample data for the first series
+          color: "#3498DB" // Blue color for the first series
+        },
+        {
+          type: "line",
+          name: "เดือน",
+          data: [44, 39, 80, 85, 88, 82, 83, 30, 84, 90, 87, 85], // Sample data for the second series
+          color: "#FF5733" // Red color for the second series
+        }
+      ],
+      plotOptions: {
+        column: {
+          pointPadding: 0,
+          groupPadding: 0.1,
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            style: {
+              color: "#FFFFFF" // Set data label color to white
+            }
+          }
+        }
+      },
+      legend: {
+        itemStyle: {
+          color: "#FFFFFF" // Set legend item color to white
+        }
+      }
+    };
 
     // this.lineGroupService.getLineGroupInfo().subscribe({
     //   next: datas => {
@@ -599,4 +685,7 @@ export class DApiLogComponent implements OnInit {
       }
     });
   }
+
+  Highcharts5_1: typeof Highcharts = Highcharts;
+  chartOptions5_1: Highcharts.Options;
 }

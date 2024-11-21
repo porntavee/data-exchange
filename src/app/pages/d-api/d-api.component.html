@@ -22,7 +22,7 @@
         </div>
     </p-toolbar>
 
-    <p-table #dt [value]="alarmGroups" [rows]="10" [paginator]="true" [loading]="isLoadingalarmGroups"
+    <p-table #dt [value]="alarmGroups" [rows]="20" [paginator]="true" [loading]="isLoadingalarmGroups"
         [globalFilterFields]="['id','tag','endpoints']" [(selection)]="alarmGroups" [rowHover]="true" dataKey="group_id"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
 

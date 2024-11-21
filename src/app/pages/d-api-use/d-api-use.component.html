@@ -43,7 +43,7 @@
     </div>
 
 
-    <p-table #dt [value]="tokenList" [rows]="10" [paginator]="true" [loading]="isLoadingalarmGroups"
+    <p-table #dt [value]="tokenList" [rows]="20" [paginator]="true" [loading]="isLoadingalarmGroups"
         [globalFilterFields]="['id','tag','endpoints']" [(selection)]="tokenList" [rowHover]="true" dataKey="group_id"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
 
