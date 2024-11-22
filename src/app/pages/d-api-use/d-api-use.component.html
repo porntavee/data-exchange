@@ -46,15 +46,15 @@
             <button
               class="btn mt-3"
               [ngClass]="{
-                'btn-warning': group.status == 1 || group.status == 2,
-                'btn-success': group.status !== 1 || group.status !== 2
+                'btn-warning': group.status !== 1 && group.status !== 2,
+                'btn-success': group.status == 1 || group.status == 2
               }"
               (click)="createToken(group.api_id)"
             >
               {{
                 group.status == 1 || group.status == 2
-                  ? "ยังไม่เปิดใช้งาน"
-                  : "เปิดใช้งานแล้ว"
+                  ? "เปิดใช้งานแล้ว"
+                  : "ยังไม่เปิดใช้งาน"
               }}
             </button>
           </div>
