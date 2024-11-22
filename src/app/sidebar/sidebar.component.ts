@@ -1454,7 +1454,9 @@ export class SidebarComponent implements OnInit {
     }
   }
   ngOnInit() {
-    // let userdata = jwt_decode(localStorage.getItem("token"));
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    debugger
+
     // let role = userdata["role"];
     // this.role = role;
     var items = [];

@@ -58,7 +58,10 @@
           ลำดับ <p-sortIcon field="row_number2"> </p-sortIcon>
         </th>
         <th pSortableColumn="user_id" class="col-2">
-          User<p-sortIcon field="user_id"></p-sortIcon>
+          User Id<p-sortIcon field="user_id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="username" class="col-2">
+          User<p-sortIcon field="username"></p-sortIcon>
         </th>
         <th pSortableColumn="tag" class="col-2">
           Tag<p-sortIcon field="tag"> </p-sortIcon>
@@ -82,6 +85,9 @@
         <td style="text-align:center;">{{ group.row_number2 }}</td>
         <td>
           <div id="myDIV3" title="{{ group.user_id }}">{{ group.user_id }}</div>
+        </td>
+        <td>
+          <div id="myDIV3" title="{{ group.username }}">{{ group.username }}</div>
         </td>
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>

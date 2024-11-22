@@ -7,6 +7,8 @@ import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
 import { threadId } from "worker_threads";
+import jwt_decode from "jwt-decode";
+
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -332,7 +334,9 @@ export class DApiUseComponent implements OnInit {
   }
   readRoute() {
     // console.log(this.selectedValues)
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/-1';
+    let userdata = jwt_decode(localStorage.getItem("token"));
+
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -347,8 +351,10 @@ export class DApiUseComponent implements OnInit {
 
   readToken() {
     // console.log(this.selectedValues)
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    debugger
 
-    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/-1";
+    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -363,11 +369,14 @@ export class DApiUseComponent implements OnInit {
 
   createToken(param) {
     // console.log(this.selectedValues)
+  let userdata = jwt_decode(localStorage.getItem("token"));
+    
    // debugger;
     const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
     this.http
       .post<any>(apiUrl, {
-        user_id: -1,
+        user_id: userdata["id"],
+        username: userdata["username"],
         route_id: param
       })
       .subscribe(
@@ -522,3 +531,5 @@ export class DApiUseComponent implements OnInit {
     });
   }
 }
+
+
