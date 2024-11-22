@@ -11,7 +11,7 @@
 <!-- </p-toolbar> -->
 <p-card
   class="col-12 card card-stats p-6"
-  style="background-color:#718096"
+  [style.backgroundColor]="'#718096'"
   [ngClass]="{
     'theme-arya': themeService.theme === 'arya-orange',
     'theme-saga': themeService.theme === 'saga-orange'

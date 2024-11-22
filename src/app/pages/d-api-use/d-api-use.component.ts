@@ -335,7 +335,7 @@ export class DApiUseComponent implements OnInit {
   readRoute() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
-
+   
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
@@ -352,7 +352,7 @@ export class DApiUseComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
-    debugger
+  //  debugger
 
     const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(

@@ -194,7 +194,7 @@ export class DApiApproveComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        debugger
+       // debugger
         this.tokenList = data.data;
       },
       error => {

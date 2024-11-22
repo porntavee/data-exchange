@@ -137,8 +137,8 @@ export class LoginComponent implements OnInit {
                   this.loading = false;
                   this.submitted = true;
                   this.loginState = false;
-                  localStorage.setItem("tk", response["token"]);
-                  this.authservice.settoken(localStorage.getItem("tk"));
+                  localStorage.setItem("token", response["token"]);
+                  this.authservice.settoken(localStorage.getItem("token"));
                   // ไม่แน่ใจว่า Token ถูกรึยัง
                   const returnUrl =
                     this.route.snapshot.queryParams["returnUrl"] || "/d-api";
@@ -187,8 +187,9 @@ export class LoginComponent implements OnInit {
             this.loading = false;
             this.submitted = true;
             this.loginState = false;
-            localStorage.setItem("tk", response["token"]);
-            this.authservice.settoken(localStorage.getItem("tk"));
+          //  console.log(this.createUnsignedJWT(response))
+            localStorage.setItem("token", this.createUnsignedJWT(response));
+            this.authservice.settoken(localStorage.getItem("token"));
             // ไม่แน่ใจว่า Token ถูกรึยัง
             const returnUrl =
               this.route.snapshot.queryParams["returnUrl"] || "/d-api";
@@ -201,7 +202,34 @@ export class LoginComponent implements OnInit {
         }
       });
   }
+  createUnsignedJWT(response) {
+    const header = {
+      alg: 'none', // ไม่มีการเข้ารหัส
+      typ: 'JWT',
+    };
 
+    // Convert objects to Base64URL encoded strings
+    const base64UrlHeader = this.base64UrlEncode(JSON.stringify(header));
+    const base64UrlPayload = this.base64UrlEncode(JSON.stringify(response.member));
+
+    // Combine header, payload, and an empty signature
+    const jwt = `${base64UrlHeader}.${base64UrlPayload}.`;
+
+   // console.log('Unsigned JWT:', jwt);
+    return jwt;
+  }
+
+  // Base64 URL Encode helper function
+  base64UrlEncode(input: string): string {
+    // Convert input string to UTF-8 before encoding
+    const utf8 = new TextEncoder().encode(input); // แปลงเป็น UTF-8
+    const base64 = btoa(String.fromCharCode(...utf8)); // เข้ารหัส Base64
+    
+    // แปลง Base64 ให้เป็น Base64URL
+    return base64.replace(/=/g, '') // ลบ padding
+                 .replace(/\+/g, '-') // แทนที่ + ด้วย -
+                 .replace(/\//g, '_'); // แทนที่ / ด้วย _
+  }
   myFunction(e) {
     if (e.target.checked) {
       this.typepassword = "text";

@@ -307,7 +307,7 @@ export class DApiComponent implements OnInit {
     this.readRoute();
 
     this.isLoadingalarmGroups = false;
-    this.changeDetection.detectChanges();
+   // this.changeDetection.detectChanges();
 
     // this.lineGroupService.getLineGroupInfo().subscribe({
     //   next: datas => {
