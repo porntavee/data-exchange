@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family: 'Raleway';
     src: url('/assets/fonts/Raleway-Regular.ttf') format('truetype'),
          url('/assets/fonts/Raleway-Bold.ttf') format('truetype');
@@ -11,21 +11,36 @@
     src: url('/assets/fonts/Raleway-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
-}  
+}   */
+
+div {
+  font-family: "Prompt", sans-serif !important;
+}
+
+.card-text {
+  font-family: "Prompt", sans-serif !important;
+}
+
+small {
+  font-family: "Prompt", sans-serif !important;
+}
+
+span {
+  font-family: "Prompt", sans-serif !important;
+}
 
 .p-card {
-    background-color: #060B28;
+  background-color: #060b28;
 }
 
 .p-component {
-    font-family: 'Prompt', sans-serif;
+  font-family: "Prompt", sans-serif;
 }
 
 .p-dropdown {
-    font-family: 'Prompt', sans-serif;
+  font-family: "Prompt", sans-serif;
 }
 
 .p-inputtext {
-    font-family: 'Prompt', sans-serif;
+  font-family: "Prompt", sans-serif;
 }
-    
