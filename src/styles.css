@@ -11,6 +11,7 @@
     src: url('/assets/fonts/Raleway-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
+<<<<<<< HEAD
 }   */
 
 div {
@@ -29,6 +30,12 @@ span {
   font-family: "Prompt", sans-serif !important;
 }
 
+=======
+}  
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    color: white;
+}
+>>>>>>> 718748dcdcfd7d9688fa25a5a8e175173e6dc930
 .p-card {
   background-color: #060b28;
 }

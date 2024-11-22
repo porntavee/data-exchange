@@ -103,6 +103,10 @@ export class DApiLogComponent implements OnInit {
   selectedValues: string[];
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
+
+  Highcharts5_1: typeof Highcharts = Highcharts;
+  chartOptions5_1: Highcharts.Options;
+
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -346,13 +350,13 @@ export class DApiLogComponent implements OnInit {
       series: [
         {
           type: "line",
-          name: "วัน",
-          data: [5, 8, 7, 2, 5, 0, 8, 4, 8, 8, 8, 9], // Sample data for the first series
+          name: "iOS",
+          data: [40, 48, 78, 82, 85, 80, 78, 40, 82, 84, 81, 79], // Sample data for the first series
           color: "#3498DB" // Blue color for the first series
         },
         {
           type: "line",
-          name: "เดือน",
+          name: "Android",
           data: [44, 39, 80, 85, 88, 82, 83, 30, 84, 90, 87, 85], // Sample data for the second series
           color: "#FF5733" // Red color for the second series
         }
@@ -686,6 +690,4 @@ export class DApiLogComponent implements OnInit {
     });
   }
 
-  Highcharts5_1: typeof Highcharts = Highcharts;
-  chartOptions5_1: Highcharts.Options;
 }
