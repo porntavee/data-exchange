@@ -86,17 +86,21 @@
           ลำดับ
           <p-sortIcon field="id"></p-sortIcon>
         </th>
-        <th pSortableColumn="status" class="col-2">
+        <th pSortableColumn="status" class="col-3">
           Status
           <p-sortIcon field="status"></p-sortIcon>
         </th>
-        <th pSortableColumn="tag" class="col-3">
+        <th pSortableColumn="tag" class="col-2">
           Tag
           <p-sortIcon field="tag"></p-sortIcon>
         </th>
-        <th pSortableColumn="endpoints" class="col-4">
-          API Key
+        <th pSortableColumn="endpoints" class="col-2">
+          End Point
           <p-sortIcon field="endpoints"></p-sortIcon>
+        </th>
+        <th pSortableColumn="token" class="col-4">
+          API Key
+          <p-sortIcon field="token"></p-sortIcon>
         </th>
 
         <th></th>
@@ -128,6 +132,9 @@
         <!-- </td> -->
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
+        </td>
+        <td>
+          <div id="myDIV1" title="{{ group.endpoints }}">{{ group.endpoints }}</div>
         </td>
         <td>
           <div id="myDIV2" title="{{ group.token }}">{{ group.token }}</div>
