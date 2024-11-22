@@ -46,8 +46,8 @@
             <button
               class="btn mt-3"
               [ngClass]="{
-                'btn-success': group.status == 1 || group.status == 2,
-                'btn-primary': group.status !== 2
+                'btn-warning': group.status == 1 || group.status == 2,
+                'btn-success': group.status !== 1 || group.status !== 2
               }"
               (click)="createToken(group.api_id)"
             >
