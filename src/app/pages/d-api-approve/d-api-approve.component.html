@@ -53,9 +53,9 @@
         <th
           style="text-align:center;"
           pSortableColumn="row_number2"
-          class="col-2"
+          class="col-1"
         >
-          ลำดับ <p-sortIcon field="row_number2"> </p-sortIcon>
+          ลำดับ <p-sortIcon field="row_number"> </p-sortIcon>
         </th>
         <th pSortableColumn="user_id" class="col-2">
           User Id<p-sortIcon field="user_id"></p-sortIcon>
@@ -66,15 +66,15 @@
         <th pSortableColumn="tag" class="col-2">
           Tag<p-sortIcon field="tag"> </p-sortIcon>
         </th>
-        <th pSortableColumn="endpoints" class="col-3">
+        <th pSortableColumn="endpoints" class="col-2">
           End Point
           <p-sortIcon field="endpoints"></p-sortIcon>
         </th>
-        <th pSortableColumn="status_description" class="col-3">
+        <th pSortableColumn="status_description" class="col-2">
           Status<p-sortIcon field="status_description"> </p-sortIcon>
         </th>
-        <th></th>
-        <th></th>
+        <th class="col-1"></th>
+        <!-- <th></th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
@@ -133,7 +133,7 @@
                       <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                           (click)="deleteGroup(group)"></button> -->
         </td>
-        <td></td>
+        <!-- <td></td> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">

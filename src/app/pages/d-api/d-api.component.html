@@ -81,8 +81,8 @@
         <th pSortableColumn="methods" class="col-3">
           Methods<p-sortIcon field="methods"> </p-sortIcon>
         </th>
-        <th></th>
-        <th></th>
+        <!-- <th></th>
+        <th></th> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
@@ -106,7 +106,7 @@
           <div id="myDIV2" title="{{ group.methods }}">{{ group.methods }}</div>
         </td>
         <!--<td>{{group.symbol_name}}</td>-->
-        <td style="display: flex; justify-content: space-between;">
+        <!-- <td style="display: flex; justify-content: space-between;"> -->
           <!-- <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
                     <button pButton type="text" (click)="menu.toggle($event)" 
                         icon="pi pi-ellipsis-h"></button> -->
@@ -119,8 +119,8 @@
                           (click)="editline(group)"></button>
                       <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                           (click)="deleteGroup(group)"></button> -->
-        </td>
-        <td></td>
+        <!-- </td>
+        <td></td> -->
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
