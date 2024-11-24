@@ -10,30 +10,50 @@
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  <div style="font-size: 18px; font-weight: 600;" class="text-color">
-    API Approve
-  </div>
-  <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left"></div>
-    <div class="p-toolbar-group-right">
-      <!-- <button pButton pRipple class="p-button-warning mr-2 Newbut" (click)="openDailog()"><i
-                    class="pi pi-plus"><span class="Newtxt new-font">Create new API</span></i></button> -->
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
-          class="Searchtxt new-font"
-          placeholder="Search..."
-        />
-      </span>
+ 
+<p-toolbar styleClass="p-mb-4">
+  <div class="p-toolbar-group-left">
+    <div style="font-size: 18px; font-weight: 600;" class="text-color">
+      API Approve
     </div>
-  </p-toolbar>
+  </div>
+  <div class="p-toolbar-group-right">
+    <!-- ปุ่ม รอตรวจสอบจากเจ้าหน้าที่ -->
+    <button
+      pButton
+      pRipple
+      class="p-button-primary mr-2"
+      label="รอตรวจสอบจากเจ้าหน้าที่ ({{ getStatusCount(1) }})"
+      (click)="filterByStatus(1)"
+    ></button>
+
+    <!-- ปุ่ม ตรวจสอบแล้ว -->
+    <button
+      pButton
+      pRipple
+      class="p-button-success mr-2"
+      label="ตรวจสอบแล้ว ({{ getStatusCount(2) }})"
+      (click)="filterByStatus(2)"
+    ></button>
+
+    <!-- ช่องค้นหา -->
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        type="text"
+        (input)="dt.filterGlobal($event.target.value, 'contains')"
+        class="Searchtxt new-font"
+        placeholder="Search..."
+      />
+    </span>
+  </div>
+</p-toolbar>
+
 
   <p-table
     #dt
-    [value]="tokenList"
+    [value]="filteredList"
     [rows]="10"
     [paginator]="true"
     [loading]="isLoadingalarmGroups"

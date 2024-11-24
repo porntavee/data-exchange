@@ -186,6 +186,7 @@ export class DApiApproveComponent implements OnInit {
     }
   }
 
+  filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง
   readToken() {
     // console.log(this.selectedValues)
 
@@ -196,6 +197,8 @@ export class DApiApproveComponent implements OnInit {
         console.log("Received data:", data.data);
        // debugger
         this.tokenList = data.data;
+        // เริ่มต้น: ใช้ข้อมูลทั้งหมด
+        this.filteredList = [...this.tokenList];
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -657,5 +660,17 @@ export class DApiApproveComponent implements OnInit {
         });
       }
     });
+  }
+
+
+  
+  // ฟังก์ชันสำหรับกรองข้อมูลตาม status
+  filterByStatus(status: number): void {
+    this.filteredList = this.tokenList.filter(item => item.status === status);
+  }
+
+  // ฟังก์ชันสำหรับนับจำนวนสถานะ
+  getStatusCount(status: number): number {
+    return this.tokenList.filter(item => item.status === status).length;
   }
 }
