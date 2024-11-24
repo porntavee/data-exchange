@@ -105,6 +105,12 @@ export class DApiUseComponent implements OnInit {
   selectedValues: string[];
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
+
+  requestDialog: boolean = false; // ควบคุมการแสดงผล Dialog
+  requestDialogHeader: string = 'Request Details'; // หัวข้อของ Dialog
+  requestDetails: string = ''; // เก็บข้อความรายละเอียด
+  selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
+  api_id: string = '';
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -367,22 +373,25 @@ export class DApiUseComponent implements OnInit {
     );
   }
 
-  createToken(param) {
+  createToken() {
     // console.log(this.selectedValues)
   let userdata = jwt_decode(localStorage.getItem("token"));
     
    // debugger;
-    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
+    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
+    const apiUrl = "http://127.0.0.1:8000/token/create";
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
         username: userdata["username"],
-        route_id: param
+        route_id: this.api_id,
+        details: this.requestDetails,
+        duration: this.selectedDuration['value']
       })
       .subscribe(
         data => {
           console.log("Received data:", data.data);
-
+          this.requestDialog = false;
           this.readRoute();
           this.readToken();
         },
@@ -529,6 +538,33 @@ export class DApiUseComponent implements OnInit {
         });
       }
     });
+  }
+
+
+    // ตัวเลือกสำหรับ Dropdown
+    durationOptions = [
+      { label: '15 วัน', value: '15' },
+      { label: '30 วัน', value: '30' },
+      { label: '60 วัน', value: '60' },
+      { label: '90 วัน', value: '90' },
+      { label: 'ไม่มีหมดอายุ', value: '0' }
+    ];
+
+  openRequestDialog(param) {
+    this.requestDialog = true;
+    this.api_id = param;
+  }
+
+  // ฟังก์ชันสำหรับปิด Dialog
+  closeDialog(): void {
+    this.requestDialog = false;
+  }
+
+  // ฟังก์ชันสำหรับบันทึกข้อมูล
+  saveRequest(): void {
+    console.log('รายละเอียด:', this.requestDetails);
+    console.log('ระยะเวลาที่เลือก:', this.selectedDuration);
+    this.requestDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }
 

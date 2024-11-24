@@ -10,12 +10,14 @@
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  <div style="font-size: 18px; font-weight: 600;" class="text-color">
-    API Library
-  </div>
+ 
 
   <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left"></div>
+    <div class="p-toolbar-group-left">
+      <div style="font-size: 18px; font-weight: 600;" class="text-color">
+        API Library ทั้งหมด
+      </div>
+    </div>
     <div class="p-toolbar-group-right">
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
@@ -41,15 +43,15 @@
             class="card-body d-flex flex-column align-items-center text-center"
           >
             <h5 class="card-title">{{ group.tag }}</h5>
-            <p class="card-text">{{ group.endpoints }}</p>
-            <small>{{ group.methods }}</small>
+            <!-- <p class="card-text">{{ group.endpoints }}</p> -->
+            <!-- <small>{{ group.methods }}</small> -->
             <button
               class="btn mt-3"
               [ngClass]="{
                 'btn-warning': group.status !== 1 && group.status !== 2,
                 'btn-success': group.status == 1 || group.status == 2
               }"
-              (click)="createToken(group.api_id)"
+              (click)="openRequestDialog(group.api_id)"
             >
               {{
                 group.status == 1 || group.status == 2
@@ -63,6 +65,25 @@
     </div>
   </div>
 
+  <p-toolbar styleClass="p-mb-4">
+    <div class="p-toolbar-group-left">
+      <div style="font-size: 18px; font-weight: 600;" class="text-color">
+        API Library ของฉัน
+      </div>
+    </div>
+    <div class="p-toolbar-group-right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target.value, 'contains')"
+          class="Searchtxt new-font"
+          placeholder="Search..."
+        />
+      </span>
+    </div>
+  </p-toolbar>
   <p-table
     #dt
     [value]="tokenList"
@@ -102,6 +123,10 @@
           API Key
           <p-sortIcon field="token"></p-sortIcon>
         </th>
+        <th pSortableColumn="expires_at" class="col-4">
+          วันที่หมดอายุ
+          <p-sortIcon field="expires_at"></p-sortIcon>
+        </th>
 
         <th></th>
       </tr>
@@ -138,6 +163,9 @@
         </td>
         <td>
           <div id="myDIV2" title="{{ group.token }}">{{ group.token }}</div>
+        </td>
+        <td>
+          <div id="myDIV2" title="{{ group.expires_at }}">{{ group.expires_at | date: 'dd/MM/yyyy' }}</div>
         </td>
         <!--<td>{{group.symbol_name}}</td>-->
         <td></td>
@@ -504,5 +532,61 @@
     </div>
   </ng-template>
 </p-dialog>
+
+
+<p-dialog
+  [(visible)]="requestDialog"
+  [style]="{ width: '650px' }"
+  [(header)]="requestDialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="details" style="font-weight: bold;">รายละเอียด</label>
+      <textarea
+        id="details"
+        rows="5"
+        [(ngModel)]="requestDetails"
+        pInputTextarea
+        placeholder="กรอกรายละเอียด..."
+        style="width: 100%;"
+      ></textarea>
+    </div>
+    <div class="p-field" style="margin-top: 20px;">
+      <label for="duration" style="font-weight: bold;">เลือกระยะเวลา</label>
+      <p-dropdown
+        id="duration"
+        [options]="durationOptions"
+        [(ngModel)]="selectedDuration"
+        placeholder="เลือกระยะเวลา"
+        optionLabel="label"
+        style="width: 100%;"
+      ></p-dropdown>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div style="float: right;">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-danger"
+        (click)="closeDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-success"
+        (click)="createToken()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
