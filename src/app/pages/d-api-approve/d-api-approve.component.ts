@@ -6,6 +6,7 @@ import { LineGroupService } from "@app/linegroupservice";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
+import jwt_decode from "jwt-decode";
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -103,6 +104,24 @@ export class DApiApproveComponent implements OnInit {
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
 
+  approveDialog: boolean = false;
+  approveDialogHeader = 'Approve Detail';
+  requestDetails = '';
+  selectedDuration: any = {};
+  adminDetails = '';
+  selectAdminDuration: any = {};
+  user_id: any;
+  route_id: any;
+
+  // ตัวเลือกสำหรับ Dropdown
+  durationOptions = [
+    { label: '15 วัน', value: '15' },
+    { label: '30 วัน', value: '30' },
+    { label: '60 วัน', value: '60' },
+    { label: '90 วัน', value: '90' },
+    { label: 'ไม่มีหมดอายุ', value: '0' }
+  ];
+
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -175,11 +194,20 @@ export class DApiApproveComponent implements OnInit {
   }
 
   toggleStatus(status: string, group: any) {
-    if (status === "เปิดใช้งาน") {
+    if (status === "ตรวจสอบรายละเอียด") {
       console.log(
         `เรียกใช้งาน approve สำหรับ ${group.user_id} ด้วย route_id ${group.route_id}`
       );
-      this.approve(group.user_id, group.route_id);
+      debugger
+      // this.approve(group.user_id, group.route_id);
+      this.requestDetails = group.details;
+      this.user_id = group.user_id;
+      this.route_id = group.route_id;
+      this.selectedDuration = { value: group.duration};
+      var index = this.durationOptions.findIndex(data => data.value === group.duration.toString());
+      this.selectedDuration = this.durationOptions[index];
+      this.selectAdminDuration = this.durationOptions[index];
+      this.approveDialog = true;
     } else {
       console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
       // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
@@ -206,18 +234,28 @@ export class DApiApproveComponent implements OnInit {
     );
   }
 
-  approve(param, param2) {
-    const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+  approve() {
+
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    // const apiUrl =
+    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+      const apiUrl =
+      "http://127.0.0.1:8000/token/approve";
     // debugger
     this.http
       .post<any>(apiUrl, {
-        user_id: param,
-        route_id: param2
+        user_id: this.user_id,
+        route_id: this.route_id,
+        status: 2,
+        admin_id: userdata["id"],
+        admin_name: userdata["username"],
+        details: this.adminDetails,
+        duration: this.selectAdminDuration['value']
       })
       .subscribe(
         data => {
           console.log("Received data:", data.data);
+          this.approveDialog = false;
           this.readToken();
         },
         error => {
@@ -420,9 +458,9 @@ export class DApiApproveComponent implements OnInit {
     // อัปเดตรายการเมนู
     this.itemsAction = [
       {
-        label: "เปิดใช้งาน",
+        label: "ตรวจสอบรายละเอียด",
         icon: "pi pi-check",
-        command: () => this.toggleStatus("เปิดใช้งาน", group)
+        command: () => this.toggleStatus("ตรวจสอบรายละเอียด", group)
       },
       {
         label: "ปิดใช้งาน",
@@ -672,5 +710,17 @@ export class DApiApproveComponent implements OnInit {
   // ฟังก์ชันสำหรับนับจำนวนสถานะ
   getStatusCount(status: number): number {
     return this.tokenList.filter(item => item.status === status).length;
+  }
+
+  // ฟังก์ชันสำหรับปิด Dialog
+  closeDialog(): void {
+    this.approveDialog = false;
+  }
+
+  // ฟังก์ชันสำหรับบันทึกข้อมูล
+  saveRequest(): void {
+    console.log('รายละเอียด:', this.requestDetails);
+    console.log('ระยะเวลาที่เลือก:', this.selectedDuration);
+    this.approveDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }

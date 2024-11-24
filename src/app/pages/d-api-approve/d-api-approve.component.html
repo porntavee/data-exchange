@@ -286,7 +286,6 @@
     </div>
   </ng-template>
 </p-dialog>
-
 <p-dialog
   [(visible)]="alarmGroupDialog"
   styleClass="modalResponsivo"
@@ -513,6 +512,93 @@
         class="p-button-success"
         *ngIf="check"
         (click)="editlistGroup()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-dialog
+  [(visible)]="approveDialog"
+  [style]="{ width: '650px' }"
+  [(header)]="approveDialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="details" style="font-weight: bold;">รายละเอียด</label>
+      <textarea
+        id="details"
+        rows="5"
+        [(ngModel)]="requestDetails"
+        pInputTextarea
+        placeholder="กรอกรายละเอียด..."
+        style="width: 100%;"
+      ></textarea>
+    </div>
+    <div class="p-field" style="margin-top: 20px;">
+      <label for="duration" style="font-weight: bold;">เลือกระยะเวลา</label>
+      <p-dropdown
+        id="duration"
+        [options]="durationOptions"
+        [(ngModel)]="selectedDuration"
+        placeholder="เลือกระยะเวลา"
+        optionLabel="label"
+        style="width: 100%;"
+      ></p-dropdown>
+    </div>
+    <hr>
+
+      <br>
+    <div class="p-field">
+      <label for="details" style="font-weight: bold;">เหตุผลเจ้าหน้าที่</label>
+      <textarea
+        id="details"
+        rows="5"
+        [(ngModel)]="adminDetails"
+        pInputTextarea
+        placeholder="กรอกรายละเอียด..."
+        style="width: 100%;"
+      ></textarea>
+    </div>
+    <div class="p-field" style="margin-top: 20px;">
+      <label for="duration" style="font-weight: bold;">ระยะเวลาที่อนุมัติ</label>
+      <p-dropdown
+        id="duration"
+        [options]="durationOptions"
+        [(ngModel)]="selectAdminDuration"
+        placeholder="ระยะเวลาที่อนุมัติ"
+        optionLabel="label"
+        style="width: 100%;"
+      ></p-dropdown>
+    </div>
+
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div style="float: right;">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-danger"
+        (click)="closeDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Reject"
+        icon="pi pi-check"
+        class="p-button-danger"
+        (click)="closeDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-success"
+        (click)="approve()"
       ></button>
     </div>
   </ng-template>
