@@ -378,8 +378,8 @@ export class DApiUseComponent implements OnInit {
   let userdata = jwt_decode(localStorage.getItem("token"));
     
    // debugger;
-    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
-    const apiUrl = "http://127.0.0.1:8000/token/create";
+    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
+    // const apiUrl = "http://127.0.0.1:8000/token/create";
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],

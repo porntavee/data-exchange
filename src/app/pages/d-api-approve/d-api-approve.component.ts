@@ -237,10 +237,10 @@ export class DApiApproveComponent implements OnInit {
   approve() {
 
     let userdata = jwt_decode(localStorage.getItem("token"));
-    // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
-      const apiUrl =
-      "http://127.0.0.1:8000/token/approve";
+    const apiUrl =
+      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+      // const apiUrl =
+      // "http://127.0.0.1:8000/token/approve";
     // debugger
     this.http
       .post<any>(apiUrl, {

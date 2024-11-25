@@ -107,6 +107,36 @@ export class DApiLogComponent implements OnInit {
   Highcharts5_1: typeof Highcharts = Highcharts;
   chartOptions5_1: Highcharts.Options;
 
+  viewMode: string = 'monthly'; // ค่าเริ่มต้นเป็น 'รายเดือน'
+  currentMonth: number = new Date().getMonth(); // เดือนปัจจุบัน (0 = มกราคม)
+  currentYear: number = new Date().getFullYear(); // ปีปัจจุบัน
+
+  selectedMonth: string = '';  // เดือนที่เลือก
+  selectedYear: string = '';   // ปีที่เลือก
+
+  // ตัวเลือกเดือน
+  months = [
+    { label: 'มกราคม', value: 'January' },
+    { label: 'กุมภาพันธ์', value: 'February' },
+    { label: 'มีนาคม', value: 'March' },
+    { label: 'เมษายน', value: 'April' },
+    { label: 'พฤษภาคม', value: 'May' },
+    { label: 'มิถุนายน', value: 'June' },
+    { label: 'กรกฎาคม', value: 'July' },
+    { label: 'สิงหาคม', value: 'August' },
+    { label: 'กันยายน', value: 'September' },
+    { label: 'ตุลาคม', value: 'October' },
+    { label: 'พฤศจิกายน', value: 'November' },
+    { label: 'ธันวาคม', value: 'December' },
+  ];
+
+  // ตัวเลือกปี
+  years = [
+    { label: '2023', value: '2023' },
+    { label: '2024', value: '2024' },
+    { label: '2025', value: '2025' },
+  ];
+
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -298,67 +328,139 @@ export class DApiLogComponent implements OnInit {
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
 
-    this.chartOptions5_1 = {
+    this.initializeChartOptions(); // เริ่มต้นแสดงผล
+    // this.chartOptions5_1 = {
+    //   chart: {
+    //     type: "line",
+    //     backgroundColor: "#1a2d45", // Set the background color to dark blue
+    //     height: 400 // Set the height of the chart to 400px (you can adjust this value)
+    //   },
+    //   title: {
+    //     text: ""
+    //   },
+    //   xAxis: {
+    //     categories: [
+    //       "Jan",
+    //       "Feb",
+    //       "Mar",
+    //       "Apr",
+    //       "May",
+    //       "Jun",
+    //       "Jul",
+    //       "Aug",
+    //       "Sep",
+    //       "Oct",
+    //       "Nov",
+    //       "Dec"
+    //     ],
+    //     title: {
+    //       text: ""
+    //     },
+    //     labels: {
+    //       style: {
+    //         color: "#FFFFFF" // Set the color of xAxis labels to white
+    //       }
+    //     }
+    //   },
+    //   yAxis: {
+    //     title: {
+    //       text: "จำนวน Session",
+    //       style: {
+    //         color: "#FFFFFF" // Set the color of yAxis title to white
+    //       }
+    //     },
+    //     labels: {
+    //       style: {
+    //         color: "#FFFFFF" // Set the color of yAxis labels to white
+    //       }
+    //     },
+    //     max: 100, // Set the maximum value for the yAxis
+    //     tickInterval: 20, // Set tick interval to 20
+    //     min: 0 // Ensure the minimum value is 0
+    //   },
+    //   series: [
+    //     {
+    //       type: "line",
+    //       name: "iOS",
+    //       data: [40, 48, 78, 82, 85, 80, 78, 40, 82, 84, 81, 79], // Sample data for the first series
+    //       color: "#3498DB" // Blue color for the first series
+    //     },
+    //     {
+    //       type: "line",
+    //       name: "Android",
+    //       data: [44, 39, 80, 85, 88, 82, 83, 30, 84, 90, 87, 85], // Sample data for the second series
+    //       color: "#FF5733" // Red color for the second series
+    //     }
+    //   ],
+    //   plotOptions: {
+    //     column: {
+    //       pointPadding: 0,
+    //       groupPadding: 0.1,
+    //       borderWidth: 0,
+    //       dataLabels: {
+    //         enabled: true,
+    //         style: {
+    //           color: "#FFFFFF" // Set data label color to white
+    //         }
+    //       }
+    //     }
+    //   },
+    //   legend: {
+    //     itemStyle: {
+    //       color: "#FFFFFF" // Set legend item color to white
+    //     }
+    //   }
+    // };
+
+  }
+
+  initializeChartOptions(): void {
+    // กำหนดค่าเริ่มต้นเป็นรายเดือน
+    this.chartOptions5_1 = this.getMonthlyChartOptions(this.currentYear, this.currentMonth);
+  }
+
+  updateChart(): void {
+
+    debugger
+    if (this.viewMode === 'monthly' && this.selectedMonth) {
+   
+      this.chartOptions5_1 = this.getMonthlyChartOptions(this.currentYear, this.currentMonth);
+      // this.changeDetection.detectChanges();
+    } else if (this.viewMode === 'yearly' && this.selectedYear) {
+    
+      this.chartOptions5_1 = this.getYearlyChartOptions(this.currentYear);
+      // this.changeDetection.detectChanges();
+    }
+  }
+  
+  getMonthlyChartOptions(year: number, month: number): Highcharts.Options {
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // จำนวนวันในเดือน
+    const categories = Array.from({ length: daysInMonth }, (_, i) => `วันที่ ${i + 1}`);
+    
+    return {
       chart: {
         type: "line",
-        backgroundColor: "#1a2d45", // Set the background color to dark blue
-        height: 400 // Set the height of the chart to 400px (you can adjust this value)
+        backgroundColor: "#1a2d45",
+        height: 400
       },
-      title: {
-        text: ""
-      },
+      // title: { text: `สถิติรายเดือน (${year} - ${month + 1})` },
       xAxis: {
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec"
-        ],
-        title: {
-          text: ""
-        },
-        labels: {
-          style: {
-            color: "#FFFFFF" // Set the color of xAxis labels to white
-          }
-        }
+        categories,
+        labels: { style: { color: "#FFFFFF" } }
       },
       yAxis: {
-        title: {
-          text: "จำนวน Session",
-          style: {
-            color: "#FFFFFF" // Set the color of yAxis title to white
-          }
-        },
-        labels: {
-          style: {
-            color: "#FFFFFF" // Set the color of yAxis labels to white
-          }
-        },
-        max: 100, // Set the maximum value for the yAxis
-        tickInterval: 20, // Set tick interval to 20
-        min: 0 // Ensure the minimum value is 0
+        title: { text: "จำนวน Session", style: { color: "#FFFFFF" } },
+        labels: { style: { color: "#FFFFFF" } },
+        max: 100,
+        tickInterval: 20,
+        min: 0
       },
       series: [
         {
           type: "line",
-          name: "iOS",
-          data: [40, 48, 78, 82, 85, 80, 78, 40, 82, 84, 81, 79], // Sample data for the first series
-          color: "#3498DB" // Blue color for the first series
-        },
-        {
-          type: "line",
-          name: "Android",
-          data: [44, 39, 80, 85, 88, 82, 83, 30, 84, 90, 87, 85], // Sample data for the second series
-          color: "#FF5733" // Red color for the second series
+          name: "จำนวนครั้ง",
+          data: Array.from({ length: daysInMonth }, () => Math.floor(Math.random() * 100)),
+          color: "#FF5733"
         }
       ],
       plotOptions: {
@@ -366,92 +468,62 @@ export class DApiLogComponent implements OnInit {
           pointPadding: 0,
           groupPadding: 0.1,
           borderWidth: 0,
-          dataLabels: {
-            enabled: true,
-            style: {
-              color: "#FFFFFF" // Set data label color to white
-            }
-          }
+          dataLabels: { enabled: true, style: { color: "#FFFFFF" } }
         }
       },
-      legend: {
-        itemStyle: {
-          color: "#FFFFFF" // Set legend item color to white
-        }
-      }
+      legend: { itemStyle: { color: "#FFFFFF" } }
     };
-
-    // this.lineGroupService.getLineGroupInfo().subscribe({
-    //   next: datas => {
-    //     this.lineGroups = datas;
-    //     this.isLoading = false;
-    //     datas.forEach((data, index) => {
-    //       this.lineGroups[index].enable = data.enable ? true : false;
-    //       this.changeDetection.detectChanges();
-    //     });
-    //   },
-    //   error: error => {
-    //     this.isLoading = false;
-    //     if (error.status == "401") {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-
-    // this.lineGroupService.getMessageGroup().subscribe({
-    //   next: datas => {
-    //     this.alarmGroups = datas;
-    //     this.isLoadingalarmGroups = false;
-    //     this.changeDetection.detectChanges();
-    //   },
-    //   error: error => {
-    //     this.isLoadingalarmGroups = false;
-    //     if (error.status == 401) {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-    // this.lineGroupService.currentMessage.subscribe(AlarmGroup => {
-    //   if (AlarmGroup != undefined) {
-    //     this.itemsAction = [
-    //       {
-    //         label: "AlarmGroup",
-    //         items: [
-    //           {
-    //             label: "View",
-    //             icon: "pi pi-fw pi-search",
-    //             command: event => {
-    //               this.lineread(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Edit",
-    //             icon: "pi pi-fw pi-pencil",
-    //             command: event => {
-    //               this.editline(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Delete",
-    //             icon: "pi pi-fw pi-trash",
-    //             command: event => {
-    //               this.deleteGroup(AlarmGroup);
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     ];
-    //   }
-    // });
   }
+  
+  getYearlyChartOptions(year: number): Highcharts.Options {
+    return {
+      chart: {
+        type: "line",
+        backgroundColor: "#1a2d45",
+        height: 400
+      },
+      // title: { text: `สถิติรายปี (${year})` },
+      xAxis: {
+        categories: [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ],
+        labels: { style: { color: "#FFFFFF" } }
+      },
+      yAxis: {
+        title: { text: "จำนวน Session", style: { color: "#FFFFFF" } },
+        labels: { style: { color: "#FFFFFF" } },
+        max: 100,
+        tickInterval: 20,
+        min: 0
+      },
+      series: [
+        // {
+        //   type: "line",
+        //   name: "จำนวนครั้ง",
+        //   data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
+        //   color: "#3498DB"
+        // },
+        {
+          type: "line",
+          name: "จำนวนครั้ง",
+          data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 100)),
+          color: "#FF5733"
+        }
+      ],
+      plotOptions: {
+        column: {
+          pointPadding: 0,
+          groupPadding: 0.1,
+          borderWidth: 0,
+          dataLabels: { enabled: true, style: { color: "#FFFFFF" } }
+        }
+      },
+      legend: { itemStyle: { color: "#FFFFFF" } }
+    };
+  }
+  
+
   menuVlue(task) {
     this.lineGroupService.valueSource(task);
   }

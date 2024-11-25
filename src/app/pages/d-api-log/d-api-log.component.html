@@ -225,7 +225,7 @@
 
 <p-dialog
   [(visible)]="alarmGroupDialog"
-  [style]="{ width: '650px' }"
+  [style]="{ width: '850px' }"
   styleClass="modalResponsivo"
   [(header)]="dialogHeader"
   [modal]="true"
@@ -233,7 +233,52 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
 >
   <ng-template pTemplate="content">
+
+    
     <div class="col-12">
+      <div class="form-group">
+        <div>
+          <p-radioButton
+            name="viewMode"
+            value="monthly"
+            [(ngModel)]="viewMode"
+            inputId="monthly"
+            (onChange)="updateChart()"
+          ></p-radioButton>
+          <label for="monthly">รายเดือน</label>
+        </div>
+        <div>
+          <p-radioButton
+            name="viewMode"
+            value="yearly"
+            [(ngModel)]="viewMode"
+            inputId="yearly"
+            (onChange)="updateChart()"
+          ></p-radioButton>
+          <label for="yearly">รายปี</label>
+        </div>
+      </div>
+      
+      <div class="form-group" *ngIf="viewMode === 'monthly'">
+        <label>เลือกเดือน</label>
+        <p-dropdown
+          [options]="months"
+          [(ngModel)]="selectedMonth"
+          placeholder="เลือกเดือน"
+          (onChange)="updateChart()"
+        ></p-dropdown>
+      </div>
+      
+      <div class="form-group" *ngIf="viewMode === 'yearly'">
+        <label>เลือกปี</label>
+        <p-dropdown
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          placeholder="เลือกปี"
+          (onChange)="updateChart()"
+        ></p-dropdown>
+      </div>
+
       <highcharts-chart
         [Highcharts]="Highcharts5_1"
         [options]="chartOptions5_1"
@@ -243,7 +288,6 @@
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
-
     <div style="float: right;">
       <button
         pButton
@@ -253,9 +297,10 @@
         class="p-button-danger"
         (click)="hideDialog()"
       ></button>
-      
     </div>
   </ng-template>
 </p-dialog>
+
+
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
