@@ -10,11 +10,12 @@
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  <div style="font-size: 18px; font-weight: 600;" class="text-color">
-    API Manager
-  </div>
   <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left"></div>
+    <div class="p-toolbar-group-left">
+      <div style="font-size: 18px; font-weight: 600;" class="text-color">
+        API Manager
+      </div>
+    </div>
     <div class="p-toolbar-group-right">
       <button
         pButton
@@ -72,14 +73,17 @@
         <th pSortableColumn="tag" class="col-2">
           Tag<p-sortIcon field="tag"></p-sortIcon>
         </th>
-        <th pSortableColumn="endpoints" class="col-4">
+        <th pSortableColumn="endpoints" class="col-2">
           Endpoints<p-sortIcon field="endpoints"> </p-sortIcon>
         </th>
         <th pSortableColumn="type" class="col-2">
           Type<p-sortIcon field="type"></p-sortIcon>
         </th>
         <th pSortableColumn="methods" class="col-3">
-          Methods<p-sortIcon field="methods"> </p-sortIcon>
+          Description<p-sortIcon field="methods"> </p-sortIcon>
+        </th>
+        <th pSortableColumn="" class="col-2">
+          Action<p-sortIcon field=""> </p-sortIcon>
         </th>
         <th></th>
         <th></th>
@@ -87,9 +91,6 @@
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
       <tr (click)="readRouteById(group)">
-        <!-- <td>
-                      <p-tableCheckbox [value]="group"></p-tableCheckbox>
-                  </td> -->
         <td style="text-align:center;">{{ group.id }}</td>
         <td>
           <div id="myDIV3" title="{{ group.tag }}">{{ group.tag }}</div>
@@ -103,7 +104,22 @@
           <div id="myDIV1" title="{{ group.type }}">{{ group.type }}</div>
         </td>
         <td>
-          <div id="myDIV2" title="{{ group.methods }}">{{ group.methods }}</div>
+          <div id="myDIV2" title="{{ group.description }}">
+            {{
+              group.description?.length > 30
+                ? (group.description | slice: 0:30) + "..."
+                : group.description
+            }}
+          </div>
+        </td>
+        <td>
+          <button
+            pButton
+            pRipple
+            label="Try Execute"
+            class="p-button-primary"
+            (click)="tryExecute2($event, group)"
+          ></button>
         </td>
         <!--<td>{{group.symbol_name}}</td>-->
         <td style="display: flex; justify-content: space-between;">
@@ -130,129 +146,6 @@
     </ng-template>
   </p-table>
 </p-card>
-<p-dialog
-  [(visible)]="lineDialog"
-  [style]="{ width: '650px' }"
-  [(header)]="dialogHeader"
-  [modal]="true"
-  styleClass="p-fluid"
-  [contentStyle]="{ overflow: 'visible' }"
->
-  <ng-template pTemplate="content">
-    <div class="p-field">
-      <div class="row mx-0">
-        <div class="col pl-0">
-          <label
-            for="id"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >ID:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_id }}</span>
-          <br />
-          <label
-            for="name"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Group Name:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_name }}</span>
-          <br />
-          <label
-            for="Drescription"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Description:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_description }}</span>
-          <br />
-          <label
-            for="Email"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            *nglf="AlarmGroup.email != '' || AlarmGroup.email != null"
-            >Email:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">{{
-            AlarmGroup.email
-          }}</span>
-          <br *nglf="AlarmGroup.email != '' || AlarmGroup.email != null" />
-          <br />
-          <div style="display: flex; justify-content: space-between;">
-            <!-- Left Footer Content -->
-            <div>
-              <p-checkbox
-                name="groupname"
-                value="recoveryNotification"
-                label="Recovery Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
-              &nbsp; &nbsp;
-              <p-checkbox
-                name="groupname"
-                value="resendNotification"
-                label="Resend Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
-            </div>
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 p-0">
-            <div class="row mx-0 mt-2">
-              <div class="col-12 pr-2">
-                <p-table
-                  [value]="stringArray"
-                  [scrollable]="true"
-                  responsiveLayout="scroll"
-                  scrollHeight="250px"
-                  width="650px"
-                >
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th
-                        [ngClass]="{
-                          'theme-arya-text':
-                            themeService.theme === 'arya-orange',
-                          'theme-saga-text':
-                            themeService.theme === 'saga-orange'
-                        }"
-                      >
-                        Monitor alarm of
-                      </th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-stringArray>
-                    <tr>
-                      <td>
-                        <li>{{ stringArray }}</li>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-                <!-- <div class="col-12 pr-2" style="text-align: center; font-weight: bold; font-size: 2rem;"
-                            *ngIf="hasNoSearchResult">
-                            No seacrh result.
-                        </div> -->
-              </div>
-            </div>
-          </div>
-          <!-- <input type="text"  pInputText id="symbol_name" [(ngModel)]="AlarmGroup.symbol_name" required autofocus disabled /> -->
-        </div>
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
 
 <p-dialog
   [(visible)]="alarmGroupDialog"
@@ -459,6 +352,30 @@
           </p-dropdown>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-12 pr-0">
+          <div class="row">
+            <div class="col-8 pl-3">
+              <label for="description" style="font-weight: bold;"
+                >Description</label
+              >
+            </div>
+          </div>
+
+          <textarea
+            type="text"
+            rows="8"
+            cols="150"
+            pInputText
+            id="description"
+            [(ngModel)]="alarmGroup.description"
+            required
+            class="description"
+            [class]="invalid"
+          ></textarea>
+        </div>
+      </div>
     </div>
 
     <!-- <div style="padding-top: 30px;">
@@ -478,10 +395,6 @@
         [(ngModel)]="selectedValues"
       ></p-checkbox>
       &nbsp; &nbsp;
-      <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
-                (onChange)="changecheck($event)" [(ngModel)]="selectedValues"></p-checkbox> -->
-      <!-- <p-dropdown style="width: 120px; margin-left: 16px;" [options]="minutes" [(ngModel)]="selectedValue" optionLabel="name"
-                 placeholder="Resend interval"></p-dropdown> -->
     </div>
 
     <div style="float: right;">
@@ -499,7 +412,7 @@
         label="Create"
         icon="pi pi-check"
         class="p-button-success"
-        *ngIf="alarmGroup.id == undefiend"
+        *ngIf="alarmGroup.id == undefined"
         (click)="createRoute()"
       ></button>
       <button
@@ -508,9 +421,56 @@
         label="Save"
         icon="pi pi-check"
         class="p-button-success"
-        *ngIf="alarmGroup.id != undefiend"
+        *ngIf="alarmGroup.id != undefined"
         (click)="editlistGroup()"
       ></button>
+      <button
+        pButton
+        pRipple
+        label="Delete"
+        icon="pi pi-trash"
+        class="p-button-danger"
+        *ngIf="alarmGroup.id != undefined"
+        (click)="deleteRoute(alarmGroup.id)"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="executeDialog"
+  [style]="{ width: '1200px' }"
+  styleClass="modalResponsivo"
+  [(header)]="dialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
+  (onHide)="hideDialog()"
+>
+  <ng-template pTemplate="content">
+    <div
+      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
+    ></div>
+    <div class="col-12">
+      <div class="row">
+        <div
+          class="table-responsive"
+          style="overflow-y: auto; overflow-x: hidden; max-height: 400px;"
+        >
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th *ngFor="let key of getKeys()">{{ key }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of jsonData">
+                <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </ng-template>
 </p-dialog>
