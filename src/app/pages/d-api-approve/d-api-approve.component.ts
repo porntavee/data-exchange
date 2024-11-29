@@ -198,7 +198,7 @@ export class DApiApproveComponent implements OnInit {
       console.log(
         `เรียกใช้งาน approve สำหรับ ${group.user_id} ด้วย route_id ${group.route_id}`
       );
-      debugger
+      //debugger
       // this.approve(group.user_id, group.route_id);
       this.requestDetails = group.details;
       this.user_id = group.user_id;
@@ -223,7 +223,7 @@ export class DApiApproveComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-       // debugger
+       // //debugger
         this.tokenList = data.data;
         // เริ่มต้น: ใช้ข้อมูลทั้งหมด
         this.filteredList = [...this.tokenList];
@@ -237,11 +237,12 @@ export class DApiApproveComponent implements OnInit {
   approve() {
 
     let userdata = jwt_decode(localStorage.getItem("token"));
+    console.log(userdata)
     const apiUrl =
       "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
       // const apiUrl =
       // "http://127.0.0.1:8000/token/approve";
-    // debugger
+    // //debugger
     this.http
       .post<any>(apiUrl, {
         user_id: this.user_id,

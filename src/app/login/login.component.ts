@@ -188,6 +188,7 @@ export class LoginComponent implements OnInit {
             this.submitted = true;
             this.loginState = false;
           //  console.log(this.createUnsignedJWT(response))
+           
             localStorage.setItem("token", this.createUnsignedJWT(response));
             this.authservice.settoken(localStorage.getItem("token"));
             // ไม่แน่ใจว่า Token ถูกรึยัง
@@ -207,10 +208,14 @@ export class LoginComponent implements OnInit {
       alg: 'none', // ไม่มีการเข้ารหัส
       typ: 'JWT',
     };
-
+    const updatedUser = {
+        ...response.member, // คัดลอกค่าเดิมทั้งหมด
+        username: response.member.name // เพิ่มคีย์ใหม่ชื่อ username และตั้งค่าจาก name
+    };
+   // console.log(updatedUser)
     // Convert objects to Base64URL encoded strings
     const base64UrlHeader = this.base64UrlEncode(JSON.stringify(header));
-    const base64UrlPayload = this.base64UrlEncode(JSON.stringify(response.member));
+    const base64UrlPayload = this.base64UrlEncode(JSON.stringify(updatedUser));
 
     // Combine header, payload, and an empty signature
     const jwt = `${base64UrlHeader}.${base64UrlPayload}.`;
