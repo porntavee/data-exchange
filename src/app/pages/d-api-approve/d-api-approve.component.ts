@@ -131,7 +131,7 @@ export class DApiApproveComponent implements OnInit {
     public themeService: ThemeService,
     private http: HttpClient
   ) {
-    this.titleService.setTitle("SED EAST-Line Manage");
+    this.titleService.setTitle("API Approve");
     this.itemsAction = [
       {
         label: "เปิดใช้งาน",
