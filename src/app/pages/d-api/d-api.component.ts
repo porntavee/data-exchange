@@ -8,6 +8,8 @@ import { LineGroupService } from "@app/linegroupservice";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
+import jwt_decode from "jwt-decode";
+
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -33,6 +35,7 @@ export interface routeAPI {
   id?: number;
   tag?: string;
   datasets?: string;
+  description?: string;
   endpoints?: string;
   methods?: string;
   request?: string;
@@ -147,6 +150,8 @@ export class DApiComponent implements OnInit {
   selectedValues: string[];
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
+
+  executeDialog: boolean = false;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -432,14 +437,37 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-    
-
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
        // debugger
+      },
+      error => {
+        console.error("Error fetching polygon data:", error);
+      }
+    );
+
+  }
+
+  tryExecute2(event: Event, param): void {
+    event.stopPropagation(); // หยุดการส่งต่อเหตุการณ์ไปยัง <tr>
+    let model = {
+      "dataset_id": param.dataset_id,
+      "query_string": param.query
+    };
+
+    let jsonStr = JSON.stringify(model);
+
+    // const apiUrl = 'http://127.0.0.1:8000/tryexecute';
+    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    this.http.post<any>(apiUrl, model).subscribe(
+      data => {
+        console.log("Received data:", data);
+        this.jsonData = data.data;
+       // debugger
+        this.executeDialog = true;
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -463,6 +491,7 @@ export class DApiComponent implements OnInit {
       "tag": this.alarmGroup.tag,
       "methods": this.alarmGroup.methods,
       "datasets": this.selectedDataSets.value,
+      "description": this.alarmGroup.description,
       "endpoints": this.alarmGroup.endpoints,
       "request": this.alarmGroup.request,
       "response": this.alarmGroup.response,
@@ -495,7 +524,7 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-
+    // const apiUrl = 'http://127.0.0.1:8000/route/create';
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/create';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
@@ -566,9 +595,11 @@ export class DApiComponent implements OnInit {
     //   this.submitted = true;
     // }
   }
+
   readRoute() {
     // console.log(this.selectedValues)
 
+    // const apiUrl = 'http://127.0.0.1:8000/route/read';
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
@@ -605,8 +636,36 @@ export class DApiComponent implements OnInit {
     );
 
   }
+
+  deleteRoute(routeId: number): void {
+    if (confirm('Are you sure you want to delete this route?')) {
+
+      let userdata = jwt_decode(localStorage.getItem("token"));
+
+      // const apiUrl = 'http://127.0.0.1:8000/route/delete';
+      const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/delete';
+
+      this.http.post(apiUrl, { route_id: routeId, updated_by: userdata["username"] }).subscribe(
+        (response: any) => {
+          if (response.status === 200) {
+            alert('Route deleted successfully.');
+            this.hideDialog(); // ปิด Dialog
+            this.readRoute(); // โหลดข้อมูลใหม่
+          } else {
+            alert(`Error: ${response.message}`);
+          }
+        },
+        (error) => {
+          console.error('Error deleting route:', error);
+          alert('An error occurred while deleting the route.');
+        }
+      );
+    }
+  }
+
   editlistGroup() {
     this.submitted = true;
+    // const apiUrl = 'http://127.0.0.1:8000/route/update/' + this.alarmGroup.id;
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/update/' + this.alarmGroup.id;
 
     let model = {
@@ -614,6 +673,7 @@ export class DApiComponent implements OnInit {
       "tag": this.alarmGroup.tag,
       "methods": this.alarmGroup.methods,
       "datasets": this.selectedDataSets.value,
+      "description": this.alarmGroup.description,
       "endpoints": this.alarmGroup.endpoints,
       "request": this.alarmGroup.request,
       "response": this.alarmGroup.response,
@@ -649,6 +709,9 @@ export class DApiComponent implements OnInit {
         if (response.status === 200) {
           
           console.log('Update successful:', response.message);
+
+          this.hideDialog();
+          this.readRoute();
         } else {
           
           console.warn('Update failed:', response.message);

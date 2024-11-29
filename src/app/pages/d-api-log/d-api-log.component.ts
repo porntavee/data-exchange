@@ -7,6 +7,7 @@ import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
 import * as Highcharts from "highcharts";
+import jwt_decode from "jwt-decode";
 
 export interface routeAPI {
   id?: number;
@@ -115,7 +116,7 @@ export class DApiLogComponent implements OnInit {
   }
 
   readLog() {
-    // console.log(this.selectedValues)
+    let userdata = jwt_decode(localStorage.getItem("token"));
 
     // const apiUrl = 'http://127.0.0.1:8000/log/read';
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';

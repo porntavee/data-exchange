@@ -342,6 +342,7 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
    
+    // const apiUrl = 'http://127.0.0.1:8000/route/read_library/' + userdata["id"];
     const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
