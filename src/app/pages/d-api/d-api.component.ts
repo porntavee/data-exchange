@@ -407,6 +407,7 @@ export class DApiComponent implements OnInit {
         this.dialogHeader = param.tag + ' can not execute. มีบางอย่างผิดพลาด';
         this.isLoadingalarmGroups = false;
         this.executeDialog = true;
+        this.jsonData = '';
         console.error("Error fetching polygon data:", error);
       }
     );
