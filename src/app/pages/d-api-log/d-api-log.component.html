@@ -69,7 +69,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
-      <tr (click)="openDailog()">
+      <tr (click)="openDailog(group)">
         <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
@@ -88,7 +88,7 @@
         <!--<td>{{group.symbol_name}}</td>-->
         <td style="display: flex; justify-content: space-between;">
           <div id="myDIV3" title="{{ group.created_at }}">
-            {{ group.created_at }}
+            {{ group.created_at | date:'dd-MM-YYYY HH:mm:ss' }}
           </div>
         </td>
         <td></td>
@@ -227,7 +227,7 @@
 
 <p-dialog
   [(visible)]="alarmGroupDialog"
-  [style]="{ width: '850px' }"
+  [style]="{ width: '1050px' }"
   styleClass="modalResponsivo"
   [(header)]="dialogHeader"
   [modal]="true"
@@ -245,7 +245,7 @@
             value="monthly"
             [(ngModel)]="viewMode"
             inputId="monthly"
-            (onChange)="updateChart()"
+            (ngModelChange)="updateChart()"
           ></p-radioButton>
           <label for="monthly">รายเดือน</label>
         </div>
@@ -255,7 +255,7 @@
             value="yearly"
             [(ngModel)]="viewMode"
             inputId="yearly"
-            (onChange)="updateChart()"
+            (ngModelChange)="updateChart()"
           ></p-radioButton>
           <label for="yearly">รายปี</label>
         </div>
@@ -271,7 +271,7 @@
         ></p-dropdown>
       </div>
       
-      <div class="form-group" *ngIf="viewMode === 'yearly'">
+      <div class="form-group" *ngIf="viewMode === 'yearly' || viewMode === 'monthly'">
         <label>เลือกปี</label>
         <p-dropdown
           [options]="years"
@@ -280,13 +280,14 @@
           (onChange)="updateChart()"
         ></p-dropdown>
       </div>
-
+    
       <highcharts-chart
         [Highcharts]="Highcharts5_1"
         [options]="chartOptions5_1"
         style="width: 100%; display: block;"
       ></highcharts-chart>
     </div>
+    
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">

@@ -109,8 +109,9 @@ export class DApiUseComponent implements OnInit {
   requestDialog: boolean = false; // ควบคุมการแสดงผล Dialog
   requestDialogHeader: string = 'Request Details'; // หัวข้อของ Dialog
   requestDetails: string = ''; // เก็บข้อความรายละเอียด
-  selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
+  // selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
   api_id: string = '';
+  selectedDuration: any = {};
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -342,8 +343,8 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
    
-    // const apiUrl = 'http://127.0.0.1:8000/route/read_library/' + userdata["id"];
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
+    const apiUrl = 'http://127.0.0.1:8000/route/read_library/' + userdata["id"];
+    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -359,9 +360,9 @@ export class DApiUseComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
-  //  debugger
 
-    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
+    const apiUrl = "http://127.0.0.1:8000/token/read/" + userdata["id"];
+    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -379,8 +380,10 @@ export class DApiUseComponent implements OnInit {
   let userdata = jwt_decode(localStorage.getItem("token"));
     
    // debugger;
-    const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
+    const apiUrl = "http://127.0.0.1:8000/token/create";
+    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
     // const apiUrl = "http://127.0.0.1:8000/token/create";
+    debugger
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
@@ -553,7 +556,16 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     this.requestDialog = true;
-    this.api_id = param;
+    this.api_id = param.api_id;
+  }
+
+  openEditDialog(param) {
+    this.requestDialog = true;
+    this.api_id = param.route_id;
+    this.requestDetails = param.details;
+    this.selectedDuration = { value: param.duration };
+    var index = this.durationOptions.findIndex(data => data.value === param.duration.toString());
+    this.selectedDuration = this.durationOptions[index];
   }
 
   // ฟังก์ชันสำหรับปิด Dialog

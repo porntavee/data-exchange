@@ -110,11 +110,11 @@ export class DApiComponent implements OnInit {
     { label: '<=', value: '<=' },
     { label: '!=', value: '!=' }
   ];
-  dataSets: any = [ 
-    { "title": 'DSS', "value": '2'}, 
-    { "title": 'ATMS', "value": '3'}, 
-    { "title": 'DSS Vehicle', "value": '4'},
-    { "title": 'M-INSIGHT', "value": '5'}
+  dataSets: any = [
+    { "title": 'DSS', "value": '2' },
+    { "title": 'ATMS', "value": '3' },
+    { "title": 'DSS Vehicle', "value": '4' },
+    { "title": 'M-INSIGHT', "value": '5' }
   ];
   selectedDataSets: any;
 
@@ -312,78 +312,8 @@ export class DApiComponent implements OnInit {
     this.readRoute();
 
     this.isLoadingalarmGroups = false;
-   // this.changeDetection.detectChanges();
+    // this.changeDetection.detectChanges();
 
-    // this.lineGroupService.getLineGroupInfo().subscribe({
-    //   next: datas => {
-    //     this.lineGroups = datas;
-    //     this.isLoading = false;
-    //     datas.forEach((data, index) => {
-    //       this.lineGroups[index].enable = data.enable ? true : false;
-    //       this.changeDetection.detectChanges();
-    //     });
-    //   },
-    //   error: error => {
-    //     this.isLoading = false;
-    //     if (error.status == "401") {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-
-    // this.lineGroupService.getMessageGroup().subscribe({
-    //   next: datas => {
-    //     this.alarmGroups = datas;
-    //     this.isLoadingalarmGroups = false;
-    //     this.changeDetection.detectChanges();
-    //   },
-    //   error: error => {
-    //     this.isLoadingalarmGroups = false;
-    //     if (error.status == 401) {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-    // this.lineGroupService.currentMessage.subscribe(AlarmGroup => {
-    //   if (AlarmGroup != undefined) {
-    //     this.itemsAction = [
-    //       {
-    //         label: "AlarmGroup",
-    //         items: [
-    //           {
-    //             label: "View",
-    //             icon: "pi pi-fw pi-search",
-    //             command: event => {
-    //               this.lineread(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Edit",
-    //             icon: "pi pi-fw pi-pencil",
-    //             command: event => {
-    //               this.editline(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Delete",
-    //             icon: "pi pi-fw pi-trash",
-    //             command: event => {
-    //               this.deleteGroup(AlarmGroup);
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     ];
-    //   }
-    // });
   }
   menuVlue(task) {
     this.lineGroupService.valueSource(task);
@@ -413,15 +343,15 @@ export class DApiComponent implements OnInit {
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
     console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
-  reboot(){
+  reboot() {
     let model = {
     };
     const apiUrl = 'https://mpub.linkflow.co.th:4433/api/dynamic_api/reboot';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
-    
-       // debugger
+
+        // debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -442,7 +372,7 @@ export class DApiComponent implements OnInit {
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
-       // debugger
+        // debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -452,6 +382,8 @@ export class DApiComponent implements OnInit {
   }
 
   tryExecute2(event: Event, param): void {
+    this.isLoadingalarmGroups = true;
+
     event.stopPropagation(); // หยุดการส่งต่อเหตุการณ์ไปยัง <tr>
     let model = {
       "dataset_id": param.dataset_id,
@@ -460,23 +392,28 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-    // const apiUrl = 'http://127.0.0.1:8000/tryexecute';
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    const apiUrl = 'http://127.0.0.1:8000/tryexecute';
+    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
-       // debugger
+        // debugger
+        this.dialogHeader = param.tag + ' Data';
+        this.isLoadingalarmGroups = false;
         this.executeDialog = true;
       },
       error => {
+        this.dialogHeader = param.tag + ' can not execute. มีบางอย่างผิดพลาด';
+        this.isLoadingalarmGroups = false;
+        this.executeDialog = true;
         console.error("Error fetching polygon data:", error);
       }
     );
 
   }
 
-  jsonData:any = [];
+  jsonData: any = [];
 
   // ดึง keys ของ JSON (ใช้สำหรับหัวตาราง)
   getKeys(): string[] {
@@ -536,71 +473,14 @@ export class DApiComponent implements OnInit {
         console.error("Error fetching polygon data:", error);
       }
     );
-
-    // if (
-    //   this.alarmGroup.group_name != undefined &&
-    //   this.alarmGroup.group_description != undefined
-    // ) {
-    //   if (this.emailsendline == null){
-    //     this.emailsendline = "";
-    //   }
-    //   this.invalid = "";
-    //   this.submitted = false;
-    //   if (this.symbolString.length != 0) {
-    //     this.lineGroupService
-    //       .createMessageGroup(
-    //         this.symbolString,
-    //         this.alarmGroup.group_name,
-    //         this.alarmGroup.group_description,
-    //         this.selectedValues,
-    //         this.emailsendline,
-    //         60
-    //       )
-    //       .subscribe(result => {
-    //         this.hideDialog();
-    //         this.messageService.add({
-    //           severity: "success",
-    //           summary: "Successful",
-    //           detail: "Create Successful",
-    //           life: 3000
-    //         });
-    //         this.changeDetection.detectChanges();
-    //         this.lineGroupService.getMessageGroup().subscribe({
-    //           next: datas => {
-    //             this.alarmGroups = datas;
-    //             this.isLoadingalarmGroups = false;
-    //             this.changeDetection.detectChanges();
-    //           },
-    //           error: error => {
-    //             this.isLoadingalarmGroups = false;
-    //             if (error.status == 401) {
-    //               this.messageService.add({
-    //                 severity: "error",
-    //                 summary: "Error",
-    //                 detail: "Session expired, please logout and login again."
-    //               });
-    //             }
-    //           }
-    //         });
-    //       });
-    //   } else {
-    //     this.messageService.add({
-    //       severity: "error",
-    //       summary: "Error",
-    //       detail: "Please Select SYMBOL ID	or IP Address."
-    //     });
-    //   }
-    // } else {
-    //   this.invalid = "ng-invalid ng-dirty";
-    //   this.submitted = true;
-    // }
   }
 
   readRoute() {
     // console.log(this.selectedValues)
 
     // const apiUrl = 'http://127.0.0.1:8000/route/read';
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
+    const apiUrl = 'http://127.0.0.1:8000/route/read';
+    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data.data);
@@ -621,14 +501,15 @@ export class DApiComponent implements OnInit {
 
     // ตั้งค่า selectedValues ด้วยค่าที่ตรงใน availableMethods
     this.selectedValues = this.availableMethods.filter(method => methodsArray.includes(method));
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param.id;
+    const apiUrl = 'http://127.0.0.1:8000/route/read/' + param.id;
+    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
-        
+
         console.log('Received data:', data.data);
         this.openDailog();
         this.alarmGroup = data.data;
-        
+
       },
       (error) => {
         console.error('Error fetching polygon data:', error);
@@ -707,18 +588,18 @@ export class DApiComponent implements OnInit {
     this.http.put<any>(`${apiUrl}`, model).subscribe(
       (response) => {
         if (response.status === 200) {
-          
+
           console.log('Update successful:', response.message);
 
           this.hideDialog();
           this.readRoute();
         } else {
-          
+
           console.warn('Update failed:', response.message);
         }
       },
       (error) => {
-        
+
         console.error('Error updating route:', error);
       }
     );

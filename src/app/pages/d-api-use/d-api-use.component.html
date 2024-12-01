@@ -149,7 +149,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
-      <tr>
+      <tr (click)="openEditDialog(group)">
         <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
@@ -160,17 +160,38 @@
           <div
             id="myDIV2"
             [ngClass]="{
-              'bg-success text-white':
-                group.status_description === 'เปิดใช้งาน',
-              'bg-primary text-white':
-                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่'
+              'bg-success text-white': group.status_description === 'เปิดใช้งาน',
+              'bg-primary text-white': group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+              'bg-danger text-white': group.status_description === 'ปฏิเสธ',
+              'bg-secondary text-white': group.status_description === 'ปิดใช้งาน'
             }"
-            class="p-2 rounded text-center"
+            class="p-2 rounded text-center position-relative"
             title="{{ group.status_description }}"
           >
             {{ group.status_description }}
+        
+            <!-- แสดงไอคอน ? ในปุ่ม -->
+            <span
+              *ngIf="group.status_description === 'ปฏิเสธ'"
+              pTooltip="{{ group.admin_details }}"
+              tooltipPosition="top"
+              style="
+                display: inline-block;
+                margin-left: 8px;
+                background-color: white;
+                color: red;
+                font-weight: bold;
+                border-radius: 50%;
+                padding: 0.4rem 0.8rem;
+                cursor: pointer;
+                font-size: 0.8rem;
+              "
+            >
+              ?
+            </span>
           </div>
         </td>
+        
         <!-- </td> -->
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
