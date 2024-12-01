@@ -181,7 +181,7 @@ export class DApiLogComponent implements OnInit {
   openDailog(param) {
     this.submitted = false;
     this.alarmGroupDialog = true;
-    this.dialogHeader = "Chart";
+    this.dialogHeader = "Log Chart of Tag: " + param.tag + " Endpoint: " + param.endpoints;
     this.check = false;
     this.check1 = true;
     this.token = param.token;

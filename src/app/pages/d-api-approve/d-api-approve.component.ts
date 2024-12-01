@@ -192,7 +192,7 @@ export class DApiApproveComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        // //debugger
+        //debugger
         this.tokenList = data.data;
 
         this.statusOptions = [
@@ -714,7 +714,8 @@ export class DApiApproveComponent implements OnInit {
     { label: `ปิดใช้งาน (0)`, value: 0 }
   ];
 
-  selectedStatus: number | null = null; // ตัวเลือกเริ่มต้น
+  selectedStatus = this.statusOptions[0]; // กำหนดค่าเริ่มต้นเป็น "ทั้งหมด"
+  // selectedStatus: number | null = null; // ตัวเลือกเริ่มต้น
 
   // filterByStatus(status: number | null): void {
   //     if (status === null) {

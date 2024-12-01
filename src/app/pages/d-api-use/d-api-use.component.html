@@ -145,11 +145,13 @@
           <p-sortIcon field="expires_at"></p-sortIcon>
         </th>
 
-        <th></th>
+        <th>
+          
+        </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
-      <tr (click)="openEditDialog(group)">
+      <tr>
         <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
@@ -206,7 +208,9 @@
           <div id="myDIV2" title="{{ group.expires_at }}">{{ group.expires_at | date: 'dd/MM/yyyy' }}</div>
         </td>
         <!--<td>{{group.symbol_name}}</td>-->
-        <td></td>
+        <td>
+          <button pButton type="text" (click)="openEditDialog(group)" icon="pi pi-ellipsis-h"></button>
+        </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
