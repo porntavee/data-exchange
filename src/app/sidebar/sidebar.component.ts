@@ -85,6 +85,14 @@ export const ROUTES: RouteInfo[] = [
     class: "",
     role: ["super admin"],
     hidden: false
+  },
+  {
+    title: "SERVICE STATUS",
+    path: "/servicestatus",
+    icon: "assets/img/m-dashboard.png",
+    class: "",
+    role: ["super admin"],
+    hidden: false
   }
 
   // {
