@@ -33,16 +33,17 @@
             ></div>
           </div>
         </div>
-
         <div style="margin-right: 16px; width:100px; text-align: right;">
           {{ tab.header.storage.name }}
         </div>
         <div class="flex-1">
-          <p-progressBar [value]="tab.header.storage.percentUsed">
-          </p-progressBar>
+          <p-progressBar
+            [value]="tab.header.storage.percentUsed"
+          ></p-progressBar>
         </div>
       </div>
     </button>
+
     <div class="accordion-content" *ngIf="tab.isOpen">
       <p-toast appendTo="body"></p-toast>
 
@@ -57,8 +58,9 @@
               'gridster-card': true
             }"
           >
+            <!-- CPU Usage -->
             <div class="card-dashboard" *ngIf="item.header == 'loadcpu'">
-              <div class=" card-body pt-1">
+              <div class="card-body pt-1">
                 <div class="grid">
                   <div
                     class="col-12 flex align-items-center justify-content-center"
@@ -85,19 +87,13 @@
                       [textColor]="colortitle"
                     ></p-knob>
                   </div>
-                  <!-- <div
-                    class="col-12 col-sm-12 col-md-12 p-0"
-                    style="text-align: center; font-weight: bold; font-size: 2rem;"
-                    *ngIf="!isLoading"
-                  >
-                    No CPU data
-                  </div> -->
                 </div>
               </div>
             </div>
 
+            <!-- Memory Usage -->
             <div class="card-dashboard" *ngIf="item.header == 'loadmemory'">
-              <div class=" card-body pt-1">
+              <div class="card-body pt-1">
                 <div class="grid">
                   <div
                     class="col-12 flex align-items-center justify-content-center"
@@ -124,18 +120,13 @@
                       [textColor]="colortitle"
                     ></p-knob>
                   </div>
-                  <!-- <div
-                    class="col-12 col-sm-12 col-md-12 p-0"
-                    style="text-align: center; font-weight: bold; font-size: 2rem;"
-                    *ngIf="!isLoading"
-                  >
-                    No Memory data
-                  </div> -->
                 </div>
               </div>
             </div>
+
+            <!-- Disk Usage -->
             <div class="card-dashboard" *ngIf="item.header == 'loaddiskstatus'">
-              <div class=" card-body pt-1">
+              <div class="card-body pt-1">
                 <div class="grid">
                   <div
                     class="col-12 flex align-items-center justify-content-center"
@@ -155,20 +146,12 @@
                       [id]="'disk_status_chart_' + tab.header.instance"
                     ></div>
                   </div>
-                  <!-- <div
-                    class="col-12 col-sm-12 col-md-12 p-0"
-                    style="text-align: center; font-weight: bold; font-size: 2rem; margin-top: 10%;"
-                    *ngIf="!isLoading"
-                  >
-                    No Disk Usage data
-                  </div> -->
                 </div>
               </div>
             </div>
           </gridster-item>
         </gridster>
       </div>
-      <!-- </div> -->
     </div>
   </div>
 </div>

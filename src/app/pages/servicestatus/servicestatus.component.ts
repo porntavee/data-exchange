@@ -2,15 +2,10 @@ import { Component, ViewChild, OnInit, ChangeDetectorRef } from "@angular/core";
 import * as Highcharts from "highcharts";
 import HC_exporting from "highcharts/modules/exporting";
 HC_exporting(Highcharts);
-import { TopchartService } from "@app/pages/topchart/topchart.service";
-import { isNumeric } from "rxjs/util/isNumeric";
-import { data } from "jquery";
 import { Title } from "@angular/platform-browser";
 import { ThemeService } from "app/theme.service";
-import { MenuItem } from "primeng/api";
 import { ServicestatusService } from "@app/pages/servicestatus/servicestatus.service";
 import { MessageService } from "primeng/api";
-import * as $ from "jquery";
 
 import {
   GridType,
@@ -19,11 +14,6 @@ import {
   GridsterItemComponentInterface
 } from "angular-gridster2";
 
-declare global {
-  interface JQuery {
-    sparkline(): void;
-  }
-}
 @Component({
   selector: "app-servicestatus",
   templateUrl: "./servicestatus.component.html",
@@ -79,12 +69,6 @@ export class ServicestatusComponent implements OnInit {
   loading: boolean = true;
   loadingchart_cpuNone: boolean = true;
 
-  start: any = "";
-  end: any = "";
-  step: any = "5m";
-  isSave: boolean = false;
-
-  menuExportcpu_time: MenuItem[];
   CPUChart: any;
 
   isLoading: boolean = false;
@@ -560,7 +544,6 @@ export class ServicestatusComponent implements OnInit {
             isOpen: false
           }));
           this.addOrUpdateTabs(windowTabs);
-          // this.tabs.push(...windowTabs);
 
           // Combine storage data from Linux and Windows
           const linuxStorageData = linuxData.data.map(
