@@ -343,12 +343,12 @@ export class DApiComponent implements OnInit {
   }
   reboot() {
     let model = {};
-    const apiUrl = "https://mpub.linkflow.co.th:4433/api/dynamic_api/reboot";
+    const apiUrl = "https://dss.motorway.go.th:4433/dnm/api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
 
-        // debugger
+        // //debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -364,12 +364,12 @@ export class DApiComponent implements OnInit {
     let jsonStr = JSON.stringify(model);
 
     const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute";
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
-        // debugger
+        // //debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
@@ -388,13 +388,13 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = "http://127.0.0.1:8000/tryexecute";
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
         this.jsonData = data.data;
-        // debugger
+        // //debugger
         this.dialogHeader = param.tag + " Data";
         this.isLoadingalarmGroups = false;
         this.executeDialog = true;
@@ -457,9 +457,9 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-    // const apiUrl = 'http://127.0.0.1:8000/route/create';
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create';
     const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/route/create";
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         console.log("Received data:", data);
@@ -475,9 +475,9 @@ export class DApiComponent implements OnInit {
   readRoute() {
     // console.log(this.selectedValues)
 
-    // const apiUrl = 'http://127.0.0.1:8000/route/read';
-    const apiUrl = "http://127.0.0.1:8000/route/read";
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -500,8 +500,8 @@ export class DApiComponent implements OnInit {
     this.selectedValues = this.availableMethods.filter(method =>
       methodsArray.includes(method)
     );
-    const apiUrl = "http://127.0.0.1:8000/route/read/" + param.id;
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param.id;
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/" + param.id;
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -518,9 +518,9 @@ export class DApiComponent implements OnInit {
     if (confirm("Are you sure you want to delete this route?")) {
       let userdata = jwt_decode(localStorage.getItem("token"));
 
-      // const apiUrl = 'http://127.0.0.1:8000/route/delete';
+      // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/delete';
       const apiUrl =
-        "https://dpub.linkflow.co.th:4433/api/data-exchange/route/delete";
+        "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/delete";
 
       this.http
         .post(apiUrl, { route_id: routeId, updated_by: userdata["username"] })
@@ -544,9 +544,9 @@ export class DApiComponent implements OnInit {
 
   editlistGroup() {
     this.submitted = true;
-    // const apiUrl = 'http://127.0.0.1:8000/route/update/' + this.alarmGroup.id;
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/' + this.alarmGroup.id;
     const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/route/update/" +
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/" +
       this.alarmGroup.id;
 
     let model = {

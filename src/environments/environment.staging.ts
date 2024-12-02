@@ -13,6 +13,7 @@ export const environment = {
   baseUrl: "https://dsslocal.linkflow.co.th/",
   websocketUrl: "wss://dsslocal.linkflow.co.th/websocket/v1/remote",
   allowedDomains: [
+    "dss.motorway.go.th:4433",
     "dsslocal.linkflow.co.th",
     "edims.infitel.co.th",
     "edd.linkflow.co.th",

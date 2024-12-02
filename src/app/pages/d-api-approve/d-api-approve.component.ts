@@ -185,10 +185,10 @@ export class DApiApproveComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = "http://127.0.0.1:8000/token/read/0";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -218,12 +218,12 @@ export class DApiApproveComponent implements OnInit {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // //debugger
     this.http
       .post<any>(apiUrl, {
@@ -251,12 +251,12 @@ export class DApiApproveComponent implements OnInit {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // //debugger
     this.http
       .post<any>(apiUrl, {
@@ -284,12 +284,12 @@ export class DApiApproveComponent implements OnInit {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     this.http
       .post<any>(apiUrl, {
@@ -729,7 +729,7 @@ export class DApiApproveComponent implements OnInit {
 
   // ฟังก์ชันสำหรับกรองข้อมูลตาม status
   filterByStatus(status: number): void {
-    debugger;
+    //debugger;
     if (status === null) {
       // กรองข้อมูลทั้งหมด
       this.filteredList = this.tokenList;
@@ -741,7 +741,7 @@ export class DApiApproveComponent implements OnInit {
 
   // ฟังก์ชันสำหรับนับจำนวนสถานะ
   getStatusCount(status: number): number {
-    debugger;
+    //debugger;
     let count = this.tokenList.filter(item => item.status === status).length;
     return count;
   }

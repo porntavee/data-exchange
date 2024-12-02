@@ -592,7 +592,7 @@ export class RealtimeComponent implements OnInit {
   getPolygonData(): void {
 
 
-    const apiUrl = 'https://mpub.linkflow.co.th:4433/api/minsight/polygon/read';
+    const apiUrl = 'https://dss.motorway.go.th:4433/dnm/api/minsight/polygon/read';
     this.http.get<any>(apiUrl).subscribe(
       (data) => {
         console.log('Received data:', data);
@@ -606,7 +606,7 @@ export class RealtimeComponent implements OnInit {
       }
     );
 
-    this.http.get<any>('https://mpub.linkflow.co.th:4433/api/minsight/polygon2/read').subscribe(
+    this.http.get<any>('https://dss.motorway.go.th:4433/dnm/api/minsight/polygon2/read').subscribe(
       (data) => {
         console.log('Received data:', data);
 

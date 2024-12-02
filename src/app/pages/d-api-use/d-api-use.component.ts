@@ -343,12 +343,12 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "http://127.0.0.1:8000/route/read_library/" + userdata["id"];
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" + userdata["id"];
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        // debugger
+        // //debugger
         this.alarmGroups = data.data;
       },
       error => {
@@ -361,12 +361,12 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "http://127.0.0.1:8000/token/read/" + userdata["id"];
-    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        // debugger;
+        // //debugger;
         this.tokenList = data.data;
       },
       error => {
@@ -379,11 +379,11 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    // debugger;
-    const apiUrl = "http://127.0.0.1:8000/token/create";
-    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
-    // const apiUrl = "http://127.0.0.1:8000/token/create";
-    debugger;
+    // //debugger;
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    //debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
