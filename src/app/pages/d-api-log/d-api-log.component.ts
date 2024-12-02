@@ -131,8 +131,8 @@ export class DApiLogComponent implements OnInit {
   readLog() {
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "http://127.0.0.1:8000/log/read";
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -146,8 +146,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   readMonthLog() {
-    const apiUrl = "http://127.0.0.1:8000/log/month/read";
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/month/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
     this.http
       .post<any>(apiUrl, {
         month: this.selectedMonth,
@@ -167,8 +167,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   readYearLog() {
-    const apiUrl = "http://127.0.0.1:8000/log/year/read";
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/month/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/year/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
     this.http
       .post<any>(apiUrl, { year: this.selectedYear, token: this.token })
       .subscribe(

@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   apiUrl: "https://dsslocal.linkflow.co.th/api/staging",
-  loginURL: "https://mpub.linkflow.co.th:4433/api",
+  loginURL: "https://dss.motorway.go.th:4433/dnm/api",
   dataExchangeURL: "https://dss.motorway.go.th:4433/dxc/api",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
   DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
@@ -21,6 +21,7 @@ export const environment = {
   websocketUrl: "wss://dsslocal.linkflow.co.th/websocket/v1/remote",
   allowedDomains: [
     "localhost:8040",
+    "dss.motorway.go.th:4433",
     "dsslocal.linkflow.co.th",
     "edims.infitel.co.th",
     "edd.linkflow.co.th",
