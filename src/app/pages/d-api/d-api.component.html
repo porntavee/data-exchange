@@ -116,7 +116,7 @@
           <button
             pButton
             pRipple
-            label="Try Execute"
+            label="View Data"
             class="p-button-primary"
             (click)="tryExecute2($event, group)"
           ></button>
@@ -442,6 +442,7 @@
   [style]="{ width: '1200px' }"
   styleClass="modalResponsivo"
   [(header)]="dialogHeader"
+  [loading]="isLoadingalarmGroups"
   [modal]="true"
   styleClass="p-fluid"
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
@@ -455,7 +456,7 @@
       <div class="row">
         <div
           class="table-responsive"
-          style="overflow-y: auto; overflow-x: hidden; max-height: 400px;"
+          style="overflow-y: auto; overflow-x: auto; max-height: 400px;"
         >
           <table class="table table-bordered">
             <thead>

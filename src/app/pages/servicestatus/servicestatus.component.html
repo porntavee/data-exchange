@@ -1,293 +1,184 @@
-<p-toast></p-toast>
+<div class="accordion">
+  <div class="accordion-item" *ngFor="let tab of tabs; let i = index">
+    <button class="accordion-header" (click)="toggleTab(i)">
+      <div
+        style="display: flex; align-items: center; justify-content: flex-start; color: white;"
+      >
+        <span style="margin-right: 10px;">{{ tab.header.instance }}</span>
+        <span style="margin-right: 10px; color: white;"
+          >CPU Avg: {{ tab.header.cpuAvg }}</span
+        >
+        <div [id]="'containerCPU-' + i" style="margin-top: 25px;"></div>
 
+        <span style="margin-right: 10px; color: white;"
+          >Memory Used: {{ tab.header.memoryUsed }}</span
+        >
 
+        <div [id]="'containerMemory-' + i" style="margin-top: 25px;"></div>
+      </div>
+    </button>
+    <div class="accordion-content" *ngIf="tab.isOpen">
+      <p-toast appendTo="body"></p-toast>
 
-
-
-<!-- <div class="row">
-  <div class="col-12 col-sm-12 col-md-12">
-    <div class="col-12 card card-stats p-2" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
-    'theme-saga': themeService.theme === 'saga-orange'}">
-      <p-toolbar styleClass="p-mb-4">
-        <div class="p-toolbar-group-left">
-          <span
-            [ngClass]="{ 'theme-arya-text': themeService.theme === 'arya-orange','theme-saga-text': themeService.theme === 'saga-orange'}"
-            class="reponsive-font">Service Status</span>
-
-        </div>
-        <div class="p-toolbar-group-right" style="text-align: center;">
-          <p-calendar #cal2 [(ngModel)]="rangeDates" [showIcon]="true" inputId="time" [numberOfMonths]="2"
-            style="margin-right:8px" dateFormat="dd/mm/yy" timeFormat="'hh:mm'" [class]="invalidmulti"
-            placeholder="Select start and end date" selectionMode="range" [maxDate]="maxDate">
-
-            <ng-template pTemplate="footer">
-              <div
-                style="background-color: grey; width:100%; border-top: 1px dashed grey; margin-bottom: 15px; opacity: 0.4;">
-              </div>
-              <div style="margin-left: 70px; text-align: center;" class="row">
-                <div style="display: inline-block;">
-                  <label for="startTimeH">Hour</label>
-                  <p-inputNumber [(ngModel)]="startTimeH" inputId="minmax" mode="decimal" [min]="0" [max]="23"
-                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidstartH">
-                  </p-inputNumber>
-                </div>
-                <div style="display: inline-block; margin: 0 10px;">
-                  <label for="startTimeM">Min</label>
-                  <p-inputNumber [(ngModel)]="startTimeM" inputId="minmax" mode="decimal" [min]="0" [max]="59"
-                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidstartM">
-                  </p-inputNumber>
-                </div>
-                <p-divider layout="vertical">to</p-divider>
-                <div style="display: inline-block; margin: 0 10px;">
-                  <label for="EndTimeH">Hour</label>
-                  <p-inputNumber [(ngModel)]="EndTimeH" inputId="minmax" mode="decimal" [min]="0" [max]="23"
-                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidendH">
-                  </p-inputNumber>
-                </div>
-                <div style="display: inline-block;">
-                  <label for="EndTimeM">Min</label>
-                  <p-inputNumber [(ngModel)]="EndTimeM" inputId="minmax" mode="decimal" [min]="0" [max]="59"
-                    [showButtons]="true" styleClass="styletimeMin" [class]="invalidendM">
-                  </p-inputNumber>
-                </div>
-              </div>
-
-
-             
-              <div
-                style="background-color: grey; width:100%; border-top: 1px dashed grey; margin-bottom: 15px; margin-top: 15px; opacity: 0.4;">
-              </div>
-
-              <div class="p-field" style="text-align: center;">
-                <div class="row mx-0">
-                  <div class="col-12">
-                    <button pButton pRipple type="button" label="Submit" class="p-button-raised p-button-success"
-                      (click)="onSaveCalendar()"></button>
+      <div class="row justify-content-between">
+        <gridster [options]="gridOptions" style="background:none; width:100%">
+          <gridster-item
+            [item]="item"
+            *ngFor="let item of dashboard"
+            [ngClass]="{
+              'theme-arya': themeService.theme === 'arya-orange',
+              'theme-saga': themeService.theme === 'saga-orange',
+              'gridster-card': true
+            }"
+          >
+            <div class="card-dashboard" *ngIf="item.header == 'loadcpu'">
+              <div class=" card-body pt-1">
+                <div class="grid">
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                  >
+                    <h5 style="margin-top: 15px; color:black">CPU Usage</h5>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loading_cpu"
+                  >
+                    <p-progressSpinner
+                      styleClass="custom-spinner"
+                    ></p-progressSpinner>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loadingcpu"
+                  >
+                    <p-knob
+                      [(ngModel)]="valueCPU[i]"
+                      [size]="150"
+                      [readonly]="true"
+                      [valueColor]="getTextColor(valueCPU[i])"
+                      [textColor]="colortitle"
+                    ></p-knob>
+                  </div>
+                  <div
+                    class="col-12 col-sm-12 col-md-12 p-0"
+                    style="text-align: center; font-weight: bold; font-size: 2rem;"
+                    *ngIf="!loading_cpu && !loadingcpu"
+                  >
+                    No CPU data
                   </div>
                 </div>
               </div>
-
-            </ng-template>
-     
-          <button style="margin-right:8px;" pButton pRipple type="button" label="Present Data"
-            class="p-button-raised p-button-success Exportbut" (click)="showPresentData()"></button>
-         
-
-
-        </div>
-
-      </p-toolbar>
-      <div class=" card-body pt-1" >
-        <div class="button-holder" *ngIf="loadingcpu">
-          <p-menu #menu [popup]="true" [model]="menuExportcpu_time" appendTo="body"></p-menu>
-          <button button pButton pRipple type="button" icon="pi pi-align-justify"
-            class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;"
-            (click)="menu.toggle($event)"></button>
-        </div>
-        <div style="text-align: center;" *ngIf="loading">
-          <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-        </div>
-        <div id="CPU" style="margin-top: 25px;" *ngIf="loadingcpu"></div>
-        <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingcpu">
-            No CPU data
-        </div>
+            </div>
+            <div class="card-dashboard" *ngIf="item.header == 'loaddisk'">
+              <div class=" card-body pt-1">
+                <div class="grid">
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                  >
+                    <h5 style="margin-top: 15px; color:black">Disk Usage</h5>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loading_disk"
+                  >
+                    <p-progressSpinner
+                      styleClass="custom-spinner"
+                    ></p-progressSpinner>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loadingdisk"
+                  >
+                    <p-knob
+                      [(ngModel)]="valueDisk"
+                      [size]="150"
+                      [readonly]="true"
+                      [valueColor]="getTextColor(valueDisk)"
+                      [textColor]="colortitle"
+                    ></p-knob>
+                  </div>
+                  <div
+                    class="col-12 col-sm-12 col-md-12 p-0"
+                    style="text-align: center; font-weight: bold; font-size: 2rem;"
+                    *ngIf="!loadingdisk && !loading_disk"
+                  >
+                    No Disk data
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-dashboard" *ngIf="item.header == 'loadmemory'">
+              <div class=" card-body pt-1">
+                <div class="grid">
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                  >
+                    <h5 style="margin-top: 15px; color:black">Memory Usage</h5>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loading_memory"
+                  >
+                    <p-progressSpinner
+                      styleClass="custom-spinner"
+                    ></p-progressSpinner>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loadingmemory"
+                  >
+                    <p-knob
+                      [(ngModel)]="valueMemory"
+                      [size]="150"
+                      [readonly]="true"
+                      [valueColor]="getTextColor(valueMemory)"
+                      [textColor]="colortitle"
+                    ></p-knob>
+                  </div>
+                  <div
+                    class="col-12 col-sm-12 col-md-12 p-0"
+                    style="text-align: center; font-weight: bold; font-size: 2rem;"
+                    *ngIf="!loadingmemory && !loading_memory"
+                  >
+                    No Memory data
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-dashboard" *ngIf="item.header == 'loaddiskstatus'">
+              <div class=" card-body pt-1">
+                <div class="grid">
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                  >
+                    <h5 style="margin-top: 15px;">Disk Usage</h5>
+                  </div>
+                  <div
+                    class="col-12 flex align-items-center justify-content-center"
+                    *ngIf="loading_disk_status"
+                  >
+                    <p-progressSpinner
+                      styleClass="custom-spinner"
+                    ></p-progressSpinner>
+                  </div>
+                  <div class="col-12" *ngIf="loadingdisk_status">
+                    <span style="color:black">"disk_status_chart_ + i"</span>
+                    <div [id]="'disk_status_chart_' + i"></div>
+                  </div>
+                  <div
+                    class="col-12 col-sm-12 col-md-12 p-0"
+                    style="text-align: center; font-weight: bold; font-size: 2rem; margin-top: 10%;"
+                    *ngIf="!loadingdisk_status && !loading_disk_status"
+                  >
+                    No Disk Usage data
+                  </div>
+                </div>
+              </div>
+            </div>
+          </gridster-item>
+        </gridster>
       </div>
-      
+      <!-- </div> -->
     </div>
   </div>
-</div> -->
-<!-- <div class="container"> -->
-<div class="row justify-content-between" >
-  <gridster [options]="gridOptions" style="background:none; width:100%">
-    <gridster-item [item]="item" *ngFor="let item of dashboard" [ngClass]="{
-  'theme-arya': themeService.theme === 'arya-orange',
-  'theme-saga': themeService.theme === 'saga-orange',
-  'gridster-card' : true
-}">
-
-      <!-- <div class="card-dashboard" *ngIf="item.header == 'loadchartcpu'">
-        <div style="text-align: center;" *ngIf="loading">
-          <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-        </div>
-        <div class="card-body pt-1" *ngIf="loadingchartcpu">
-          <div class="button-holder">
-            <p-menu #menu [popup]="true" [model]="menuExportcpu_time" appendTo="body"></p-menu>
-            <button button pButton pRipple type="button" icon="pi pi-align-justify"
-              class="p-button-rounded p-button-text p-button-plain" style="margin-top: 10px;"
-              (click)="menu.toggle($event)"></button>
-          </div>
-          <div id="CPU" style="margin-top: 25px;"></div>
-        </div>
-        <div class="row" id="graph-row{{ i }}" *ngIf="!loadingchart_cpuNone">
-          <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;">
-            No CPU data
-          </div>
-        </div>
-      </div> -->
-
-      <div class="card-dashboard" *ngIf="item.header == 'loadcpu'">
-       
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">CPU Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_cpu">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingcpu">
-              <p-knob [(ngModel)]="valueCPU" [size]="150" [readonly]="true" [valueColor]="getTextColor(valueCPU)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loading_cpu && !loadingcpu">
-               No CPU data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loaddisk'">
-
-        <div class=" card-body pt-1">
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Disk Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_disk">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingdisk">
-              <p-knob [(ngModel)]="valueDisk" [size]="150" [readonly]="true" [valueColor]="getTextColor(valueDisk)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingdisk && !loading_disk">
-               No Disk data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loadmemory'">
-
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Memory Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_memory">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingmemory">
-              <p-knob [(ngModel)]="valueMemory" [size]="150"  [readonly]="true" [valueColor]="getTextColor(valueMemory)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingmemory && !loading_memory">
-               No Memory data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loaddiskstatus'">
-
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Disk Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_disk_status">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12" *ngIf="loadingdisk_status">
-              <div id="disk_status_chart" ></div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem; margin-top: 10%;" *ngIf="!loadingdisk_status && !loading_disk_status">
-               No Disk Usage data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loadcpu_usage_netmon'">
-       
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">CPU Netmon Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_cpu_usage_netmon">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingcpu_usage_netmon">
-              <p-knob [(ngModel)]="valueCPU_netmon" [size]="150" [readonly]="true" [valueColor]="getTextColor(valueCPU)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingcpu_usage_netmon && !loading_cpu_usage_netmon">
-               No CPU Netmon data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loaddisk_usage_netmon'">
-
-        <div class=" card-body pt-1">
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Disk Netmon Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_disk_usage_netmon">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingdisk_usage_netmon">
-              <p-knob [(ngModel)]="valueDisk_netmon" [size]="150" [readonly]="true" [valueColor]="getTextColor(valueDisk)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingdisk_usage_netmon && !loading_disk_usage_netmon">
-               No Disk Netmon data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loadmemory_usage_netmon'">
-
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Memory Netmon Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_memory_usage_netmon">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loadingmemory_usage_netmon">
-              <p-knob [(ngModel)]="valueMemory_netmon" [size]="150"  [readonly]="true" [valueColor]="getTextColor(valueMemory)" [textColor]="colortitle"></p-knob>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem;" *ngIf="!loadingmemory_usage_netmon && !loading_memory_usage_netmon">
-               No Memory Netmon data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-dashboard" *ngIf="item.header == 'loaddiskstatus_netmon'">
-
-        <div class=" card-body pt-1" >
-          <div class="grid">
-            <div class="col-12 flex align-items-center justify-content-center">
-              <h5 style="margin-top: 15px;">Disk Netmon Usage</h5>
-            </div>
-            <div class="col-12 flex align-items-center justify-content-center" *ngIf="loading_disk_status_netmon">
-              <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
-            </div>
-            <div class="col-12" *ngIf="loadingdisk_status_netmon">
-              <div id="disk_status_netmon_chart" ></div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 p-0"
-            style="text-align: center; font-weight: bold; font-size: 2rem; margin-top: 10%;" *ngIf="!loadingdisk_status_netmon && !loading_disk_status_netmon">
-               No Disk Usage Netmon data
-            </div>
-          </div>
-        </div>
-      </div>
-    </gridster-item>
-  </gridster>
 </div>
-<!-- </div> -->

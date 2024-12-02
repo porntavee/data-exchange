@@ -4,21 +4,32 @@
 
 <p-card
   class="col-12 card card-stats p-6"
-  style="background-color:#718096"
+  [style.backgroundColor]="'#718096'"
   [ngClass]="{
     'theme-arya': themeService.theme === 'arya-orange',
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  <div style="font-size: 18px; font-weight: 600;" class="text-color">
-    API Approve
-  </div>
   <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left"></div>
+    <div class="p-toolbar-group-left">
+      <div style="font-size: 18px; font-weight: 600;" class="text-color">
+        API Approve
+      </div>
+    </div>
     <div class="p-toolbar-group-right">
-      <!-- <button pButton pRipple class="p-button-warning mr-2 Newbut" (click)="openDailog()"><i
-                    class="pi pi-plus"><span class="Newtxt new-font">Create new API</span></i></button> -->
-      <span class="p-input-icon-left">
+      <!-- Dropdown สำหรับเลือกสถานะ -->
+      <p-dropdown
+        [style]="{ width: '350px' }"
+        [options]="statusOptions"
+        [(ngModel)]="selectedStatus"
+        optionLabel="label"
+        placeholder="เลือกสถานะ"
+        (onChange)="filterByStatus(selectedStatus['value'])"
+      >
+      </p-dropdown>
+
+      <!-- ช่องค้นหา -->
+      <span class="p-input-icon-left ml-1">
         <i class="pi pi-search"></i>
         <input
           pInputText
@@ -33,7 +44,7 @@
 
   <p-table
     #dt
-    [value]="tokenList"
+    [value]="filteredList"
     [rows]="10"
     [paginator]="true"
     [loading]="isLoadingalarmGroups"
@@ -55,15 +66,32 @@
           pSortableColumn="row_number2"
           class="col-1"
         >
-          ลำดับ <p-sortIcon field="row_number2"> </p-sortIcon>
+          ลำดับ <p-sortIcon field="row_number"> </p-sortIcon>
         </th>
-        <th pSortableColumn="user_id" class="col-2">
-          User<p-sortIcon field="user_id"></p-sortIcon>
+        <th pSortableColumn="username" class="col-1">
+          User<p-sortIcon field="username"></p-sortIcon>
         </th>
-        <th pSortableColumn="tag" class="col-4">
+        <th pSortableColumn="tag" class="col-1">
           Tag<p-sortIcon field="tag"> </p-sortIcon>
         </th>
-        <th pSortableColumn="status_description" class="col-3">
+        <th pSortableColumn="endpoints" class="col-1">
+          End Point
+          <p-sortIcon field="endpoints"></p-sortIcon>
+        </th>
+        <th pSortableColumn="request_at" class="col-2">
+          Request Date
+          <p-sortIcon field="request_at"></p-sortIcon>
+        </th>
+        <th pSortableColumn="approve_at" class="col-2">
+          Approve Date
+          <p-sortIcon field="approve_at"></p-sortIcon>
+        </th>
+        <th pSortableColumn="admin_name" class="col-2">
+          Approve By
+          <p-sortIcon field="admin_name"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="status_description" class="col-2">
           Status<p-sortIcon field="status_description"> </p-sortIcon>
         </th>
         <th></th>
@@ -77,10 +105,50 @@
                   </td> -->
         <td style="text-align:center;">{{ group.row_number2 }}</td>
         <td>
-          <div id="myDIV3" title="{{ group.user_id }}">{{ group.user_id }}</div>
+          <div id="myDIV3" title="{{ group.username }}">
+            {{ group.username }}
+          </div>
         </td>
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
+        </td>
+        <td>
+          <div id="myDIV1" title="{{ group.endpoints }}">
+            {{ group.endpoints }}
+          </div>
+        </td>
+        <td>
+          <div
+            id="myDIV1"
+            title="{{
+              group.request_at ? (group.request_at | date: 'dd/MM/yyyy') : '-'
+            }}"
+          >
+            {{
+              group.request_at
+                ? (group.request_at | date: "dd/MM/yyyy hh:mm:ss")
+                : "-"
+            }}
+          </div>
+        </td>
+        <td>
+          <div
+            id="myDIV1"
+            title="{{
+              group.approve_at ? (group.approve_at | date: 'dd/MM/yyyy') : '-'
+            }}"
+          >
+            {{
+              group.approve_at
+                ? (group.approve_at | date: "dd/MM/yyyy hh:mm:ss")
+                : "-"
+            }}
+          </div>
+        </td>
+        <td>
+          <div id="myDIV1" title="{{ group.admin_name }}">
+            {{ group.admin_name }}
+          </div>
         </td>
         <td>
           <div
@@ -89,7 +157,10 @@
               'bg-success text-white':
                 group.status_description === 'เปิดใช้งาน',
               'bg-primary text-white':
-                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่'
+                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+              'bg-danger text-white': group.status_description === 'ปฏิเสธ',
+              'bg-secondary text-white':
+                group.status_description === 'ปิดใช้งาน'
             }"
             class="p-2 rounded text-center"
             title="{{ group.status_description }}"
@@ -253,7 +324,6 @@
     </div>
   </ng-template>
 </p-dialog>
-
 <p-dialog
   [(visible)]="alarmGroupDialog"
   styleClass="modalResponsivo"
@@ -480,6 +550,94 @@
         class="p-button-success"
         *ngIf="check"
         (click)="editlistGroup()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+<p-dialog
+  [(visible)]="approveDialog"
+  [style]="{ width: '650px' }"
+  [(header)]="approveDialogHeader"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="details" style="font-weight: bold;">รายละเอียด</label>
+      <textarea
+        id="details"
+        rows="5"
+        [(ngModel)]="requestDetails"
+        pInputTextarea
+        placeholder="กรอกรายละเอียด..."
+        style="width: 100%;"
+      ></textarea>
+    </div>
+    <div class="p-field" style="margin-top: 20px;">
+      <label for="duration" style="font-weight: bold;">เลือกระยะเวลา</label>
+      <p-dropdown
+        id="duration"
+        [options]="durationOptions"
+        [(ngModel)]="selectedDuration"
+        placeholder="เลือกระยะเวลา"
+        optionLabel="label"
+        style="width: 100%;"
+      ></p-dropdown>
+    </div>
+    <hr />
+
+    <br />
+    <div class="p-field">
+      <label for="details" style="font-weight: bold;">เหตุผลเจ้าหน้าที่</label>
+      <textarea
+        id="details"
+        rows="5"
+        [(ngModel)]="adminDetails"
+        pInputTextarea
+        placeholder="กรอกรายละเอียด..."
+        style="width: 100%;"
+      ></textarea>
+    </div>
+    <div class="p-field" style="margin-top: 20px;">
+      <label for="duration" style="font-weight: bold;"
+        >ระยะเวลาที่อนุมัติ</label
+      >
+      <p-dropdown
+        id="duration"
+        [options]="durationOptions"
+        [(ngModel)]="selectAdminDuration"
+        placeholder="ระยะเวลาที่อนุมัติ"
+        optionLabel="label"
+        style="width: 100%;"
+      ></p-dropdown>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div style="float: right;">
+      <button
+        pButton
+        pRipple
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-danger"
+        (click)="closeDialog()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Reject"
+        icon="pi pi-check"
+        class="p-button-danger"
+        (click)="reject()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        label="Save"
+        icon="pi pi-check"
+        class="p-button-success"
+        (click)="approve()"
       ></button>
     </div>
   </ng-template>

@@ -10,7 +10,7 @@ import { FixedPluginModule } from "@app/shared/fixedplugin/fixedplugin.module";
 
 import { AppComponent } from "@app/app.component";
 import { AppRoutes } from "@app/app.routing";
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import { AdminLayoutComponent } from "@app/layouts/admin-layout/admin-layout.component";
 
 import { HttpClientModule } from "@angular/common/http";
@@ -52,12 +52,11 @@ import { KeyFilterModule } from "primeng/keyfilter";
 
 import { ScrollPanelModule } from "primeng/scrollpanel";
 // import { DropDownButtonModule } from '@syncfusion/ej2-angular-splitbuttons';
-import {SidebarModule} from 'primeng/sidebar';
+import { SidebarModule } from "primeng/sidebar";
 import { HighchartsChartModule } from "highcharts-angular";
-import { SharedModule } from '@app/shared/shared.module';
-
-
-
+import { SharedModule } from "@app/shared/shared.module";
+import { ChartModule } from "primeng/chart";
+import { ServiceStatusHeaderComponent } from "./service-status-header/service-status-header.component";
 // import { ManagedeviceotherComponent } from './pages/managedeviceother/managedeviceother.component';
 
 enableRipple(true);
@@ -70,13 +69,9 @@ enableRipple(true);
     MonthlyScheduleComponent,
     CrudComponent,
     LoginComponent,
-    RightMenuComponent,
+    RightMenuComponent
 
-    
-
-    
     // ManagedeviceotherComponent,
-
   ],
   imports: [
     BrowserAnimationsModule,
@@ -118,6 +113,7 @@ enableRipple(true);
     InputMaskModule,
     InputNumberModule,
     KeyFilterModule,
+    // ChartModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

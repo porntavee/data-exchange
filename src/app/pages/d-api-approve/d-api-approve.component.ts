@@ -174,6 +174,145 @@ export class DApiApproveComponent implements OnInit {
     // ];
   }
 
+  ngOnInit() {
+    this.readToken();
+
+    this.isLoadingalarmGroups = false;
+    this.changeDetection.detectChanges();
+  }
+
+  filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง
+  readToken() {
+    // console.log(this.selectedValues)
+
+    const apiUrl = "http://127.0.0.1:8000/token/read/0";
+
+    // const apiUrl =
+    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0";
+    this.http.get<any>(apiUrl).subscribe(
+      data => {
+        console.log("Received data:", data.data);
+        //debugger
+        this.tokenList = data.data;
+
+        this.statusOptions = [
+          { label: "ทั้งหมด", value: null },
+          {
+            label: `รอตรวจสอบจากเจ้าหน้าที่ (${this.getStatusCount(1)})`,
+            value: 1
+          },
+          { label: `ตรวจสอบแล้ว (${this.getStatusCount(2)})`, value: 2 },
+          { label: `ปฏิเสธ (${this.getStatusCount(-1)})`, value: -1 },
+          { label: `ปิดใช้งาน (${this.getStatusCount(0)})`, value: 0 }
+        ];
+        // เริ่มต้น: ใช้ข้อมูลทั้งหมด
+        this.filteredList = [...this.tokenList];
+      },
+      error => {
+        console.error("Error fetching polygon data:", error);
+      }
+    );
+  }
+
+  approve() {
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    console.log(userdata);
+
+    const apiUrl = "http://127.0.0.1:8000/token/approve";
+
+    // const apiUrl =
+    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    // const apiUrl =
+    // "http://127.0.0.1:8000/token/approve";
+    // //debugger
+    this.http
+      .post<any>(apiUrl, {
+        user_id: this.user_id,
+        route_id: this.route_id,
+        status: 2,
+        admin_id: userdata["id"],
+        admin_name: userdata["username"],
+        details: this.adminDetails,
+        duration: this.selectAdminDuration["value"]
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.approveDialog = false;
+          this.readToken();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
+  }
+
+  reject() {
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    console.log(userdata);
+
+    const apiUrl = "http://127.0.0.1:8000/token/approve";
+
+    // const apiUrl =
+    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    // const apiUrl =
+    // "http://127.0.0.1:8000/token/approve";
+    // //debugger
+    this.http
+      .post<any>(apiUrl, {
+        user_id: this.user_id,
+        route_id: this.route_id,
+        status: -1,
+        admin_id: userdata["id"],
+        admin_name: userdata["username"],
+        details: this.adminDetails,
+        duration: this.selectAdminDuration["value"]
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.approveDialog = false;
+          this.readToken();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
+  }
+
+  close() {
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    console.log(userdata);
+
+    const apiUrl = "http://127.0.0.1:8000/token/approve";
+
+    // const apiUrl =
+    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    // const apiUrl =
+    // "http://127.0.0.1:8000/token/approve";
+
+    this.http
+      .post<any>(apiUrl, {
+        user_id: this.user_id,
+        route_id: this.route_id,
+        status: 0,
+        admin_id: userdata["id"],
+        admin_name: userdata["username"],
+        details: this.adminDetails,
+        duration: "0"
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.approveDialog = false;
+          this.readToken();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
+  }
+
   prepareMenu(group: any, event: Event, menu: any) {
     // กำหนดรายการเมนูตามข้อมูลของ group
     this.itemsAction = [
@@ -210,60 +349,14 @@ export class DApiApproveComponent implements OnInit {
       this.selectedDuration = this.durationOptions[index];
       this.selectAdminDuration = this.durationOptions[index];
       this.approveDialog = true;
+    } else if (status === "ปิดใช้งาน") {
+      this.user_id = group.user_id;
+      this.route_id = group.route_id;
+      this.close();
     } else {
       console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
       // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
     }
-  }
-
-  filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง
-  readToken() {
-    // console.log(this.selectedValues)
-
-    const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0";
-    this.http.get<any>(apiUrl).subscribe(
-      data => {
-        console.log("Received data:", data.data);
-        // //debugger
-        this.tokenList = data.data;
-        // เริ่มต้น: ใช้ข้อมูลทั้งหมด
-        this.filteredList = [...this.tokenList];
-      },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
-    );
-  }
-
-  approve() {
-    let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata);
-    const apiUrl =
-      "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
-    // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
-    // //debugger
-    this.http
-      .post<any>(apiUrl, {
-        user_id: this.user_id,
-        route_id: this.route_id,
-        status: 2,
-        admin_id: userdata["id"],
-        admin_name: userdata["username"],
-        details: this.adminDetails,
-        duration: this.selectAdminDuration["value"]
-      })
-      .subscribe(
-        data => {
-          console.log("Received data:", data.data);
-          this.approveDialog = false;
-          this.readToken();
-        },
-        error => {
-          console.error("Error fetching polygon data:", error);
-        }
-      );
   }
 
   actionItem(AlarmGroup: alarmGroup) {
@@ -362,96 +455,7 @@ export class DApiApproveComponent implements OnInit {
     this.alarmGroupDialog1 = false;
     this.submitted = false;
   }
-  ngOnInit() {
-    // this.alarmGroups = [{
-    //   id: 1,
-    //   tag: 'Trafic Daily',
-    //   endpoints: '/trafic_daily',
-    //   methods: 'POST'
-    // },
-    // {
-    //   id: 2,
-    //   tag: 'Trafic Monthly',
-    //   endpoints: '/trafic_monthly',
-    //   methods: 'POST,GET'
-    // }]
 
-    this.readToken();
-
-    this.isLoadingalarmGroups = false;
-    this.changeDetection.detectChanges();
-
-    // this.lineGroupService.getLineGroupInfo().subscribe({
-    //   next: datas => {
-    //     this.lineGroups = datas;
-    //     this.isLoading = false;
-    //     datas.forEach((data, index) => {
-    //       this.lineGroups[index].enable = data.enable ? true : false;
-    //       this.changeDetection.detectChanges();
-    //     });
-    //   },
-    //   error: error => {
-    //     this.isLoading = false;
-    //     if (error.status == "401") {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-
-    // this.lineGroupService.getMessageGroup().subscribe({
-    //   next: datas => {
-    //     this.alarmGroups = datas;
-    //     this.isLoadingalarmGroups = false;
-    //     this.changeDetection.detectChanges();
-    //   },
-    //   error: error => {
-    //     this.isLoadingalarmGroups = false;
-    //     if (error.status == 401) {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-    // this.lineGroupService.currentMessage.subscribe(AlarmGroup => {
-    //   if (AlarmGroup != undefined) {
-    //     this.itemsAction = [
-    //       {
-    //         label: "AlarmGroup",
-    //         items: [
-    //           {
-    //             label: "View",
-    //             icon: "pi pi-fw pi-search",
-    //             command: event => {
-    //               this.lineread(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Edit",
-    //             icon: "pi pi-fw pi-pencil",
-    //             command: event => {
-    //               this.editline(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Delete",
-    //             icon: "pi pi-fw pi-trash",
-    //             command: event => {
-    //               this.deleteGroup(AlarmGroup);
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     ];
-    //   }
-    // });
-  }
   openMenuWithItems(group: any, event: Event, menu: any) {
     this.menuVlue(group); // กำหนดค่าหรืออัปเดต itemsAction
     menu.toggle(event); // เปิดเมนู
@@ -702,14 +706,44 @@ export class DApiApproveComponent implements OnInit {
     });
   }
 
+  statusOptions = [
+    { label: "ทั้งหมด", value: null },
+    { label: `รอตรวจสอบจากเจ้าหน้าที่ (0)`, value: 1 },
+    { label: `ตรวจสอบแล้ว (0)`, value: 2 },
+    { label: `ปฏิเสธ (0)`, value: -1 },
+    { label: `ปิดใช้งาน (0)`, value: 0 }
+  ];
+
+  selectedStatus = this.statusOptions[0]; // กำหนดค่าเริ่มต้นเป็น "ทั้งหมด"
+  // selectedStatus: number | null = null; // ตัวเลือกเริ่มต้น
+
+  // filterByStatus(status: number | null): void {
+  //     if (status === null) {
+  //         // กรองข้อมูลทั้งหมด
+  //         this.dt.filterGlobal('', 'contains');
+  //     } else {
+  //         // กรองตามสถานะ
+  //         this.dt.filterGlobal(String(status), 'contains', 'status');
+  //     }
+  // }
+
   // ฟังก์ชันสำหรับกรองข้อมูลตาม status
   filterByStatus(status: number): void {
-    this.filteredList = this.tokenList.filter(item => item.status === status);
+    debugger;
+    if (status === null) {
+      // กรองข้อมูลทั้งหมด
+      this.filteredList = this.tokenList;
+    } else {
+      // กรองตามสถานะ
+      this.filteredList = this.tokenList.filter(item => item.status === status);
+    }
   }
 
   // ฟังก์ชันสำหรับนับจำนวนสถานะ
   getStatusCount(status: number): number {
-    return this.tokenList.filter(item => item.status === status).length;
+    debugger;
+    let count = this.tokenList.filter(item => item.status === status).length;
+    return count;
   }
 
   // ฟังก์ชันสำหรับปิด Dialog

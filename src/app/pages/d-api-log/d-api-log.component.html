@@ -8,7 +8,6 @@
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  
   <p-toolbar styleClass="p-mb-4">
     <div class="p-toolbar-group-left">
       <div style="font-size: 18px; font-weight: 600;" class="text-color">
@@ -69,7 +68,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
-      <tr (click)="openDailog()">
+      <tr (click)="openDailog(group)">
         <!-- <td>
                       <p-tableCheckbox [value]="group"></p-tableCheckbox>
                   </td> -->
@@ -88,7 +87,7 @@
         <!--<td>{{group.symbol_name}}</td>-->
         <td style="display: flex; justify-content: space-between;">
           <div id="myDIV3" title="{{ group.created_at }}">
-            {{ group.created_at }}
+            {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
           </div>
         </td>
         <td></td>
@@ -227,7 +226,7 @@
 
 <p-dialog
   [(visible)]="alarmGroupDialog"
-  [style]="{ width: '650px' }"
+  [style]="{ width: '1050px' }"
   styleClass="modalResponsivo"
   [(header)]="dialogHeader"
   [modal]="true"
@@ -236,6 +235,52 @@
 >
   <ng-template pTemplate="content">
     <div class="col-12">
+      <div class="form-group">
+        <div>
+          <p-radioButton
+            name="viewMode"
+            value="monthly"
+            [(ngModel)]="viewMode"
+            inputId="monthly"
+            (ngModelChange)="updateChart()"
+          ></p-radioButton>
+          <label for="monthly">รายเดือน</label>
+        </div>
+        <div>
+          <p-radioButton
+            name="viewMode"
+            value="yearly"
+            [(ngModel)]="viewMode"
+            inputId="yearly"
+            (ngModelChange)="updateChart()"
+          ></p-radioButton>
+          <label for="yearly">รายปี</label>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="viewMode === 'monthly'">
+        <label>เลือกเดือน</label>
+        <p-dropdown
+          [options]="months"
+          [(ngModel)]="selectedMonth"
+          placeholder="เลือกเดือน"
+          (onChange)="updateChart()"
+        ></p-dropdown>
+      </div>
+
+      <div
+        class="form-group"
+        *ngIf="viewMode === 'yearly' || viewMode === 'monthly'"
+      >
+        <label>เลือกปี</label>
+        <p-dropdown
+          [options]="years"
+          [(ngModel)]="selectedYear"
+          placeholder="เลือกปี"
+          (onChange)="updateChart()"
+        ></p-dropdown>
+      </div>
+
       <highcharts-chart
         [Highcharts]="Highcharts5_1"
         [options]="chartOptions5_1"
@@ -245,7 +290,6 @@
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
-
     <div style="float: right;">
       <button
         pButton
@@ -255,7 +299,6 @@
         class="p-button-danger"
         (click)="hideDialog()"
       ></button>
-      
     </div>
   </ng-template>
 </p-dialog>
