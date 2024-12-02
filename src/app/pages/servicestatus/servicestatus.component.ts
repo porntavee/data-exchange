@@ -66,6 +66,7 @@ export class ServicestatusComponent implements OnInit {
   optionsstatusCPU: any;
   optionsstatusMemory: any;
   optionsstatus2: any;
+  intervalId: NodeJS.Timeout;
   constructor(
     public themeService: ThemeService,
     private titleService: Title,
@@ -113,7 +114,7 @@ export class ServicestatusComponent implements OnInit {
   // valueCPU: any;
   valueCPU: { [key: string]: any[] } = {};
   valueDisk: any;
-  valueMemory: any;
+  valueMemory: { [key: string]: any[] } = {};
   valueCPU_netmon: any;
   valueDisk_netmon: any;
   valueMemory_netmon: any;
@@ -153,7 +154,9 @@ export class ServicestatusComponent implements OnInit {
   chartOptions: any;
   ngOnInit(): void {
     this.loadData();
-
+    // this.intervalId = setInterval(() => {
+    this.refreshCharts(); // Update charts every 3 seconds
+    // }, 3000);
     this.optionsstatus = {
       chart: {
         zoomType: null, // ปิดการซูม
@@ -401,7 +404,7 @@ export class ServicestatusComponent implements OnInit {
             } else if (data.header == "loaddisk") {
               this.getdisk_usage();
             } else if (data.header == "loadmemory") {
-              this.getmemory_usage();
+              this.getcpu_usage();
             } else if (data.header == "loaddiskstatus") {
               this.getdisk_status();
             } else {
@@ -425,7 +428,7 @@ export class ServicestatusComponent implements OnInit {
             } else if (data.header == "loaddisk") {
               this.getdisk_usage();
             } else if (data.header == "loadmemory") {
-              this.getmemory_usage();
+              this.getcpu_usage();
             } else if (data.header == "loaddiskstatus") {
               this.getdisk_status();
             } else {
@@ -443,8 +446,46 @@ export class ServicestatusComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId); // Clear the interval
+      console.log("Interval cleared");
+    } // Clear interval on component destruction
+    console.log("Component destroyed, interval cleared");
+  }
+
+  refreshCharts() {
+    // For each tab, call methods to update the data
+    this.getcpu_usage();
+    this.getdisk_usage();
+    // this.getmemory_usage();
+    this.loadData();
+    this.cdRef.detectChanges();
+  }
+
   toggleTab(index: number) {
     this.tabs[index].isOpen = !this.tabs[index].isOpen;
+    if (this.tabs[index].isOpen) {
+      this.dashboard.forEach(data => {
+        if (data.header == "loadcpu") {
+          this.getcpu_usage();
+        } else if (data.header == "loaddisk") {
+          this.getdisk_usage();
+        } else if (data.header == "loadmemory") {
+          this.getcpu_usage();
+        } else if (data.header == "loaddiskstatus") {
+          this.getdisk_status();
+        } else {
+          this.loading_cpu = false;
+          this.loading_disk = false;
+          this.loading_memory = false;
+          this.loadingcpu = false;
+          this.loadingdisk = false;
+          this.loadingmemory = false;
+          this.loading_disk_status_netmon = false;
+        }
+      });
+    }
   }
 
   ngAfterViewInit(): void {
@@ -582,7 +623,7 @@ export class ServicestatusComponent implements OnInit {
   getcpu_usage() {
     this.loading_cpu = true;
     this.loadingcpu = false; // Hide chart before loading
-
+    this.loading_memory = true;
     // Fetch data from both Linux and Windows APIs using Promise.all
     Promise.all([
       this.ServicestatusService.getDataLinux().toPromise(),
@@ -600,25 +641,33 @@ export class ServicestatusComponent implements OnInit {
           console.log(allCPUData);
           // Calculate average CPU usage
           const cpuAverages = allCPUData.map(item => item.cpu.avg);
-          console.log(cpuAverages[0], cpuAverages[1]);
+          const ramAverages = allCPUData.map(item => item.memory.free);
+          console.log(ramAverages[0]);
           const overallCPUAvg =
             cpuAverages.reduce((sum, value) => sum + value, 0) /
             cpuAverages.length;
           allCPUData.forEach((item, index) => {
             this.valueCPU[index] = item.cpu.avg.toFixed(2);
+            this.valueMemory[index] = item.memory.free.toFixed(2);
             // Your code logic here, using 'item' (the current element)
-            console.log("CPU Core:", item);
-            console.log("Index:", index);
           });
+          const linuxFilter = allCPUData.filter(item => item.os === "linux");
+          const windowsFilter = allCPUData.filter(
+            item => item.os === "windows"
+          );
+          console.log(linuxFilter, windowsFilter);
 
           // this.valueCPU[] = parseFloat(overallCPUAvg.toFixed(2));
           console.log(this.valueCPU);
           this.loading_cpu = false; // Loading finished
           this.loadingcpu = true; // Show chart
+          this.loading_memory = false;
+          this.loadingmemory = true;
         } else {
           console.error("Invalid response format:", linuxData, windowData);
           this.loading_cpu = false;
           this.loadingcpu = false;
+          this.loadingmemory = false;
         }
       })
       .catch(error => {
@@ -678,90 +727,87 @@ export class ServicestatusComponent implements OnInit {
     });
   }
 
-  getmemory_usage() {
-    this.loading_memory = true;
-    this.ServicestatusService.getDataLinux().subscribe({
-      next: linuxResults => {
-        this.ServicestatusService.getDataWindow().subscribe({
-          next: windowResults => {
-            this.loading_memory = false;
-            this.loadingmemory = true;
+  // getmemory_usage() {
+  //   this.loading_memory = true;
+  //   this.ServicestatusService.getDataLinux().subscribe({
+  //     next: linuxResults => {
+  //       this.ServicestatusService.getDataWindow().subscribe({
+  //         next: windowResults => {
+  //           this.loading_memory = false;
+  //           this.loadingmemory = true;
 
-            // Combine memory data from Linux and Windows
-            const linuxMemoryData = linuxResults.data.map(
-              instance => instance.memory.used
-            );
-            const windowMemoryData = windowResults.data.map(
-              instance => instance.memory.used
-            );
+  //           // Combine memory data from Linux and Windows
+  //           const linuxMemoryData = linuxResults.data.map(
+  //             instance => instance.memory.used
+  //           );
+  //           const windowMemoryData = windowResults.data.map(
+  //             instance => instance.memory.used
+  //           );
 
-            const allMemoryData = [...linuxMemoryData, ...windowMemoryData];
+  //           const allMemoryData = [...linuxMemoryData, ...windowMemoryData];
 
-            // Calculate the total used memory and average it
-            const totalMemory = allMemoryData.reduce(
-              (acc, used) => acc + used,
-              0
-            );
-            const totalInstances = allMemoryData.length;
+  //           // Calculate the total used memory and average it
+  //           const totalMemory = allMemoryData.reduce(
+  //             (acc, used) => acc + used,
+  //             0
+  //           );
+  //           const totalInstances = allMemoryData.length;
 
-            if (totalInstances > 0) {
-              this.valueMemory = totalMemory / totalInstances; // Calculate average used memory
-              this.valueMemory = parseFloat(this.valueMemory.toFixed(2)); // Round to two decimal places
-            } else {
-              this.valueMemory = 0;
-            }
-          },
-          error: error => {
-            if (error) {
-              this.loading_memory = false;
-              this.loadingmemory = false;
-            }
-          }
-        });
-      },
-      error: error => {
-        if (error) {
-          this.loading_memory = false;
-          this.loadingmemory = false;
-        }
-      }
-    });
-  }
+  //           if (totalInstances > 0) {
+  //             this.valueMemory = totalMemory / totalInstances; // Calculate average used memory
+  //             this.valueMemory = parseFloat(this.valueMemory.toFixed(2)); // Round to two decimal places
+  //           } else {
+  //             this.valueMemory = 0;
+  //           }
+  //         },
+  //         error: error => {
+  //           if (error) {
+  //             this.loading_memory = false;
+  //             this.loadingmemory = false;
+  //           }
+  //         }
+  //       });
+  //     },
+  //     error: error => {
+  //       if (error) {
+  //         this.loading_memory = false;
+  //         this.loadingmemory = false;
+  //       }
+  //     }
+  //   });
+  // }
 
-  getcpu_usage_netmon() {
-    this.loading_cpu_usage_netmon = true;
-    this.ServicestatusService.cpu_usage_netmon().subscribe({
-      next: results => {
-        this.loading_cpu_usage_netmon = false;
-        this.loadingcpu_usage_netmon = true;
-        var valueCPU_netmon = results.data.result[0].value[1];
-        this.valueCPU_netmon = parseFloat(valueCPU_netmon);
-        if (!isNaN(this.valueCPU_netmon)) {
-          this.valueCPU_netmon = parseFloat(this.valueCPU_netmon.toFixed(2));
-        }
-      },
-      error: error => {
-        if (error) {
-          this.loading_cpu_usage_netmon = false;
-          this.loadingcpu_usage_netmon = false;
-          // this.checkchart = false;
-        }
-      }
-    });
-  }
+  // getcpu_usage_netmon() {
+  //   this.loading_cpu_usage_netmon = true;
+  //   this.ServicestatusService.cpu_usage_netmon().subscribe({
+  //     next: results => {
+  //       this.loading_cpu_usage_netmon = false;
+  //       this.loadingcpu_usage_netmon = true;
+  //       var valueCPU_netmon = results.data.result[0].value[1];
+  //       this.valueCPU_netmon = parseFloat(valueCPU_netmon);
+  //       if (!isNaN(this.valueCPU_netmon)) {
+  //         this.valueCPU_netmon = parseFloat(this.valueCPU_netmon.toFixed(2));
+  //       }
+  //     },
+  //     error: error => {
+  //       if (error) {
+  //         this.loading_cpu_usage_netmon = false;
+  //         this.loadingcpu_usage_netmon = false;
+  //         // this.checkchart = false;
+  //       }
+  //     }
+  //   });
+  // }
   valueChart: { [key: string]: any } = {};
   getdisk_status() {
     this.loading_disk_status = true;
     this.ServicestatusService.getDataLinux().subscribe({
       next: resultsLinux => {
-        // console.log(results);
         this.ServicestatusService.getDataWindow().subscribe({
           next: resultsWindow => {
             var allResults = [...resultsLinux.data, ...resultsWindow.data];
-            console.log(allResults);
             var AllResultsExt4 = [];
             var AllResultsTMPFS = [];
-
             AllResultsExt4 = allResults
               .map(item => {
                 if (item.os === "linux") {
@@ -829,7 +875,6 @@ export class ServicestatusComponent implements OnInit {
               AllResultsExt4.length,
               AllResultsTMPFS.length
             );
-
             const mergeResults = Array.from(
               { length: maxLength },
               (_, index) => ({
@@ -837,17 +882,13 @@ export class ServicestatusComponent implements OnInit {
                 tmpfs: AllResultsTMPFS[index] || null
               })
             );
-
-            console.log(mergeResults);
             this.loading_disk_status = false;
             this.loadingdisk_status = true;
             if (this.loadingdisk_status) {
               mergeResults.forEach((item, index) => {
                 const chartId = `disk_status_chart_${index}`;
                 const container = document.getElementById(chartId);
-                console.log(`disk_status_chart_${index}`);
                 if (!container) {
-                  console.error(`Container with id ${chartId} not found`);
                   return;
                 }
                 var optionsstatus: any = {
@@ -901,13 +942,15 @@ export class ServicestatusComponent implements OnInit {
                     {
                       type: "bar",
                       name: "ext4", // ชื่อซีรีส์
-                      data: [
-                        {
-                          y: item.ext4.usage,
-                          usageGB: item.ext4.usageGB,
-                          color: "#50D0BC" // สีของ ext4
-                        }
-                      ],
+                      data: item.ext4
+                        ? [
+                            {
+                              y: item.ext4.usage,
+                              usageGB: item.ext4.usageGB,
+                              color: "#50D0BC" // สีของ ext4
+                            }
+                          ]
+                        : [],
                       tooltip: {
                         headerFormat:
                           '<span style="font-size:10px">{point.key}</span><table>',
@@ -922,13 +965,15 @@ export class ServicestatusComponent implements OnInit {
                     {
                       type: "bar",
                       name: "tmpfs", // ชื่อซีรีส์
-                      data: [
-                        {
-                          y: item.tmpfs.usage,
-                          usageGB: item.tmpfs.usageGB,
-                          color: "#FF7782" // สีของ tmpfs
-                        }
-                      ],
+                      data: item.tmpfs
+                        ? [
+                            {
+                              y: item.tmpfs.usage,
+                              usageGB: item.tmpfs.usageGB,
+                              color: "#FF7782" // สีของ tmpfs
+                            }
+                          ]
+                        : [],
                       tooltip: {
                         headerFormat:
                           '<span style="font-size:10px">{point.key}</span><table>',
