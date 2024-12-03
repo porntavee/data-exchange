@@ -348,7 +348,7 @@ export class DApiUseComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        // //debugger
+        // ////debugger
         this.alarmGroups = data.data;
       },
       error => {
@@ -366,7 +366,7 @@ export class DApiUseComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-        // //debugger;
+        // ////debugger;
         this.tokenList = data.data;
       },
       error => {
@@ -379,11 +379,11 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    // //debugger;
+    // ////debugger;
     const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
-    //debugger;
+    ////debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
@@ -554,13 +554,13 @@ export class DApiUseComponent implements OnInit {
   ];
 
   openRequestDialog(param) {
-    debugger
+    //debugger
     this.requestDialog = true;
     this.api_id = param.api_id;
   }
 
   openEditDialog(param) {
-    debugger
+    //debugger
     this.requestDialog = true;
     this.api_id = param.route_id;
     this.requestDetails = param.details;
