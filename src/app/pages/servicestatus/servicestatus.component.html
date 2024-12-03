@@ -1,157 +1,211 @@
-<div class="accordion" style="overflow-y: scroll; height: calc(100vh - 120px);">
-  <div class="accordion-item" *ngFor="let tab of tabs; let i = index">
-    <button class="accordion-header" (click)="toggleTab(tab.header.instance)">
-      <div
-        style="display: flex; align-items: center; justify-content: flex-start; color: white;"
-      >
-        <div style="width:130px">
-          <span style="margin-right: 10px;">{{ tab.header.instance }}</span>
-        </div>
-        <div style="text-align: right; display: flex; align-items: center;">
-          <div style="width:160px">
-            <span style="margin-right: 10px; color: white;"
-              >CPU Avg: {{ tab.header.cpuAvg }}</span
-            >
-          </div>
-          <div class="flex-1 mb-2">
-            <div
-              [id]="'containerCPU-' + tab.header.instance"
-              style="margin-top: 25px;"
-            ></div>
-          </div>
-        </div>
-        <div style="text-align: right; display: flex; align-items: center;">
-          <div style="width:200px">
-            <span style="margin-right: 10px; color: white;"
-              >Memory Used: {{ tab.header.free }}</span
-            >
-          </div>
-          <div class="flex-1 mb-2">
-            <div
-              [id]="'containerMemory-' + tab.header.instance"
-              style="margin-top: 25px;"
-            ></div>
-          </div>
-        </div>
-        <div style="margin-right: 16px; width:100px; text-align: right;">
-          {{ tab.header.storage.name }}
-        </div>
-        <div class="flex-1">
-          <p-progressBar
-            [value]="tab.header.storage.percentUsed"
-          ></p-progressBar>
-        </div>
-      </div>
-    </button>
-
-    <div class="accordion-content" *ngIf="tab.isOpen">
-      <p-toast appendTo="body"></p-toast>
-
-      <div class="row justify-content-between">
-        <gridster [options]="gridOptions" style="background:none; width:100%">
-          <gridster-item
-            [item]="item"
-            *ngFor="let item of dashboard"
-            [ngClass]="{
-              'theme-arya': themeService.theme === 'arya-orange',
-              'theme-saga': themeService.theme === 'saga-orange',
-              'gridster-card': true
-            }"
+<div class="p-mb-3 fixed-top-left" style="padding: 10px;">
+  <p-selectButton
+    [options]="['Storage', 'Backup']"
+    [(ngModel)]="selectedOption"
+    styleClass="p-button-secondary"
+    (onChange)="onOptionChange($event)"
+  >
+  </p-selectButton>
+</div>
+<div [hidden]="selectedOption !== 'Storage'">
+  <div style="text-align: center; padding: 60px; background-color: #3E5774; ">
+    <div
+      class="accordion"
+      style="overflow-y: scroll; height: calc(100vh - 120px);"
+    >
+      <div class="accordion-item" *ngFor="let tab of tabs; let i = index">
+        <button
+          class="accordion-header"
+          (click)="toggleTab(tab.header.instance)"
+        >
+          <div
+            style="display: flex; align-items: center; justify-content: flex-start; color: white;"
           >
-            <!-- CPU Usage -->
-            <div class="card-dashboard" *ngIf="item.header == 'loadcpu'">
-              <div class="card-body pt-1">
-                <div class="grid">
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                  >
-                    <h5 style="margin-top: 15px; color:black">CPU Usage</h5>
-                  </div>
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                    *ngIf="isLoading"
-                  >
-                    <p-progressSpinner
-                      styleClass="custom-spinner"
-                    ></p-progressSpinner>
-                  </div>
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                    *ngIf="!isLoading"
-                  >
-                    <p-knob
-                      [(ngModel)]="tab.header.cpuAvg"
-                      [size]="150"
-                      [readonly]="true"
-                      [valueColor]="getTextColor(tab.header.cpuAvg)"
-                      [textColor]="colortitle"
-                    ></p-knob>
-                  </div>
-                </div>
+            <div style="width:130px">
+              <span style="margin-right: 10px;">{{ tab.header.instance }}</span>
+            </div>
+            <div style="text-align: right; display: flex; align-items: center;">
+              <div style="width:160px">
+                <span style="margin-right: 10px; color: white;"
+                  >CPU Avg: {{ tab.header.cpuAvg }}</span
+                >
+              </div>
+              <div class="flex-1 mb-2">
+                <div
+                  [id]="'containerCPU-' + tab.header.instance"
+                  style="margin-top: 25px;"
+                ></div>
               </div>
             </div>
+            <div style="text-align: right; display: flex; align-items: center;">
+              <div style="width:200px">
+                <span style="margin-right: 10px; color: white;"
+                  >Memory Used: {{ tab.header.free }}</span
+                >
+              </div>
+              <div class="flex-1 mb-2">
+                <div
+                  [id]="'containerMemory-' + tab.header.instance"
+                  style="margin-top: 25px;"
+                ></div>
+              </div>
+            </div>
+            <div style="margin-right: 16px; width:100px; text-align: right;">
+              {{ tab.header.storage.name }}
+            </div>
+            <div class="flex-1">
+              <p-progressBar
+                [value]="tab.header.storage.percentUsed"
+              ></p-progressBar>
+            </div>
+          </div>
+        </button>
 
-            <!-- Memory Usage -->
-            <div class="card-dashboard" *ngIf="item.header == 'loadmemory'">
-              <div class="card-body pt-1">
-                <div class="grid">
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                  >
-                    <h5 style="margin-top: 15px; color:black">Memory Usage</h5>
-                  </div>
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                    *ngIf="isLoading"
-                  >
-                    <p-progressSpinner
-                      styleClass="custom-spinner"
-                    ></p-progressSpinner>
-                  </div>
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                    *ngIf="!isLoading"
-                  >
-                    <p-knob
-                      [(ngModel)]="tab.header.free"
-                      [size]="150"
-                      [readonly]="true"
-                      [valueColor]="getTextColor(tab.header.free)"
-                      [textColor]="colortitle"
-                    ></p-knob>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div class="accordion-content" *ngIf="tab.isOpen">
+          <p-toast appendTo="body"></p-toast>
 
-            <!-- Disk Usage -->
-            <div class="card-dashboard" *ngIf="item.header == 'loaddiskstatus'">
-              <div class="card-body pt-1">
-                <div class="grid">
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                  >
-                    <h5 style="margin-top: 15px;">Disk Usage</h5>
-                  </div>
-                  <div
-                    class="col-12 flex align-items-center justify-content-center"
-                    *ngIf="isLoading"
-                  >
-                    <p-progressSpinner
-                      styleClass="custom-spinner"
-                    ></p-progressSpinner>
-                  </div>
-                  <div class="col-12" *ngIf="!isLoading">
-                    <div
-                      [id]="'disk_status_chart_' + tab.header.instance"
-                    ></div>
+          <div class="row justify-content-between">
+            <gridster
+              [options]="gridOptions"
+              style="background:none; width:100%"
+            >
+              <gridster-item
+                [item]="item"
+                *ngFor="let item of dashboard"
+                [ngClass]="{
+                  'theme-arya': themeService.theme === 'arya-orange',
+                  'theme-saga': themeService.theme === 'saga-orange',
+                  'gridster-card': true
+                }"
+              >
+                <!-- CPU Usage -->
+                <div class="card-dashboard" *ngIf="item.header == 'loadcpu'">
+                  <div class="card-body pt-1">
+                    <div class="grid">
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                      >
+                        <h5 style="margin-top: 15px; color:black">CPU Usage</h5>
+                      </div>
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                        *ngIf="isLoading"
+                      >
+                        <p-progressSpinner
+                          styleClass="custom-spinner"
+                        ></p-progressSpinner>
+                      </div>
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                        *ngIf="!isLoading"
+                      >
+                        <p-knob
+                          [(ngModel)]="tab.header.cpuAvg"
+                          [size]="150"
+                          [readonly]="true"
+                          [valueColor]="getTextColor(tab.header.cpuAvg)"
+                          [textColor]="colortitle"
+                        ></p-knob>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </gridster-item>
-        </gridster>
+
+                <!-- Memory Usage -->
+                <div class="card-dashboard" *ngIf="item.header == 'loadmemory'">
+                  <div class="card-body pt-1">
+                    <div class="grid">
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                      >
+                        <h5 style="margin-top: 15px; color:black">
+                          Memory Usage
+                        </h5>
+                      </div>
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                        *ngIf="isLoading"
+                      >
+                        <p-progressSpinner
+                          styleClass="custom-spinner"
+                        ></p-progressSpinner>
+                      </div>
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                        *ngIf="!isLoading"
+                      >
+                        <p-knob
+                          [(ngModel)]="tab.header.free"
+                          [size]="150"
+                          [readonly]="true"
+                          [valueColor]="getTextColor(tab.header.free)"
+                          [textColor]="colortitle"
+                        ></p-knob>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Disk Usage -->
+                <div
+                  class="card-dashboard"
+                  *ngIf="item.header == 'loaddiskstatus'"
+                >
+                  <div class="card-body pt-1">
+                    <div class="grid">
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                      >
+                        <h5 style="margin-top: 15px;">Disk Usage</h5>
+                      </div>
+                      <div
+                        class="col-12 flex align-items-center justify-content-center"
+                        *ngIf="isLoading"
+                      >
+                        <p-progressSpinner
+                          styleClass="custom-spinner"
+                        ></p-progressSpinner>
+                      </div>
+                      <div class="col-12" *ngIf="!isLoading">
+                        <div
+                          [id]="'disk_status_chart_' + tab.header.instance"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </gridster-item>
+            </gridster>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+</div>
+<div *ngIf="selectedOption === 'Backup'">
+  <!-- Create content for Backup here -->
+  <div style="text-align: center; padding: 60px; background-color: #3E5774; ">
+    <p-table
+      *ngIf="selectedOption === 'Backup'"
+      [value]="products"
+      [tableStyle]="{ 'min-width': '100rem', 'background-color': '#3E5774' }"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="position: sticky; top: 0; background-color: #3E5774;">
+            Filename
+          </th>
+          <th style="position: sticky; top: 0; background-color: #3E5774;">
+            Created At
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.filename }}</td>
+          <td>{{ product.created_at }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>

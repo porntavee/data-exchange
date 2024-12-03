@@ -70,12 +70,18 @@ export class ServicestatusComponent implements OnInit {
   loadingchart_cpuNone: boolean = true;
 
   CPUChart: any;
-
+  products = [
+    { code: "P001", name: "Apple", category: "Fruit", quantity: 30 },
+    { code: "P002", name: "Banana", category: "Fruit", quantity: 50 },
+    { code: "P003", name: "Carrot", category: "Vegetable", quantity: 20 },
+    { code: "P004", name: "Tomato", category: "Vegetable", quantity: 40 },
+    { code: "P005", name: "Milk", category: "Dairy", quantity: 15 }
+  ];
   isLoading: boolean = false;
 
   invalidstartH: any;
   valueDisk: any;
-
+  selectedOption: string = "Storage"; // เริ่มต้นที่ Storage
   dashboard: any[] = [];
   horizontalOptions: any;
   tabs: {
@@ -108,6 +114,15 @@ export class ServicestatusComponent implements OnInit {
   chartOptions: any;
   ngOnInit(): void {
     this.loadData();
+    this.ServicestatusService.getBackup().subscribe(
+      data => {
+        this.products = data.data; // อัปเดตข้อมูลใน products
+        console.log(data);
+      },
+      error => {
+        console.error("Error fetching backup data", error); // จัดการข้อผิดพลาด
+      }
+    );
     this.intervalId = setInterval(() => {
       this.loadData();
     }, 1000);
@@ -169,6 +184,11 @@ export class ServicestatusComponent implements OnInit {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+  }
+
+  onOptionChange(event: any) {
+    console.log("Selected option:", event.value);
+    // คุณสามารถใช้ event.value เพื่ออัปเดตข้อมูลตามตัวเลือก
   }
 
   toggleTab(instance: number) {

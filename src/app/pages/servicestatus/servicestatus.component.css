@@ -22,6 +22,56 @@ p {
   box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.p-table {
+  overflow-y: scroll;
+}
+
+.p-table .p-datatable-tbody {
+  display: block;
+  max-height: 300px; /* Set the max-height as needed */
+  overflow-y: auto;
+}
+
+.p-table th {
+  position: sticky;
+  top: 0;
+  background-color: #3e5774;
+  z-index: 1;
+}
+
+.card {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Scrollbar specific for .card-dashboard */
 .card-dashboard {
   overflow-y: auto; /* Ensure the content scrolls vertically */
@@ -56,6 +106,14 @@ p {
 .custom-spinner {
   margin-top: 15px;
 }
+
+.fixed-top-left {
+  position: fixed; /* ทำให้ตำแหน่งคงที่ */
+  top: 100px; /* เว้นระยะห่างจากด้านบน */
+  left: 140px; /* เว้นระยะห่างจากด้านซ้าย */
+  z-index: 1000; /* ให้ปุ่มอยู่บนสุดของหน้า */
+}
+
 .card-dashboard {
   height: 100%;
   /* width: 100vh; */
@@ -81,8 +139,7 @@ body {
 .accordion {
   width: 80%;
   margin: 50px auto;
-  background-color: #fff;
-  border-radius: 5px;
+  background-color: #1f2d40;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -93,7 +150,7 @@ body {
 .accordion-header {
   width: 100%;
   padding: 15px;
-  background-color: #3e5774;
+  background-color: #1f2d40;
   color: white;
   text-align: left;
   border: none;

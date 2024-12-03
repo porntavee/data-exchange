@@ -35,6 +35,16 @@ export class ServicestatusService {
     );
   }
 
+  getBackup() {
+    const headers = { "content-type": "application/json" };
+    return this.http.get<any>(
+      `${environment.backupURL}/backup/database/data_exchange`,
+      {
+        headers: headers
+      }
+    );
+  }
+
   getDataExchange() {
     const headers = { "content-type": "application/json" };
     return this.http.get<any>(

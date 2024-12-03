@@ -10,6 +10,7 @@ export const environment = {
   dataExchangeURL: "https://dss.motorway.go.th:4433/dxc/api",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
   DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
+  backupURL: "https://dss.motorway.go.th:4433/minsight/api",
   // serviceURL: "http://localhost:8040/api/staging/callapi",
   // serviceURL:"http://10.11.2.179:3009",
   // websocketUrl: 'ws://localhost/api/v1/device/remote'
