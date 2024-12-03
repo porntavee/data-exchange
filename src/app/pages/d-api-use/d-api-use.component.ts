@@ -555,11 +555,13 @@ export class DApiUseComponent implements OnInit {
     ];
 
   openRequestDialog(param) {
+    debugger
     this.requestDialog = true;
     this.api_id = param.api_id;
   }
 
   openEditDialog(param) {
+    debugger
     this.requestDialog = true;
     this.api_id = param.route_id;
     this.requestDetails = param.details;

@@ -67,7 +67,7 @@
                 'btn-warning': group.status !== 1 && group.status !== 2,
                 'btn-success': group.status == 1 || group.status == 2
               }"
-              (click)="openRequestDialog(group.api_id)"
+              (click)="openRequestDialog(group)"
             >
               {{
                 group.status == 1 || group.status == 2
