@@ -2,14 +2,10 @@
 <!-- <p-toolbar styleClass="p-mb-4">
     </p-toolbar> -->
 
-<p-card
-  class="col-12 card card-stats p-6"
-  style="background-color:#718096"
-  [ngClass]="{
+<p-card class="col-12 card card-stats p-6" style="background-color:#718096" [ngClass]="{
     'theme-arya': themeService.theme === 'arya-orange',
     'theme-saga': themeService.theme === 'saga-orange'
-  }"
->
+  }">
   <div style="font-size: 18px; font-weight: 600;" class="text-color">
     API Library
   </div>
@@ -19,57 +15,34 @@
     <div class="p-toolbar-group-right">
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
-          class="Searchtxt new-font"
-          placeholder="Search..."
-        />
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+          class="Searchtxt new-font" placeholder="Search..." />
       </span>
     </div>
   </p-toolbar>
 
   <div class="container-fluid py-4">
     <div class="row">
-      <div
-        *ngFor="let group of alarmGroups; let i = index"
-        class="col-6 col-md-4 col-lg-2 mb-3"
-      >
-        <div
-          class="card h-100 shadow-sm position-relative"
-          style="background-color: #718096"
-        >
+      <div *ngFor="let group of alarmGroups; let i = index" class="col-6 col-md-4 col-lg-2 mb-3">
+        <div class="card h-100 shadow-sm position-relative" style="background-color: #718096">
           <!-- แสดงสัญลักษณ์ ! ก็ต่อเมื่อ group.description มีค่า -->
-          <div
-            *ngIf="group.description"
-            class="position-absolute"
-            style="top: 0; right: 0; margin: 0.5rem; cursor: pointer;"
-            pTooltip="{{ group.description }}"
-            tooltipPosition="top"
-          >
+          <div *ngIf="group.description" class="position-absolute"
+            style="top: 0; right: 0; margin: 0.5rem; cursor: pointer;" pTooltip="{{ group.description }}"
+            tooltipPosition="top">
             <span
-              style="background-color: red; color: white; font-weight: bold; border-radius: 50%; padding: 0.4rem 0.8rem; font-size: 0.8rem;"
-              >?</span
-            >
+              style="background-color: red; color: white; font-weight: bold; border-radius: 50%; padding: 0.4rem 0.8rem; font-size: 0.8rem;">?</span>
           </div>
 
-          <div
-            class="card-body d-flex flex-column align-items-center text-center"
-          >
+          <div class="card-body d-flex flex-column align-items-center text-center">
             <h5 class="card-title">{{ group.tag }}</h5>
-            <button
-              class="btn mt-3"
-              [ngClass]="{
+            <button class="btn mt-3" [ngClass]="{
                 'btn-warning': group.status == 1 || group.status == 2,
                 'btn-success': group.status !== 1 || group.status !== 2
-              }"
-              (click)="createToken(group.api_id)"
-            >
+              }" (click)="openRequestDialog(group)">
               {{
-                group.status == 1 || group.status == 2
-                  ? "ยังไม่เปิดใช้งาน"
-                  : "เปิดใช้งานแล้ว"
+              group.status == 1 || group.status == 2
+              ? "ยังไม่เปิดใช้งาน"
+              : "เปิดใช้งานแล้ว"
               }}
             </button>
           </div>
@@ -87,29 +60,14 @@
     <div class="p-toolbar-group-right">
       <span class="p-input-icon-left">
         <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
-          class="Searchtxt new-font"
-          placeholder="Search..."
-        />
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+          class="Searchtxt new-font" placeholder="Search..." />
       </span>
     </div>
   </p-toolbar>
-  <p-table
-    #dt
-    [value]="tokenList"
-    [rows]="10"
-    [paginator]="true"
-    [loading]="isLoadingalarmGroups"
-    [globalFilterFields]="['id', 'tag', 'endpoints']"
-    [(selection)]="tokenList"
-    [rowHover]="true"
-    dataKey="group_id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [showCurrentPageReport]="true"
-  >
+  <p-table #dt [value]="tokenList" [rows]="10" [paginator]="true" [loading]="isLoadingalarmGroups"
+    [globalFilterFields]="['id', 'tag', 'endpoints']" [(selection)]="tokenList" [rowHover]="true" dataKey="group_id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
     <ng-template pTemplate="header">
       <tr>
         <!-- <th style="width: 3rem">
@@ -134,7 +92,7 @@
         </th>
 
         <th>
-          
+
         </th>
       </tr>
     </ng-template>
@@ -147,25 +105,17 @@
         <!-- <td> -->
         <!-- <div id="myDIV3" title="{{group.status_description}}">{{group.status_description}}</div> -->
         <td>
-          <div
-            id="myDIV2"
-            [ngClass]="{
+          <div id="myDIV2" [ngClass]="{
               'bg-success text-white': group.status_description === 'เปิดใช้งาน',
               'bg-primary text-white': group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
               'bg-danger text-white': group.status_description === 'ปฏิเสธ',
               'bg-secondary text-white': group.status_description === 'ปิดใช้งาน'
-            }"
-            class="p-2 rounded text-center position-relative"
-            title="{{ group.status_description }}"
-          >
+            }" class="p-2 rounded text-center position-relative" title="{{ group.status_description }}">
             {{ group.status_description }}
-        
+
             <!-- แสดงไอคอน ? ในปุ่ม -->
-            <span
-              *ngIf="group.status_description === 'ปฏิเสธ'"
-              pTooltip="{{ group.admin_details }}"
-              tooltipPosition="top"
-              style="
+            <span *ngIf="group.status_description === 'ปฏิเสธ'" pTooltip="{{ group.admin_details }}"
+              tooltipPosition="top" style="
                 display: inline-block;
                 margin-left: 8px;
                 background-color: white;
@@ -175,13 +125,12 @@
                 padding: 0.4rem 0.8rem;
                 cursor: pointer;
                 font-size: 0.8rem;
-              "
-            >
+              ">
               ?
             </span>
           </div>
         </td>
-        
+
         <!-- </td> -->
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
@@ -202,104 +151,62 @@
     </ng-template>
   </p-table>
 </p-card>
-<p-dialog
-  [(visible)]="lineDialog"
-  [style]="{ width: '650px' }"
-  [(header)]="dialogHeader"
-  [modal]="true"
-  styleClass="p-fluid"
-  [contentStyle]="{ overflow: 'visible' }"
->
+<p-dialog [(visible)]="lineDialog" [style]="{ width: '650px' }" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ overflow: 'visible' }">
   <ng-template pTemplate="content">
     <div class="p-field">
       <div class="row mx-0">
         <div class="col pl-0">
-          <label
-            for="id"
-            [ngClass]="{
+          <label for="id" [ngClass]="{
               'theme-arya-text': themeService.theme === 'arya-orange',
               'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >ID:</label
-          >&nbsp;&nbsp;&nbsp;
+            }">ID:</label>&nbsp;&nbsp;&nbsp;
           <span>{{ AlarmGroup.group_id }}</span>
           <br />
-          <label
-            for="name"
-            [ngClass]="{
+          <label for="name" [ngClass]="{
               'theme-arya-text': themeService.theme === 'arya-orange',
               'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Group Name:</label
-          >&nbsp;&nbsp;&nbsp;
+            }">Group Name:</label>&nbsp;&nbsp;&nbsp;
           <span>{{ AlarmGroup.group_name }}</span>
           <br />
-          <label
-            for="Drescription"
-            [ngClass]="{
+          <label for="Drescription" [ngClass]="{
               'theme-arya-text': themeService.theme === 'arya-orange',
               'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Description:</label
-          >&nbsp;&nbsp;&nbsp;
+            }">Description:</label>&nbsp;&nbsp;&nbsp;
           <span>{{ AlarmGroup.group_description }}</span>
           <br />
-          <label
-            for="Email"
-            [ngClass]="{
+          <label for="Email" [ngClass]="{
               'theme-arya-text': themeService.theme === 'arya-orange',
               'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            *nglf="AlarmGroup.email != '' || AlarmGroup.email != null"
-            >Email:</label
-          >&nbsp;&nbsp;&nbsp;
+            }" *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">Email:</label>&nbsp;&nbsp;&nbsp;
           <span *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">{{
             AlarmGroup.email
-          }}</span>
+            }}</span>
           <br *nglf="AlarmGroup.email != '' || AlarmGroup.email != null" />
           <br />
           <div style="display: flex; justify-content: space-between;">
             <!-- Left Footer Content -->
             <div>
-              <p-checkbox
-                name="groupname"
-                value="recoveryNotification"
-                label="Recovery Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
+              <p-checkbox name="groupname" value="recoveryNotification" label="Recovery Notification"
+                (onChange)="changecheck($event)" [(ngModel)]="selectedValues" readonly="true"></p-checkbox>
               &nbsp; &nbsp;
-              <p-checkbox
-                name="groupname"
-                value="resendNotification"
-                label="Resend Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
+              <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
+                (onChange)="changecheck($event)" [(ngModel)]="selectedValues" readonly="true"></p-checkbox>
             </div>
           </div>
           <div class="col-12 col-sm-12 col-md-12 p-0">
             <div class="row mx-0 mt-2">
               <div class="col-12 pr-2">
-                <p-table
-                  [value]="stringArray"
-                  [scrollable]="true"
-                  responsiveLayout="scroll"
-                  scrollHeight="250px"
-                  width="650px"
-                >
+                <p-table [value]="stringArray" [scrollable]="true" responsiveLayout="scroll" scrollHeight="250px"
+                  width="650px">
                   <ng-template pTemplate="header">
                     <tr>
-                      <th
-                        [ngClass]="{
+                      <th [ngClass]="{
                           'theme-arya-text':
                             themeService.theme === 'arya-orange',
                           'theme-saga-text':
                             themeService.theme === 'saga-orange'
-                        }"
-                      >
+                        }">
                         Monitor alarm of
                       </th>
                     </tr>
@@ -326,14 +233,8 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog
-  [(visible)]="alarmGroupDialog"
-  styleClass="modalResponsivo"
-  [(header)]="dialogHeader"
-  [modal]="true"
-  styleClass="p-fluid"
-  [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
->
+<p-dialog [(visible)]="alarmGroupDialog" styleClass="modalResponsivo" [(header)]="dialogHeader" [modal]="true"
+  styleClass="p-fluid" [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }">
   <ng-template pTemplate="content">
     <!-- <div class="col-12 justify-content-between flex">
             <div class="row">
@@ -397,108 +298,49 @@
                 </div>
             </div>
         </div> -->
-    <div
-      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
-    ></div>
+    <div style="background-color: grey; width:100%; border-top: 1px dashed grey;"></div>
     <div class="col-12 justify-content-between flex">
       <div class="row mx-0">
         <div class="col-6 pr-0">
           <label for="tag" style="font-weight: bold;">Tag</label>
-          <input
-            type="text"
-            pInputText
-            id="tag"
-            [(ngModel)]="alarmGroup.tag"
-            required
-            class="tag"
-            [class]="invalid"
-          />
-          <small class="p-error block" *ngIf="submitted && !alarmGroup.tag"
-            >Tag is required.</small
-          >
+          <input type="text" pInputText id="tag" [(ngModel)]="alarmGroup.tag" required class="tag" [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.tag">Tag is required.</small>
         </div>
         <div class="col-6 pr-0"></div>
         <div class="col-6 pr-0">
           <label for="endpoints" style="font-weight: bold;">Endpoints</label>
-          <input
-            type="text"
-            pInputText
-            id="endpoints"
-            [(ngModel)]="alarmGroup.endpoints"
-            required
-            class="endpoints"
-            [class]="invalid"
-          />
-          <small
-            class="p-error block"
-            *ngIf="submitted && !alarmGroup.endpoints"
-            >Endpoints is required.</small
-          >
+          <input type="text" pInputText id="endpoints" [(ngModel)]="alarmGroup.endpoints" required class="endpoints"
+            [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.endpoints">Endpoints is required.</small>
         </div>
         <!-- <div class="col-1 pr-0"></div> -->
         <div class="col-6 pr-0"></div>
         <div class="col-6 pr-0">
           <label for="methods" style="font-weight: bold;">Methods</label>
-          <input
-            type="text"
-            pInputText
-            id="methods"
-            [(ngModel)]="alarmGroup.methods"
-            required
-            class="methods"
-            [class]="invalid"
-          />
-          <small class="p-error block" *ngIf="submitted && !alarmGroup.methods"
-            >Methods is required.</small
-          >
+          <input type="text" pInputText id="methods" [(ngModel)]="alarmGroup.methods" required class="methods"
+            [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.methods">Methods is required.</small>
         </div>
         <div class="col-6 pr-0"></div>
         <div class="col-6 pr-0">
           <label for="request" style="font-weight: bold;">Request</label>
-          <input
-            type="text"
-            pInputText
-            id="request"
-            [(ngModel)]="alarmGroup.request"
-            required
-            class="request"
-            [class]="invalid"
-          />
-          <small class="p-error block" *ngIf="submitted && !alarmGroup.request"
-            >Request is required.</small
-          >
+          <input type="text" pInputText id="request" [(ngModel)]="alarmGroup.request" required class="request"
+            [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.request">Request is required.</small>
         </div>
         <div class="col-6 pr-0"></div>
         <div class="col-6 pr-0">
           <label for="response" style="font-weight: bold;">Response</label>
-          <input
-            type="text"
-            pInputText
-            id="response"
-            [(ngModel)]="alarmGroup.response"
-            required
-            class="response"
-            [class]="invalid"
-          />
-          <small class="p-error block" *ngIf="submitted && !alarmGroup.response"
-            >Response is required.</small
-          >
+          <input type="text" pInputText id="response" [(ngModel)]="alarmGroup.response" required class="response"
+            [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.response">Response is required.</small>
         </div>
         <div class="col-6 pr-0"></div>
         <div class="col-6 pr-0">
           <label for="table" style="font-weight: bold;">Table</label>
-          <input
-            type="text"
-            pInputText
-            id="table"
-            [(ngModel)]="alarmGroup.table"
-            required
-            class="table"
-            [class]="invalid"
-          />
-          <small class="p-error block" *ngIf="submitted && !alarmGroup.table"
-            >Table is required.</small
-          >
+          <input type="text" pInputText id="table" [(ngModel)]="alarmGroup.table" required class="table"
+            [class]="invalid" />
+          <small class="p-error block" *ngIf="submitted && !alarmGroup.table">Table is required.</small>
         </div>
       </div>
     </div>
@@ -512,13 +354,8 @@
 
   <ng-template pTemplate="footer" class="footer">
     <div style="display:flex">
-      <p-checkbox
-        name="groupname"
-        value="recoveryNotification"
-        label="Active"
-        (onChange)="changecheck($event)"
-        [(ngModel)]="selectedValues"
-      ></p-checkbox>
+      <p-checkbox name="groupname" value="recoveryNotification" label="Active" (onChange)="changecheck($event)"
+        [(ngModel)]="selectedValues"></p-checkbox>
       &nbsp; &nbsp;
       <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
                 (onChange)="changecheck($event)" [(ngModel)]="selectedValues"></p-checkbox> -->
@@ -527,32 +364,11 @@
     </div>
 
     <div style="float: right;">
-      <button
-        pButton
-        pRipple
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-danger"
-        (click)="hideDialog()"
-      ></button>
-      <button
-        pButton
-        pRipple
-        label="Create"
-        icon="pi pi-check"
-        class="p-button-success"
-        *ngIf="check1"
-        (click)="createGroup()"
-      ></button>
-      <button
-        pButton
-        pRipple
-        label="Save"
-        icon="pi pi-check"
-        class="p-button-success"
-        *ngIf="check"
-        (click)="editlistGroup()"
-      ></button>
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-danger" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Create" icon="pi pi-check" class="p-button-success" *ngIf="check1"
+        (click)="createGroup()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" *ngIf="check"
+        (click)="editlistGroup()"></button>
     </div>
   </ng-template>
 </p-dialog>

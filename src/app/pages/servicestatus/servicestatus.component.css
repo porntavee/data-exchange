@@ -107,13 +107,6 @@ p {
   margin-top: 15px;
 }
 
-.fixed-top-left {
-  position: fixed; /* ทำให้ตำแหน่งคงที่ */
-  top: 100px; /* เว้นระยะห่างจากด้านบน */
-  left: 140px; /* เว้นระยะห่างจากด้านซ้าย */
-  z-index: 1000; /* ให้ปุ่มอยู่บนสุดของหน้า */
-}
-
 .card-dashboard {
   height: 100%;
   /* width: 100vh; */

@@ -113,7 +113,9 @@ export class DApiComponent implements OnInit {
     { title: "DSS", value: "2" },
     { title: "ATMS", value: "3" },
     { title: "DSS Vehicle", value: "4" },
-    { title: "M-INSIGHT", value: "5" }
+    { title: "M-INSIGHT", value: "5" },
+    { title: "DSS online", value: "6" },
+    { title: "DXC", value: "7" }
   ];
   selectedDataSets: any;
 
@@ -339,14 +341,14 @@ export class DApiComponent implements OnInit {
 
     // อัปเดตข้อมูลในรูปแบบ JSON String
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
-    console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
+    // console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
   reboot() {
     let model = {};
-    const apiUrl = "https://dss.motorway.go.th:4433/dnm/api/reboot";
+    const apiUrl = "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
 
         // //debugger
       },
@@ -367,7 +369,7 @@ export class DApiComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.jsonData = data.data;
         // //debugger
       },
@@ -392,7 +394,7 @@ export class DApiComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.jsonData = data.data;
         // //debugger
         this.dialogHeader = param.tag + " Data";
@@ -462,7 +464,7 @@ export class DApiComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.hideDialog();
         this.readRoute();
       },
@@ -480,7 +482,7 @@ export class DApiComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        console.log("Received data:", data.data);
+        // console.log("Received data:", data.data);
         this.alarmGroups = data.data;
       },
       error => {
@@ -504,7 +506,7 @@ export class DApiComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        console.log("Received data:", data.data);
+        // console.log("Received data:", data.data);
         this.openDailog();
         this.alarmGroup = data.data;
       },
