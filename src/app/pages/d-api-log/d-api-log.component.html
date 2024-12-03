@@ -2,13 +2,12 @@
 
 <p-card
   class="col-12 card card-stats p-6"
-  [style.backgroundColor]="'#718096'"
+  style="background-color:#718096"
   [ngClass]="{
     'theme-arya': themeService.theme === 'arya-orange',
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  
   <p-toolbar styleClass="p-mb-4">
     <div class="p-toolbar-group-left">
       <div style="font-size: 18px; font-weight: 600;" class="text-color">
@@ -88,7 +87,7 @@
         <!--<td>{{group.symbol_name}}</td>-->
         <td style="display: flex; justify-content: space-between;">
           <div id="myDIV3" title="{{ group.created_at }}">
-            {{ group.created_at | date:'dd-MM-YYYY HH:mm:ss' }}
+            {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
           </div>
         </td>
         <td></td>
@@ -235,8 +234,6 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
 >
   <ng-template pTemplate="content">
-
-    
     <div class="col-12">
       <div class="form-group">
         <div>
@@ -260,7 +257,7 @@
           <label for="yearly">รายปี</label>
         </div>
       </div>
-      
+
       <div class="form-group" *ngIf="viewMode === 'monthly'">
         <label>เลือกเดือน</label>
         <p-dropdown
@@ -270,8 +267,11 @@
           (onChange)="updateChart()"
         ></p-dropdown>
       </div>
-      
-      <div class="form-group" *ngIf="viewMode === 'yearly' || viewMode === 'monthly'">
+
+      <div
+        class="form-group"
+        *ngIf="viewMode === 'yearly' || viewMode === 'monthly'"
+      >
         <label>เลือกปี</label>
         <p-dropdown
           [options]="years"
@@ -280,14 +280,13 @@
           (onChange)="updateChart()"
         ></p-dropdown>
       </div>
-    
+
       <highcharts-chart
         [Highcharts]="Highcharts5_1"
         [options]="chartOptions5_1"
         style="width: 100%; display: block;"
       ></highcharts-chart>
     </div>
-    
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
@@ -303,7 +302,5 @@
     </div>
   </ng-template>
 </p-dialog>
-
-
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

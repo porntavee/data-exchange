@@ -107,10 +107,10 @@ export class DApiUseComponent implements OnInit {
   isLoadingalarmGroups: boolean = true;
 
   requestDialog: boolean = false; // ควบคุมการแสดงผล Dialog
-  requestDialogHeader: string = 'Request Details'; // หัวข้อของ Dialog
-  requestDetails: string = ''; // เก็บข้อความรายละเอียด
+  requestDialogHeader: string = "Request Details"; // หัวข้อของ Dialog
+  requestDetails: string = ""; // เก็บข้อความรายละเอียด
   // selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
-  api_id: string = '';
+  api_id: string = "";
   selectedDuration: any = {};
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -342,17 +342,17 @@ export class DApiUseComponent implements OnInit {
   readRoute() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
-   
-    const apiUrl = 'http://127.0.0.1:8000/route/read_library/' + userdata["id"];
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read_library/' + userdata["id"];
+
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" + userdata["id"];
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-       // debugger
+      data => {
+        console.log("Received data:", data.data);
+        // //debugger
         this.alarmGroups = data.data;
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
   }
@@ -361,12 +361,12 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "http://127.0.0.1:8000/token/read/" + userdata["id"];
-    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/" + userdata["id"];
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
-       // debugger;
+        // //debugger;
         this.tokenList = data.data;
       },
       error => {
@@ -377,20 +377,20 @@ export class DApiUseComponent implements OnInit {
 
   createToken() {
     // console.log(this.selectedValues)
-  let userdata = jwt_decode(localStorage.getItem("token"));
-    
-   // debugger;
-    const apiUrl = "http://127.0.0.1:8000/token/create";
-    // const apiUrl = "https://dpub.linkflow.co.th:4433/api/data-exchange/token/create";
-    // const apiUrl = "http://127.0.0.1:8000/token/create";
-    debugger
+    let userdata = jwt_decode(localStorage.getItem("token"));
+
+    // //debugger;
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    //debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
         username: userdata["username"],
         route_id: this.api_id,
         details: this.requestDetails,
-        duration: this.selectedDuration['value']
+        duration: this.selectedDuration["value"]
       })
       .subscribe(
         data => {
@@ -544,15 +544,14 @@ export class DApiUseComponent implements OnInit {
     });
   }
 
-
-    // ตัวเลือกสำหรับ Dropdown
-    durationOptions = [
-      { label: '15 วัน', value: '15' },
-      { label: '30 วัน', value: '30' },
-      { label: '60 วัน', value: '60' },
-      { label: '90 วัน', value: '90' },
-      { label: 'ไม่มีหมดอายุ', value: '0' }
-    ];
+  // ตัวเลือกสำหรับ Dropdown
+  durationOptions = [
+    { label: "15 วัน", value: "15" },
+    { label: "30 วัน", value: "30" },
+    { label: "60 วัน", value: "60" },
+    { label: "90 วัน", value: "90" },
+    { label: "ไม่มีหมดอายุ", value: "0" }
+  ];
 
   openRequestDialog(param) {
     debugger
@@ -566,7 +565,9 @@ export class DApiUseComponent implements OnInit {
     this.api_id = param.route_id;
     this.requestDetails = param.details;
     this.selectedDuration = { value: param.duration };
-    var index = this.durationOptions.findIndex(data => data.value === param.duration.toString());
+    var index = this.durationOptions.findIndex(
+      data => data.value === param.duration.toString()
+    );
     this.selectedDuration = this.durationOptions[index];
   }
 
@@ -577,10 +578,8 @@ export class DApiUseComponent implements OnInit {
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   saveRequest(): void {
-    console.log('รายละเอียด:', this.requestDetails);
-    console.log('ระยะเวลาที่เลือก:', this.selectedDuration);
+    console.log("รายละเอียด:", this.requestDetails);
+    console.log("ระยะเวลาที่เลือก:", this.selectedDuration);
     this.requestDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }
-
-

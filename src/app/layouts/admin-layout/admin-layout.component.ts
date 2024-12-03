@@ -179,7 +179,7 @@ export class AdminLayoutComponent implements OnInit {
     event.stopPropagation();
     // ทำสิ่งที่ต้องการที่นี่ เช่น การเปลี่ยนแปลง class หรืออัปเดตข้อมูลอื่นๆ
     console.log('Navigation clicked:', navId);
-    this.navService.setNavId(this.valueClass + navId ?? '/realtime1');
+    // this.navService.setNavId(this.valueClass + navId ?? '/realtime1');
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -195,7 +195,7 @@ export class AdminLayoutComponent implements OnInit {
       const civicNumber = value
         .toString()
         .substring(0, value.toString().indexOf("?"));
-      if (value == "/dashboard" || value == "/servicestatus") {
+      if (value == "/dashboard") {
         this.classsidebar = "wrapperhidden";
         this.scrollDown = this.commentList.nativeElement.scrollTop = 0;
       } else {

@@ -105,21 +105,21 @@ export class DApiApproveComponent implements OnInit {
   isLoadingalarmGroups: boolean = true;
 
   approveDialog: boolean = false;
-  approveDialogHeader = 'Approve Detail';
-  requestDetails = '';
+  approveDialogHeader = "Approve Detail";
+  requestDetails = "";
   selectedDuration: any = {};
-  adminDetails = '';
+  adminDetails = "";
   selectAdminDuration: any = {};
   user_id: any;
   route_id: any;
 
   // ตัวเลือกสำหรับ Dropdown
   durationOptions = [
-    { label: '15 วัน', value: '15' },
-    { label: '30 วัน', value: '30' },
-    { label: '60 วัน', value: '60' },
-    { label: '90 วัน', value: '90' },
-    { label: 'ไม่มีหมดอายุ', value: '0' }
+    { label: "15 วัน", value: "15" },
+    { label: "30 วัน", value: "30" },
+    { label: "60 วัน", value: "60" },
+    { label: "90 วัน", value: "90" },
+    { label: "ไม่มีหมดอายุ", value: "0" }
   ];
 
   constructor(
@@ -185,10 +185,10 @@ export class DApiApproveComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = "http://127.0.0.1:8000/token/read/0";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/read/0";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
     this.http.get<any>(apiUrl).subscribe(
       data => {
         console.log("Received data:", data.data);
@@ -196,8 +196,11 @@ export class DApiApproveComponent implements OnInit {
         this.tokenList = data.data;
 
         this.statusOptions = [
-          { label: 'ทั้งหมด', value: null },
-          { label: `รอตรวจสอบจากเจ้าหน้าที่ (${this.getStatusCount(1)})`, value: 1 },
+          { label: "ทั้งหมด", value: null },
+          {
+            label: `รอตรวจสอบจากเจ้าหน้าที่ (${this.getStatusCount(1)})`,
+            value: 1
+          },
           { label: `ตรวจสอบแล้ว (${this.getStatusCount(2)})`, value: 2 },
           { label: `ปฏิเสธ (${this.getStatusCount(-1)})`, value: -1 },
           { label: `ปิดใช้งาน (${this.getStatusCount(0)})`, value: 0 }
@@ -212,16 +215,15 @@ export class DApiApproveComponent implements OnInit {
   }
 
   approve() {
-
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata)
+    console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // //debugger
     this.http
       .post<any>(apiUrl, {
@@ -231,7 +233,7 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: this.selectAdminDuration['value']
+        duration: this.selectAdminDuration["value"]
       })
       .subscribe(
         data => {
@@ -246,16 +248,15 @@ export class DApiApproveComponent implements OnInit {
   }
 
   reject() {
-
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata)
+    console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // //debugger
     this.http
       .post<any>(apiUrl, {
@@ -265,7 +266,7 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: this.selectAdminDuration['value']
+        duration: this.selectAdminDuration["value"]
       })
       .subscribe(
         data => {
@@ -279,18 +280,16 @@ export class DApiApproveComponent implements OnInit {
       );
   }
 
-
   close() {
-
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata)
+    console.log(userdata);
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
-    //   "https://dpub.linkflow.co.th:4433/api/data-exchange/token/approve";
+    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
-    // "http://127.0.0.1:8000/token/approve";
+    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     this.http
       .post<any>(apiUrl, {
@@ -300,7 +299,7 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: '0'
+        duration: "0"
       })
       .subscribe(
         data => {
@@ -344,7 +343,9 @@ export class DApiApproveComponent implements OnInit {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
       this.selectedDuration = { value: group.duration };
-      var index = this.durationOptions.findIndex(data => data.value === group.duration.toString());
+      var index = this.durationOptions.findIndex(
+        data => data.value === group.duration.toString()
+      );
       this.selectedDuration = this.durationOptions[index];
       this.selectAdminDuration = this.durationOptions[index];
       this.approveDialog = true;
@@ -352,8 +353,7 @@ export class DApiApproveComponent implements OnInit {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
       this.close();
-    }
-    else {
+    } else {
       console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
       // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
     }
@@ -707,7 +707,7 @@ export class DApiApproveComponent implements OnInit {
   }
 
   statusOptions = [
-    { label: 'ทั้งหมด', value: null },
+    { label: "ทั้งหมด", value: null },
     { label: `รอตรวจสอบจากเจ้าหน้าที่ (0)`, value: 1 },
     { label: `ตรวจสอบแล้ว (0)`, value: 2 },
     { label: `ปฏิเสธ (0)`, value: -1 },
@@ -729,7 +729,7 @@ export class DApiApproveComponent implements OnInit {
 
   // ฟังก์ชันสำหรับกรองข้อมูลตาม status
   filterByStatus(status: number): void {
-    debugger
+    //debugger;
     if (status === null) {
       // กรองข้อมูลทั้งหมด
       this.filteredList = this.tokenList;
@@ -737,12 +737,11 @@ export class DApiApproveComponent implements OnInit {
       // กรองตามสถานะ
       this.filteredList = this.tokenList.filter(item => item.status === status);
     }
-
   }
 
   // ฟังก์ชันสำหรับนับจำนวนสถานะ
   getStatusCount(status: number): number {
-    debugger
+    //debugger;
     let count = this.tokenList.filter(item => item.status === status).length;
     return count;
   }
@@ -754,8 +753,8 @@ export class DApiApproveComponent implements OnInit {
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   saveRequest(): void {
-    console.log('รายละเอียด:', this.requestDetails);
-    console.log('ระยะเวลาที่เลือก:', this.selectedDuration);
+    console.log("รายละเอียด:", this.requestDetails);
+    console.log("ระยะเวลาที่เลือก:", this.selectedDuration);
     this.approveDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }

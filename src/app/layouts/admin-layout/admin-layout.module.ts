@@ -79,31 +79,31 @@ import { RippleModule } from "primeng/ripple";
 import { PanelModule } from "primeng/panel";
 import { ProvisioningHistoryComponent } from "@app/pages/provisioning-history/provisioning-history.component";
 import { ScriptTemplateComponent } from "@app/pages/script-template/script-template.component";
-import { SnpmProfileService } from '@app/pages/snpm-profile/snpm-profile.service';
+import { SnpmProfileService } from "@app/pages/snpm-profile/snpm-profile.service";
 import { TopologyMapComponent } from "@app/pages/topology-map/topology-map.component";
-import {GalleriaModule} from 'primeng/galleria';
-import {KnobModule} from 'primeng/knob';
+import { GalleriaModule } from "primeng/galleria";
+import { KnobModule } from "primeng/knob";
 import { GridsterModule } from "angular-gridster2";
 import { ManagedeviceauthenComponent } from "@app/pages/managedeviceauthen/managedeviceauthen.component";
 import { ManagedeviceprofileComponent } from "@app/pages/managedeviceprofile/managedeviceprofile.component";
-import { MenuModule } from 'primeng/menu';
-import { RightMenuComponent } from '@app/shared/rightMenu/rightMenu.component';
+import { MenuModule } from "primeng/menu";
+import { RightMenuComponent } from "@app/shared/rightMenu/rightMenu.component";
 import { ZtpComponent } from "@app/ztp/ztp.component";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { AppRoutes } from "@app/app.routing";
 import { TieredMenuModule } from "primeng/tieredmenu";
-import { SnpmProfileComponent } from '@app/pages/snpm-profile/snpm-profile.component';
-import { AlarmProfileComponent } from '@app/pages/alarm-profile/alarm-profile.component';
-import { AlarmProfileService } from '@app/pages/alarm-profile/alarm-profile.service';
-import { ManagedeviceotherComponent } from '@app/pages/managedeviceother/managedeviceother.component';
-import { AlatmhistoryComponent } from '@app/pages/alatmhistory/alatmhistory.component';
+import { SnpmProfileComponent } from "@app/pages/snpm-profile/snpm-profile.component";
+import { AlarmProfileComponent } from "@app/pages/alarm-profile/alarm-profile.component";
+import { AlarmProfileService } from "@app/pages/alarm-profile/alarm-profile.service";
+import { ManagedeviceotherComponent } from "@app/pages/managedeviceother/managedeviceother.component";
+import { AlatmhistoryComponent } from "@app/pages/alatmhistory/alatmhistory.component";
 import { AlarmTrapHistoryComponent } from "@app/pages/alarm-trap-history/alarm-trap-history.component";
 import { CustomerReportComponent } from "@app/pages/customer-report/customer-report.component";
 import { CatidHistoryComponent } from "@app/pages/catid-history/catid-history.component";
-import { TrafficmonthlyComponent } from '@app/pages/trafficmonthly/trafficmonthly.component';
-import { DailysummaryComponent } from '@app/pages/dailysummary/dailysummary.component';
-import { DeviceAvailabilityComponent } from '@app/pages/device-availability/device-availability.component';
-import { ServicestatusComponent } from '@app/pages/servicestatus/servicestatus.component';
+import { TrafficmonthlyComponent } from "@app/pages/trafficmonthly/trafficmonthly.component";
+import { DailysummaryComponent } from "@app/pages/dailysummary/dailysummary.component";
+import { DeviceAvailabilityComponent } from "@app/pages/device-availability/device-availability.component";
+import { ServicestatusComponent } from "@app/pages/servicestatus/servicestatus.component";
 import { PointsInterestComponent } from "@app/pages/points-interest/points-interest.component";
 import { RealtimeComponent } from "@app/pages/realtime/realtime.component";
 import { StatsComponent } from "@app/pages/stats/stats.component";
@@ -166,7 +166,7 @@ import { DApiLogComponent } from "@app/pages/d-api-log/d-api-log.component";
     AccordionModule,
     GridsterModule,
     TieredMenuModule,
-    MenuModule,
+    MenuModule
   ],
   declarations: [
     DashboardComponent,
@@ -213,7 +213,8 @@ import { DApiLogComponent } from "@app/pages/d-api-log/d-api-log.component";
     DApiComponent,
     DApiUseComponent,
     DApiApproveComponent,
-    DApiLogComponent
+    DApiLogComponent,
+    ServicestatusComponent
   ],
   providers: [
     TopoService,

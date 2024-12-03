@@ -30,7 +30,6 @@ export interface alarmGroup {
   email?: string;
 }
 
-
 export interface routeAPI {
   id?: number;
   tag?: string;
@@ -103,18 +102,20 @@ export class DApiComponent implements OnInit {
   fieldConditions: number[] = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, 3, ..., 10]
   // ตัวเลือกเงื่อนไขสำหรับ Dropdown
   conditionOptions = [
-    { label: '=', value: '=' },
-    { label: '>', value: '>' },
-    { label: '<', value: '<' },
-    { label: '>=', value: '>=' },
-    { label: '<=', value: '<=' },
-    { label: '!=', value: '!=' }
+    { label: "=", value: "=" },
+    { label: ">", value: ">" },
+    { label: "<", value: "<" },
+    { label: ">=", value: ">=" },
+    { label: "<=", value: "<=" },
+    { label: "!=", value: "!=" }
   ];
   dataSets: any = [
-    { "title": 'DSS', "value": '2' },
-    { "title": 'ATMS', "value": '3' },
-    { "title": 'DSS Vehicle', "value": '4' },
-    { "title": 'M-INSIGHT', "value": '5' }
+    { title: "DSS", value: "2" },
+    { title: "ATMS", value: "3" },
+    { title: "DSS Vehicle", value: "4" },
+    { title: "M-INSIGHT", value: "5" },
+    { title: "DSS online", value: "6" },
+    { title: "DXC", value: "7" }
   ];
   selectedDataSets: any;
 
@@ -313,20 +314,19 @@ export class DApiComponent implements OnInit {
 
     this.isLoadingalarmGroups = false;
     // this.changeDetection.detectChanges();
-
   }
   menuVlue(task) {
     this.lineGroupService.valueSource(task);
   }
 
   // Method ที่มีให้เลือก
-  availableMethods: string[] = ['POST', 'GET', 'PUT', 'DELETE'];
+  availableMethods: string[] = ["POST", "GET", "PUT", "DELETE"];
 
   // เก็บ Method ที่ถูกเลือก
   selectedMethods: string[] = [];
 
   // เก็บข้อมูล Methods ที่ถูกสร้างเป็น JSON String
-  methods: string = '';
+  methods: string = "";
 
   // ฟังก์ชันสำหรับเพิ่ม/ลบ Method ที่ถูกเลือก
   toggleMethodSelection(method: string): void {
@@ -341,44 +341,42 @@ export class DApiComponent implements OnInit {
 
     // อัปเดตข้อมูลในรูปแบบ JSON String
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
-    console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
+    // console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
   reboot() {
-    let model = {
-    };
-    const apiUrl = 'https://mpub.linkflow.co.th:4433/api/dynamic_api/reboot';
+    let model = {};
+    const apiUrl = "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
 
-        // debugger
+        // //debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
       }
     );
-
   }
   tryExecute() {
     let model = {
-      "dataset_id": this.selectedDataSets.value,
-      "query_string": this.alarmGroup.query
+      dataset_id: this.selectedDataSets.value,
+      query_string: this.alarmGroup.query
     };
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.jsonData = data.data;
-        // debugger
+        // //debugger
       },
       error => {
         console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   tryExecute2(event: Event, param): void {
@@ -386,32 +384,31 @@ export class DApiComponent implements OnInit {
 
     event.stopPropagation(); // หยุดการส่งต่อเหตุการณ์ไปยัง <tr>
     let model = {
-      "dataset_id": param.dataset_id,
-      "query_string": param.query
+      dataset_id: param.dataset_id,
+      query_string: param.query
     };
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = 'http://127.0.0.1:8000/tryexecute';
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/tryexecute';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.jsonData = data.data;
-        // debugger
-        this.dialogHeader = param.tag + ' Data';
+        // //debugger
+        this.dialogHeader = param.tag + " Data";
         this.isLoadingalarmGroups = false;
         this.executeDialog = true;
       },
       error => {
-        this.dialogHeader = param.tag + ' can not execute. มีบางอย่างผิดพลาด';
+        this.dialogHeader = param.tag + " can not execute. มีบางอย่างผิดพลาด";
         this.isLoadingalarmGroups = false;
         this.executeDialog = true;
-        this.jsonData = '';
+        this.jsonData = "";
         console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   jsonData: any = [];
@@ -425,48 +422,49 @@ export class DApiComponent implements OnInit {
     // console.log(this.selectedValues)
 
     let model = {
-      "id": 0,
-      "tag": this.alarmGroup.tag,
-      "methods": this.alarmGroup.methods,
-      "datasets": this.selectedDataSets.value,
-      "description": this.alarmGroup.description,
-      "endpoints": this.alarmGroup.endpoints,
-      "request": this.alarmGroup.request,
-      "response": this.alarmGroup.response,
-      "query": this.alarmGroup.query,
-      "type": this.alarmGroup.type,
-      "created_by": "string",
-      "updated_by": "string",
-      "active": 1,
-      "param1": this.alarmGroup.param1 ?? "",
-      "param2": this.alarmGroup.param2 ?? "",
-      "param3": this.alarmGroup.param3 ?? "",
-      "param4": this.alarmGroup.param4 ?? "",
-      "param5": this.alarmGroup.param5 ?? "",
-      "param6": this.alarmGroup.param6 ?? "",
-      "param7": this.alarmGroup.param7 ?? "",
-      "param8": this.alarmGroup.param8 ?? "",
-      "param9": this.alarmGroup.param9 ?? "",
-      "param10": this.alarmGroup.param10 ?? "",
-      "operator1": this.alarmGroup.operator1 ?? "",
-      "operator2": this.alarmGroup.operator2 ?? "",
-      "operator3": this.alarmGroup.operator3 ?? "",
-      "operator4": this.alarmGroup.operator4 ?? "",
-      "operator5": this.alarmGroup.operator5 ?? "",
-      "operator6": this.alarmGroup.operator6 ?? "",
-      "operator7": this.alarmGroup.operator7 ?? "",
-      "operator8": this.alarmGroup.operator8 ?? "",
-      "operator9": this.alarmGroup.operator9 ?? "",
-      "operator10": this.alarmGroup.operator10 ?? "",
+      id: 0,
+      tag: this.alarmGroup.tag,
+      methods: this.alarmGroup.methods,
+      datasets: this.selectedDataSets.value,
+      description: this.alarmGroup.description,
+      endpoints: this.alarmGroup.endpoints,
+      request: this.alarmGroup.request,
+      response: this.alarmGroup.response,
+      query: this.alarmGroup.query,
+      type: this.alarmGroup.type,
+      created_by: "string",
+      updated_by: "string",
+      active: 1,
+      param1: this.alarmGroup.param1 ?? "",
+      param2: this.alarmGroup.param2 ?? "",
+      param3: this.alarmGroup.param3 ?? "",
+      param4: this.alarmGroup.param4 ?? "",
+      param5: this.alarmGroup.param5 ?? "",
+      param6: this.alarmGroup.param6 ?? "",
+      param7: this.alarmGroup.param7 ?? "",
+      param8: this.alarmGroup.param8 ?? "",
+      param9: this.alarmGroup.param9 ?? "",
+      param10: this.alarmGroup.param10 ?? "",
+      operator1: this.alarmGroup.operator1 ?? "",
+      operator2: this.alarmGroup.operator2 ?? "",
+      operator3: this.alarmGroup.operator3 ?? "",
+      operator4: this.alarmGroup.operator4 ?? "",
+      operator5: this.alarmGroup.operator5 ?? "",
+      operator6: this.alarmGroup.operator6 ?? "",
+      operator7: this.alarmGroup.operator7 ?? "",
+      operator8: this.alarmGroup.operator8 ?? "",
+      operator9: this.alarmGroup.operator9 ?? "",
+      operator10: this.alarmGroup.operator10 ?? ""
     };
 
     let jsonStr = JSON.stringify(model);
 
-    // const apiUrl = 'http://127.0.0.1:8000/route/create';
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/create';
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create';
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data);
+        // console.log("Received data:", data);
         this.hideDialog();
         this.readRoute();
       },
@@ -479,129 +477,129 @@ export class DApiComponent implements OnInit {
   readRoute() {
     // console.log(this.selectedValues)
 
-    // const apiUrl = 'http://127.0.0.1:8000/route/read';
-    const apiUrl = 'http://127.0.0.1:8000/route/read';
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read';
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
+      data => {
+        // console.log("Received data:", data.data);
         this.alarmGroups = data.data;
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   readRouteById(param) {
-
-    var index = this.dataSets.findIndex(data => data.value === param.dataset_id.toString());
-    this.selectedDataSets = this.dataSets[index]
+    var index = this.dataSets.findIndex(
+      data => data.value === param.dataset_id.toString()
+    );
+    this.selectedDataSets = this.dataSets[index];
     const methodsArray = JSON.parse(param.methods);
 
     // ตั้งค่า selectedValues ด้วยค่าที่ตรงใน availableMethods
-    this.selectedValues = this.availableMethods.filter(method => methodsArray.includes(method));
-    const apiUrl = 'http://127.0.0.1:8000/route/read/' + param.id;
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/read/' + param.id;
+    this.selectedValues = this.availableMethods.filter(method =>
+      methodsArray.includes(method)
+    );
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/" + param.id;
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-
-        console.log('Received data:', data.data);
+      data => {
+        // console.log("Received data:", data.data);
         this.openDailog();
         this.alarmGroup = data.data;
-
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   deleteRoute(routeId: number): void {
-    if (confirm('Are you sure you want to delete this route?')) {
-
+    if (confirm("Are you sure you want to delete this route?")) {
       let userdata = jwt_decode(localStorage.getItem("token"));
 
-      // const apiUrl = 'http://127.0.0.1:8000/route/delete';
-      const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/delete';
+      // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/delete';
+      const apiUrl =
+        "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/delete";
 
-      this.http.post(apiUrl, { route_id: routeId, updated_by: userdata["username"] }).subscribe(
-        (response: any) => {
-          if (response.status === 200) {
-            alert('Route deleted successfully.');
-            this.hideDialog(); // ปิด Dialog
-            this.readRoute(); // โหลดข้อมูลใหม่
-          } else {
-            alert(`Error: ${response.message}`);
+      this.http
+        .post(apiUrl, { route_id: routeId, updated_by: userdata["username"] })
+        .subscribe(
+          (response: any) => {
+            if (response.status === 200) {
+              alert("Route deleted successfully.");
+              this.hideDialog(); // ปิด Dialog
+              this.readRoute(); // โหลดข้อมูลใหม่
+            } else {
+              alert(`Error: ${response.message}`);
+            }
+          },
+          error => {
+            console.error("Error deleting route:", error);
+            alert("An error occurred while deleting the route.");
           }
-        },
-        (error) => {
-          console.error('Error deleting route:', error);
-          alert('An error occurred while deleting the route.');
-        }
-      );
+        );
     }
   }
 
   editlistGroup() {
     this.submitted = true;
-    // const apiUrl = 'http://127.0.0.1:8000/route/update/' + this.alarmGroup.id;
-    const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/route/update/' + this.alarmGroup.id;
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/' + this.alarmGroup.id;
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/" +
+      this.alarmGroup.id;
 
     let model = {
-      "id": 0,
-      "tag": this.alarmGroup.tag,
-      "methods": this.alarmGroup.methods,
-      "datasets": this.selectedDataSets.value,
-      "description": this.alarmGroup.description,
-      "endpoints": this.alarmGroup.endpoints,
-      "request": this.alarmGroup.request,
-      "response": this.alarmGroup.response,
-      "query": this.alarmGroup.query,
-      "type": this.alarmGroup.type,
-      "created_by": "string",
-      "updated_by": "string",
-      "active": 1,
-      "param1": this.alarmGroup.param1 ?? "",
-      "param2": this.alarmGroup.param2 ?? "",
-      "param3": this.alarmGroup.param3 ?? "",
-      "param4": this.alarmGroup.param4 ?? "",
-      "param5": this.alarmGroup.param5 ?? "",
-      "param6": this.alarmGroup.param6 ?? "",
-      "param7": this.alarmGroup.param7 ?? "",
-      "param8": this.alarmGroup.param8 ?? "",
-      "param9": this.alarmGroup.param9 ?? "",
-      "param10": this.alarmGroup.param10 ?? "",
-      "operator1": this.alarmGroup.operator1 ?? "",
-      "operator2": this.alarmGroup.operator2 ?? "",
-      "operator3": this.alarmGroup.operator3 ?? "",
-      "operator4": this.alarmGroup.operator4 ?? "",
-      "operator5": this.alarmGroup.operator5 ?? "",
-      "operator6": this.alarmGroup.operator6 ?? "",
-      "operator7": this.alarmGroup.operator7 ?? "",
-      "operator8": this.alarmGroup.operator8 ?? "",
-      "operator9": this.alarmGroup.operator9 ?? "",
-      "operator10": this.alarmGroup.operator10 ?? "",
+      id: 0,
+      tag: this.alarmGroup.tag,
+      methods: this.alarmGroup.methods,
+      datasets: this.selectedDataSets.value,
+      description: this.alarmGroup.description,
+      endpoints: this.alarmGroup.endpoints,
+      request: this.alarmGroup.request,
+      response: this.alarmGroup.response,
+      query: this.alarmGroup.query,
+      type: this.alarmGroup.type,
+      created_by: "string",
+      updated_by: "string",
+      active: 1,
+      param1: this.alarmGroup.param1 ?? "",
+      param2: this.alarmGroup.param2 ?? "",
+      param3: this.alarmGroup.param3 ?? "",
+      param4: this.alarmGroup.param4 ?? "",
+      param5: this.alarmGroup.param5 ?? "",
+      param6: this.alarmGroup.param6 ?? "",
+      param7: this.alarmGroup.param7 ?? "",
+      param8: this.alarmGroup.param8 ?? "",
+      param9: this.alarmGroup.param9 ?? "",
+      param10: this.alarmGroup.param10 ?? "",
+      operator1: this.alarmGroup.operator1 ?? "",
+      operator2: this.alarmGroup.operator2 ?? "",
+      operator3: this.alarmGroup.operator3 ?? "",
+      operator4: this.alarmGroup.operator4 ?? "",
+      operator5: this.alarmGroup.operator5 ?? "",
+      operator6: this.alarmGroup.operator6 ?? "",
+      operator7: this.alarmGroup.operator7 ?? "",
+      operator8: this.alarmGroup.operator8 ?? "",
+      operator9: this.alarmGroup.operator9 ?? "",
+      operator10: this.alarmGroup.operator10 ?? ""
     };
 
     this.http.put<any>(`${apiUrl}`, model).subscribe(
-      (response) => {
+      response => {
         if (response.status === 200) {
-
-          console.log('Update successful:', response.message);
+          console.log("Update successful:", response.message);
 
           this.hideDialog();
           this.readRoute();
         } else {
-
-          console.warn('Update failed:', response.message);
+          console.warn("Update failed:", response.message);
         }
       },
-      (error) => {
-
-        console.error('Error updating route:', error);
+      error => {
+        console.error("Error updating route:", error);
       }
     );
   }

@@ -1,15 +1,63 @@
-p{
+p {
   font-weight: 600;
 }
-.col-12{
+.col-12 {
   padding: 0;
 }
 
-.custom-spinner{
+/* Scrollbar for all elements */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%);
+  box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Scrollbar specific for .card-dashboard */
+.card-dashboard {
+  overflow-y: auto; /* Ensure the content scrolls vertically */
+}
+
+.card-dashboard::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.card-dashboard::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.card-dashboard::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%);
+  box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Additional scrollbar adjustments for dialog or specific components */
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
+  background-color: #757474;
+}
+
+.custom-spinner {
   margin-top: 15px;
 }
-.card-dashboard{
-  height:100%;
+.card-dashboard {
+  height: 100%;
   /* width: 100vh; */
   /* margin: 16px; */
 }
@@ -22,8 +70,64 @@ p{
   right: 0;
   z-index: 100;
 }
-.Critical{
-    /* color: #BF73CC;
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.accordion {
+  width: 80%;
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-item {
+  border-bottom: 1px solid #ddd;
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 15px;
+  background-color: #3e5774;
+  color: white;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+h5 {
+  color: black;
+}
+
+.accordion-header:hover {
+  background-color: #3e5774;
+}
+
+.accordion-content {
+  padding: 0 15px;
+  background-color: #3e5774;
+}
+
+.accordion-content p {
+  padding: 15px 0;
+  margin: 0;
+}
+
+.inlinesparkline {
+  width: 100%;
+  height: 50px; /* Add appropriate height */
+}
+
+.Critical {
+  /* color: #BF73CC;
     background-color: #F5B7B1;
     border-radius: 5px;
     background-position: center;
@@ -32,47 +136,47 @@ p{
     font-weight: bold;
     text-align: center;
     padding: 5px; */
-    background-color: #F96A44;
+  background-color: #f96a44;
 
-    color: white;
-    height: auto;
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: repeat;
-    width: 90px;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
+  color: white;
+  height: auto;
+  border-radius: 5px;
+  background-position: center;
+  background-repeat: repeat;
+  width: 90px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
 }
-.Major{
-    background-color: #FFAE1F;
+.Major {
+  background-color: #ffae1f;
 
-    color: white;
-    height: auto;
-    /* width: 2em; */
-    /* color: #FF7782; */
-    /* background-color: #fcd07e; */
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: repeat;
-    width: 90px;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
+  color: white;
+  height: auto;
+  /* width: 2em; */
+  /* color: #FF7782; */
+  /* background-color: #fcd07e; */
+  border-radius: 5px;
+  background-position: center;
+  background-repeat: repeat;
+  width: 90px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
 }
-.Minor{
-    background-color: #D7BD00;
+.Minor {
+  background-color: #d7bd00;
 
-    color: white;
-    height: auto;
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: repeat;
-    width: 90px;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
-    /* color: #FF7782;
+  color: white;
+  height: auto;
+  border-radius: 5px;
+  background-position: center;
+  background-repeat: repeat;
+  width: 90px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  /* color: #FF7782;
     color: #FFBB55;
     background-color: #fdfb6a;
     border-radius: 5px;
@@ -83,35 +187,35 @@ p{
     text-align: center;
     padding: 5px; */
 }
-.Warning{
-    background-color: #5D87FF;
+.Warning {
+  background-color: #5d87ff;
 
-    color: white;
-    height: auto;
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: repeat;
-    width: 90px;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
+  color: white;
+  height: auto;
+  border-radius: 5px;
+  background-position: center;
+  background-repeat: repeat;
+  width: 90px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
 }
-.Unknown{
-    background-color: #49BEFF;
+.Unknown {
+  background-color: #49beff;
 
-    color: white;
-    height: auto;
-    border-radius: 5px;
-    background-position: center;
-    background-repeat: repeat;
-    width: 90px;
-    font-weight: bold;
-    text-align: center;
-    padding: 5px;
+  color: white;
+  height: auto;
+  border-radius: 5px;
+  background-position: center;
+  background-repeat: repeat;
+  width: 90px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
 }
 
-.Alarm_ok{
-  background-color: #52595F;
+.Alarm_ok {
+  background-color: #52595f;
   color: white;
   height: auto;
   border-radius: 5px;
@@ -122,8 +226,8 @@ p{
   text-align: center;
   padding: 5px;
 }
-.Alarm_Warning{
-  background-color: #FFBB55;
+.Alarm_Warning {
+  background-color: #ffbb55;
   color: white;
   height: auto;
   border-radius: 5px;
@@ -134,8 +238,8 @@ p{
   text-align: center;
   padding: 5px;
 }
-.Alarm_Critical{
-  background-color: #FF7782;
+.Alarm_Critical {
+  background-color: #ff7782;
   color: white;
   height: auto;
   /* width: 2em; */
@@ -149,34 +253,38 @@ p{
   text-align: center;
   padding: 5px;
 }
-.card-container{
-    border-radius: 32px;
+.card-container {
+  border-radius: 32px;
 }
 
 .theme-arya {
-  background-color:  #1f2d40;
+  background-color: #1f2d40;
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
-  
 }
 .theme-saga {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
 }
 .theme-arya-panel {
-    background-color:  #1f2d40;
-    box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
-    
+  background-color: #1f2d40;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.1);
 }
-.theme-arya-text{
-    color: #FFFFFF;
+.theme-arya-text {
+  color: #ffffff;
 }
-.theme-saga-text{
-    color: black;
+.theme-saga-text {
+  color: black;
 }
+
+.progressbar {
+  width: 40%; /* หรือกำหนดขนาดที่เหมาะสม */
+  display: block;
+}
+
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
- }
+}
 
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
@@ -185,13 +293,17 @@ p{
 
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
-  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
 ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
- }
+}
 ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
   border-radius: 100px !important;
@@ -199,203 +311,206 @@ p{
 
 ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
-  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
-::ng-deep .p-datatable-resizable>.p-datatable-wrapper {
-    overflow-x: auto;
-    /* height: 8px !important; */
+::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  overflow-x: auto;
+  /* height: 8px !important; */
 }
-::ng-deep .p-datatable-resizable>.p-datatable-wrapper::-webkit-scrollbar {
-    width: 8px !important;
-    height: 8px !important;
-   }
+::ng-deep .p-datatable-resizable > .p-datatable-wrapper::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
 
-::ng-deep .p-datatable-resizable>.p-datatable-wrapper::-webkit-scrollbar-track {
-    background-color: #e4e4e4 !important;
-    border-radius: 100px !important;
-  }
+::ng-deep
+  .p-datatable-resizable
+  > .p-datatable-wrapper::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
 
-::ng-deep .p-datatable-resizable>.p-datatable-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 100px !important;
-    background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
-    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+::ng-deep
+  .p-datatable-resizable
+  > .p-datatable-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
 @media screen and (min-width: 451px) {
-
-    .reponsive-font{
-        font-size: 24px;
-    }
-    
+  .reponsive-font {
+    font-size: 24px;
   }
+}
 @media screen and (max-width: 450px) {
-    .reponsive-size{
-      width: 100px;
-    }
-    .reponsive-font{
-        font-size: 18px;
-    }
-    
+  .reponsive-size {
+    width: 100px;
   }
-
-  @media screen and (min-width: 480px) {
-    .Newtxt{
-      margin-left: 5px !important;
-    }
-    .Exporttxt{
-      margin-left: 5px !important;
-    }
-    .Cleartxt{
-      margin-left: 5px !important;
-    }
-    .Clearbut{
-      margin-right: 15px;
-    }
-    
-    
-    }
-    @media screen and (max-width: 560px) {
-      .Searchtxt{
-        width: 100%  !important;
-      }
-    }
-    @media screen and (max-width: 520px) {
-      .Searchtxt{
-        width: 100%  !important;
-      }
-    }
-    @media screen and (max-width: 480px) {
-    .Newtxt{
-      display: none;
-    }
-    .Exporttxt{
-      display: none;
-    }
-    .Cleartxt{
-      display: none;
-    }
-    .Searchtxt{
-      width: 100%  !important;
-    }
-    .Newbut {
-      width: 20px !important;
-    }
-    .Clearbut{
-      width: 20px !important;
-      margin-right: 5px;
-    }
-    .pi-plus:before {
-      margin-left: -10px;
-    }
-    .Exportbut {
-      width: 100% !important;
-    }
-    .pi-file:before {
-      margin-left: -10px;
-    }
-    .pi-filter-slash:before {
-      margin-left: -10px;
-    }
-    }
-
-:ng-deep .styletime{
-      width: 100px !important;
-      height: 40px !important;
-      margin-top: 15px !important;
-    }
-
-::ng-deep .styletimeMin{
-      width: 100px !important;
-      margin-left: 15px !important;
-      height: 40px !important;
-      margin-top: 15px !important;
-    }
-
-::ng-deep .styletimeAM-PM{
-      margin-left: 15px !important;
-      margin-right: 10px !important;
-      margin-top: 15px !important;
-    }
-
-::ng-deep .datePickerS{
-      margin-left:12px !important;
+  .reponsive-font {
+    font-size: 18px;
+  }
 }
 
 @media screen and (min-width: 480px) {
-.Newtxt{
-  margin-left: 5px !important;
-}
-.Exporttxt{
-  margin-left: 5px !important;
-}
-.Cleartxt{
-  margin-left: 5px !important;
-}
-.Clearbut{
-  margin-right: 15px;
-}
-
-
-
-
+  .Newtxt {
+    margin-left: 5px !important;
+  }
+  .Exporttxt {
+    margin-left: 5px !important;
+  }
+  .Cleartxt {
+    margin-left: 5px !important;
+  }
+  .Clearbut {
+    margin-right: 15px;
+  }
 }
 @media screen and (max-width: 560px) {
-  .Searchtxt{
+  .Searchtxt {
     width: 100% !important;
   }
-  .p-toolbar-group-right{
-    flex-direction: column;
-    align-items: flex-start;
-    gap:8px;
-  }
 }
-@media screen and (max-width: 720px) {
-  .Searchtxt{
-    width: 100%  !important;
-  }
-  .p-toolbar-group-right{
-    flex-direction: column;
-    align-items: flex-start;
-    gap:8px;
+@media screen and (max-width: 520px) {
+  .Searchtxt {
+    width: 100% !important;
   }
 }
 @media screen and (max-width: 480px) {
-.Newtxt{
-  display: none;
+  .Newtxt {
+    display: none;
+  }
+  .Exporttxt {
+    display: none;
+  }
+  .Cleartxt {
+    display: none;
+  }
+  .Searchtxt {
+    width: 100% !important;
+  }
+  .Newbut {
+    width: 20px !important;
+  }
+  .Clearbut {
+    width: 20px !important;
+    margin-right: 5px;
+  }
+  .pi-plus:before {
+    margin-left: -10px;
+  }
+  .Exportbut {
+    width: 100% !important;
+  }
+  .pi-file:before {
+    margin-left: -10px;
+  }
+  .pi-filter-slash:before {
+    margin-left: -10px;
+  }
 }
-.Exporttxt{
-  display: none;
+
+:ng-deep .styletime {
+  width: 100px !important;
+  height: 40px !important;
+  margin-top: 15px !important;
 }
-.Cleartxt{
-  display: none;
+
+::ng-deep .styletimeMin {
+  width: 100px !important;
+  margin-left: 15px !important;
+  height: 40px !important;
+  margin-top: 15px !important;
 }
-.Searchtxt{
-  width: 100% !important;
+
+::ng-deep .styletimeAM-PM {
+  margin-left: 15px !important;
+  margin-right: 10px !important;
+  margin-top: 15px !important;
 }
-.Newbut {
-  width: 20px !important;
+
+::ng-deep .datePickerS {
+  margin-left: 12px !important;
 }
-.Clearbut{
-  width: 20px !important;
-  margin-right: 5px;
+
+@media screen and (min-width: 480px) {
+  .Newtxt {
+    margin-left: 5px !important;
+  }
+  .Exporttxt {
+    margin-left: 5px !important;
+  }
+  .Cleartxt {
+    margin-left: 5px !important;
+  }
+  .Clearbut {
+    margin-right: 15px;
+  }
 }
-.pi-plus:before {
-  margin-left: -10px;
+@media screen and (max-width: 560px) {
+  .Searchtxt {
+    width: 100% !important;
+  }
+  .p-toolbar-group-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
-.Exportbut {
-  width: 100% !important;
+@media screen and (max-width: 720px) {
+  .Searchtxt {
+    width: 100% !important;
+  }
+  .p-toolbar-group-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
-.pi-file:before {
-  margin-left: -10px;
-}
-.pi-filter-slash:before {
-  margin-left: -10px;
-}
-.p-toolbar-group-right{
-  flex-direction: column;
-  align-items: flex-start;
-  gap:8px;
-}
+@media screen and (max-width: 480px) {
+  .Newtxt {
+    display: none;
+  }
+  .Exporttxt {
+    display: none;
+  }
+  .Cleartxt {
+    display: none;
+  }
+  .Searchtxt {
+    width: 100% !important;
+  }
+  .Newbut {
+    width: 20px !important;
+  }
+  .Clearbut {
+    width: 20px !important;
+    margin-right: 5px;
+  }
+  .pi-plus:before {
+    margin-left: -10px;
+  }
+  .Exportbut {
+    width: 100% !important;
+  }
+  .pi-file:before {
+    margin-left: -10px;
+  }
+  .pi-filter-slash:before {
+    margin-left: -10px;
+  }
+  .p-toolbar-group-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 @media screen and (max-width: 800px) {
   .card-dashboard {
@@ -405,25 +520,29 @@ p{
   .card-dashboard::-webkit-scrollbar {
     width: 8px !important;
     height: 8px !important;
-   }
+  }
   .card-dashboard::-webkit-scrollbar-track {
     background-color: #e4e4e4 !important;
     border-radius: 100px !important;
   }
- 
+
   .card-dashboard::-webkit-scrollbar-thumb {
     border-radius: 100px !important;
-    background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+    background-image: linear-gradient(
+      180deg,
+      #979594e7 0%,
+      #757474 99%
+    ) !important;
     box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
   }
-  .valueTemp{
-    font-size:5vw !important;
+  .valueTemp {
+    font-size: 5vw !important;
   }
- 
-::ng-deep .p-dialog { 
-  width: calc(100% - 150px) !important; 
-}
-::ng-deep .p-dialog .p-dialog-content { 
-  width: calc(100%) !important; 
-}
+
+  ::ng-deep .p-dialog {
+    width: calc(100% - 150px) !important;
+  }
+  ::ng-deep .p-dialog .p-dialog-content {
+    width: calc(100%) !important;
+  }
 }

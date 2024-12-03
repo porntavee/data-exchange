@@ -3,14 +3,13 @@
     </p-toolbar> -->
 
 <p-card
-  [style.backgroundColor]="'#718096'"
+  style="background-color:#718096"
   class="col-12 card card-stats p-6"
   [ngClass]="{
     'theme-arya': themeService.theme === 'arya-orange',
     'theme-saga': themeService.theme === 'saga-orange'
   }"
 >
-  
   <p-toolbar styleClass="p-mb-4">
     <div class="p-toolbar-group-left">
       <div style="font-size: 18px; font-weight: 600;" class="text-color">
@@ -86,8 +85,8 @@
         <th pSortableColumn="" class="col-2">
           Action<p-sortIcon field=""> </p-sortIcon>
         </th>
-        <!-- <th></th>
-        <th></th> -->
+        <th></th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-group let-rowIndex>
@@ -106,7 +105,11 @@
         </td>
         <td>
           <div id="myDIV2" title="{{ group.description }}">
-            {{ group.description?.length > 30 ? (group.description | slice: 0:30) + '...' : group.description }}
+            {{
+              group.description?.length > 30
+                ? (group.description | slice: 0:30) + "..."
+                : group.description
+            }}
           </div>
         </td>
         <td>
@@ -118,6 +121,22 @@
             (click)="tryExecute2($event, group)"
           ></button>
         </td>
+        <!--<td>{{group.symbol_name}}</td>-->
+        <td style="display: flex; justify-content: space-between;">
+          <!-- <p-menu #menu [popup]="true" [model]="itemsAction" appendTo="body"></p-menu>
+                    <button pButton type="text" (click)="menu.toggle($event)" 
+                        icon="pi pi-ellipsis-h"></button> -->
+
+          <!-- (click)="menuVlue(group)" -->
+
+          <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
+                          (click)="lineread(group)"></button>
+                      <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
+                          (click)="editline(group)"></button>
+                      <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                          (click)="deleteGroup(group)"></button> -->
+        </td>
+        <td></td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary">
@@ -338,10 +357,12 @@
         <div class="col-12 pr-0">
           <div class="row">
             <div class="col-8 pl-3">
-              <label for="description" style="font-weight: bold;">Description</label>
+              <label for="description" style="font-weight: bold;"
+                >Description</label
+              >
             </div>
           </div>
-  
+
           <textarea
             type="text"
             rows="8"
@@ -356,8 +377,6 @@
         </div>
       </div>
     </div>
-
-    
 
     <!-- <div style="padding-top: 30px;">
             <label for="email" style="font-weight: bold;">Email: </label>
@@ -377,7 +396,7 @@
       ></p-checkbox>
       &nbsp; &nbsp;
     </div>
-  
+
     <div style="float: right;">
       <button
         pButton
@@ -416,7 +435,6 @@
       ></button>
     </div>
   </ng-template>
-  
 </p-dialog>
 
 <p-dialog
@@ -430,34 +448,32 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
   (onHide)="hideDialog()"
 >
-<ng-template pTemplate="content">
-  <div
-    style="background-color: grey; width:100%; border-top: 1px dashed grey;"
-  ></div>
-  <div class="col-12">
-    <div class="row">
-      <div
-        class="table-responsive"
-        style="overflow-y: auto; overflow-x: auto; max-height: 400px;"
-      >
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th *ngFor="let key of getKeys()">{{ key }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of jsonData">
-              <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
-            </tr>
-          </tbody>
-        </table>
+  <ng-template pTemplate="content">
+    <div
+      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
+    ></div>
+    <div class="col-12">
+      <div class="row">
+        <div
+          class="table-responsive"
+          style="overflow-y: auto; overflow-x: auto; max-height: 400px;"
+        >
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th *ngFor="let key of getKeys()">{{ key }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of jsonData">
+                <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-</ng-template>
-
-
+  </ng-template>
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

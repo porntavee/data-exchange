@@ -51,7 +51,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api",
     icon: "assets/img/m-dashboard.png",
     class: "",
-    role: ["super admin"],
+    role: ["develop"],
     hidden: false
   },
   {
@@ -59,7 +59,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-use",
     icon: "assets/img/m-dashboard.png",
     class: "",
-    role: ["super admin"],
+    role: ["develop","DOH","POL","monitor"],
     hidden: false
   },
   {
@@ -67,7 +67,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-approve",
     icon: "assets/img/m-dashboard.png",
     class: "",
-    role: ["super admin"],
+    role: ["develop"],
     hidden: false
   },
   {
@@ -75,7 +75,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-log",
     icon: "assets/img/m-dashboard.png",
     class: "",
-    role: ["super admin"],
+    role: ["develop","DOH"],
     hidden: false
   },
   {
@@ -83,7 +83,15 @@ export const ROUTES: RouteInfo[] = [
     path: "/user",
     icon: "assets/img/user-icon.png",
     class: "",
-    role: ["super admin"],
+    role: ["develop"],
+    hidden: false
+  },
+  {
+    title: "SERVICE STATUS",
+    path: "/servicestatus",
+    icon: "assets/img/m-dashboard.png",
+    class: "",
+    role: ["develop","DOH"],
     hidden: false
   }
 
@@ -1454,11 +1462,9 @@ export class SidebarComponent implements OnInit {
     }
   }
   ngOnInit() {
-    // let userdata = jwt_decode(localStorage.getItem("token"));
-    // debugger
-
-    // let role = userdata["role"];
-    // this.role = role;
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    let role = userdata["role"];
+    this.role = role;
     var items = [];
     this.menuItems = ROUTES;
     var ii = this.menuItems;
@@ -1470,11 +1476,12 @@ export class SidebarComponent implements OnInit {
     var list = arr.concat(...children);
     var lists = list.filter(data => data != undefined);
 
-    // this.menuItems = this.menuItems.filter(menuItem =>
-    //   menuItem.children.filter(data => {
-    //     return data.role.includes(role);
-    //   })
-    // );
+    this.menuItems = this.menuItems.filter(menuItem =>
+     {
+      return menuItem.role.includes(role);
+     }
+    );
+    console.log(this.menuItems)
     // this.menuItems.forEach(menu => {
     //   // console.log(menu)
     //   if (menu.children != undefined) {

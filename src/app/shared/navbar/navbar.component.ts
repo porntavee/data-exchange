@@ -158,10 +158,10 @@ export class NavbarComponent implements OnInit {
     }
    
     this.localIP = ["192.23", "4123"];
-    // let userdata = jwt_decode(localStorage.getItem("token"));
-    // this.userRole = userdata["role"];
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    this.userRole = userdata["role"];
     // this.userID = userdata["id"];
-    // this.userUsername = userdata["username"];
+    this.userUsername = userdata["username"];
     var children = ROUTES.map(data => data["children"]);
     var listTitle = ROUTES.filter(listTitle => listTitle);
     var listTitlefilter = listTitle.filter(data => data.children == undefined);

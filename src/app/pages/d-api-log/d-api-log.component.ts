@@ -28,9 +28,9 @@ export interface routeAPI {
       }
     `
   ],
-  selector: 'app-d-api-log',
-  templateUrl: './d-api-log.component.html',
-  styleUrls: ['./d-api-log.component.css']
+  selector: "app-d-api-log",
+  templateUrl: "./d-api-log.component.html",
+  styleUrls: ["./d-api-log.component.css"]
 })
 export class DApiLogComponent implements OnInit {
   minutes = [
@@ -63,7 +63,7 @@ export class DApiLogComponent implements OnInit {
   Highcharts5_1: typeof Highcharts = Highcharts;
   chartOptions5_1: Highcharts.Options;
 
-  viewMode: string = 'monthly'; // ค่าเริ่มต้นเป็น 'รายเดือน'
+  viewMode: string = "monthly"; // ค่าเริ่มต้นเป็น 'รายเดือน'
   currentMonth: number = new Date().getMonth(); // เดือนปัจจุบัน (0 = มกราคม)
   currentYear: number = new Date().getFullYear(); // ปีปัจจุบัน
 
@@ -71,24 +71,24 @@ export class DApiLogComponent implements OnInit {
   selectedYear: number | null = null; // ปีที่เลือก
 
   months = [
-    { label: 'มกราคม', value: 1 },
-    { label: 'กุมภาพันธ์', value: 2 },
-    { label: 'มีนาคม', value: 3 },
-    { label: 'เมษายน', value: 4 },
-    { label: 'พฤษภาคม', value: 5 },
-    { label: 'มิถุนายน', value: 6 },
-    { label: 'กรกฎาคม', value: 7 },
-    { label: 'สิงหาคม', value: 8 },
-    { label: 'กันยายน', value: 9 },
-    { label: 'ตุลาคม', value: 10 },
-    { label: 'พฤศจิกายน', value: 11 },
-    { label: 'ธันวาคม', value: 12 }
+    { label: "มกราคม", value: 1 },
+    { label: "กุมภาพันธ์", value: 2 },
+    { label: "มีนาคม", value: 3 },
+    { label: "เมษายน", value: 4 },
+    { label: "พฤษภาคม", value: 5 },
+    { label: "มิถุนายน", value: 6 },
+    { label: "กรกฎาคม", value: 7 },
+    { label: "สิงหาคม", value: 8 },
+    { label: "กันยายน", value: 9 },
+    { label: "ตุลาคม", value: 10 },
+    { label: "พฤศจิกายน", value: 11 },
+    { label: "ธันวาคม", value: 12 }
   ];
 
   // ตัวเลือกปี
   years: { label: string; value: number }[] = [];
 
-  token = '';
+  token = "";
   logList: any = [];
 
   constructor(
@@ -103,7 +103,6 @@ export class DApiLogComponent implements OnInit {
     this.titleService.setTitle("API Log");
   }
 
-  
   ngOnInit() {
     const today = new Date();
     const currentMonth = today.getMonth() + 1; // JavaScript months are 0-indexed
@@ -127,61 +126,68 @@ export class DApiLogComponent implements OnInit {
     this.changeDetection.detectChanges();
 
     // this.initializeChartOptions(); // เริ่มต้นแสดงผล
-
   }
 
   readLog() {
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = 'http://127.0.0.1:8000/log/read';
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/read';
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        
+      data => {
+        console.log("Received data:", data.data);
+
         this.tokenList = data.data;
       },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
+      error => {
+        console.error("Error fetching polygon data:", error);
       }
     );
-
   }
 
   readMonthLog() {
-    const apiUrl = 'http://127.0.0.1:8000/log/month/read';
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/month/read';
-    this.http.post<any>(apiUrl, { 'month': this.selectedMonth, 'year': this.selectedYear, 'token': this.token}).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        this.logList = data.data;
-        this.chartOptions5_1 = this.getMonthlyChartOptions(this.logList);
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
+    this.http
+      .post<any>(apiUrl, {
+        month: this.selectedMonth,
+        year: this.selectedYear,
+        token: this.token
+      })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.logList = data.data;
+          this.chartOptions5_1 = this.getMonthlyChartOptions(this.logList);
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
   }
 
   readYearLog() {
-    const apiUrl = 'http://127.0.0.1:8000/log/year/read';
-    // const apiUrl = 'https://dpub.linkflow.co.th:4433/api/data-exchange/log/month/read';
-    this.http.post<any>(apiUrl, { 'year': this.selectedYear, 'token': this.token}).subscribe(
-      (data) => {
-        console.log('Received data:', data.data);
-        this.logList = data.data;
-        this.chartOptions5_1 = this.getYearlyChartOptions(this.logList);
-      },
-      (error) => {
-        console.error('Error fetching polygon data:', error);
-      }
-    );
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/year/read";
+    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
+    this.http
+      .post<any>(apiUrl, { year: this.selectedYear, token: this.token })
+      .subscribe(
+        data => {
+          console.log("Received data:", data.data);
+          this.logList = data.data;
+          this.chartOptions5_1 = this.getYearlyChartOptions(this.logList);
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+        }
+      );
   }
 
   openDailog(param) {
     this.submitted = false;
     this.alarmGroupDialog = true;
-    this.dialogHeader = "Log Chart of Tag: " + param.tag + " Endpoint: " + param.endpoints;
+    this.dialogHeader =
+      "Log Chart of Tag: " + param.tag + " Endpoint: " + param.endpoints;
     this.check = false;
     this.check1 = true;
     this.token = param.token;
@@ -194,72 +200,75 @@ export class DApiLogComponent implements OnInit {
     this.submitted = false;
   }
 
-
   // initializeChartOptions(): void {
   //   // กำหนดค่าเริ่มต้นเป็นรายเดือน
   //   this.chartOptions5_1 = this.getMonthlyChartOptions(this.currentYear, this.currentMonth);
   // }
 
   updateChart(): void {
-   
-    if (this.viewMode === 'monthly') {  // && this.selectedMonth
-      
+    if (this.viewMode === "monthly") {
+      // && this.selectedMonth
+
       this.readMonthLog();
       // this.chartOptions5_1 = this.getMonthlyChartOptions(this.currentYear, this.currentMonth);
       // this.changeDetection.detectChanges();
-      
-    } else if (this.viewMode === 'yearly') { // && this.selectedYear
-    
+    } else if (this.viewMode === "yearly") {
+      // && this.selectedYear
+
       this.readYearLog();
       // this.chartOptions5_1 = this.getYearlyChartOptions(this.currentYear);
       // this.changeDetection.detectChanges();
     }
   }
-  
-  getMonthlyChartOptions(logList): Highcharts.Options {
 
+  getMonthlyChartOptions(logList): Highcharts.Options {
     // สมมติ logList มีโครงสร้าง [{ log_date: '2024-11-01', usage_count: 10 }, ...]
-    const daysInMonth = new Date(this.selectedYear, this.selectedMonth, 0).getDate(); // จำนวนวันในเดือน
-    const categories = Array.from({ length: daysInMonth }, (_, i) => `วันที่ ${i + 1}`); // วันที่ 1 ถึงวันสุดท้ายของเดือน
-  
+    const daysInMonth = new Date(
+      this.selectedYear,
+      this.selectedMonth,
+      0
+    ).getDate(); // จำนวนวันในเดือน
+    const categories = Array.from(
+      { length: daysInMonth },
+      (_, i) => `วันที่ ${i + 1}`
+    ); // วันที่ 1 ถึงวันสุดท้ายของเดือน
+
     // แปลง logList เป็น data array ที่สอดคล้องกับวันที่ในเดือน
     const usageData = Array.from({ length: daysInMonth }, (_, i) => {
       const day = i + 1;
-      const log = logList.find(
-        (item) => new Date(item.date).getDate() === day
-      );
+      const log = logList.find(item => new Date(item.date).getDate() === day);
       return log ? log.usage_count : 0; // ถ้าไม่มีข้อมูล ให้ใส่ค่า 0
     });
-  
+
     return {
       chart: {
         type: "line",
         backgroundColor: "#1a2d45",
-        height: 400,
+        height: 400
       },
       xAxis: {
         categories,
         labels: {
-          style: { color: "#FFFFFF" }, // สีของ label แกน X
-        },
+          style: { color: "#FFFFFF" } // สีของ label แกน X
+        }
       },
       yAxis: {
         title: {
           text: "จำนวน Session",
-          style: { color: "#FFFFFF" }, // สีของ title แกน Y
+          style: { color: "#FFFFFF" } // สีของ title แกน Y
         },
         labels: {
-          style: { color: "#FFFFFF" }, // สีของ label แกน Y
+          style: { color: "#FFFFFF" } // สีของ label แกน Y
         },
-        min: 0, // ค่าเริ่มต้นของแกน Y
+        min: 0 // ค่าเริ่มต้นของแกน Y
       },
       series: [
         {
           type: "line",
           name: "จำนวนครั้ง",
           data: usageData, // ใช้ข้อมูลจาก logList
-          color: "#FF5733",
-        },
+          color: "#FF5733"
+        }
       ],
       plotOptions: {
         column: {
@@ -268,61 +277,69 @@ export class DApiLogComponent implements OnInit {
           borderWidth: 0,
           dataLabels: {
             enabled: true,
-            style: { color: "#FFFFFF" },
-          },
-        },
+            style: { color: "#FFFFFF" }
+          }
+        }
       },
       legend: {
-        itemStyle: { color: "#FFFFFF" },
-      },
+        itemStyle: { color: "#FFFFFF" }
+      }
     };
   }
-  
-  
+
   getYearlyChartOptions(logList): Highcharts.Options {
     // สมมติ logList มีโครงสร้าง [{ log_month: 1, usage_count: 100 }, ...]
     const categories = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
     ];
-  
-    
+
     // แปลง logList เป็น data array ที่สอดคล้องกับเดือนในปี
     const usageData = Array.from({ length: 12 }, (_, i) => {
       const month = i + 1;
-      const log = logList.find((item) => item.month === month);
+      const log = logList.find(item => item.month === month);
       return log ? log.usage_count : 0; // ถ้าไม่มีข้อมูล ให้ใส่ค่า 0
     });
-  
+
     return {
       chart: {
         type: "line",
         backgroundColor: "#1a2d45",
-        height: 400,
+        height: 400
       },
       xAxis: {
         categories,
         labels: {
-          style: { color: "#FFFFFF" }, // สีของ label แกน X
-        },
+          style: { color: "#FFFFFF" } // สีของ label แกน X
+        }
       },
       yAxis: {
         title: {
           text: "จำนวน Session",
-          style: { color: "#FFFFFF" }, // สีของ title แกน Y
+          style: { color: "#FFFFFF" } // สีของ title แกน Y
         },
         labels: {
-          style: { color: "#FFFFFF" }, // สีของ label แกน Y
+          style: { color: "#FFFFFF" } // สีของ label แกน Y
         },
-        min: 0, // ค่าเริ่มต้นของแกน Y
+        min: 0 // ค่าเริ่มต้นของแกน Y
       },
       series: [
         {
           type: "line",
           name: "จำนวนครั้ง",
           data: usageData, // ใช้ข้อมูลจาก logList
-          color: "#FF5733",
-        },
+          color: "#FF5733"
+        }
       ],
       plotOptions: {
         column: {
@@ -331,15 +348,13 @@ export class DApiLogComponent implements OnInit {
           borderWidth: 0,
           dataLabels: {
             enabled: true,
-            style: { color: "#FFFFFF" },
-          },
-        },
+            style: { color: "#FFFFFF" }
+          }
+        }
       },
       legend: {
-        itemStyle: { color: "#FFFFFF" },
-      },
+        itemStyle: { color: "#FFFFFF" }
+      }
     };
   }
-  
-
 }
