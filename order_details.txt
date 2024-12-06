@@ -1,0 +1,13 @@
+🌟 Restaurant: 🍣 Japanese Restaurant 🌟
+
+🍽️ Ordered Items:
+- Sushi 🍣 - 200 Baht
+- Sushi 🍣 - 200 Baht
+- Sushi 🍣 - 200 Baht
+- Pork Donburi 🍖 - 130 Baht
+
+💰 Total before discount: 730 Baht
+🎉 Discount code applied: NEW10
+💸 Discount amount: 73.0 Baht
+
+🎯 Final Total after discount: 657.0 Baht 🎉

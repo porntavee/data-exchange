@@ -68,7 +68,6 @@ export class ServicestatusComponent implements OnInit {
   formattedStartDate: any;
   loading: boolean = true;
   loadingchart_cpuNone: boolean = true;
-
   CPUChart: any;
   products = [
     { code: "P001", name: "Apple", category: "Fruit", quantity: 30 },
@@ -187,8 +186,9 @@ export class ServicestatusComponent implements OnInit {
   }
 
   onOptionChange(event: any) {
+    this.selectedOption = event.value; // อัปเดตค่าที่เลือก
     console.log("Selected option:", event.value);
-    // คุณสามารถใช้ event.value เพื่ออัปเดตข้อมูลตามตัวเลือก
+    // คุณสามารถดำเนินการอื่น ๆ ตามค่าที่เลือกได้
   }
 
   toggleTab(instance: number) {
@@ -488,19 +488,46 @@ export class ServicestatusComponent implements OnInit {
   }
 
   loadData() {
-    this.isLoading = false;
-    // Fetch data from both Linux and Windows APIs using Promise.all
-    Promise.all([
+    // สร้างตัวแปรเพื่อจับเวลา
+    const loadTimeout = setTimeout(() => {
+      // ถ้าโหลดข้อมูลใช้เวลานานกว่า 100ms ก็แสดง spinner
+      this.isLoading = true;
+    }, 1000); // กำหนดเวลา 0.1 วินาที
+
+    // Fetch data from both Linux and Windows APIs using Promise.allSettled
+    Promise.allSettled([
       this.ServicestatusService.getDataLinux().toPromise(),
       this.ServicestatusService.getDataWindow().toPromise()
     ])
-      .then(([linuxData, windowData]) => {
+      .then(([linuxResult, windowResult]) => {
+        clearTimeout(loadTimeout); // ยกเลิกการตั้งเวลา timeout ถ้าโหลดเสร็จภายใน 100ms
+
+        let linuxData = null;
+        let windowData = null;
+
+        // ตรวจสอบผลลัพธ์ของแต่ละ Promise
+        if (linuxResult.status === "fulfilled") {
+          linuxData = linuxResult.value;
+        } else {
+          console.error("Error fetching Linux data:", linuxResult.reason);
+        }
+
+        if (windowResult.status === "fulfilled") {
+          windowData = windowResult.value;
+        } else {
+          console.error("Error fetching Windows data:", windowResult.reason);
+        }
+
+        // หากมีข้อมูลจาก Linux หรือ Windows (หรือทั้งสอง)
         if (
+          linuxData &&
+          windowData &&
           linuxData.success &&
           Array.isArray(linuxData.data) &&
           windowData.success &&
           Array.isArray(windowData.data)
         ) {
+          this.isLoading = false; // ซ่อน spinner เมื่อข้อมูลโหลดเสร็จ
           const linuxTabs = linuxData.data.map(item => ({
             header: {
               instance: item.instance,
@@ -532,6 +559,7 @@ export class ServicestatusComponent implements OnInit {
             isOpen: false
           }));
           this.addOrUpdateTabs(linuxTabs);
+
           const windowTabs = windowData.data.map(item => ({
             header: {
               instance: item.instance,
@@ -548,13 +576,13 @@ export class ServicestatusComponent implements OnInit {
               }
             },
             content: `
-                OS: ${item.os}
-                CPU Avg: ${item.cpu.avg.toFixed(2)}
-                Memory Used: ${item.memory.used.toFixed(2)}%
-                Storage C: Used: ${item.storage["C:"].used.toFixed(2)} GB
-                Storage D: Used: ${item.storage["D:"].used.toFixed(2)} GB
-                Storage E: Used: ${item.storage["E:"].used.toFixed(2)} GB
-              `,
+            OS: ${item.os}
+            CPU Avg: ${item.cpu.avg.toFixed(2)}
+            Memory Used: ${item.memory.used.toFixed(2)}%
+            Storage C: Used: ${item.storage["C:"].used.toFixed(2)} GB
+            Storage D: Used: ${item.storage["D:"].used.toFixed(2)} GB
+            Storage E: Used: ${item.storage["E:"].used.toFixed(2)} GB
+          `,
             storage: Object.entries(item.storage).map(([key, value]: any) => ({
               name: key,
               total: value.total,
@@ -588,6 +616,7 @@ export class ServicestatusComponent implements OnInit {
           } else {
             this.valueDisk = 0;
           }
+
           // Combine CPU data from Linux and Windows
           const allCPUData = [...linuxData.data, ...windowData.data];
           // Calculate average CPU usage
@@ -609,7 +638,7 @@ export class ServicestatusComponent implements OnInit {
       })
       .catch(error => {
         console.error("Error fetching CPU data:", error);
-        this.isLoading = false;
+        this.isLoading = false; // ซ่อน spinner เมื่อเกิดข้อผิดพลาด
       });
   }
 

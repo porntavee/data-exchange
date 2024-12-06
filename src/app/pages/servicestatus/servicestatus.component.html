@@ -1,15 +1,34 @@
 <div class="p-mb-3 fixed-top-left" style="padding: 10px;">
-  <p-selectButton
-    [options]="['Storage', 'Backup']"
-    [(ngModel)]="selectedOption"
-    styleClass="p-button-secondary"
-    (onChange)="onOptionChange($event)"
-  >
-  </p-selectButton>
+  <div class="button-group">
+    <button
+      class="custom-button"
+      [ngClass]="{ selected: selectedOption === 'Storage' }"
+      (click)="onOptionChange({ value: 'Storage' })"
+    >
+      Storage
+    </button>
+    <button
+      class="custom-button"
+      [ngClass]="{ selected: selectedOption === 'Backup' }"
+      (click)="onOptionChange({ value: 'Backup' })"
+    >
+      Backup
+    </button>
+  </div>
 </div>
+
 <div [hidden]="selectedOption !== 'Storage'">
-  <div style="text-align: center; padding: 60px; background-color: #3E5774; ">
+  <div style="text-align: center; padding: 20px; background-color: #3E5774;">
+    <!-- Show spinner while loading -->
+    <p-progressSpinner
+      *ngIf="isLoading"
+      styleClass="custom-spinner"
+      [style]="{ width: '50px', height: '50px' }"
+    ></p-progressSpinner>
+
+    <!-- Show accordion when data is loaded -->
     <div
+      *ngIf="!isLoading"
       class="accordion"
       style="overflow-y: scroll; height: calc(100vh - 120px);"
     >
@@ -24,11 +43,12 @@
             <div style="width:130px">
               <span style="margin-right: 10px;">{{ tab.header.instance }}</span>
             </div>
+
             <div style="text-align: right; display: flex; align-items: center;">
               <div style="width:160px">
-                <span style="margin-right: 10px; color: white;"
-                  >CPU Avg: {{ tab.header.cpuAvg }}</span
-                >
+                <span style="margin-right: 10px; color: white;">
+                  CPU Avg: {{ tab.header.cpuAvg }}
+                </span>
               </div>
               <div class="flex-1 mb-2">
                 <div
@@ -39,9 +59,9 @@
             </div>
             <div style="text-align: right; display: flex; align-items: center;">
               <div style="width:200px">
-                <span style="margin-right: 10px; color: white;"
-                  >Memory Used: {{ tab.header.free }}</span
-                >
+                <span style="margin-right: 10px; color: white;">
+                  Memory Used: {{ tab.header.free }}
+                </span>
               </div>
               <div class="flex-1 mb-2">
                 <div
@@ -49,21 +69,29 @@
                   style="margin-top: 25px;"
                 ></div>
               </div>
-            </div>
-            <div style="margin-right: 16px; width:100px; text-align: right;">
-              {{ tab.header.storage.name }}
-            </div>
-            <div class="flex-1">
-              <p-progressBar
-                [value]="tab.header.storage.percentUsed"
-              ></p-progressBar>
+              <div style="margin-right: 16px; width:100px; text-align: right;">
+                {{ tab.header.storage.name }}
+              </div>
+              <div style="width: 100px;">
+                <!-- Progress Bar Container -->
+                <div class="flex-1">
+                  <p-progressBar
+                    *ngIf="!isLoading"
+                    [value]="tab.header.storage.percentUsed"
+                  ></p-progressBar>
+                  <p-progressSpinner
+                    *ngIf="isLoading"
+                    styleClass="custom-spinner"
+                    [style]="{ width: '50px', height: '50px' }"
+                  ></p-progressSpinner>
+                </div>
+              </div>
             </div>
           </div>
         </button>
 
         <div class="accordion-content" *ngIf="tab.isOpen">
           <p-toast appendTo="body"></p-toast>
-
           <div class="row justify-content-between">
             <gridster
               [options]="gridOptions"
@@ -182,22 +210,22 @@
     </div>
   </div>
 </div>
+
 <div *ngIf="selectedOption === 'Backup'">
-  <!-- Create content for Backup here -->
-  <div style="text-align: center; padding: 60px; background-color: #3E5774; ">
+  <div style="text-align: center; padding: 60px; background-color: #3E5774;">
+    <div style="text-align: left; font-weight: bolder; margin-bottom: 24px;">
+      Backup History
+    </div>
     <p-table
       *ngIf="selectedOption === 'Backup'"
       [value]="products"
-      [tableStyle]="{ 'min-width': '100rem', 'background-color': '#3E5774' }"
+      responsiveLayout="scroll"
+      [tableStyle]="{ 'min-width': '50%', 'background-color': '#3E5774' }"
     >
       <ng-template pTemplate="header">
         <tr>
-          <th style="position: sticky; top: 0; background-color: #3E5774;">
-            Filename
-          </th>
-          <th style="position: sticky; top: 0; background-color: #3E5774;">
-            Created At
-          </th>
+          <th>Filename</th>
+          <th>Created At</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-product>
