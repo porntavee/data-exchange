@@ -25,8 +25,8 @@ import {
       }
 
       gridster {
-        width: 97vw;
-        height: calc(100vh - 130px);
+        width: 90vw;
+        height: 600px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -55,6 +55,7 @@ export class ServicestatusComponent implements OnInit {
   optionsstatusCPU: any;
   optionsstatusMemory: any;
   intervalId: NodeJS.Timeout;
+  isNodata: boolean;
   constructor(
     public themeService: ThemeService,
     private titleService: Title,
@@ -77,12 +78,13 @@ export class ServicestatusComponent implements OnInit {
     { code: "P005", name: "Milk", category: "Dairy", quantity: 15 }
   ];
   isLoading: boolean = false;
-
+  isNoData: boolean = false;
   invalidstartH: any;
   valueDisk: any;
   selectedOption: string = "Storage"; // เริ่มต้นที่ Storage
   dashboard: any[] = [];
   horizontalOptions: any;
+
   tabs: {
     lineChartData: any;
     isOpen: boolean;
@@ -94,11 +96,13 @@ export class ServicestatusComponent implements OnInit {
     minCols: 3,
     maxCols: 12,
     minRows: 2,
-    maxRows: 500,
+    maxRows: 600,
     gridType: "verticalFixed" as GridType,
-    fixedRowHeight: 240,
+    fixedRowHeight: 560,
+    fixedRowWidth: 480,
     margin: 16
   };
+
   rangeColors = [
     { start: 0, end: 33.33, color: "green" },
     { start: 33.33, end: 66.66, color: "yellow" },
@@ -124,7 +128,7 @@ export class ServicestatusComponent implements OnInit {
     );
     this.intervalId = setInterval(() => {
       this.loadData();
-    }, 1000);
+    }, 60000);
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue("--text-color");
     const textColorSecondary = documentStyle.getPropertyValue(
@@ -136,14 +140,14 @@ export class ServicestatusComponent implements OnInit {
     this.gridOptions = this.initialGridOptions;
 
     this.dashboard = [
-      { cols: 6, rows: 1, x: 0, y: 0, header: "loadcpu" },
+      { cols: 3, rows: 1, x: 0, y: 0, header: "loadcpu" },
       // { cols: 3, rows: 1, x: 3, y: 0, header: "loaddisk" },
-      { cols: 6, rows: 1, x: 6, y: 0, header: "loadmemory" },
+      { cols: 3, rows: 1, x: 3, y: 0, header: "loadmemory" },
       {
-        cols: 12,
-        rows: 2,
-        x: 0,
-        y: 1,
+        cols: 6,
+        rows: 1,
+        x: 6,
+        y: 0,
         header: "loaddiskstatus"
       }
     ];
@@ -224,127 +228,152 @@ export class ServicestatusComponent implements OnInit {
     }
   }
   drawDisk() {
-    this.cdr.detectChanges();
+    // ไม่เรียก this.cdr.detectChanges() ที่นี่เพื่อลดการ re-render ซ้ำ ๆ
+    // this.cdr.detectChanges(); // <- ลองคอมเมนต์บรรทัดนี้ออก
 
     this.tabs.forEach((tab, index) => {
-      const container = document.getElementById(
-        "disk_status_chart_" + tab.header.instance
-      );
-      if (container) {
-        const diskOptions: Highcharts.Options = {
-          chart: {
-            type: "bar",
-            backgroundColor: "transparent"
-          },
-          title: {
-            text: null,
-            style: {
-              color: this.colortitle
-            }
-          },
-          legend: {
-            enabled: false
-          },
-          credits: {
-            enabled: false
-          },
-          exporting: {
-            enabled: false
-          },
-          xAxis: [
-            {
-              categories: tab.storage.map(data => data.name),
-              gridLineWidth: 0,
-              labels: {
-                style: {
-                  fontSize: "16px"
-                }
-              }
-            },
-            {
-              linkedTo: 0,
-              opposite: true,
-              categories: tab.storage.map(
-                data => `${parseFloat(data.total).toFixed(2)} GB`
-              ),
-              gridLineWidth: 0,
-              labels: {
-                style: {
-                  fontSize: "16px"
-                }
-              }
-            }
-          ],
-          yAxis: {
-            max: 100,
-            gridLineWidth: 0,
-            labels: { enabled: false },
-            title: { text: "" }
-          },
-          plotOptions: {
-            bar: {
-              stacking: "percent",
-              animation: false,
-              pointWidth: 40,
-              groupPadding: 0.05,
-              pointPadding: 0.02
-            }
-          },
-          tooltip: {
-            useHTML: true,
-            formatter: function() {
-              const value = this.point.y.toFixed(2);
-              return `
-              <span style="font-size:10px">${this.series.name}</span>
-              <table>
-                <tr>
-                  <td style="color:${this.color};padding:0">${this.series.name}: </td>
-                  <td style="padding:0"><b>${value} GB</b></td>
-                </tr>
-              </table>`;
-            }
-          },
-          series: [
-            {
-              type: "bar",
-              name: "Free",
-              data: tab.storage.map(storageItem => ({
-                y: parseFloat(storageItem.total) - parseFloat(storageItem.used),
-                color: "#D5D8DC"
-              }))
-            },
-            {
-              type: "bar",
-              name: "Usage",
-              data: tab.storage.map(storageItem => ({
-                y: parseFloat(storageItem.used),
-                color:
-                  (parseFloat(storageItem.used) /
-                    parseFloat(storageItem.total)) *
-                    100 <
-                  81
-                    ? "#50D0BC"
-                    : (parseFloat(storageItem.used) /
-                        parseFloat(storageItem.total)) *
-                        100 <
-                      91
-                    ? "#FFBB55"
-                    : "#FF7782"
-              }))
-            }
-          ]
-        };
-        Highcharts.chart(
-          "disk_status_chart_" + tab.header.instance,
-          diskOptions
-        );
+      const containerId = "disk_status_chart_" + tab.header.instance;
+      const container = document.getElementById(containerId);
+
+      // ตรวจสอบว่ามี container และมี storage data หรือไม่
+      if (!container || !tab.storage || tab.storage.length === 0) {
+        return; // ไม่มี container หรือไม่มีข้อมูล ไม่วาดกราฟ
       }
+
+      // กำหนดความสูงคงที่แทนการคำนวณแบบไดนามิก เพื่อป้องกันกราฟหดตัว
+      const fixedHeight = 200;
+
+      const diskOptions: Highcharts.Options = {
+        chart: {
+          type: "bar",
+          backgroundColor: "transparent",
+          marginLeft: 150,
+          marginRight: 150,
+          spacing: [10, 10, 10, 10] // เพิ่ม spacing รอบๆ
+        },
+        title: {
+          text: null,
+          style: {
+            color: this.colortitle
+          }
+        },
+        legend: {
+          enabled: false
+        },
+        credits: {
+          enabled: false
+        },
+        exporting: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            categories: tab.storage.map(data => data.name),
+            gridLineWidth: 0,
+            labels: {
+              style: {
+                fontSize: "16px"
+              }
+            }
+          },
+          {
+            linkedTo: 0,
+            opposite: true,
+            categories: tab.storage.map(
+              data => `${parseFloat(data.total).toFixed(2)} GB`
+            ),
+            gridLineWidth: 0,
+            labels: {
+              style: {
+                fontSize: "16px"
+              }
+            }
+          }
+        ],
+        yAxis: {
+          max: 100,
+          gridLineWidth: 0,
+          labels: { enabled: false },
+          title: { text: "" }
+        },
+        plotOptions: {
+          bar: {
+            stacking: "percent",
+            animation: false,
+            pointWidth: 40,
+            groupPadding: 0.4,
+            pointPadding: 1
+          }
+        },
+        tooltip: {
+          useHTML: true,
+          formatter: function() {
+            if (!this.point || typeof this.point.y !== "number") {
+              return "No data";
+            }
+            const value = this.point.y.toFixed(2);
+            return `
+          <span style="font-size:10px">${this.series.name}</span>
+          <table>
+            <tr>
+              <td style="color:${this.color};padding:0">${this.series.name}: </td>
+              <td style="padding:0"><b>${value} GB</b></td>
+            </tr>
+          </table>`;
+          }
+        },
+        series: [
+          {
+            type: "bar",
+            name: "Free",
+            data: tab.storage.map(storageItem => {
+              const total = parseFloat(storageItem.total);
+              const used = parseFloat(storageItem.used);
+              if (isNaN(total) || isNaN(used)) {
+                return { y: 0, color: "#D5D8DC" };
+              }
+              return {
+                y: total - used,
+                color: "#D5D8DC"
+              };
+            })
+          },
+          {
+            type: "bar",
+            name: "Usage",
+            data: tab.storage.map(storageItem => {
+              const total = parseFloat(storageItem.total);
+              const used = parseFloat(storageItem.used);
+              if (isNaN(total) || isNaN(used) || total === 0) {
+                return { y: 0, color: "#D5D8DC" };
+              }
+              const usagePercent = (used / total) * 100;
+              let barColor = "#FF7782";
+              if (usagePercent < 81) {
+                barColor = "#50D0BC";
+              } else if (usagePercent < 91) {
+                barColor = "#FFBB55";
+              }
+              return {
+                y: used,
+                color: barColor
+              };
+            })
+          }
+        ]
+      };
+
+      Highcharts.chart(containerId, diskOptions);
     });
   }
 
   drawHeaderSparkline() {
     this.cdr.detectChanges();
+    console.log(this.tabs);
+
     this.tabs.forEach((tab, index) => {
+      console.log(tab.header.cpuRange.slice(-2));
+
       const cpuSparklineOptions: any = {
         chart: {
           zoomType: null,
@@ -366,7 +395,7 @@ export class ServicestatusComponent implements OnInit {
         credits: { enabled: false },
         exporting: { enabled: false },
         xAxis: {
-          type: "category",
+          type: "datetime",
           gridLineWidth: 0,
           labels: { enabled: false },
           title: { text: null },
@@ -386,17 +415,27 @@ export class ServicestatusComponent implements OnInit {
         series: [
           {
             type: "line",
-            name: "CPU Utilization",
-            data: tab.header.cpuRange,
-            color: "#4FC3F7", // สีฟ้าสำหรับ CPU
-            lineWidth: 1.5,
+            name: "CPU Util",
+            data: tab.header.cpuRange
+              .slice(-24)
+              .map((point: [number, number]) => {
+                return [point[0] * 1000, point[1]];
+              }),
+            color: "#00FFFF",
+            lineWidth: 2,
             tooltip: {
-              headerFormat:
-                '<span style="font-size:10px">Data Point: {point.key}</span><table>',
-              pointFormat:
-                '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-              footerFormat: "</table>",
+              formatter: function() {
+                const timestamp = new Date(this.point.x);
+                const formattedTime = timestamp.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit"
+                });
+                const cpuValue = (Math.round(this.point.y * 100) / 100).toFixed(
+                  2
+                );
+                return `<b>Time:</b> ${formattedTime}<br/><b>CPU:</b> ${cpuValue}`;
+              },
               shared: true,
               useHTML: true
             }
@@ -425,7 +464,7 @@ export class ServicestatusComponent implements OnInit {
         credits: { enabled: false },
         exporting: { enabled: false },
         xAxis: {
-          type: "category",
+          type: "datetime",
           gridLineWidth: 0,
           labels: { enabled: false },
           title: { text: null },
@@ -445,17 +484,32 @@ export class ServicestatusComponent implements OnInit {
         series: [
           {
             type: "line",
-            name: "Memory Utilization",
-            data: tab.header.memoryRange,
-            color: "#AB47BC", // สีม่วงสำหรับ Memory
-            lineWidth: 1.5,
+            name: "Memory Util",
+            data: tab.header.memoryRange
+              .slice(-24)
+              .map((point: [number, number]) => {
+                return [point[0] * 1000, point[1]];
+              }),
+            color: "#FFFF00",
+            lineWidth: 2,
             tooltip: {
-              headerFormat:
-                '<span style="font-size:10px">Data Point: {point.key}</span><table>',
-              pointFormat:
-                '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-              footerFormat: "</table>",
+              formatter: function() {
+                const timestamp = new Date(this.point.x);
+                const formattedTime = timestamp.toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit"
+                });
+                const memValue = parseFloat(this.point.y.toString()).toFixed(2);
+                return `
+                <span style="font-size:10px">Timestamp: ${formattedTime}</span>
+                <table>
+                  <tr>
+                    <td style="color:${this.color};padding:0">${this.series.name}: </td>
+                    <td style="padding:0"><b>${memValue}</b></td>
+                  </tr>
+                </table>`;
+              },
               shared: true,
               useHTML: true
             }
@@ -466,23 +520,23 @@ export class ServicestatusComponent implements OnInit {
       // สำหรับ containerCPU
       const containerCPUId = `containerCPU-${tab.header.instance}`;
       const containerCPU = document.getElementById(containerCPUId);
-      if (containerCPU) {
-        if (!containerCPU.getAttribute("data-chart-initialized")) {
-          Highcharts.chart(containerCPUId, cpuSparklineOptions);
-          containerCPU.setAttribute("data-chart-initialized", "true");
-        }
-      } else {
+      if (
+        containerCPU &&
+        !containerCPU.getAttribute("data-chart-initialized")
+      ) {
+        Highcharts.chart(containerCPUId, cpuSparklineOptions);
+        containerCPU.setAttribute("data-chart-initialized", "true");
       }
 
       // สำหรับ containerMemory
       const containerMemoryId = `containerMemory-${tab.header.instance}`;
       const containerMemory = document.getElementById(containerMemoryId);
-      if (containerMemory) {
-        if (!containerMemory.getAttribute("data-chart-initialized")) {
-          Highcharts.chart(containerMemoryId, memorySparklineOptions);
-          containerMemory.setAttribute("data-chart-initialized", "true");
-        }
-      } else {
+      if (
+        containerMemory &&
+        !containerMemory.getAttribute("data-chart-initialized")
+      ) {
+        Highcharts.chart(containerMemoryId, memorySparklineOptions);
+        containerMemory.setAttribute("data-chart-initialized", "true");
       }
     });
   }
@@ -490,45 +544,26 @@ export class ServicestatusComponent implements OnInit {
   loadData() {
     // สร้างตัวแปรเพื่อจับเวลา
     const loadTimeout = setTimeout(() => {
-      // ถ้าโหลดข้อมูลใช้เวลานานกว่า 100ms ก็แสดง spinner
-      this.isLoading = true;
-    }, 1000); // กำหนดเวลา 0.1 วินาที
+      this.isLoading = true; // แสดง spinner หากโหลดนานกว่า 1 วินาที
+    }, 1000);
 
-    // Fetch data from both Linux and Windows APIs using Promise.allSettled
+    // ตั้งค่าเริ่มต้นของ isNodata
+    this.isNodata = false;
+
+    // ดึงข้อมูลจากทั้ง Linux และ Windows APIs
     Promise.allSettled([
       this.ServicestatusService.getDataLinux().toPromise(),
       this.ServicestatusService.getDataWindow().toPromise()
     ])
       .then(([linuxResult, windowResult]) => {
-        clearTimeout(loadTimeout); // ยกเลิกการตั้งเวลา timeout ถ้าโหลดเสร็จภายใน 100ms
+        clearTimeout(loadTimeout); // ยกเลิก timeout เมื่อข้อมูลโหลดเสร็จ
 
-        let linuxData = null;
-        let windowData = null;
+        const tabs: any[] = []; // เก็บข้อมูลสำหรับ tabs
 
-        // ตรวจสอบผลลัพธ์ของแต่ละ Promise
-        if (linuxResult.status === "fulfilled") {
-          linuxData = linuxResult.value;
-        } else {
-          console.error("Error fetching Linux data:", linuxResult.reason);
-        }
-
-        if (windowResult.status === "fulfilled") {
-          windowData = windowResult.value;
-        } else {
-          console.error("Error fetching Windows data:", windowResult.reason);
-        }
-
-        // หากมีข้อมูลจาก Linux หรือ Windows (หรือทั้งสอง)
-        if (
-          linuxData &&
-          windowData &&
-          linuxData.success &&
-          Array.isArray(linuxData.data) &&
-          windowData.success &&
-          Array.isArray(windowData.data)
-        ) {
-          this.isLoading = false; // ซ่อน spinner เมื่อข้อมูลโหลดเสร็จ
-          const linuxTabs = linuxData.data.map(item => ({
+        // ตรวจสอบข้อมูล Linux
+        if (linuxResult.status === "fulfilled" && linuxResult.value?.success) {
+          const linuxData = linuxResult.value.data;
+          const linuxTabs = linuxData.map(item => ({
             header: {
               instance: item.instance,
               cpuAvg: Math.max(item.cpu.avg, 0).toFixed(2),
@@ -545,11 +580,11 @@ export class ServicestatusComponent implements OnInit {
             },
             lineChartData: item.cpu.avg_range,
             content: `
-            OS: ${item.os}
-            CPU Avg: ${item.cpu.avg.toFixed(2)}
-            Memory Used: ${item.memory.used.toFixed(2)}%
-            Storage EXT4 Used: ${item.storage.ext4.used.toFixed(2)} GB
-          `,
+          OS: ${item.os}
+          CPU Avg: ${item.cpu.avg.toFixed(2)}
+          Memory Used: ${item.memory.used.toFixed(2)}%
+          Storage EXT4 Used: ${item.storage.ext4.used.toFixed(2)} GB
+        `,
             storage: Object.entries(item.storage).map(([key, value]: any) => ({
               name: key,
               total: value.total,
@@ -558,9 +593,18 @@ export class ServicestatusComponent implements OnInit {
             })),
             isOpen: false
           }));
-          this.addOrUpdateTabs(linuxTabs);
+          tabs.push(...linuxTabs); // เพิ่มข้อมูล Linux ใน tabs
+        } else if (linuxResult.status === "rejected") {
+          console.error("Error fetching Linux data:", linuxResult.reason);
+        }
 
-          const windowTabs = windowData.data.map(item => ({
+        // ตรวจสอบข้อมูล Windows
+        if (
+          windowResult.status === "fulfilled" &&
+          windowResult.value?.success
+        ) {
+          const windowData = windowResult.value.data;
+          const windowTabs = windowData.map(item => ({
             header: {
               instance: item.instance,
               cpuAvg: Math.max(item.cpu.avg, 0).toFixed(2),
@@ -576,13 +620,11 @@ export class ServicestatusComponent implements OnInit {
               }
             },
             content: `
-            OS: ${item.os}
-            CPU Avg: ${item.cpu.avg.toFixed(2)}
-            Memory Used: ${item.memory.used.toFixed(2)}%
-            Storage C: Used: ${item.storage["C:"].used.toFixed(2)} GB
-            Storage D: Used: ${item.storage["D:"].used.toFixed(2)} GB
-            Storage E: Used: ${item.storage["E:"].used.toFixed(2)} GB
-          `,
+          OS: ${item.os}
+          CPU Avg: ${item.cpu.avg.toFixed(2)}
+          Memory Used: ${item.memory.used.toFixed(2)}%
+          Storage C: Used: ${item.storage["C:"].used.toFixed(2)} GB
+        `,
             storage: Object.entries(item.storage).map(([key, value]: any) => ({
               name: key,
               total: value.total,
@@ -591,53 +633,24 @@ export class ServicestatusComponent implements OnInit {
             })),
             isOpen: false
           }));
-          this.addOrUpdateTabs(windowTabs);
-
-          // Combine storage data from Linux and Windows
-          const linuxStorageData = linuxData.data.map(
-            instance => instance.storage.ext4
-          );
-          const windowStorageData = windowData.data.flatMap(instance =>
-            Object.values(instance.storage)
-          );
-
-          const allStorageData = [...linuxStorageData, ...windowStorageData];
-
-          // Calculate average used storage
-          const totalStorage = allStorageData.reduce(
-            (acc, data) => acc + data.used,
-            0
-          );
-          const totalInstances = allStorageData.length;
-
-          if (totalInstances > 0) {
-            this.valueDisk = totalStorage / totalInstances;
-            this.valueDisk = parseFloat(this.valueDisk.toFixed(2)); // Round to two decimal places
-          } else {
-            this.valueDisk = 0;
-          }
-
-          // Combine CPU data from Linux and Windows
-          const allCPUData = [...linuxData.data, ...windowData.data];
-          // Calculate average CPU usage
-          const cpuAverages = allCPUData.map(item => item.cpu.avg);
-          const ramAverages = allCPUData.map(item => item.memory.free);
-          const overallCPUAvg =
-            cpuAverages.reduce((sum, value) => sum + value, 0) /
-            cpuAverages.length;
-
-          const linuxFilter = allCPUData.filter(item => item.os === "linux");
-          const windowsFilter = allCPUData.filter(
-            item => item.os === "windows"
-          );
-          this.isLoading = false;
-        } else {
-          console.error("Invalid response format:", linuxData, windowData);
-          this.isLoading = false;
+          tabs.push(...windowTabs); // เพิ่มข้อมูล Windows ใน tabs
+        } else if (windowResult.status === "rejected") {
+          console.error("Error fetching Windows data:", windowResult.reason);
         }
+
+        // ตรวจสอบว่ามีข้อมูลใดถูกเพิ่มเข้ามาหรือไม่
+        if (tabs.length > 0) {
+          this.addOrUpdateTabs(tabs);
+        } else {
+          this.isNodata = true; // กำหนดว่าไม่มีข้อมูล
+          console.error("No valid data received from Linux or Windows.");
+        }
+
+        this.isLoading = false; // ซ่อน spinner หลังจากโหลดข้อมูลเสร็จ
       })
       .catch(error => {
-        console.error("Error fetching CPU data:", error);
+        console.error("Error fetching data:", error);
+        this.isNodata = true; // กำหนดว่าไม่มีข้อมูลเมื่อเกิดข้อผิดพลาด
         this.isLoading = false; // ซ่อน spinner เมื่อเกิดข้อผิดพลาด
       });
   }

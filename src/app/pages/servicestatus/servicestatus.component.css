@@ -1,5 +1,4 @@
-/* General styles */
-p {
+General styles p {
   font-weight: 600;
 }
 .col-12 {
@@ -23,6 +22,7 @@ p {
   box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
 }
 
+/* Container styles */
 .container {
   display: flex;
   flex-direction: column;
@@ -39,6 +39,7 @@ p {
   gap: 16px;
 }
 
+/* Accordion styles */
 .accordion {
   width: 100%;
 }
@@ -54,6 +55,7 @@ p {
 
 .accordion-header {
   padding: 15px;
+  width: fit-content;
   background-color: #1f2d40;
   color: white;
   text-align: left;
@@ -62,6 +64,7 @@ p {
   font-size: 18px;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  width: 100%;
 }
 
 .accordion-content p {
@@ -69,49 +72,25 @@ p {
   margin: 0;
 }
 
-.inlinesparkline {
-  width: 100%;
-  height: 50px; /* Add appropriate height */
-}
-
-.content {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.p-table {
-  overflow-y: scroll;
-}
-
-.p-table .p-datatable-tbody {
-  display: block;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* Progress Bar Container */
+/* Progress Bar */
 .progress-bar-container {
   width: 100%;
-  max-width: 300px; /* ขนาดคงที่สำหรับหน้าจอเล็ก */
-  background-color: #e0e0e0; /* สีพื้นหลัง */
+  max-width: 300px;
+  background-color: #e0e0e0;
   border-radius: 8px;
-  height: 20px; /* ความสูงของ progress bar */
+  height: 20px;
   overflow: hidden;
   position: relative;
 }
 
-/* Progress Bar */
 .progress-bar {
   height: 100%;
-  background-color: #4caf50; /* สีของ progress bar */
-  width: 0%; /* กำหนดเริ่มต้นที่ 0% */
-  border-radius: 8px 0 0 8px; /* มุมของ progress bar */
-  transition: width 0.5s ease-in-out; /* เพิ่มการเปลี่ยนแปลงค่อยๆ */
-  position: relative;
+  background-color: #4caf50;
+  width: 0%;
+  border-radius: 8px 0 0 8px;
+  transition: width 0.5s ease-in-out;
 }
 
-/* Display the percentage inside the progress bar */
 .progress-bar-text {
   position: absolute;
   top: 0;
@@ -126,7 +105,9 @@ p {
 .card {
   background-color: #f4f4f4;
   border-radius: 8px;
-  padding: 16px;
+  margin-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -136,39 +117,63 @@ p {
 
 .card-dashboard {
   overflow-y: auto;
+  height: 100%;
+  max-height: 500px;
 }
 
-/* Scrollbar specific for .card-dashboard */
 .card-dashboard::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.card-dashboard::-webkit-scrollbar-track {
-  background-color: #e4e4e4;
-  border-radius: 100px;
+  width: 6px;
 }
 
 .card-dashboard::-webkit-scrollbar-thumb {
-  border-radius: 100px;
-  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%);
-  box-shadow: inset 2px 2px 5px 0 rgba(255, 255, 255, 0.5);
+  background-color: #757474;
+  border-radius: 10px;
 }
 
-@media (max-width: 768px) {
-  .p-table th,
-  .p-table td {
-    display: block;
-    width: 100%;
-    text-align: left;
-  }
-  .p-table tr {
-    display: block;
-    margin-bottom: 1rem;
-  }
+/* Gridster styles */
+.gridster {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto; /* เลื่อนแนวตั้งหากพื้นที่ไม่พอ */
 }
 
-/* Buttons */
+.gridster-item .card {
+  width: 100%; /* ใช้พื้นที่ทั้งหมดของไอเท็ม */
+  height: 100%;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* p-table styles */
+p-table .ui-table-scrollable-body {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+
+p-table .ui-table-scrollable-body::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+p-table .ui-table-scrollable-body::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
+
+p-table .ui-table-scrollable-body::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
+}
+
+/* Button styles */
 .custom-button {
   padding: 10px 20px;
   border: 1px solid #ccc;
@@ -176,11 +181,6 @@ p {
   color: black;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
-}
-
-.custom-spinner {
-  width: 10px !important; /* ปรับขนาดความกว้าง */
-  height: 10px !important; /* ปรับขนาดความสูง */
 }
 
 .custom-button:hover {
@@ -193,17 +193,20 @@ p {
   border-color: #3e5774;
 }
 
+.no-data-message {
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* จัดตำแหน่งแนวนอนให้อยู่ตรงกลาง */
+  align-items: center; /* จัดตำแหน่งแนวตั้งให้อยู่ตรงกลาง */
+  background-color: #3e5774; /* สีพื้นหลังเพื่อความกลมกลืน */
+}
+
 .button-group {
   display: flex;
   gap: 10px;
 }
 
-.p-selectbutton .p-button.p-highlight {
-  background-color: #ff5722;
-  color: #ffffff;
-}
-
-/* Dialog */
+/* Dialog styles */
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
@@ -211,103 +214,30 @@ p {
 
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
-  border-radius: 100px !important;
 }
 
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
-  border-radius: 100px !important;
-  background-image: linear-gradient(
-    180deg,
-    #979594e7 0%,
-    #757474 99%
-  ) !important;
-  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+  background-color: #757474 !important;
 }
 
-/* Media Queries for responsive design */
+/* Media Queries */
 @media screen and (max-width: 768px) {
   .progress-bar-container {
-    width: 300px; /* ขนาดคงที่ 300px สำหรับหน้าจอเล็ก */
+    width: 100%;
   }
-}
 
-@media screen and (max-width: 480px) {
-  .progress-bar-container {
-    width: 300px; /* ขนาดคงที่ 300px สำหรับหน้าจอเล็ก */
-  }
-}
-
-@media screen and (max-width: 560px) {
-  .Searchtxt {
-    width: 100% !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .Newtxt {
-    display: none;
-  }
-  .Exporttxt {
-    display: none;
-  }
-  .Cleartxt {
-    display: none;
-  }
-  .Searchtxt {
-    width: 100% !important;
-  }
-  .Newbut {
-    width: 20px !important;
-  }
-  .Clearbut {
-    width: 20px !important;
-    margin-right: 5px;
-  }
-  .pi-plus:before {
-    margin-left: -10px;
-  }
-  .Exportbut {
-    width: 100% !important;
-  }
-  .pi-file:before {
-    margin-left: -10px;
-  }
-  .pi-filter-slash:before {
-    margin-left: -10px;
-  }
-}
-
-@media screen and (max-width: 800px) {
   .card-dashboard {
-    height: 100%;
-    overflow-y: auto;
+    height: auto;
   }
-  .card-dashboard::-webkit-scrollbar {
-    width: 8px !important;
-    height: 8px !important;
-  }
-  .card-dashboard::-webkit-scrollbar-track {
-    background-color: #e4e4e4 !important;
-    border-radius: 100px !important;
+}
+
+@media screen and (max-width: 480px) {
+  .button-group {
+    flex-direction: column;
+    gap: 5px;
   }
 
-  .card-dashboard::-webkit-scrollbar-thumb {
-    border-radius: 100px !important;
-    background-image: linear-gradient(
-      180deg,
-      #979594e7 0%,
-      #757474 99%
-    ) !important;
-    box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
-  }
-  .valueTemp {
-    font-size: 5vw !important;
-  }
-
-  ::ng-deep .p-dialog {
-    width: calc(100% - 150px) !important;
-  }
-  ::ng-deep .p-dialog .p-dialog-content {
-    width: calc(100%) !important;
+  .card-dashboard {
+    height: auto;
   }
 }
