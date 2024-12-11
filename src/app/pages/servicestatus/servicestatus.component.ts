@@ -183,6 +183,10 @@ export class ServicestatusComponent implements OnInit {
     this.themeService.currentcolorMessage.subscribe(value => {});
   }
 
+  ngAfterViewInit() {
+    this.drawDisk();
+  }
+
   ngOnDestroy(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -200,22 +204,23 @@ export class ServicestatusComponent implements OnInit {
       tab => tab.header.instance === instance
     );
     this.tabs[existingIndex].isOpen = !this.tabs[existingIndex].isOpen;
-    this.cdr.detectChanges();
-    // if (this.tabs[existingIndex].isOpen) {
-    //   this.dashboard.forEach(data => {
-    //     if (data.header == "loadcpu") {
-    //       this.loadData();
-    //     } else if (data.header == "loaddisk") {
-    //       this.loadData();
-    //     } else if (data.header == "loadmemory") {
-    //       this.loadData();
-    //     } else if (data.header == "loaddiskstatus") {
-    //       this.loadData();
-    //     } else {
-    //       this.isLoading = false;
-    //     }
-    //   });
-    // }
+    // this.cdr.detectChanges();
+    if (this.tabs[existingIndex].isOpen) {
+      this.dashboard.forEach(data => {
+        this.loadData();
+        // if (data.header == "loadcpu") {
+        //   this.loadData();
+        // } else if (data.header == "loaddisk") {
+        //   this.loadData();
+        // } else if (data.header == "loadmemory") {
+        //   this.loadData();
+        // } else if (data.header == "loaddiskstatus") {
+        //   this.loadData();
+        // } else {
+        //   this.isLoading = false;
+        // }
+      });
+    }
   }
 
   static itemChange(
@@ -647,7 +652,11 @@ export class ServicestatusComponent implements OnInit {
     });
 
     this.drawHeaderSparkline();
-    this.drawDisk();
+
+    // ใช้ Promise เพื่อให้มั่นใจว่าการวาด disk จะเกิดหลังจาก view render เสร็จ
+    Promise.resolve().then(() => {
+      this.drawDisk();
+    });
   }
 
   valueChart: { [key: string]: any } = {};
