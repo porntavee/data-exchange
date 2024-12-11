@@ -206,7 +206,10 @@ export class ServicestatusComponent implements OnInit {
     this.tabs[existingIndex].isOpen = !this.tabs[existingIndex].isOpen;
     // this.cdr.detectChanges();
     if (this.tabs[existingIndex].isOpen) {
-      this.loadData();
+      this.drawHeaderSparkline();
+
+      // ใช้ Promise เพื่อให้มั่นใจว่าการวาด disk จะเกิดหลังจาก view render เสร็จ
+      this.drawDisk();
     }
   }
 
