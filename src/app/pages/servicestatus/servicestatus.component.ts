@@ -25,7 +25,7 @@ import {
       }
 
       gridster {
-        width: 90vw;
+        width: 1000px;
         height: 600px;
       }
       gridster::-webkit-scrollbar {
@@ -93,10 +93,10 @@ export class ServicestatusComponent implements OnInit {
     storage: any;
   }[] = [];
   initialGridOptions = {
-    minCols: 3,
+    minCols: 4,
     maxCols: 12,
-    minRows: 2,
-    maxRows: 600,
+    minRows: 1,
+    maxRows: 1,
     gridType: "verticalFixed" as GridType,
     fixedRowHeight: 560,
     fixedRowWidth: 480,
@@ -419,7 +419,9 @@ export class ServicestatusComponent implements OnInit {
             data: tab.header.cpuRange
               .slice(-24)
               .map((point: [number, number]) => {
-                return [point[0] * 1000, point[1]];
+                // ปัดทศนิยม 2 ตำแหน่งก่อนนำไปแสดง
+                const cpuValue = Math.round(point[1] * 100) / 100;
+                return [point[0] * 1000, cpuValue];
               }),
             color: "#00FFFF",
             lineWidth: 2,
@@ -431,9 +433,8 @@ export class ServicestatusComponent implements OnInit {
                   minute: "2-digit",
                   second: "2-digit"
                 });
-                const cpuValue = (Math.round(this.point.y * 100) / 100).toFixed(
-                  2
-                );
+                // ปัดทศนิยม 2 ตำแหน่งในขั้น tooltip อีกครั้งเพื่อความชัวร์
+                const cpuValue = Number(this.point.y).toFixed(2);
                 return `<b>Time:</b> ${formattedTime}<br/><b>CPU:</b> ${cpuValue}`;
               },
               shared: true,
@@ -488,7 +489,9 @@ export class ServicestatusComponent implements OnInit {
             data: tab.header.memoryRange
               .slice(-24)
               .map((point: [number, number]) => {
-                return [point[0] * 1000, point[1]];
+                const timeValue = point[0] * 1000;
+                const memValue = Math.round(point[1] * 100) / 100; // ปัดทศนิยมสองตำแหน่ง
+                return [timeValue, memValue];
               }),
             color: "#FFFF00",
             lineWidth: 2,
@@ -500,15 +503,16 @@ export class ServicestatusComponent implements OnInit {
                   minute: "2-digit",
                   second: "2-digit"
                 });
-                const memValue = parseFloat(this.point.y.toString()).toFixed(2);
+                // เพิ่มความมั่นใจว่าจะแสดงได้ 2 ทศนิยม
+                const memValue = Number(this.point.y).toFixed(2);
                 return `
-                <span style="font-size:10px">Timestamp: ${formattedTime}</span>
-                <table>
-                  <tr>
-                    <td style="color:${this.color};padding:0">${this.series.name}: </td>
-                    <td style="padding:0"><b>${memValue}</b></td>
-                  </tr>
-                </table>`;
+          <span style="font-size:10px">Timestamp: ${formattedTime}</span>
+          <table>
+            <tr>
+              <td style="color:${this.color};padding:0">${this.series.name}: </td>
+              <td style="padding:0"><b>${memValue}</b></td>
+            </tr>
+          </table>`;
               },
               shared: true,
               useHTML: true

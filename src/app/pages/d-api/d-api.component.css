@@ -1,3 +1,55 @@
 ::ng-deep .p-radiobutton .p-radiobutton-box {
-    margin-top: -10px !important;
+  margin-top: -10px !important;
+}
+
+/* ตัวอย่าง CSS สำหรับ Flex Layout */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-col-4 {
+  flex: 1 1 calc(33.333% - 16px);
+  min-width: 200px;
+}
+
+.form-col-8 {
+  flex: 1 1 calc(66.666% - 16px);
+  min-width: 300px;
+}
+
+.form-col-6 {
+  flex: 1 1 calc(50% - 16px);
+  min-width: 200px;
+}
+
+.form-col-12 {
+  flex: 1 1 100%;
+}
+
+@media (max-width: 768px) {
+  .form-col-4,
+  .form-col-8,
+  .form-col-6 {
+    flex: 1 1 100%;
+  }
+}
+
+/* สำหรับตาราง */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* สำหรับปุ่มใน toolbar สามารถใช้ flex เพื่อจัดวางปุ่มเป็นแถวเดียวกันให้เลื่อนหรือเรียงลงได้เมื่อจอเล็ก */
+.toolbar-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.Newbut {
+  flex-shrink: 0;
 }
