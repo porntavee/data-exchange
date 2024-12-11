@@ -27,7 +27,7 @@ import {
       gridster {
         width: 97vw;
         height: 300px;
-        min-width:1620px;
+        min-width: 1620px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -201,21 +201,21 @@ export class ServicestatusComponent implements OnInit {
     );
     this.tabs[existingIndex].isOpen = !this.tabs[existingIndex].isOpen;
     this.cdr.detectChanges();
-    if (this.tabs[existingIndex].isOpen) {
-      this.dashboard.forEach(data => {
-        if (data.header == "loadcpu") {
-          this.loadData();
-        } else if (data.header == "loaddisk") {
-          this.loadData();
-        } else if (data.header == "loadmemory") {
-          this.loadData();
-        } else if (data.header == "loaddiskstatus") {
-          this.loadData();
-        } else {
-          this.isLoading = false;
-        }
-      });
-    }
+    // if (this.tabs[existingIndex].isOpen) {
+    //   this.dashboard.forEach(data => {
+    //     if (data.header == "loadcpu") {
+    //       this.loadData();
+    //     } else if (data.header == "loaddisk") {
+    //       this.loadData();
+    //     } else if (data.header == "loadmemory") {
+    //       this.loadData();
+    //     } else if (data.header == "loaddiskstatus") {
+    //       this.loadData();
+    //     } else {
+    //       this.isLoading = false;
+    //     }
+    //   });
+    // }
   }
 
   static itemChange(
@@ -257,8 +257,8 @@ export class ServicestatusComponent implements OnInit {
           },
           xAxis: [
             {
-              categories: tab.storage.map(data => 
-                data.name.length > 5 
+              categories: tab.storage.map(data =>
+                data.name.length > 5
                   ? `...${data.name.slice(-7)}` // เก็บเฉพาะ 10 ตัวอักษรท้าย และเพิ่ม ...
                   : data.name
               ),
@@ -297,7 +297,7 @@ export class ServicestatusComponent implements OnInit {
               groupPadding: 0, // ลดระยะห่างระหว่างกลุ่มแท่ง
               pointPadding: 0.005 // ลดระยะห่างระหว่างแท่งในกลุ่มเดียวกัน
             }
-          },          
+          },
           tooltip: {
             useHTML: true,
             formatter: function() {
@@ -355,7 +355,36 @@ export class ServicestatusComponent implements OnInit {
     console.log(this.tabs);
 
     this.tabs.forEach((tab, index) => {
-      console.log(tab.header.cpuRange.slice(-2));
+      // เรียงข้อมูลตาม timestamp (ค่าที่เก็บไว้ใน point[0])
+      const sortedCpuData = [...tab.header.cpuRange].sort(
+        (a, b) => a[0] - b[0]
+      );
+      const sortedMemoryData = [...tab.header.memoryRange].sort(
+        (a, b) => a[0] - b[0]
+      );
+
+      const offset = 7 * 3600000; // GMT+7
+
+      const last24CpuData = sortedCpuData
+        .slice(-24)
+        .map((point: [number, number]) => {
+          const cpuValue = Math.round(point[1] * 100) / 100;
+          // ปรับเวลาข้อมูล CPU ด้วยการบวก offset (GMT+7)
+          const localCpuTime = point[0] * 1000 + offset;
+          return [localCpuTime, cpuValue];
+        });
+
+      const last24MemoryData = sortedMemoryData
+        .slice(-24)
+        .map((point: [number, number]) => {
+          const memValue = Math.round(point[1] * 100) / 100;
+          // ปรับเวลาข้อมูล Memory ด้วยการบวก offset (GMT+7)
+          const localMemTime = point[0] * 1000 + offset;
+          return [localMemTime, memValue];
+        });
+
+      console.log("Last 24 CPU Data (Processed):", last24CpuData);
+      console.log("Last 24 Memory Data (Processed):", last24MemoryData);
 
       const cpuSparklineOptions: any = {
         chart: {
@@ -399,27 +428,10 @@ export class ServicestatusComponent implements OnInit {
           {
             type: "line",
             name: "CPU Util",
-            data: tab.header.cpuRange
-              .slice(-24)
-              .map((point: [number, number]) => {
-                // ปัดทศนิยม 2 ตำแหน่งก่อนนำไปแสดง
-                const cpuValue = Math.round(point[1] * 100) / 100;
-                return [point[0] * 1000, cpuValue];
-              }),
+            data: last24CpuData,
             color: "#00FFFF",
             lineWidth: 2,
             tooltip: {
-              formatter: function() {
-                const timestamp = new Date(this.point.x);
-                const formattedTime = timestamp.toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit"
-                });
-                // ปัดทศนิยม 2 ตำแหน่งในขั้น tooltip อีกครั้งเพื่อความชัวร์
-                const cpuValue = Number(this.point.y).toFixed(2);
-                return `<b>Time:</b> ${formattedTime}<br/><b>CPU:</b> ${cpuValue}`;
-              },
               shared: true,
               useHTML: true
             }
@@ -469,34 +481,10 @@ export class ServicestatusComponent implements OnInit {
           {
             type: "line",
             name: "Memory Util",
-            data: tab.header.memoryRange
-              .slice(-24)
-              .map((point: [number, number]) => {
-                const timeValue = point[0] * 1000;
-                const memValue = Math.round(point[1] * 100) / 100; // ปัดทศนิยมสองตำแหน่ง
-                return [timeValue, memValue];
-              }),
+            data: last24MemoryData,
             color: "#FFFF00",
             lineWidth: 2,
             tooltip: {
-              formatter: function() {
-                const timestamp = new Date(this.point.x);
-                const formattedTime = timestamp.toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit"
-                });
-                // เพิ่มความมั่นใจว่าจะแสดงได้ 2 ทศนิยม
-                const memValue = Number(this.point.y).toFixed(2);
-                return `
-          <span style="font-size:10px">Timestamp: ${formattedTime}</span>
-          <table>
-            <tr>
-              <td style="color:${this.color};padding:0">${this.series.name}: </td>
-              <td style="padding:0"><b>${memValue}</b></td>
-            </tr>
-          </table>`;
-              },
               shared: true,
               useHTML: true
             }
@@ -504,26 +492,16 @@ export class ServicestatusComponent implements OnInit {
         ]
       };
 
-      // สำหรับ containerCPU
       const containerCPUId = `containerCPU-${tab.header.instance}`;
       const containerCPU = document.getElementById(containerCPUId);
-      if (
-        containerCPU &&
-        !containerCPU.getAttribute("data-chart-initialized")
-      ) {
+      if (containerCPU) {
         Highcharts.chart(containerCPUId, cpuSparklineOptions);
-        containerCPU.setAttribute("data-chart-initialized", "true");
       }
 
-      // สำหรับ containerMemory
       const containerMemoryId = `containerMemory-${tab.header.instance}`;
       const containerMemory = document.getElementById(containerMemoryId);
-      if (
-        containerMemory &&
-        !containerMemory.getAttribute("data-chart-initialized")
-      ) {
+      if (containerMemory) {
         Highcharts.chart(containerMemoryId, memorySparklineOptions);
-        containerMemory.setAttribute("data-chart-initialized", "true");
       }
     });
   }
