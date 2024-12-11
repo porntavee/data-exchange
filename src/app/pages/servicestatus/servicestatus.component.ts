@@ -183,9 +183,9 @@ export class ServicestatusComponent implements OnInit {
     this.themeService.currentcolorMessage.subscribe(value => {});
   }
 
-  ngAfterViewInit() {
-    this.drawDisk();
-  }
+  // ngAfterViewInit() {
+  //   this.drawDisk();
+  // }
 
   ngOnDestroy(): void {
     if (this.intervalId) {
@@ -206,20 +206,7 @@ export class ServicestatusComponent implements OnInit {
     this.tabs[existingIndex].isOpen = !this.tabs[existingIndex].isOpen;
     // this.cdr.detectChanges();
     if (this.tabs[existingIndex].isOpen) {
-      this.dashboard.forEach(data => {
-        this.loadData();
-        // if (data.header == "loadcpu") {
-        //   this.loadData();
-        // } else if (data.header == "loaddisk") {
-        //   this.loadData();
-        // } else if (data.header == "loadmemory") {
-        //   this.loadData();
-        // } else if (data.header == "loaddiskstatus") {
-        //   this.loadData();
-        // } else {
-        //   this.isLoading = false;
-        // }
-      });
+      this.loadData();
     }
   }
 
@@ -240,6 +227,7 @@ export class ServicestatusComponent implements OnInit {
         "disk_status_chart_" + tab.header.instance
       );
       if (container) {
+        setTimeout(() => {
         const diskOptions: Highcharts.Options = {
           chart: {
             type: "bar",
@@ -351,6 +339,7 @@ export class ServicestatusComponent implements OnInit {
           "disk_status_chart_" + tab.header.instance,
           diskOptions
         );
+      }, 0);
       }
     });
   }
@@ -654,9 +643,7 @@ export class ServicestatusComponent implements OnInit {
     this.drawHeaderSparkline();
 
     // ใช้ Promise เพื่อให้มั่นใจว่าการวาด disk จะเกิดหลังจาก view render เสร็จ
-    Promise.resolve().then(() => {
-      this.drawDisk();
-    });
+    this.drawDisk();
   }
 
   valueChart: { [key: string]: any } = {};
