@@ -2,7 +2,8 @@
   margin-top: 50px;
   z-index: 900;
   // padding: 0 30px;
-  background: url(/assets/img/bg_cover.png) no-repeat center top; /* ใช้ส่วนบนของรูป */
+  // background: url(/assets/img/bg_cover.png) no-repeat center top; /* ใช้ส่วนบนของรูป */
+  height: 100vh;
 }
 
 #style-1::-webkit-scrollbar-track {
@@ -22,6 +23,10 @@
 }
 
 // .bodyClass {
+//   background-color: aqua !important;
+// }
+
+// .bodyClass {
 //     .p-card .p-card-body {
 //         padding: 1.5rem;
 //     }
@@ -32,12 +37,30 @@
 }
 
 .menu-background {
-  background: url(/assets/img/bg_cover.png) no-repeat center top; /* ใช้ส่วนบนของรูป */
+  // background: url(/assets/img/bg_cover.png) no-repeat center top; /* ใช้ส่วนบนของรูป */
   background-size: cover; /* ให้ภาพเต็มพื้นที่ */
   background-attachment: fixed; /* คงที่ไม่เลื่อนตาม scroll */
-  height: 100vh; /* สูงเต็มหน้าจอ */
-  background-color: black; /* สีพื้นหลัง */
+  height: 100vh !important; /* สูงเต็มหน้าจอ */
 }
+
+.bodyClass {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(1, 15, 35, 0.8),
+      /* จางลง */ rgba(0, 25, 57, 0.8),
+      /* จางลง */ rgba(0, 33, 82, 0.8),
+      /* จางลง */ rgba(1, 50, 130, 0.8),
+      /* จางลง */ rgba(1, 81, 207, 0.8),
+      /* จางลง */ rgba(0, 86, 219, 0.8),
+      /* จางลง */ rgba(0, 80, 210, 0.8),
+      /* จางลง */ rgba(0, 77, 205, 0.8) /* จางลง */
+    ),
+    url(/assets/img/bg_cover.png); /* เพิ่มภาพพื้นหลัง */
+  background-size: cover; /* ให้ภาพเต็มพื้นที่ */
+  background-color: black; /* เพิ่มสีพื้นหลังเพื่อความเข้ากัน */
+  height: 100vh;
+}
+
 .menu-background-sidebar {
   position: fixed; /* คงที่ไม่เลื่อนตาม scroll */
   z-index: 1000; /* ให้อยู่เหนือเนื้อหา */

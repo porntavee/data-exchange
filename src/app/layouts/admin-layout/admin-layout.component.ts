@@ -3,8 +3,8 @@ import {
   OnInit,
   HostListener,
   ElementRef,
-  ViewChild
-  , NgZone
+  ViewChild,
+  NgZone
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { AdminLayoutService } from "@app/layouts/admin-layout/admin-layout.service";
@@ -118,12 +118,7 @@ export class AdminLayoutComponent implements OnInit {
       titlee = titlee.slice(1);
     }
     // console.log(titlee)
-    this.navService.setNavId(titlee + '1');
-    if (this.themeService.theme == "saga-orange") {
-      this.styleClassTheme = "theme-saga";
-    } else {
-      this.styleClassTheme = "theme-arya";
-    }
+    this.navService.setNavId(titlee + "1");
 
     if (window.innerWidth > 1800) {
       this.AdminLayoutService.currentmainpanelMessage.subscribe(data => {
@@ -178,7 +173,7 @@ export class AdminLayoutComponent implements OnInit {
   handleNavigationClick(navId: string): void {
     event.stopPropagation();
     // ทำสิ่งที่ต้องการที่นี่ เช่น การเปลี่ยนแปลง class หรืออัปเดตข้อมูลอื่นๆ
-    console.log('Navigation clicked:', navId);
+    console.log("Navigation clicked:", navId);
     // this.navService.setNavId(this.valueClass + navId ?? '/realtime1');
   }
   ngAfterViewInit() {

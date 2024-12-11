@@ -3,7 +3,7 @@
   id="style-1"
   #commentList
   [scrollTop]="scrollDown"
-  class="menu-background"
+  class="bodyClass"
 >
   <div
     [(class)]="classMenu"
@@ -15,7 +15,8 @@
   >
     <sidebar-cmp></sidebar-cmp>
   </div>
-  <p-card
+  <div
+    style="padding-top:24px"
     [(class)]="classMain"
     [ngClass]="{
       bodyClassX: classBodyX,
@@ -27,5 +28,5 @@
     <div class="content">
       <router-outlet></router-outlet>
     </div>
-  </p-card>
+  </div>
 </div>

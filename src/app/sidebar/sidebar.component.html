@@ -1,104 +1,209 @@
-<div class="sidebar-wrapper" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
-  'theme-saga': themeService.theme === 'saga-orange'
-}">
+<div
+  class="sidebar-wrapper"
+  [ngClass]="{
+    'theme-arya': themeService.theme === 'arya-orange',
+    'theme-saga': themeService.theme === 'saga-orange'
+  }"
+>
   <!-- <div class="logo"> -->
 
-    <!-- <div class="logo-image-normal" style="text-align: center; "> -->
-      <!-- <img src="assets/img/EDS_logo.png" style="width: 70px; height:70px"> -->
-      <!-- <img [src]="Logopic" [(class)]="classLogo"> -->
-    <!-- </div> -->
-    <!-- <div>{{showMinimenu}}</div>
+  <!-- <div class="logo-image-normal" style="text-align: center; "> -->
+  <!-- <img src="assets/img/EDS_logo.png" style="width: 70px; height:70px"> -->
+  <!-- <img [src]="Logopic" [(class)]="classLogo"> -->
+  <!-- </div> -->
+  <!-- <div>{{showMinimenu}}</div>
     <div>{{showMainmenu}}</div> -->
   <!-- </div> -->
 
-  <div *ngIf="showMinimenu" >
-    
+  <div *ngIf="showMinimenu">
     <ul class="nav" style="margin-top: 10px;">
-      
-      <li *ngFor="let menuItem of menuItems" >
-       
-        <a (click)="submenu(menuItem.title,menuItem.path)" *ngIf="menuItem.children == undefined">
-          
+      <li *ngFor="let menuItem of menuItems">
+        <a
+          (click)="submenu(menuItem.title, menuItem.path)"
+          *ngIf="menuItem.children == undefined"
+        >
           <div align="center">
-            <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-            <p style="font-size: 8px;">{{menuItem.title}}</p>
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
+            <p style="font-size: 8px;">{{ menuItem.title }}</p>
           </div>
         </a>
 
-        <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'ALARM'" >
- 
-          <a  (click)="menu.toggle($event)" >
-            <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-          </a>
-            <p-menu #menu [popup]="true" [model]="itemsAlarm" appendTo="body" styleClass="menuList"></p-menu>
-        
-          </ng-container>
-        <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'TASK'" >
- 
-          <a  (click)="menu.toggle($event)" >
-            <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-          </a>
-            <p-menu #menu [popup]="true" [model]="itemsTask" appendTo="body" styleClass="menuList"></p-menu>
-        
-          </ng-container>
-          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'CUSTOMER REPORT'">
-
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'ALARM'
+          "
+        >
           <a (click)="menu.toggle($event)">
-            <img [src]="menuItem.icon" style="width: 30px; height: 25px;" [title]="menuItem.title">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
           </a>
-          <p-menu #menu [popup]="true" [model]="itemsCustomer" appendTo="body" styleClass="menuList"></p-menu>
-
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsAlarm"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
         </ng-container>
-        <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'USER MANAGEMENT'" >
- 
-            <a  (click)="menu.toggle($event)" >
-              <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-            </a>
-              <p-menu #menu [popup]="true" [model]="itemsUser" appendTo="body" styleClass="menuList"></p-menu>
-          
-          </ng-container>
-          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'THROUGHPUT'" >
- 
-            <a  (click)="menu.toggle($event)" >
-              <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-            </a>
-              <p-menu #menu [popup]="true" [model]="itemsTHROUGHPUT" appendTo="body" styleClass="menuList"></p-menu>
-          
-          </ng-container>
-          <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.title == 'MANAGE DEVICE'" >
- 
-            <a  (click)="menu.toggle($event)" >
-              <img [src]="menuItem.icon" style="width: 30px; height:25px; " [title]="menuItem.title">
-            </a>
-              <p-menu #menu [popup]="true" [model]="itemsMANAGEDEVICE" appendTo="body" styleClass="menuList"></p-menu>
-          
-          </ng-container>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'TASK'
+          "
+        >
+          <a (click)="menu.toggle($event)">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
+          </a>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsTask"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'CUSTOMER REPORT'
+          "
+        >
+          <a (click)="menu.toggle($event)">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height: 25px;"
+              [title]="menuItem.title"
+            />
+          </a>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsCustomer"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'USER MANAGEMENT'
+          "
+        >
+          <a (click)="menu.toggle($event)">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
+          </a>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsUser"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'THROUGHPUT'
+          "
+        >
+          <a (click)="menu.toggle($event)">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
+          </a>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsTHROUGHPUT"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.title == 'MANAGE DEVICE'
+          "
+        >
+          <a (click)="menu.toggle($event)">
+            <img
+              [src]="menuItem.icon"
+              style="width: 30px; height:25px; "
+              [title]="menuItem.title"
+            />
+          </a>
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsMANAGEDEVICE"
+            appendTo="body"
+            styleClass="menuList"
+          ></p-menu>
+        </ng-container>
       </li>
     </ul>
   </div>
-  <div *ngIf="showMainmenu" >
+  <div *ngIf="showMainmenu">
     <!-- <p-panelMenu [model]="items" [style]="{'width':'260px'}" [multiple]="false" class="activeAR" (click)="selectedMenu()" [(styleClass)]="styleClassTheme"></p-panelMenu> -->
     <ul class="nav">
-    <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}}" >
-
-      <a (click)="link($event,menuItem.path,menuItem.title)" >
-        <img [src]="menuItem.icon" style="width: 30px; height:25px; " >
-        <span (click)="toggleMenu(menuItem.title)" style="margin-left: 15px; ">{{menuItem.title}} <i class={{menuItem.icon_drop}}
-            style="float: right; font-size: 1.5rem"></i></span>
-      </a>
-      <ng-container *ngIf="menuItem.children && menuItem.children.length > 0 && menuItem.hidden == true" >
-      <ul [(class)]="classSubmenu">
-      <li routerLinkActive="active" *ngFor="let childmenu of menuItem.children" class="{{menuItem.children.class}}" >
-      <a [routerLink]="[childmenu.path]" (click)="link1(menuItem.title,childmenu.title,childmenu.path)" >
-
-        <p style="text-indent: 2.5em;">{{childmenu.title}}</p>
-      </a>
+      <li *ngFor="let menuItem of menuItems" class="{{ menuItem.class }}">
+        <a (click)="link($event, menuItem.path, menuItem.title)">
+          <img [src]="menuItem.icon" style="width: 30px; height:25px; " />
+          <span (click)="toggleMenu(menuItem.title)" style="margin-left: 15px; "
+            >{{ menuItem.title }}
+            <i
+              class="{{ menuItem.icon_drop }}"
+              style="float: right; font-size: 1.5rem"
+            ></i
+          ></span>
+        </a>
+        <ng-container
+          *ngIf="
+            menuItem.children &&
+            menuItem.children.length > 0 &&
+            menuItem.hidden == true
+          "
+        >
+          <ul [(class)]="classSubmenu">
+            <li
+              routerLinkActive="active"
+              *ngFor="let childmenu of menuItem.children"
+              class="{{ menuItem.children.class }}"
+            >
+              <a
+                [routerLink]="[childmenu.path]"
+                (click)="link1(menuItem.title, childmenu.title, childmenu.path)"
+              >
+                <p style="text-indent: 2.5em;">{{ childmenu.title }}</p>
+              </a>
+            </li>
+          </ul>
+        </ng-container>
       </li>
     </ul>
-    </ng-container>
-
-    </li>
-  </ul>
   </div>
-  
 </div>

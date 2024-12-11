@@ -129,11 +129,7 @@ export class ServicestatusComponent implements OnInit {
     this.intervalId = setInterval(() => {
       const now = new Date();
       const currentMinute = now.getMinutes();
-
-      // ตรวจสอบตัวเลขหลักสุดท้ายของนาที
       const lastDigit = currentMinute % 10;
-
-      // ถ้านาทีลงท้ายด้วย 0 หรือ 5 ให้เรียกใช้ loadData()
       if (lastDigit === 0 || lastDigit === 5) {
         this.loadData();
       }
@@ -390,9 +386,6 @@ export class ServicestatusComponent implements OnInit {
           return [localMemTime, memValue];
         });
 
-      // console.log("Last 24 CPU Data (Processed):", last24CpuData);
-      // console.log("Last 24 Memory Data (Processed):", last24MemoryData);
-
       const cpuSparklineOptions: any = {
         chart: {
           zoomType: null,
@@ -428,7 +421,8 @@ export class ServicestatusComponent implements OnInit {
         },
         plotOptions: {
           series: {
-            marker: { enabled: false }
+            marker: { enabled: false },
+            animation: false // ปิดอนิเมชัน
           }
         },
         series: [
@@ -481,7 +475,8 @@ export class ServicestatusComponent implements OnInit {
         },
         plotOptions: {
           series: {
-            marker: { enabled: false }
+            marker: { enabled: false },
+            animation: false // ปิดอนิเมชัน
           }
         },
         series: [

@@ -2,14 +2,7 @@
 <!-- <p-toolbar styleClass="p-mb-4">
     </p-toolbar> -->
 
-<p-card
-  class="col-12 card card-stats p-6"
-  [style.backgroundColor]="'#718096'"
-  [ngClass]="{
-    'theme-arya': themeService.theme === 'arya-orange',
-    'theme-saga': themeService.theme === 'saga-orange'
-  }"
->
+<div class="pt-4 pb-4">
   <p-toolbar styleClass="p-mb-4">
     <div class="p-toolbar-group-left">
       <div style="font-size: 18px; font-weight: 600;" class="text-color">
@@ -200,7 +193,7 @@
       </div>
     </ng-template>
   </p-table>
-</p-card>
+</div>
 <p-dialog
   [(visible)]="lineDialog"
   [style]="{ width: '650px' }"
