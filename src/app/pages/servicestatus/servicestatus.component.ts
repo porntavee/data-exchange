@@ -206,8 +206,6 @@ export class ServicestatusComponent implements OnInit {
     this.tabs[existingIndex].isOpen = !this.tabs[existingIndex].isOpen;
     // this.cdr.detectChanges();
     if (this.tabs[existingIndex].isOpen) {
-      this.drawHeaderSparkline();
-
       // ใช้ Promise เพื่อให้มั่นใจว่าการวาด disk จะเกิดหลังจาก view render เสร็จ
       this.drawDisk();
     }
@@ -231,74 +229,74 @@ export class ServicestatusComponent implements OnInit {
       );
       if (container) {
         setTimeout(() => {
-        const diskOptions: Highcharts.Options = {
-          chart: {
-            type: "bar",
-            backgroundColor: "transparent"
-          },
-          title: {
-            text: null,
-            style: {
-              color: this.colortitle
-            }
-          },
-          legend: {
-            enabled: false
-          },
-          credits: {
-            enabled: false
-          },
-          exporting: {
-            enabled: false
-          },
-          xAxis: [
-            {
-              categories: tab.storage.map(data =>
-                data.name.length > 5
-                  ? `...${data.name.slice(-7)}` // เก็บเฉพาะ 10 ตัวอักษรท้าย และเพิ่ม ...
-                  : data.name
-              ),
-              gridLineWidth: 0,
-              labels: {
-                style: {
-                  fontSize: "16px"
-                }
+          const diskOptions: Highcharts.Options = {
+            chart: {
+              type: "bar",
+              backgroundColor: "transparent"
+            },
+            title: {
+              text: null,
+              style: {
+                color: this.colortitle
               }
             },
-            {
-              linkedTo: 0,
-              opposite: true,
-              categories: tab.storage.map(
-                data => `${parseFloat(data.total).toFixed(2)} GB`
-              ),
-              gridLineWidth: 0,
-              labels: {
-                style: {
-                  fontSize: "16px"
+            legend: {
+              enabled: false
+            },
+            credits: {
+              enabled: false
+            },
+            exporting: {
+              enabled: false
+            },
+            xAxis: [
+              {
+                categories: tab.storage.map(data =>
+                  data.name.length > 5
+                    ? `...${data.name.slice(-7)}` // เก็บเฉพาะ 10 ตัวอักษรท้าย และเพิ่ม ...
+                    : data.name
+                ),
+                gridLineWidth: 0,
+                labels: {
+                  style: {
+                    fontSize: "16px"
+                  }
+                }
+              },
+              {
+                linkedTo: 0,
+                opposite: true,
+                categories: tab.storage.map(
+                  data => `${parseFloat(data.total).toFixed(2)} GB`
+                ),
+                gridLineWidth: 0,
+                labels: {
+                  style: {
+                    fontSize: "16px"
+                  }
                 }
               }
-            }
-          ],
-          yAxis: {
-            max: 100,
-            gridLineWidth: 0,
-            labels: { enabled: false },
-            title: { text: "" }
-          },
-          plotOptions: {
-            bar: {
-              stacking: "percent",
-              animation: false,
-              pointWidth: 8, // ลดความกว้างของแท่ง
-              groupPadding: 0, // ลดระยะห่างระหว่างกลุ่มแท่ง
-              pointPadding: 0.005 // ลดระยะห่างระหว่างแท่งในกลุ่มเดียวกัน
-            }
-          },
-          tooltip: {
-            useHTML: true,
-            formatter: function() {
-              const value = this.point.y.toFixed(2);
-              return `
+            ],
+            yAxis: {
+              max: 100,
+              gridLineWidth: 0,
+              labels: { enabled: false },
+              title: { text: "" }
+            },
+            plotOptions: {
+              bar: {
+                stacking: "percent",
+                animation: false,
+                pointWidth: 8, // ลดความกว้างของแท่ง
+                groupPadding: 0, // ลดระยะห่างระหว่างกลุ่มแท่ง
+                pointPadding: 0.005 // ลดระยะห่างระหว่างแท่งในกลุ่มเดียวกัน
+              }
+            },
+            tooltip: {
+              useHTML: true,
+              formatter: function() {
+                const value = this.point.y.toFixed(2);
+                return `
               <span style="font-size:10px">${this.series.name}</span>
               <table>
                 <tr>
@@ -306,43 +304,45 @@ export class ServicestatusComponent implements OnInit {
                   <td style="padding:0"><b>${value} GB</b></td>
                 </tr>
               </table>`;
-            }
-          },
-          series: [
-            {
-              type: "bar",
-              name: "Free",
-              data: tab.storage.map(storageItem => ({
-                y: parseFloat(storageItem.total) - parseFloat(storageItem.used),
-                color: "#D5D8DC"
-              }))
+              }
             },
-            {
-              type: "bar",
-              name: "Usage",
-              data: tab.storage.map(storageItem => ({
-                y: parseFloat(storageItem.used),
-                color:
-                  (parseFloat(storageItem.used) /
-                    parseFloat(storageItem.total)) *
-                    100 <
-                  81
-                    ? "#50D0BC"
-                    : (parseFloat(storageItem.used) /
-                        parseFloat(storageItem.total)) *
-                        100 <
-                      91
-                    ? "#FFBB55"
-                    : "#FF7782"
-              }))
-            }
-          ]
-        };
-        Highcharts.chart(
-          "disk_status_chart_" + tab.header.instance,
-          diskOptions
-        );
-      }, 0);
+            series: [
+              {
+                type: "bar",
+                name: "Free",
+                data: tab.storage.map(storageItem => ({
+                  y:
+                    parseFloat(storageItem.total) -
+                    parseFloat(storageItem.used),
+                  color: "#D5D8DC"
+                }))
+              },
+              {
+                type: "bar",
+                name: "Usage",
+                data: tab.storage.map(storageItem => ({
+                  y: parseFloat(storageItem.used),
+                  color:
+                    (parseFloat(storageItem.used) /
+                      parseFloat(storageItem.total)) *
+                      100 <
+                    81
+                      ? "#50D0BC"
+                      : (parseFloat(storageItem.used) /
+                          parseFloat(storageItem.total)) *
+                          100 <
+                        91
+                      ? "#FFBB55"
+                      : "#FF7782"
+                }))
+              }
+            ]
+          };
+          Highcharts.chart(
+            "disk_status_chart_" + tab.header.instance,
+            diskOptions
+          );
+        }, 0);
       }
     });
   }

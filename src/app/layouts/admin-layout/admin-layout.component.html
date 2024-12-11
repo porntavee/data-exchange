@@ -1,19 +1,31 @@
-<div [(class)]="classsidebar"  id="style-1" #commentList [scrollTop]="scrollDown">
-    <div [(class)]="classMenu" [ngClass]="{ 'theme-arya': themeService.theme === 'arya-orange',
-    'theme-saga': themeService.theme === 'saga-orange'}">
-        <sidebar-cmp></sidebar-cmp>
+<div
+  [(class)]="classsidebar"
+  id="style-1"
+  #commentList
+  [scrollTop]="scrollDown"
+  class="menu-background"
+>
+  <div
+    [(class)]="classMenu"
+    [ngClass]="{
+      'theme-arya': themeService.theme === 'arya-orange',
+      'theme-saga': themeService.theme === 'saga-orange'
+    }"
+    class="menu-background-sidebar"
+  >
+    <sidebar-cmp></sidebar-cmp>
+  </div>
+  <p-card
+    [(class)]="classMain"
+    [ngClass]="{
+      bodyClassX: classBodyX,
+      bodyClass: !classBodyX,
+      bodyClassdevice: classBodyXdevice
+    }"
+  >
+    <navbar-cmp class="navbar-fixed"></navbar-cmp>
+    <div class="content">
+      <router-outlet></router-outlet>
     </div>
-    <!-- set background color with style -->
-    <p-card [(class)]="classMain" [ngClass]="{ 'bodyClassX': classBodyX,
-    'bodyClass': !classBodyX,'bodyClassdevice': classBodyXdevice}">
-        <navbar-cmp  ></navbar-cmp>
-        
-        <!-- <div class="content" style="background-color: #121212;"> -->
-        <div class="content">
-            <router-outlet></router-outlet>
-        </div>
-        <!-- </div> -->
-        <!-- <footer-cmp></footer-cmp> -->
-    </p-card>
-    <!-- <right-menu ></right-menu> -->
+  </p-card>
 </div>
