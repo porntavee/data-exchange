@@ -27,7 +27,7 @@ import {
       gridster {
         width: 97vw;
         height: 300px;
-        min-width: 1620px;
+        min-width: 1700px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -46,6 +46,7 @@ import {
       gridster-item {
         /* background-color: #1e1e1e; */
         border-radius: 16px;
+        
       }
     `
   ]
@@ -380,8 +381,8 @@ export class ServicestatusComponent implements OnInit {
           return [localMemTime, memValue];
         });
 
-      console.log("Last 24 CPU Data (Processed):", last24CpuData);
-      console.log("Last 24 Memory Data (Processed):", last24MemoryData);
+      // console.log("Last 24 CPU Data (Processed):", last24CpuData);
+      // console.log("Last 24 Memory Data (Processed):", last24MemoryData);
 
       const cpuSparklineOptions: any = {
         chart: {

@@ -48,14 +48,8 @@ General styles p {
   background-color: #3e5774;
 }
 
-.accordion-content {
-  padding: 0 15px;
-  background-color: #3e5774;
-}
-
 .accordion-header {
   padding: 15px;
-  width: fit-content;
   background-color: #1f2d40;
   color: white;
   text-align: left;
@@ -64,7 +58,23 @@ General styles p {
   font-size: 18px;
   font-weight: bold;
   transition: background-color 0.3s ease;
+  width: 90%;  /* ใช้ 100% เพื่อให้ header มีขนาดเต็มความกว้าง */
+  box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+  min-width: 1700px;
 }
+@media screen and (min-width: 1920px) {
+  .accordion-content {
+    padding: 0 5%;
+    background-color: #3e5774;
+    box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+  }
+}
+.accordion-content {
+  padding: 0 10px;
+  background-color: #3e5774;
+  box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+}
+
 
 .accordion-content p {
   padding: 15px 0;

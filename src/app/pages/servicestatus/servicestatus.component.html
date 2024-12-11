@@ -42,64 +42,54 @@
       style="overflow-y: scroll; height: calc(100vh - 120px);"
     >
       <div class="accordion-item" *ngFor="let tab of tabs; let i = index">
-        <button
-          class="accordion-header"
-          (click)="toggleTab(tab.header.instance)"
-        >
-          <div
-            style="display: flex; align-items: center; justify-content: flex-start; color: white;"
-          >
-            <div style="width:130px">
+        <button class="accordion-header" (click)="toggleTab(tab.header.instance)">
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+            
+            <!-- Instance Name -->
+            <div style="flex: 0.5; text-align: left;">
               <span>{{ tab.header.instance }}</span>
             </div>
-
-            <div style="text-align: right; display: flex; align-items: center;">
-              <div style="width:200px; display: flex; align-items: center;">
-                <span style="color: white; width: 200px; display: flex;">
-                  CPU Usage: {{ tab.header.cpuAvg }}%
-                </span>
-              </div>
-
-              <div class="flex-1 mb-2">
-                <div
-                  [id]="'containerCPU-' + tab.header.instance"
-                  style="margin-top: 25px;"
-                ></div>
-              </div>
+        
+            <!-- CPU Usage -->
+            <div style="flex: 1; text-align: left;">
+              <span style="color: white;">
+                CPU Usage: {{ tab.header.cpuAvg }} %
+              </span>
             </div>
-            <div style="text-align: right; display: flex; align-items: center;">
-              <div style="width:230px; display: flex; align-items: center;">
-                <span style="color: white; width: 230px; display: flex;">
-                  Memory Usage: {{ tab.header.memoryUsed }}%
-                </span>
-              </div>
-              <div class="flex-1 mb-2">
-                <div
-                  [id]="'containerMemory-' + tab.header.instance"
-                  style="margin-top: 25px;"
-                ></div>
-              </div>
-              <div style="margin-left: 16px; width:100px; text-align: left;">
+            
+            <div style="flex: 1; text-align: center;">
+             
+              <div [id]="'containerCPU-' + tab.header.instance" style="margin-top: 25px;"></div>
+            </div>
+            <!-- Memory Usage -->
+            <div style="flex: 1; text-align: left;">
+              <span style="color: white;">
+                Memory Usage: {{ tab.header.memoryUsed }} %
+              </span>
+            </div>
+            
+            <div style="flex: 1; text-align: center;">
+              
+              <div [id]="'containerMemory-' + tab.header.instance" style="margin-top: 25px;"></div>
+            </div>
+            <!-- Disk Information -->
+            <div style="flex: 0.5; text-align: left;">
+              <span style="color: white;">
                 Disk: {{ tab.header.storage.name }}
-              </div>
-              <div style="width: 500px;">
-                <!-- Progress Bar Container -->
-                <div class="flex-1">
-                  <p-progressBar
-                    *ngIf="!isLoading"
-                    [value]="tab.header.storage.percentUsed"
-                  ></p-progressBar>
-                  <p-progressSpinner
-                    *ngIf="isLoading"
-                    styleClass="custom-spinner"
-                    [style]="{ width: '50px', height: '50px' }"
-                  ></p-progressSpinner>
-                </div>
-              </div>
+              </span>
+             
+            </div>
+            
+            <div style="flex: 1; text-align: left;">
+                <p-progressBar *ngIf="!isLoading" [(value)]="tab.header.storage.percentUsed"></p-progressBar>
+                <p-progressSpinner *ngIf="isLoading" styleClass="custom-spinner" [style]="{ width: '50px', height: '50px' }"></p-progressSpinner>
             </div>
           </div>
         </button>
-
+        
+        
+        
+       
         <div class="accordion-content" *ngIf="tab.isOpen">
           <p-toast appendTo="body"></p-toast>
           <div class="row justify-content-between">
