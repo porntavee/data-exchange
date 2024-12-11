@@ -131,7 +131,7 @@
                         <p-knob
                           *ngIf="!isLoading"
                           [(ngModel)]="tab.header.cpuAvg"
-                          [size]="230"
+                          [size]="150"
                           [readonly]="true"
                           [valueColor]="getTextColor(tab.header.cpuAvg)"
                           [textColor]="colortitle"
@@ -157,7 +157,7 @@
                         <p-knob
                           *ngIf="!isLoading"
                           [(ngModel)]="tab.header.memoryUsed"
-                          [size]="230"
+                          [size]="150"
                           [readonly]="true"
                           [valueColor]="getTextColor(tab.header.memoryUsed)"
                           [textColor]="colortitle"
@@ -180,7 +180,7 @@
                         ></p-progressSpinner>
                         <div *ngIf="!isLoading">
                           <div
-                            [id]="'disk_status_chart_' + tab.header.instance"
+                            [id]="'disk_status_chart_' + tab.header.instance" style="height: 150px;"
                           ></div>
                         </div>
                       </div>
