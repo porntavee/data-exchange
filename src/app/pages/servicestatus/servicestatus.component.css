@@ -62,18 +62,23 @@ General styles p {
   box-sizing: border-box;  /* รวม padding ในขนาดของ element */
   min-width: 1700px;
 }
-@media screen and (min-width: 1920px) {
+@media screen and (max-width: 1920px) {
   .accordion-content {
-    padding: 0 5%;
+    padding: 0 10px;
     background-color: #3e5774;
     box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+    width: 90%;
   }
 }
-.accordion-content {
-  padding: 0 10px;
-  background-color: #3e5774;
-  box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+@media screen and (min-width: 1921px) {
+  .accordion-content {
+    padding: 0 6%;
+    background-color: #3e5774;
+    box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+    width: 90%;
+  }
 }
+
 
 
 .accordion-content p {
