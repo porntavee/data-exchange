@@ -101,6 +101,7 @@
       </span>
     </div>
   </p-toolbar>
+
   <p-table
     #dt
     [value]="tokenList"
@@ -113,13 +114,11 @@
     dataKey="group_id"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [showCurrentPageReport]="true"
+    responsiveLayout="scroll"
+    breakpoint="960px"
   >
     <ng-template pTemplate="header">
       <tr>
-        <!-- <th style="width: 3rem">
-                      <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                  </th> -->
-
         <th style="text-align:center;" pSortableColumn="id" class="col-1">
           ลำดับ
           <p-sortIcon field="id"></p-sortIcon>
@@ -144,18 +143,13 @@
           วันที่หมดอายุ
           <p-sortIcon field="expires_at"></p-sortIcon>
         </th>
-
         <th></th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-group let-rowIndex>
       <tr>
-        <!-- <td>
-                      <p-tableCheckbox [value]="group"></p-tableCheckbox>
-                  </td> -->
         <td style="text-align:center;">{{ group.row_number }}</td>
-        <!-- <td> -->
-        <!-- <div id="myDIV3" title="{{group.status_description}}">{{group.status_description}}</div> -->
         <td>
           <div
             id="myDIV2"
@@ -172,30 +166,26 @@
             title="{{ group.status_description }}"
           >
             {{ group.status_description }}
-
-            <!-- แสดงไอคอน ? ในปุ่ม -->
             <span
               *ngIf="group.status_description === 'ปฏิเสธ'"
               pTooltip="{{ group.admin_details }}"
               tooltipPosition="top"
               style="
-                display: inline-block;
-                margin-left: 8px;
-                background-color: white;
-                color: red;
-                font-weight: bold;
-                border-radius: 50%;
-                padding: 0.4rem 0.8rem;
-                cursor: pointer;
-                font-size: 0.8rem;
-              "
+              display: inline-block;
+              margin-left: 8px;
+              background-color: white;
+              color: red;
+              font-weight: bold;
+              border-radius: 50%;
+              padding: 0.4rem 0.8rem;
+              cursor: pointer;
+              font-size: 0.8rem;
+            "
             >
               ?
             </span>
           </div>
         </td>
-
-        <!-- </td> -->
         <td>
           <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
         </td>
@@ -212,7 +202,6 @@
             {{ group.expires_at | date: "dd/MM/yyyy" }}
           </div>
         </td>
-        <!--<td>{{group.symbol_name}}</td>-->
         <td>
           <button
             pButton
@@ -223,6 +212,7 @@
         </td>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="summary">
       <div class="p-d-flex p-ai-center p-jc-between">
         Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.

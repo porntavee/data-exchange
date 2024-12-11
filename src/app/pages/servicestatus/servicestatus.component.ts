@@ -46,7 +46,6 @@ import {
       gridster-item {
         /* background-color: #1e1e1e; */
         border-radius: 16px;
-        
       }
     `
   ]
@@ -128,8 +127,18 @@ export class ServicestatusComponent implements OnInit {
       }
     );
     this.intervalId = setInterval(() => {
-      this.loadData();
-    }, 60000);
+      const now = new Date();
+      const currentMinute = now.getMinutes();
+
+      // ตรวจสอบตัวเลขหลักสุดท้ายของนาที
+      const lastDigit = currentMinute % 10;
+
+      // ถ้านาทีลงท้ายด้วย 0 หรือ 5 ให้เรียกใช้ loadData()
+      if (lastDigit === 0 || lastDigit === 5) {
+        this.loadData();
+      }
+    }, 10000);
+
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue("--text-color");
     const textColorSecondary = documentStyle.getPropertyValue(
