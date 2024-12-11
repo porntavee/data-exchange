@@ -64,7 +64,6 @@ General styles p {
   font-size: 18px;
   font-weight: bold;
   transition: background-color 0.3s ease;
-  width: 100%;
 }
 
 .accordion-content p {
