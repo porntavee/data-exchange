@@ -646,7 +646,7 @@ export class ServicestatusComponent implements OnInit {
     this.drawHeaderSparkline();
 
     // ใช้ Promise เพื่อให้มั่นใจว่าการวาด disk จะเกิดหลังจาก view render เสร็จ
-    this.drawDisk();
+    // this.drawDisk();
   }
 
   valueChart: { [key: string]: any } = {};
