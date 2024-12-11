@@ -25,7 +25,7 @@ import {
       }
 
       gridster {
-        width: 1000px;
+        width: 97vw;
         height: 600px;
       }
       gridster::-webkit-scrollbar {
