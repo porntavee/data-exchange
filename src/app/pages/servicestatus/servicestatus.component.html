@@ -46,34 +46,34 @@
           <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
             
             <!-- Instance Name -->
-            <div style="flex: 0.5; text-align: left;">
+            <div style="flex: 0.3; text-align: left;">
               <span>{{ tab.header.instance }}</span>
             </div>
         
             <!-- CPU Usage -->
-            <div style="flex: 1; text-align: left;">
+            <div style="flex: 0.6; text-align: left;">
               <span style="color: white;">
                 CPU Usage: {{ tab.header.cpuAvg }} %
               </span>
             </div>
             
-            <div style="flex: 1; text-align: center;">
+            <div style="flex: 0.6; text-align: center;">
              
               <div [id]="'containerCPU-' + tab.header.instance" style="margin-top: 25px;"></div>
             </div>
             <!-- Memory Usage -->
-            <div style="flex: 1; text-align: left;">
+            <div style="flex: 0.7; text-align: left;">
               <span style="color: white;">
                 Memory Usage: {{ tab.header.memoryUsed }} %
               </span>
             </div>
             
-            <div style="flex: 1; text-align: center;">
+            <div style="flex: 0.6; text-align: center;">
               
               <div [id]="'containerMemory-' + tab.header.instance" style="margin-top: 25px;"></div>
             </div>
             <!-- Disk Information -->
-            <div style="flex: 0.5; text-align: left;">
+            <div style="flex: 0.3; text-align: left;">
               <span style="color: white;">
                 Disk: {{ tab.header.storage.name }}
               </span>
