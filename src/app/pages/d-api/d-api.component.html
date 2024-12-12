@@ -293,20 +293,31 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" *ngIf="jsonData && jsonData.length > 0">
         <div class="table-responsive">
-          <table class="table table-bordered">
-            <thead>
+          <p-table
+            [value]="jsonData"
+            [paginator]="true"
+            [rows]="10"
+            [responsiveLayout]="'scroll'"
+            [rowsPerPageOptions]="[5, 10, 20]"
+          >
+            <ng-template pTemplate="header">
               <tr>
-                <th *ngFor="let key of getKeys()">{{ key }}</th>
+                <th *ngFor="let key of getKeys()">
+                  {{ key }}
+                </th>
               </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of jsonData">
-                <td *ngFor="let key of getKeys()">{{ row[key] }}</td>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td *ngFor="let key of getKeys()">
+                  {{ row[key] }}
+                </td>
               </tr>
-            </tbody>
-          </table>
+            </ng-template>
+          </p-table>
+
         </div>
       </div>
 
