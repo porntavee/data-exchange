@@ -50,7 +50,7 @@ General styles p {
 
 .accordion-header {
   padding: 15px;
-  background-color: #1f2d40;
+  background-color: #061949;
   color: white;
   text-align: left;
   border: none;
@@ -58,15 +58,15 @@ General styles p {
   font-size: 18px;
   font-weight: bold;
   transition: background-color 0.3s ease;
-  width: 90%;  /* ใช้ 100% เพื่อให้ header มีขนาดเต็มความกว้าง */
-  box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+  width: 90%; /* ใช้ 100% เพื่อให้ header มีขนาดเต็มความกว้าง */
+  box-sizing: border-box; /* รวม padding ในขนาดของ element */
   min-width: 1700px;
 }
 @media screen and (max-width: 1920px) {
   .accordion-content {
     padding: 0 10px;
     background-color: #3e5774;
-    box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+    box-sizing: border-box; /* รวม padding ในขนาดของ element */
     width: 90%;
   }
 }
@@ -74,12 +74,10 @@ General styles p {
   .accordion-content {
     padding: 0 6%;
     background-color: #3e5774;
-    box-sizing: border-box;  /* รวม padding ในขนาดของ element */
+    box-sizing: border-box; /* รวม padding ในขนาดของ element */
     width: 90%;
   }
 }
-
-
 
 .accordion-content p {
   padding: 15px 0;
@@ -167,17 +165,23 @@ p-table .ui-table-scrollable-body {
   overflow-x: auto !important;
   overflow-y: auto !important;
 }
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar{
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
 }
 
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-track {
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
   border-radius: 100px !important;
 }
 
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-thumb {
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
   background-image: linear-gradient(
     180deg,

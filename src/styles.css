@@ -13,6 +13,54 @@
     font-style: normal;
 }   */
 
+.p-toolbar {
+  background-color: #060b28 !important;
+}
+
+p-toolbar {
+  background-color: #060b28 !important;
+}
+
+p-table {
+  background-color: #060b28 !important;
+}
+
+.p-table {
+  background-color: #060b28 !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background-color: #060b28 !important;
+}
+
+p-datatable p-datatable-tbody > tr {
+  background-color: #060b28 !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: #060b28 !important;
+}
+
+.p-paginator {
+  background-color: #060b28 !important;
+}
+
+.p-datatable .p-datatable-footer {
+  background-color: #060b28 !important;
+}
+
+.p-dialog .p-dialog-header {
+  background-color: #060b28 !important;
+}
+
+.p-dialog .p-dialog-content {
+  background-color: #060b28 !important;
+}
+
+.p-dialog .p-dialog-footer {
+  background-color: #060b28 !important;
+}
+
 div {
   font-family: "Prompt", sans-serif !important;
 }
