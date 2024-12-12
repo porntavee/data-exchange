@@ -61,6 +61,7 @@
                   'btn-warning': group.status !== 1 && group.status !== 2,
                   'btn-success': group.status == 1 || group.status == 2
                 }"
+                style="font-size:16px; color:black"
                 (click)="openRequestDialog(group)"
               >
                 {{
@@ -155,6 +156,7 @@
                 'bg-secondary text-white':
                   group.status_description === 'ปิดใช้งาน'
               }"
+              style="font-size:16px; color:black"
               class="p-2 rounded text-center position-relative"
               title="{{ group.status_description }}"
             >
