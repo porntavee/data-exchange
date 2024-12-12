@@ -1,13 +1,268 @@
+.card-stats {
+  position: relative; /* กำหนดให้ตำแหน่งเป็น relative เพื่อให้สามารถใช้ :before ได้ */
+  overflow: hidden; /* ซ่อนสิ่งที่เกินขอบเขต */
+}
+
+.card-stats {
+  position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
+  overflow: hidden; /* ซ่อนสิ่งที่เกินขอบเขต */
+  background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
+ 
+  height: calc(100vh - 120px); 
+}
+.bgcards {
+  position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
+  overflow-y: auto; /* ซ่อนสิ่งที่เกินขอบเขต */
+  background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
+ 
+  height: calc(100vh - 120px); 
+}
+.bgcards::-webkit-scrollbar {
+  display: none; /* ซ่อน scrollbar */
+}
+.card-stats > * { 
+  position: relative; /* กำหนดให้เนื้อหาภายในอยู่ด้านบน */
+  z-index: 2; /* ให้เนื้อหาสูงกว่าพื้นหลัง */
+}
+.table-container {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #061949;
+}
+
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background-color: #061949 !important;
+  color: white;
+}
+::ng-deep .p-toolbar, .p-toolbar-group-left, .p-toolbar-group-right {
+  background-color: transparent !important;
+  border: transparent !important;
+  color: white;
+}
+
+::ng-deep .p-datatable .p-datatable-footer {
+  background-color: #061949 !important;
+  color: white;
+}
+::ng-deep .p-datatable .p-paginator-bottom {
+  background-color: #061949 !important;
+  color: white;
+}
+/* ปรับสีปุ่มทั้งหมดใน paginator ให้เป็นสีขาว */
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-last,
+::ng-deep .p-paginator .p-paginator-page {
+  background-color: transparent !important;
+  color: white !important; /* เปลี่ยนสีของตัวอักษรเป็นสีดำ */
+  border: 0px solid #ccc; /* เพิ่มขอบให้ดูมีความชัดเจน */
+}
+
+/* เพิ่มสไตล์เมื่อมีการ hover */
+::ng-deep .p-paginator .p-paginator-first:hover,
+::ng-deep .p-paginator .p-paginator-prev:hover,
+::ng-deep .p-paginator .p-paginator-next:hover,
+::ng-deep .p-paginator .p-paginator-last:hover,
+::ng-deep .p-paginator .p-paginator-page:hover {
+  background-color:  transparent !important; /* สีเมื่อ hover */
+  color: white !important;
+}
+::ng-deep .p-paginator {
+  display: flex;
+  align-items: end !important;
+  justify-content: end !important;
+  flex-wrap: wrap;
+}
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: transparent;
+  border-color: transparent;
+  color: white;
+}
+::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+ }
+
+::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
+
+::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+}
+th {
+  background-color: #061949;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #1a2a55;
+  color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: #051a4b;
+  color: white;
+}
+::ng-deep .p-calendar-w-btn .p-inputtext {
+  border-radius: 5px 0 0 5px !important; /* ขอบมน */
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight{
+  background: #64B5F6 !important;
+}
+::ng-deep .p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover{
+  background: #27b2ff;
+}
+::ng-deep .p-calendar-w-btn .p-datepicker-trigger {
+  border-radius: 0 5px 5px 0 !important; /* ขอบมน */
+  background-color: white !important; /* พื้นหลังเป็นสี #263b64 */
+  color: #263b64 !important; /* ตัวหนังสือสีขาว */
+  border-color: #263b64 !important;
+}
+::ng-deep .p-datepicker:not(.p-datepicker-inline){
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-datepicker-prev{
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-datepicker-next{
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-datepicker:not(.p-datepicker-inline) .p-datepicker-header {
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+}
+::ng-deep .p-dropdown .p-dropdown-label.p-placeholder {
+  border-radius: 5px !important; /* ขอบมน */
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-inputtext {
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dropdown {
+  border-radius: 5px !important; /* ขอบมน */
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dropdown .p-dropdown-trigger {
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dropdown-items-wrapper {
+  border-radius: 2px !important; /* ขอบมน */
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+  z-index: 9999 !important; /* เพิ่มค่า z-index ให้สูงพอเพื่อให้ dropdown อยู่เหนือกราฟ */
+  position: relative; /* ให้แน่ใจว่า position ถูกตั้งค่าเป็น relative */
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message{
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dropdown-panel {
+  z-index: 9999 !important; /* เพิ่ม z-index ให้สูงสุด */
+  position: absolute !important; /* ให้รายการแสดงในตำแหน่งที่ถูกต้อง */
+  top: 0; /* ปรับตำแหน่งให้พอดีกับตำแหน่งที่ต้องการ */
+  left: 0;
+}
+::ng-deep .p-dropdown {
+  position: relative; /* ทำให้ dropdown panel แสดงอยู่เหนือกราฟ */
+}
+::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar {
+  display: none; /* ซ่อน scrollbar */
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover{
+  background: #27b2ff;
+}
+::ng-deep .p-dropdown-label{
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
 }
-
+::ng-deep .p-menu.p-menu-overlay {
+  background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dialog .p-dialog-header {
+  background-color: rgba(6, 11, 40); 
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dialog .p-dialog-content {
+  background-color: rgba(6, 11, 40); 
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dialog .p-dialog-footer {
+  background-color: rgba(6, 11, 40); 
+  color: white !important; /* ตัวหนังสือสีขาว */
+  font-family: "Prompt", sans-serif !important;
+}
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
   border-radius: 100px !important;
 }
 
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+}
+::ng-deep .table-responsive::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+::ng-deep .table-responsive::-webkit-scrollbar-track {
+  background-color: #e4e4e4 !important;
+  border-radius: 100px !important;
+}
+
+::ng-deep .table-responsive::-webkit-scrollbar-thumb {
+  border-radius: 100px !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
+  box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
+}
 ::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
   background-image: linear-gradient(

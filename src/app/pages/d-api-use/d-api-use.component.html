@@ -1,219 +1,219 @@
 <p-toast></p-toast>
 <!-- <p-toolbar styleClass="p-mb-4">
     </p-toolbar> -->
-
-<div class="pt-4 pb-4">
-  <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left">
-      <div style="font-size: 18px; font-weight: 600;" class="text-color">
-        API Library ทั้งหมด
+<div class="col-12 card bgcards p-2" style="position: relative;">
+  <div class="pt-4 pb-4">
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <div style="font-size: 18px; font-weight: 600;" class="text-color">
+          API Library ทั้งหมด
+        </div>
       </div>
-    </div>
-    <div class="p-toolbar-group-right">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
-          class="Searchtxt new-font"
-          placeholder="Search..."
-        />
-      </span>
-    </div>
-  </p-toolbar>
+      <div class="p-toolbar-group-right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            class="Searchtxt new-font"
+            placeholder="Search..."
+          />
+        </span>
+      </div>
+    </p-toolbar>
 
-  <div class="container-fluid py-4">
-    <div class="row justify-content-center">
-      <div
-        *ngFor="let group of alarmGroups; let i = index"
-        class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 mb-3"
-      >
+    <div class="container-fluid py-4">
+      <div class="row justify-content-center">
         <div
-          class="card h-100 shadow-sm position-relative"
-          style="background-color: #060b28"
+          *ngFor="let group of alarmGroups; let i = index"
+          class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 mb-3"
         >
-          <!-- แสดงสัญลักษณ์ ? ก็ต่อเมื่อ group.description มีค่า -->
           <div
-            *ngIf="group.description"
-            class="position-absolute"
-            style="top: 0; right: 0; margin: 0.5rem; cursor: pointer;"
-            pTooltip="{{ group.description }}"
-            tooltipPosition="top"
+            class="card h-100 shadow-sm position-relative bgcardsdrop"
+            
           >
-            <span
-              style="background-color: red; color: white; font-weight: bold; border-radius: 50%; padding: 0.4rem 0.8rem; font-size: 0.8rem;"
-              >?</span
+            <!-- แสดงสัญลักษณ์ ? ก็ต่อเมื่อ group.description มีค่า -->
+            <div
+              *ngIf="group.description"
+              class="position-absolute"
+              style="top: 0; right: 0; margin: 0.5rem; cursor: pointer;"
+              pTooltip="{{ group.description }}"
+              tooltipPosition="top"
             >
-          </div>
+              <span
+                style="background-color: red; color: white; font-weight: bold; border-radius: 50%; padding: 0.4rem 0.8rem; font-size: 0.8rem;"
+                >?</span
+              >
+            </div>
 
-          <div
-            class="card-body d-flex flex-column align-items-center text-center"
-          >
-            <span
-              class="card-title"
-              style="font-size:18px; font-weight: bold; color:white"
-              >{{ group.tag }}</span
+            <div
+              class="card-body d-flex flex-column align-items-center text-center"
             >
-            <button
-              class="btn mt-3"
-              [ngClass]="{
-                'btn-warning': group.status !== 1 && group.status !== 2,
-                'btn-success': group.status == 1 || group.status == 2
-              }"
-              (click)="openRequestDialog(group)"
-            >
-              {{
-                group.status == 1 || group.status == 2
-                  ? "เปิดใช้งานแล้ว"
-                  : "ยังไม่เปิดใช้งาน"
-              }}
-            </button>
+              <span
+                class="card-title"
+                style="font-size:18px; font-weight: bold; color:white"
+                >{{ group.tag }}</span
+              >
+              <button
+                class="btn mt-3"
+                [ngClass]="{
+                  'btn-warning': group.status !== 1 && group.status !== 2,
+                  'btn-success': group.status == 1 || group.status == 2
+                }"
+                (click)="openRequestDialog(group)"
+              >
+                {{
+                  group.status == 1 || group.status == 2
+                    ? "เปิดใช้งานแล้ว"
+                    : "ยังไม่เปิดใช้งาน"
+                }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <p-toolbar styleClass="p-mb-4">
-    <div class="p-toolbar-group-left">
-      <div style="font-size: 18px; font-weight: 600;" class="text-color">
-        API Library ของฉัน
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <div style="font-size: 18px; font-weight: 600;" class="text-color">
+          API Library ของฉัน
+        </div>
       </div>
-    </div>
-    <div class="p-toolbar-group-right">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
-          class="Searchtxt new-font"
-          placeholder="Search..."
-        />
-      </span>
-    </div>
-  </p-toolbar>
-
-  <p-table
-    #dt
-    [value]="tokenList"
-    [rows]="10"
-    [paginator]="true"
-    [loading]="isLoadingalarmGroups"
-    [globalFilterFields]="['id', 'tag', 'endpoints']"
-    [(selection)]="tokenList"
-    [rowHover]="true"
-    dataKey="group_id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [showCurrentPageReport]="true"
-    responsiveLayout="scroll"
-    breakpoint="960px"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th style="text-align:center;" pSortableColumn="id" class="col-1">
-          ลำดับ
-          <p-sortIcon field="id"></p-sortIcon>
-        </th>
-        <th pSortableColumn="status" class="col-3">
-          Status
-          <p-sortIcon field="status"></p-sortIcon>
-        </th>
-        <th pSortableColumn="tag" class="col-2">
-          Tag
-          <p-sortIcon field="tag"></p-sortIcon>
-        </th>
-        <th pSortableColumn="endpoints" class="col-2">
-          End Point
-          <p-sortIcon field="endpoints"></p-sortIcon>
-        </th>
-        <th pSortableColumn="token" class="col-4">
-          API Key
-          <p-sortIcon field="token"></p-sortIcon>
-        </th>
-        <th pSortableColumn="expires_at" class="col-4">
-          วันที่หมดอายุ
-          <p-sortIcon field="expires_at"></p-sortIcon>
-        </th>
-        <th></th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-group let-rowIndex>
-      <tr>
-        <td style="text-align:center;">{{ group.row_number }}</td>
-        <td>
-          <div
-            id="myDIV2"
-            [ngClass]="{
-              'bg-success text-white':
-                group.status_description === 'เปิดใช้งาน',
-              'bg-primary text-white':
-                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
-              'bg-danger text-white': group.status_description === 'ปฏิเสธ',
-              'bg-secondary text-white':
-                group.status_description === 'ปิดใช้งาน'
-            }"
-            class="p-2 rounded text-center position-relative"
-            title="{{ group.status_description }}"
-          >
-            {{ group.status_description }}
-            <span
-              *ngIf="group.status_description === 'ปฏิเสธ'"
-              pTooltip="{{ group.admin_details }}"
-              tooltipPosition="top"
-              style="
-              display: inline-block;
-              margin-left: 8px;
-              background-color: white;
-              color: red;
-              font-weight: bold;
-              border-radius: 50%;
-              padding: 0.4rem 0.8rem;
-              cursor: pointer;
-              font-size: 0.8rem;
-            "
-            >
-              ?
-            </span>
-          </div>
-        </td>
-        <td>
-          <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
-        </td>
-        <td>
-          <div id="myDIV1" title="{{ group.endpoints }}">
-            {{ group.endpoints }}
-          </div>
-        </td>
-        <td>
-          <div id="myDIV2" title="{{ group.token }}">{{ group.token }}</div>
-        </td>
-        <td>
-          <div id="myDIV2" title="{{ group.expires_at }}">
-            {{ group.expires_at | date: "dd/MM/yyyy" }}
-          </div>
-        </td>
-        <td>
-          <button
-            pButton
+      <div class="p-toolbar-group-right">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
             type="text"
-            (click)="openEditDialog(group)"
-            icon="pi pi-ellipsis-h"
-          ></button>
-        </td>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="summary">
-      <div class="p-d-flex p-ai-center p-jc-between">
-        Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            class="Searchtxt new-font"
+            placeholder="Search..."
+          />
+        </span>
       </div>
-    </ng-template>
-  </p-table>
-</div>
+    </p-toolbar>
 
+    <p-table
+      #dt
+      [value]="tokenList"
+      [rows]="10"
+      [paginator]="true"
+      [loading]="isLoadingalarmGroups"
+      [globalFilterFields]="['id', 'tag', 'endpoints']"
+      [(selection)]="tokenList"
+      
+      dataKey="group_id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+      responsiveLayout="scroll"
+      breakpoint="960px"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="text-align:center;" pSortableColumn="id" class="col-1">
+            ลำดับ
+            <p-sortIcon field="id"></p-sortIcon>
+          </th>
+          <th pSortableColumn="status" class="col-3">
+            Status
+            <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th pSortableColumn="tag" class="col-2">
+            Tag
+            <p-sortIcon field="tag"></p-sortIcon>
+          </th>
+          <th pSortableColumn="endpoints" class="col-2">
+            End Point
+            <p-sortIcon field="endpoints"></p-sortIcon>
+          </th>
+          <th pSortableColumn="token" class="col-4">
+            API Key
+            <p-sortIcon field="token"></p-sortIcon>
+          </th>
+          <th pSortableColumn="expires_at" class="col-4">
+            วันที่หมดอายุ
+            <p-sortIcon field="expires_at"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-group let-rowIndex>
+        <tr>
+          <td style="text-align:center;">{{ group.row_number }}</td>
+          <td>
+            <div
+              id="myDIV2"
+              [ngClass]="{
+                'bg-success text-white':
+                  group.status_description === 'เปิดใช้งาน',
+                'bg-primary text-white':
+                  group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+                'bg-danger text-white': group.status_description === 'ปฏิเสธ',
+                'bg-secondary text-white':
+                  group.status_description === 'ปิดใช้งาน'
+              }"
+              class="p-2 rounded text-center position-relative"
+              title="{{ group.status_description }}"
+            >
+              {{ group.status_description }}
+              <span
+                *ngIf="group.status_description === 'ปฏิเสธ'"
+                pTooltip="{{ group.admin_details }}"
+                tooltipPosition="top"
+                style="
+                display: inline-block;
+                margin-left: 8px;
+                background-color: white;
+                color: red;
+                font-weight: bold;
+                border-radius: 50%;
+                padding: 0.4rem 0.8rem;
+                cursor: pointer;
+                font-size: 0.8rem;
+              "
+              >
+                ?
+              </span>
+            </div>
+          </td>
+          <td>
+            <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
+          </td>
+          <td>
+            <div id="myDIV1" title="{{ group.endpoints }}">
+              {{ group.endpoints }}
+            </div>
+          </td>
+          <td>
+            <div id="myDIV2" title="{{ group.token }}">{{ group.token }}</div>
+          </td>
+          <td>
+            <div id="myDIV2" title="{{ group.expires_at }}">
+              {{ group.expires_at | date: "dd/MM/yyyy" }}
+            </div>
+          </td>
+          <td>
+            <button
+              pButton
+              type="text"
+              (click)="openEditDialog(group)"
+              icon="pi pi-ellipsis-h"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
 <p-dialog
   [(visible)]="lineDialog"
   [style]="{ width: '650px' }"

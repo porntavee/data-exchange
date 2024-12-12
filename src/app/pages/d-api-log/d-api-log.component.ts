@@ -243,22 +243,25 @@ export class DApiLogComponent implements OnInit {
     return {
       chart: {
         type: "line",
-        backgroundColor: "#1a2d45",
+        backgroundColor: "transparent",
         height: 400
+      },
+      title: {
+        text: ""
       },
       xAxis: {
         categories,
         labels: {
-          style: { color: "#FFFFFF" } // สีของ label แกน X
+          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ label แกน X
         }
       },
       yAxis: {
         title: {
           text: "จำนวน Session",
-          style: { color: "#FFFFFF" } // สีของ title แกน Y
+          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ title แกน Y
         },
         labels: {
-          style: { color: "#FFFFFF" } // สีของ label แกน Y
+          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ label แกน Y
         },
         min: 0 // ค่าเริ่มต้นของแกน Y
       },
@@ -270,6 +273,13 @@ export class DApiLogComponent implements OnInit {
           color: "#FF5733"
         }
       ],
+      tooltip: {
+       
+        style: {
+          fontFamily: "Prompt",
+          fontSize: "16px"
+        }
+      },
       plotOptions: {
         column: {
           pointPadding: 0,
@@ -277,12 +287,18 @@ export class DApiLogComponent implements OnInit {
           borderWidth: 0,
           dataLabels: {
             enabled: true,
-            style: { color: "#FFFFFF" }
+            style: { color: "#FFFFFF",fontFamily: "Prompt", }
           }
         }
       },
+      credits: {
+        enabled: false
+      },
+      exporting: {
+        enabled: false // ซ่อนการ export
+      },
       legend: {
-        itemStyle: { color: "#FFFFFF" }
+        itemStyle: { color: "#FFFFFF",fontFamily: "Prompt", }
       }
     };
   }

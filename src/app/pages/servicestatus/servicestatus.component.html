@@ -1,3 +1,4 @@
+
 <div class="p-mb-3 fixed-top-left" style="padding: 10px;">
   <div class="button-group">
     <button
@@ -19,7 +20,7 @@
 
 <div [hidden]="selectedOption !== 'Storage'">
   <div
-    style="text-align: center; padding: 20px; background-color: #3E5774; width:100%"
+    style="text-align: center; padding: 20px; background-color: rgba(6, 11, 40, 0.5); width:100%"
   >
     <!-- Show spinner while loading -->
     <p-progressSpinner
@@ -39,7 +40,7 @@
     <div
       *ngIf="!isLoading && !isNodata"
       class="accordion"
-      style="overflow-y: scroll; height: calc(100vh - 120px);"
+      style="overflow-y: scroll; height: calc(100vh - 195px);"
     >
       <div class="accordion-item" *ngFor="let tab of tabs; let i = index">
         <button
@@ -198,29 +199,35 @@
   </div>
 </div>
 
-<div *ngIf="selectedOption === 'Backup'">
-  <div style="text-align: center; padding: 60px; background-color: #3E5774;">
-    <div style="text-align: left; font-weight: bolder; margin-bottom: 24px;">
-      Backup History
+  <div *ngIf="selectedOption === 'Backup'">
+    <div style="text-align: center; padding: 0 60px 30px 60px;" class="bgcards">
+      <p-toolbar styleClass="p-mb-4">
+        <div class="p-toolbar-group-left">
+          <div style="font-size: 18px; font-weight: 600;" class="text-color">
+            Backup History
+          </div>
+        </div>
+       
+      </p-toolbar>
+      <p-table
+        [value]="products"
+        responsiveLayout="scroll"
+        [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
+        class="ui-table-scrollable"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Filename</th>
+            <th>Created At</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.filename }}</td>
+            <td>{{ product.created_at }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-    <p-table
-      [value]="products"
-      responsiveLayout="scroll"
-      [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
-      class="ui-table-scrollable"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Filename</th>
-          <th>Created At</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr>
-          <td>{{ product.filename }}</td>
-          <td>{{ product.created_at }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
   </div>
-</div>
+
