@@ -146,8 +146,8 @@ export class ServicestatusComponent implements OnInit {
     this.gridOptions = this.initialGridOptions;
 
     this.dashboard = [
-      { cols: 3, rows: 1, x: 0, y: 0, header: "loadcpu" }, // Widget 1
-      { cols: 3, rows: 1, x: 1, y: 0, header: "loadmemory" }, // Widget 2
+      { cols: 1, rows: 1, x: 0, y: 0, header: "loadcpu" }, // Widget 1
+      { cols: 1, rows: 1, x: 1, y: 0, header: "loadmemory" }, // Widget 2
       { cols: 1, rows: 1, x: 2, y: 0, header: "loadCPUText" }, // Widget 3
       { cols: 1, rows: 1, x: 3, y: 0, header: "loadMemoryText" }, // Widget 4
 
