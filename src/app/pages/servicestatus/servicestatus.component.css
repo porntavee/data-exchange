@@ -8,14 +8,14 @@
   overflow: hidden; /* ซ่อนสิ่งที่เกินขอบเขต */
   background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
  
-  height: calc(100vh - 180px); 
+  height: calc(100vh - 200px); 
 }
 .bgcards {
   position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
   overflow-y: auto; /* ซ่อนสิ่งที่เกินขอบเขต */
   background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
  
-  height: calc(100vh - 180px); 
+  height: calc(100vh - 200px); 
 }
 
 ::ng-deep .bgcards::-webkit-scrollbar {
