@@ -51,102 +51,72 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <!-- <th style="width: 3rem">
-                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                    </th> -->
-
           <th
-            style="text-align:center;"
+            style="width: 5%; text-align: center;"
             pSortableColumn="row_number2"
-            class="col-1"
           >
-            ลำดับ <p-sortIcon field="row_number"> </p-sortIcon>
+            ลำดับ <p-sortIcon field="row_number"></p-sortIcon>
           </th>
-          <th pSortableColumn="username" class="col-1">
-            User<p-sortIcon field="username"></p-sortIcon>
+          <th style="width: 10%;" pSortableColumn="username">
+            User <p-sortIcon field="username"></p-sortIcon>
           </th>
-          <th pSortableColumn="tag" class="col-1">
-            Tag<p-sortIcon field="tag"> </p-sortIcon>
+          <th style="width: 10%;" pSortableColumn="tag">
+            Tag <p-sortIcon field="tag"></p-sortIcon>
           </th>
-          <th pSortableColumn="endpoints" class="col-1">
-            End Point
-            <p-sortIcon field="endpoints"></p-sortIcon>
+          <th style="width: 20%;" pSortableColumn="endpoints">
+            End Point <p-sortIcon field="endpoints"></p-sortIcon>
           </th>
-          <th pSortableColumn="request_at" class="col-2">
-            Request Date
-            <p-sortIcon field="request_at"></p-sortIcon>
+          <th style="width: 15%;" pSortableColumn="request_at">
+            Request Date <p-sortIcon field="request_at"></p-sortIcon>
           </th>
-          <th pSortableColumn="approve_at" class="col-2">
-            Approve Date
-            <p-sortIcon field="approve_at"></p-sortIcon>
+          <th style="width: 15%;" pSortableColumn="approve_at">
+            Approve Date <p-sortIcon field="approve_at"></p-sortIcon>
           </th>
-          <th pSortableColumn="admin_name" class="col-2">
-            Approve By
-            <p-sortIcon field="admin_name"></p-sortIcon>
+          <th style="width: 10%;" pSortableColumn="admin_name">
+            Approve By <p-sortIcon field="admin_name"></p-sortIcon>
           </th>
-
-          <th pSortableColumn="status_description" class="col-2">
-            Status<p-sortIcon field="status_description"> </p-sortIcon>
+          <th style="width: 10%;" pSortableColumn="status_description">
+            Status <p-sortIcon field="status_description"></p-sortIcon>
           </th>
-          <th></th>
-          <th></th>
+          <th style="width: 5%;"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-group let-rowIndex>
         <tr>
-          <!-- <td>
-                        <p-tableCheckbox [value]="group"></p-tableCheckbox>
-                    </td> -->
-          <td style="text-align:center;">{{ group.row_number2 }}</td>
-          <td>
-            <div id="myDIV3" title="{{ group.username }}">
-              {{ group.username }}
-            </div>
+          <td style="text-align: center;">{{ group.row_number2 }}</td>
+          <td class="truncate" title="{{ group.username }}">
+            {{ group.username }}
           </td>
-          <td>
-            <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
+          <td class="truncate" title="{{ group.tag }}">{{ group.tag }}</td>
+          <td class="truncate" title="{{ group.endpoints }}">
+            {{ group.endpoints }}
           </td>
-          <td>
-            <div id="myDIV1" title="{{ group.endpoints }}">
-              {{ group.endpoints }}
-            </div>
+          <td
+            class="truncate"
+            title="{{ group.request_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+          >
+            {{
+              group.request_at
+                ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
+                : "-"
+            }}
           </td>
-          <td>
-            <div
-              id="myDIV1"
-              title="{{
-                group.request_at ? (group.request_at | date: 'dd/MM/yyyy') : '-'
-              }}"
-            >
-              {{
-                group.request_at
-                  ? (group.request_at | date: "dd/MM/yyyy hh:mm:ss")
-                  : "-"
-              }}
-            </div>
+          <td
+            class="truncate"
+            title="{{ group.approve_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+          >
+            {{
+              group.approve_at
+                ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
+                : "-"
+            }}
           </td>
-          <td>
-            <div
-              id="myDIV1"
-              title="{{
-                group.approve_at ? (group.approve_at | date: 'dd/MM/yyyy') : '-'
-              }}"
-            >
-              {{
-                group.approve_at
-                  ? (group.approve_at | date: "dd/MM/yyyy hh:mm:ss")
-                  : "-"
-              }}
-            </div>
-          </td>
-          <td>
-            <div id="myDIV1" title="{{ group.admin_name }}">
-              {{ group.admin_name }}
-            </div>
+          <td class="truncate" title="{{ group.admin_name }}">
+            {{ group.admin_name }}
           </td>
           <td>
             <div
-              id="myDIV2"
+              class="truncate p-2 rounded text-center"
               [ngClass]="{
                 'bg-success text-white':
                   group.status_description === 'เปิดใช้งาน',
@@ -156,15 +126,13 @@
                 'bg-secondary text-white':
                   group.status_description === 'ปิดใช้งาน'
               }"
-              style="font-size:16px;  color:black"
-              class="p-2 rounded text-center"
+              style="font-size: 16px; color: black;"
               title="{{ group.status_description }}"
             >
               {{ group.status_description }}
             </div>
           </td>
-          <!--<td>{{group.symbol_name}}</td>-->
-          <td style="display: flex; justify-content: space-between;">
+          <td style="text-align: center;">
             <p-menu
               #menu
               [popup]="true"
@@ -177,16 +145,7 @@
               (click)="openMenuWithItems(group, $event, menu)"
               icon="pi pi-ellipsis-h"
             ></button>
-
-            <!-- (click)="approve(group.user_id, group.route_id)" -->
-            <!-- <button type="button" pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info"
-                            (click)="lineread(group)"></button>
-                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
-                            (click)="editline(group)"></button>
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                            (click)="deleteGroup(group)"></button> -->
           </td>
-          <td></td>
         </tr>
       </ng-template>
       <ng-template pTemplate="summary">

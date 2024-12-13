@@ -85,28 +85,28 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3rem">
+          <th style="width: 5rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th pSortableColumn="firstname">
+          <th style="width: 15%" pSortableColumn="firstname">
             Name <p-sortIcon field="firstname"></p-sortIcon>
           </th>
-          <th pSortableColumn="username">
+          <th style="width: 15%" pSortableColumn="username">
             Username <p-sortIcon field="username"></p-sortIcon>
           </th>
-          <th pSortableColumn="email">
+          <th style="width: 25%" pSortableColumn="email">
             Email <p-sortIcon field="email"></p-sortIcon>
           </th>
-          <th pSortableColumn="role">
+          <th style="width: 10%" pSortableColumn="role">
             Role <p-sortIcon field="role"></p-sortIcon>
           </th>
-          <th pSortableColumn="zone_name">
+          <th style="width: 15%" pSortableColumn="zone_name">
             Zone <p-sortIcon field="zone_name"></p-sortIcon>
           </th>
-          <th pSortableColumn="created_at">
+          <th style="width: 15%" pSortableColumn="created_at">
             Create at <p-sortIcon field="created_at"></p-sortIcon>
           </th>
-          <th></th>
+          <th style="width: 5%"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user>
@@ -115,27 +115,21 @@
             <p-tableCheckbox [value]="user"></p-tableCheckbox>
           </td>
           <td>{{ user.firstname }} {{ user.lastname }}</td>
-          <td>
-            <div class="myDIV2" title="{{ user.username }}">
-              {{ user.username }}
-            </div>
+          <td class="truncate" title="{{ user.username }}">
+            {{ user.username }}
           </td>
-          <td>
-            <div class="myDIV1" title="{{ user.email }}">{{ user.email }}</div>
+          <td class="truncate" title="{{ user.email }}">
+            {{ user.email }}
           </td>
           <td>{{ user.role }}</td>
-          <td>
-            <div class="myDIV2" title="{{ user.zone_name }}">
-              {{ user.zone_name }}
-            </div>
+          <td class="truncate" title="{{ user.zone_name }}">
+            {{ user.zone_name }}
           </td>
-          <td>
-            <div
-              class="myDIV3"
-              title="{{ user.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
-            >
-              {{ user.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
-            </div>
+          <td
+            class="truncate"
+            title="{{ user.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
+          >
+            {{ user.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
           </td>
           <td>
             <p-menu

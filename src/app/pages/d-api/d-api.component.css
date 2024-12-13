@@ -388,3 +388,28 @@ tr:nth-child(odd) {
   ) !important;
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
+
+.p-table table {
+  table-layout: fixed; /* บังคับให้ขนาดคอลัมน์คงที่ */
+  width: 100%;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  text-align: center;
+}
+
+button.p-button-primary {
+  width: 100%;
+}

@@ -61,58 +61,49 @@
             <ng-template pTemplate="header">
               <tr>
                 <th
-                  style="text-align:center;"
+                  style="width: 10%; text-align: center;"
                   pSortableColumn="id"
-                  class="col-1"
                 >
-                  ID <p-sortIcon field="id"> </p-sortIcon>
+                  ID <p-sortIcon field="id"></p-sortIcon>
                 </th>
-                <th pSortableColumn="tag" class="col-2">
-                  Tag<p-sortIcon field="tag"></p-sortIcon>
+                <th style="width: 20%;" pSortableColumn="tag">
+                  Tag <p-sortIcon field="tag"></p-sortIcon>
                 </th>
-                <th pSortableColumn="endpoints" class="col-2">
-                  Endpoints<p-sortIcon field="endpoints"> </p-sortIcon>
+                <th style="width: 20%;" pSortableColumn="endpoints">
+                  Endpoints <p-sortIcon field="endpoints"></p-sortIcon>
                 </th>
-                <th pSortableColumn="type" class="col-2">
-                  Type<p-sortIcon field="type"></p-sortIcon>
+                <th style="width: 15%;" pSortableColumn="type">
+                  Type <p-sortIcon field="type"></p-sortIcon>
                 </th>
-                <th pSortableColumn="methods" class="col-3">
-                  Description<p-sortIcon field="methods"> </p-sortIcon>
+                <th style="width: 25%;" pSortableColumn="methods">
+                  Description <p-sortIcon field="methods"></p-sortIcon>
                 </th>
-                <th pSortableColumn="" class="col-2">
-                  Action<p-sortIcon field=""> </p-sortIcon>
+                <th style="width: 10%;">
+                  Action
                 </th>
-
-                <!-- <th></th> -->
               </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-group let-rowIndex>
               <tr (click)="readRouteById(group)">
-                <td style="text-align:center;">{{ group.id }}</td>
-                <td>
-                  <div id="myDIV3" title="{{ group.tag }}">{{ group.tag }}</div>
+                <td style="text-align: center;">{{ group.id }}</td>
+                <td class="truncate" title="{{ group.tag }}">
+                  {{ group.tag }}
                 </td>
-                <td>
-                  <div id="myDIV1" title="{{ group.endpoints }}">
-                    {{ group.endpoints }}
-                  </div>
+                <td class="truncate" title="{{ group.endpoints }}">
+                  {{ group.endpoints }}
                 </td>
-                <td>
-                  <div id="myDIV1" title="{{ group.type }}">
-                    {{ group.type }}
-                  </div>
+                <td class="truncate" title="{{ group.type }}">
+                  {{ group.type }}
                 </td>
-                <td>
-                  <div id="myDIV2" title="{{ group.description }}">
-                    {{
-                      group.description?.length > 30
-                        ? (group.description | slice: 0:30) + "..."
-                        : group.description
-                    }}
-                  </div>
+                <td class="truncate" title="{{ group.description }}">
+                  {{
+                    group.description?.length > 30
+                      ? (group.description | slice: 0:30) + "..."
+                      : group.description
+                  }}
                 </td>
-                <td>
+                <td style="text-align: center;">
                   <button
                     pButton
                     pRipple
@@ -121,9 +112,6 @@
                     (click)="tryExecute2($event, group)"
                   ></button>
                 </td>
-                <!--<td>{{group.symbol_name}}</td>-->
-
-                <!-- <td></td> -->
               </tr>
             </ng-template>
             <ng-template pTemplate="summary">

@@ -107,6 +107,22 @@
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
 
+.p-table table {
+  table-layout: fixed; /* บังคับให้ขนาดคอลัมน์คงที่ */
+  width: 100%;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
 @media (min-width: 768px) {
   .p-toolbar-group-right {
     justify-content: flex-start !important;

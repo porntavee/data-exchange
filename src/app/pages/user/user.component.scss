@@ -456,6 +456,18 @@ tr:nth-child(odd) {
     margin-left: -10px;
   }
 }
+
+.p-table table {
+  table-layout: fixed; /* บังคับให้คอลัมน์มีขนาดคงที่ */
+  width: 100%;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 @media screen and (max-width: 1200px) {
   .myDIV1 {
     width: 100px; /* Need to specify a width (can be any unit). overflow: hidden does nothing unless the width of .title is less than the width of the containing content */
