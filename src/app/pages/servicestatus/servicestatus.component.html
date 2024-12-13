@@ -1,4 +1,3 @@
-
 <div class="p-mb-3 fixed-top-left" style="padding: 10px;">
   <div class="button-group">
     <button
@@ -167,6 +166,43 @@
                       </div>
                     </div>
                   </div>
+                  <div
+                    class="card-dashboard"
+                    *ngIf="item.header === 'loadMemoryText'"
+                  >
+                    <div class="card-body pt-1">
+                      <h5 class="card-title" style="color:black">
+                        RAM
+                      </h5>
+                      <div class="card-content">
+                        <p-progressSpinner
+                          *ngIf="isLoading"
+                          styleClass="custom-spinner"
+                        ></p-progressSpinner>
+                        <div>{{ tab.header.ram }} GB</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="card-dashboard"
+                    *ngIf="item.header === 'loadCPUText'"
+                  >
+                    <div class="card-body pt-1">
+                      <h5 class="card-title" style="color:black">
+                        CPU CORE
+                      </h5>
+                      <div class="card-content">
+                        <p-progressSpinner
+                          *ngIf="isLoading"
+                          styleClass="custom-spinner"
+                        ></p-progressSpinner>
+                        <div>
+                          {{ tab.header.core }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                   <!-- Disk Usage -->
                   <div
@@ -199,35 +235,33 @@
   </div>
 </div>
 
-  <div *ngIf="selectedOption === 'Backup'">
-    <div style="text-align: center; padding: 0 60px 30px 60px;" class="bgcards">
-      <p-toolbar styleClass="p-mb-4">
-        <div class="p-toolbar-group-left">
-          <div style="font-size: 18px; font-weight: 600;" class="text-color">
-            Backup History
-          </div>
+<div *ngIf="selectedOption === 'Backup'">
+  <div style="text-align: center; padding: 0 60px 30px 60px;" class="bgcards">
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-toolbar-group-left">
+        <div style="font-size: 18px; font-weight: 600;" class="text-color">
+          Backup History
         </div>
-       
-      </p-toolbar>
-      <p-table
-        [value]="products"
-        responsiveLayout="scroll"
-        [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
-        class="ui-table-scrollable"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Filename</th>
-            <th>Created At</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-product>
-          <tr>
-            <td>{{ product.filename }}</td>
-            <td>{{ product.created_at }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
+      </div>
+    </p-toolbar>
+    <p-table
+      [value]="products"
+      responsiveLayout="scroll"
+      [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
+      class="ui-table-scrollable"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Filename</th>
+          <th>Created At</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.filename }}</td>
+          <td>{{ product.created_at }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
-
+</div>

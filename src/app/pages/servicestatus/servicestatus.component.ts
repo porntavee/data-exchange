@@ -99,7 +99,7 @@ export class ServicestatusComponent implements OnInit {
     minRows: 1,
     maxRows: 1,
     gridType: "verticalFixed" as GridType,
-    fixedRowHeight: 240,
+    fixedRowHeight: 120,
     margin: 16
   };
 
@@ -146,15 +146,17 @@ export class ServicestatusComponent implements OnInit {
     this.gridOptions = this.initialGridOptions;
 
     this.dashboard = [
-      { cols: 4, rows: 1, x: 0, y: 0, header: "loadcpu" },
-      // { cols: 3, rows: 1, x: 3, y: 0, header: "loaddisk" },
-      { cols: 4, rows: 1, x: 4, y: 0, header: "loadmemory" },
+      { cols: 3, rows: 1, x: 0, y: 0, header: "loadcpu" }, // Widget 1
+      { cols: 3, rows: 1, x: 1, y: 0, header: "loadmemory" }, // Widget 2
+      { cols: 1, rows: 1, x: 2, y: 0, header: "loadCPUText" }, // Widget 3
+      { cols: 1, rows: 1, x: 3, y: 0, header: "loadMemoryText" }, // Widget 4
+
       {
         cols: 4,
         rows: 1,
-        x: 8,
+        x: 4,
         y: 0,
-        header: "loaddiskstatus"
+        header: "loaddiskstatus" // Disk status widget
       }
     ];
 
@@ -543,15 +545,17 @@ export class ServicestatusComponent implements OnInit {
                 percentUsed: Number(
                   (item.storage.ext4.used / item.storage.ext4.total) * 100
                 ).toFixed(0)
-              }
+              },
+              core: item.cpu.core.length,
+              ram: Math.round(item.memory.total)
             },
             lineChartData: item.cpu.avg_range,
             content: `
-          OS: ${item.os}
-          CPU Avg: ${item.cpu.avg.toFixed(2)}
-          Memory Used: ${item.memory.used.toFixed(2)}%
-          Storage EXT4 Used: ${item.storage.ext4.used.toFixed(2)} GB
-        `,
+      OS: ${item.os}
+      CPU Avg: ${item.cpu.avg.toFixed(2)}
+      Memory Used: ${item.memory.used.toFixed(2)}%
+      Storage EXT4 Used: ${item.storage.ext4.used.toFixed(2)} GB
+    `,
             storage: Object.entries(item.storage).map(([key, value]: any) => ({
               name: key,
               total: value.total,
@@ -560,6 +564,7 @@ export class ServicestatusComponent implements OnInit {
             })),
             isOpen: false
           }));
+          console.log(linuxTabs);
           tabs.push(...linuxTabs); // เพิ่มข้อมูล Linux ใน tabs
         } else if (linuxResult.status === "rejected") {
           console.error("Error fetching Linux data:", linuxResult.reason);
@@ -584,7 +589,9 @@ export class ServicestatusComponent implements OnInit {
                 percentUsed: Number(
                   (item.storage["C:"].used / item.storage["C:"].total) * 100
                 ).toFixed(0)
-              }
+              },
+              core: item.cpu.core.length,
+              ram: Math.round(item.memory.total)
             },
             content: `
           OS: ${item.os}
@@ -635,7 +642,8 @@ export class ServicestatusComponent implements OnInit {
           free: newTab.header.free,
           cpuRange: newTab.header.cpuRange,
           memoryRange: newTab.header.memoryRange,
-          storage: { ...newTab.header.storage }
+          storage: { ...newTab.header.storage },
+          core: newTab.header.cpu.core[1]
         };
         this.tabs[existingIndex].storage = [...newTab.storage];
       } else {

@@ -7,20 +7,20 @@
   position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
   overflow: hidden; /* ซ่อนสิ่งที่เกินขอบเขต */
   background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
- 
-  height: calc(100vh - 120px); 
+
+  height: calc(100vh - 120px);
 }
 .bgcards {
   position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
   overflow-y: auto; /* ซ่อนสิ่งที่เกินขอบเขต */
   background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
- 
-  height: calc(100vh - 120px); 
+
+  height: calc(100vh - 120px);
 }
 .bgcards::-webkit-scrollbar {
   display: none; /* ซ่อน scrollbar */
 }
-.card-stats > * { 
+.card-stats > * {
   position: relative; /* กำหนดให้เนื้อหาภายในอยู่ด้านบน */
   z-index: 2; /* ให้เนื้อหาสูงกว่าพื้นหลัง */
 }
@@ -30,12 +30,13 @@
   border: 1px solid #061949;
 }
 
-
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #061949 !important;
   color: white;
 }
-::ng-deep .p-toolbar, .p-toolbar-group-left, .p-toolbar-group-right {
+::ng-deep .p-toolbar,
+.p-toolbar-group-left,
+.p-toolbar-group-right {
   background-color: transparent !important;
   border: transparent !important;
   color: white;
@@ -66,7 +67,7 @@
 ::ng-deep .p-paginator .p-paginator-next:hover,
 ::ng-deep .p-paginator .p-paginator-last:hover,
 ::ng-deep .p-paginator .p-paginator-page:hover {
-  background-color:  transparent !important; /* สีเมื่อ hover */
+  background-color: transparent !important; /* สีเมื่อ hover */
   color: white !important;
 }
 ::ng-deep .p-paginator {
@@ -80,19 +81,29 @@
   border-color: transparent;
   color: white;
 }
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar {
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;
- }
+}
 
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-track {
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
   border-radius: 100px !important;
 }
 
-::ng-deep .p-datatable-responsive-scroll>.p-datatable-wrapper::-webkit-scrollbar-thumb {
+::ng-deep
+  .p-datatable-responsive-scroll
+  > .p-datatable-wrapper::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
-  background-image: linear-gradient(180deg, #979594e7 0%, #757474 99%) !important;
+  background-image: linear-gradient(
+    180deg,
+    #979594e7 0%,
+    #757474 99%
+  ) !important;
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
 th {
@@ -114,10 +125,14 @@ tr:nth-child(odd) {
   background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
   color: white !important; /* ตัวหนังสือสีขาว */
 }
-::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight{
-  background: #64B5F6 !important;
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: #64b5f6 !important;
 }
-::ng-deep .p-datepicker:not(.p-disabled) table td span:not(.p-highlight):not(.p-disabled):hover{
+::ng-deep
+  .p-datepicker:not(.p-disabled)
+  table
+  td
+  span:not(.p-highlight):not(.p-disabled):hover {
   background: #27b2ff;
 }
 ::ng-deep .p-calendar-w-btn .p-datepicker-trigger {
@@ -126,16 +141,16 @@ tr:nth-child(odd) {
   color: #263b64 !important; /* ตัวหนังสือสีขาว */
   border-color: #263b64 !important;
 }
-::ng-deep .p-datepicker:not(.p-datepicker-inline){
+::ng-deep .p-datepicker:not(.p-datepicker-inline) {
   background-color: #263b64 !important; /* พื้นหลังเป็นสี #263b64 */
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
-::ng-deep .p-datepicker-prev{
+::ng-deep .p-datepicker-prev {
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
-::ng-deep .p-datepicker-next{
+::ng-deep .p-datepicker-next {
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
@@ -172,7 +187,7 @@ tr:nth-child(odd) {
   z-index: 9999 !important; /* เพิ่มค่า z-index ให้สูงพอเพื่อให้ dropdown อยู่เหนือกราฟ */
   position: relative; /* ให้แน่ใจว่า position ถูกตั้งค่าเป็น relative */
 }
-::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message{
+::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-empty-message {
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
@@ -188,10 +203,13 @@ tr:nth-child(odd) {
 ::ng-deep .p-dropdown-items-wrapper::-webkit-scrollbar {
   display: none; /* ซ่อน scrollbar */
 }
-::ng-deep .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover{
+::ng-deep
+  .p-dropdown-panel
+  .p-dropdown-items
+  .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
   background: #27b2ff;
 }
-::ng-deep .p-dropdown-label{
+::ng-deep .p-dropdown-label {
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
@@ -209,17 +227,17 @@ tr:nth-child(odd) {
   font-family: "Prompt", sans-serif !important;
 }
 ::ng-deep .p-dialog .p-dialog-header {
-  background-color: rgba(6, 11, 40); 
+  background-color: rgba(6, 11, 40);
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
 ::ng-deep .p-dialog .p-dialog-content {
-  background-color: rgba(6, 11, 40); 
+  background-color: rgba(6, 11, 40);
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
 ::ng-deep .p-dialog .p-dialog-footer {
-  background-color: rgba(6, 11, 40); 
+  background-color: rgba(6, 11, 40);
   color: white !important; /* ตัวหนังสือสีขาว */
   font-family: "Prompt", sans-serif !important;
 }
@@ -391,6 +409,9 @@ tr:nth-child(odd) {
   .Clearbut {
     margin-right: 15px;
   }
+  .Searchtxt {
+    width: 300px;
+  }
 }
 @media screen and (max-width: 560px) {
   .Searchtxt {
@@ -413,7 +434,8 @@ tr:nth-child(odd) {
     display: none;
   }
   .Searchtxt {
-    width: 80px !important;
+    margin-top: 16px;
+    width: 180px !important;
   }
   .Newbut {
     width: 20px !important;

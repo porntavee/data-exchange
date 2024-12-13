@@ -70,6 +70,8 @@
       [value]="users"
       [rows]="10"
       [paginator]="true"
+      scrollable="true"
+      scrollHeight="400px"
       [globalFilterFields]="[
         'firstname',
         'firstname | lastname',
@@ -78,7 +80,6 @@
         'username'
       ]"
       [(selection)]="selectedUsers"
-      
       dataKey="id"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [showCurrentPageReport]="true"
@@ -95,7 +96,7 @@
             Username <p-sortIcon field="username"></p-sortIcon>
           </th>
           <th pSortableColumn="email">
-            email <p-sortIcon field="email"></p-sortIcon>
+            Email <p-sortIcon field="email"></p-sortIcon>
           </th>
           <th pSortableColumn="role">
             Role <p-sortIcon field="role"></p-sortIcon>
@@ -106,7 +107,6 @@
           <th pSortableColumn="created_at">
             Create at <p-sortIcon field="created_at"></p-sortIcon>
           </th>
-          <!-- <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
           <th></th>
         </tr>
       </ng-template>
@@ -138,7 +138,6 @@
               {{ user.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
             </div>
           </td>
-          <!-- <td><span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span></td> -->
           <td>
             <p-menu
               #menu
@@ -153,10 +152,6 @@
               (click)="menuVlue(user)"
               icon="pi pi-ellipsis-h"
             ></button>
-            <!-- <button pButton pRipple icon="pi pi-upload" class="p-button-rounded p-button-help p-mr-2"
-                            (click)="sendmail(user.email)"></button> -->
-            <!-- <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning p-mr-2"
-                            title="Edit" (click)="editUser(user)"></button> -->
           </td>
         </tr>
       </ng-template>
