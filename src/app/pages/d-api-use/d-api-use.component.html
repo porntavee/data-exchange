@@ -29,10 +29,7 @@
           *ngFor="let group of alarmGroups; let i = index"
           class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1 mb-3"
         >
-          <div
-            class="card h-100 shadow-sm position-relative bgcardsdrop"
-            
-          >
+          <div class="card h-100 shadow-sm position-relative bgcardsdrop">
             <!-- แสดงสัญลักษณ์ ? ก็ต่อเมื่อ group.description มีค่า -->
             <div
               *ngIf="group.description"
@@ -104,12 +101,10 @@
       [loading]="isLoadingalarmGroups"
       [globalFilterFields]="['id', 'tag', 'endpoints']"
       [(selection)]="tokenList"
-      
       dataKey="group_id"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [showCurrentPageReport]="true"
       responsiveLayout="scroll"
-      breakpoint="960px"
     >
       <ng-template pTemplate="header">
         <tr>

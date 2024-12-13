@@ -57,6 +57,7 @@ export class ServicestatusComponent implements OnInit {
   optionsstatusMemory: any;
   intervalId: NodeJS.Timeout;
   isNodata: boolean;
+  lastProcessedMinute: number;
   constructor(
     public themeService: ThemeService,
     private titleService: Title,
@@ -130,8 +131,13 @@ export class ServicestatusComponent implements OnInit {
       const now = new Date();
       const currentMinute = now.getMinutes();
       const lastDigit = currentMinute % 10;
-      if (lastDigit === 0 || lastDigit === 5) {
+
+      if (
+        (lastDigit === 0 || lastDigit === 5) &&
+        this.lastProcessedMinute !== currentMinute
+      ) {
         this.loadData();
+        this.lastProcessedMinute = currentMinute;
       }
     }, 1000);
 
