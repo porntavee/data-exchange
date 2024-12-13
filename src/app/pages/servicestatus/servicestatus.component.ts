@@ -26,7 +26,7 @@ import {
 
       gridster {
         width: 97vw;
-        height: 300px;
+        height: 250px;
         min-width: 1700px;
       }
       gridster::-webkit-scrollbar {
@@ -100,7 +100,7 @@ export class ServicestatusComponent implements OnInit {
     minRows: 1,
     maxRows: 2,
     gridType: "verticalFixed" as GridType,
-    fixedRowHeight: 120,
+    fixedRowHeight: 100,
     margin: 16
   };
 
