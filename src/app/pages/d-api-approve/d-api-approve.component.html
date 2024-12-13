@@ -3,16 +3,18 @@
     </p-toolbar> -->
 <div class="col-12 card bgcards p-2" style="position: relative;">
   <div class="pt-4 pb-4">
-    <p-toolbar styleClass="p-mb-4">
+    <p-toolbar styleClass="p-mb-4 p-d-flex p-flex-wrap">
       <div class="p-toolbar-group-left">
         <div style="font-size: 18px; font-weight: 600;" class="text-color">
-          API Approve
+          API Log
         </div>
       </div>
-      <div class="p-toolbar-group-right">
-        <!-- Dropdown สำหรับเลือกสถานะ -->
+      <div
+        class="p-toolbar-group-right"
+        style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;"
+      >
         <p-dropdown
-          [style]="{ width: '350px' }"
+          [style]="{ width: '100%', maxWidth: '350px' }"
           [options]="statusOptions"
           [(ngModel)]="selectedStatus"
           optionLabel="label"
@@ -21,8 +23,7 @@
         >
         </p-dropdown>
 
-        <!-- ช่องค้นหา -->
-        <span class="p-input-icon-left ml-1">
+        <span class="p-input-icon-left toolbar-search">
           <i class="pi pi-search"></i>
           <input
             pInputText
@@ -30,11 +31,11 @@
             (input)="dt.filterGlobal($event.target.value, 'contains')"
             class="Searchtxt new-font"
             placeholder="Search..."
+            style="width: 100%;"
           />
         </span>
       </div>
     </p-toolbar>
-
     <p-table
       #dt
       [value]="filteredList"
@@ -43,10 +44,11 @@
       [loading]="isLoadingalarmGroups"
       [globalFilterFields]="['id', 'tag', 'endpoints']"
       [(selection)]="alarmGroups"
-      
       dataKey="group_id"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [showCurrentPageReport]="true"
+      scrollable="true"
+      scrollHeight="600px"
     >
       <ng-template pTemplate="header">
         <tr>

@@ -133,7 +133,7 @@ export class ServicestatusComponent implements OnInit {
       if (lastDigit === 0 || lastDigit === 5) {
         this.loadData();
       }
-    }, 10000);
+    }, 1000);
 
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue("--text-color");
@@ -146,14 +146,12 @@ export class ServicestatusComponent implements OnInit {
     this.gridOptions = this.initialGridOptions;
 
     this.dashboard = [
-      { cols: 3, rows: 2, x: 0, y: 0, header: "loadcpu" }, 
+      { cols: 3, rows: 2, x: 0, y: 0, header: "loadcpu" },
       { cols: 3, rows: 2, x: 3, y: 0, header: "loadmemory" },
-      { cols: 2, rows: 1, x: 6, y: 0, header: "loadCPUText" }, 
+      { cols: 2, rows: 1, x: 6, y: 0, header: "loadCPUText" },
       { cols: 2, rows: 1, x: 6, y: 1, header: "loadMemoryText" },
       { cols: 4, rows: 2, x: 8, y: 0, header: "loaddiskstatus" }
-      
     ];
-    
 
     this.horizontalOptions = {
       indexAxis: "y",
@@ -619,7 +617,7 @@ export class ServicestatusComponent implements OnInit {
       })
       .catch(error => {
         console.error("Error fetching data:", error);
-        this.isNodata = true; // กำหนดว่าไม่มีข้อมูลเมื่อเกิดข้อผิดพลาด
+        // this.isNodata = true; // กำหนดว่าไม่มีข้อมูลเมื่อเกิดข้อผิดพลาด
         this.isLoading = false; // ซ่อน spinner เมื่อเกิดข้อผิดพลาด
       });
   }

@@ -3,20 +3,21 @@
     </p-toolbar> -->
 <div class="col-12 card bgcards p-2" style="position: relative;">
   <div class="pt-4 pb-4">
-    <p-toolbar styleClass="p-mb-4">
+    <p-toolbar class="p-mb-4">
       <div class="p-toolbar-group-left">
-        <div style="font-size: 18px; font-weight: 600;" class="text-color">
+        <div class="text-color title">
           API Manager
         </div>
       </div>
-      <div class="p-toolbar-group-right">
+      <div class="p-toolbar-group-right actions">
         <button
           pButton
           pRipple
           class="p-button-warning mr-2 Newbut"
           (click)="reboot()"
         >
-          <i class="pi pi-refresh"><span class="Newtxt new-font">Reboot</span></i>
+          <i class="pi pi-refresh"></i>
+          <span class="Newtxt new-font">Reboot</span>
         </button>
         <button
           pButton
@@ -24,11 +25,10 @@
           class="p-button-warning mr-2 Newbut"
           (click)="openDailog()"
         >
-          <i class="pi pi-plus"
-            ><span class="Newtxt new-font">Create Route API</span></i
-          >
+          <i class="pi pi-plus"></i>
+          <span class="Newtxt new-font">Create Route API</span>
         </button>
-        <span class="p-input-icon-left">
+        <span class="p-input-icon-left search-container">
           <i class="pi pi-search"></i>
           <input
             pInputText
@@ -40,27 +40,32 @@
         </span>
       </div>
     </p-toolbar>
-   
-      <div class="row mx-0" style="position: relative; z-index: 0;">
-        <div class="col-12">
-          <div class="table-container">
-            <p-table
-              #dt
-              [value]="alarmGroups"
-              [rows]="10"
-              [paginator]="true"
-              [loading]="isLoadingalarmGroups"
-              [globalFilterFields]="['id', 'tag', 'endpoints']"
-              [(selection)]="alarmGroups"
-              
-              dataKey="group_id"
-              styleClass="f-color-w"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-              [showCurrentPageReport]="true"
-            >
+
+    <div class="row mx-0" style="position: relative; z-index: 0;">
+      <div class="col-12">
+        <div class="table-container">
+          <p-table
+            #dt
+            [value]="alarmGroups"
+            [rows]="10"
+            [paginator]="true"
+            [loading]="isLoadingalarmGroups"
+            [globalFilterFields]="['id', 'tag', 'endpoints']"
+            [(selection)]="alarmGroups"
+            dataKey="group_id"
+            styleClass="f-color-w"
+            scrollable="true"
+            scrollHeight="600px"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true"
+          >
             <ng-template pTemplate="header">
               <tr>
-                <th style="text-align:center;" pSortableColumn="id" class="col-1">
+                <th
+                  style="text-align:center;"
+                  pSortableColumn="id"
+                  class="col-1"
+                >
                   ID <p-sortIcon field="id"> </p-sortIcon>
                 </th>
                 <th pSortableColumn="tag" class="col-2">
@@ -78,11 +83,11 @@
                 <th pSortableColumn="" class="col-2">
                   Action<p-sortIcon field=""> </p-sortIcon>
                 </th>
-                
+
                 <!-- <th></th> -->
               </tr>
             </ng-template>
-  
+
             <ng-template pTemplate="body" let-group let-rowIndex>
               <tr (click)="readRouteById(group)">
                 <td style="text-align:center;">{{ group.id }}</td>
@@ -95,7 +100,9 @@
                   </div>
                 </td>
                 <td>
-                  <div id="myDIV1" title="{{ group.type }}">{{ group.type }}</div>
+                  <div id="myDIV1" title="{{ group.type }}">
+                    {{ group.type }}
+                  </div>
                 </td>
                 <td>
                   <div id="myDIV2" title="{{ group.description }}">
@@ -116,7 +123,7 @@
                   ></button>
                 </td>
                 <!--<td>{{group.symbol_name}}</td>-->
-                
+
                 <!-- <td></td> -->
               </tr>
             </ng-template>
@@ -125,13 +132,11 @@
                 Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
               </div>
             </ng-template>
-            </p-table>
-          </div>
+          </p-table>
         </div>
       </div>
-  
     </div>
-
+  </div>
 </div>
 <p-dialog
   [(visible)]="alarmGroupDialog"
@@ -317,7 +322,6 @@
               </tr>
             </ng-template>
           </p-table>
-
         </div>
       </div>
 
