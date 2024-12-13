@@ -49,7 +49,7 @@ export const ROUTES: RouteInfo[] = [
   {
     title: "API Manager",
     path: "/d-api",
-    icon: "assets/img/m-dashboard.png",
+    icon: "assets/img/Linemanagement-icon.png",
     class: "",
     role: ["develop"],
     hidden: false
@@ -57,15 +57,15 @@ export const ROUTES: RouteInfo[] = [
   {
     title: "API Library",
     path: "/d-api-use",
-    icon: "assets/img/m-dashboard.png",
+    icon: "assets/img/Throughput-icon.png",
     class: "",
-    role: ["develop","DOH","POL","monitor"],
+    role: ["develop", "DOH", "POL", "monitor"],
     hidden: false
   },
   {
     title: "API Approve",
     path: "/d-api-approve",
-    icon: "assets/img/m-dashboard.png",
+    icon: "assets/img/Task-icon.png",
     class: "",
     role: ["develop"],
     hidden: false
@@ -73,9 +73,9 @@ export const ROUTES: RouteInfo[] = [
   {
     title: "API Log",
     path: "/d-api-log",
-    icon: "assets/img/m-dashboard.png",
+    icon: "assets/img/Provisionhistory-icon.png",
     class: "",
-    role: ["develop","DOH"],
+    role: ["develop", "DOH"],
     hidden: false
   },
   {
@@ -89,9 +89,9 @@ export const ROUTES: RouteInfo[] = [
   {
     title: "SERVICE STATUS",
     path: "/servicestatus",
-    icon: "assets/img/m-dashboard.png",
+    icon: "assets/img/service-icon.png",
     class: "",
-    role: ["develop","DOH"],
+    role: ["develop", "DOH"],
     hidden: false
   }
 
@@ -1476,12 +1476,10 @@ export class SidebarComponent implements OnInit {
     var list = arr.concat(...children);
     var lists = list.filter(data => data != undefined);
 
-    this.menuItems = this.menuItems.filter(menuItem =>
-     {
+    this.menuItems = this.menuItems.filter(menuItem => {
       return menuItem.role.includes(role);
-     }
-    );
-    console.log(this.menuItems)
+    });
+    console.log(this.menuItems);
     // this.menuItems.forEach(menu => {
     //   // console.log(menu)
     //   if (menu.children != undefined) {

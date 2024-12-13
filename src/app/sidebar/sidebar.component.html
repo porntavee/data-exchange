@@ -17,7 +17,10 @@
 
   <div *ngIf="showMinimenu">
     <ul class="nav" style="margin-top: 10px;">
-      <li *ngFor="let menuItem of menuItems">
+      <li
+        *ngFor="let menuItem of menuItems"
+        [ngClass]="{ 'active-menu': checkActiveState(menuItem.path) }"
+      >
         <a
           (click)="submenu(menuItem.title, menuItem.path)"
           *ngIf="menuItem.children == undefined"
@@ -198,7 +201,9 @@
                 [routerLink]="[childmenu.path]"
                 (click)="link1(menuItem.title, childmenu.title, childmenu.path)"
               >
-                <p style="text-indent: 2.5em; font-family: 'Prompt';">{{ childmenu.title }}</p>
+                <p style="text-indent: 2.5em; font-family: 'Prompt';">
+                  {{ childmenu.title }}
+                </p>
               </a>
             </li>
           </ul>
