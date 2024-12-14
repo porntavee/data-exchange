@@ -51,7 +51,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api",
     icon: "assets/img/Linemanagement-icon.png",
     class: "",
-    role: ["develop"],
+    role: ["develop", "monitor"],
     hidden: false
   },
   {
@@ -67,7 +67,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-approve",
     icon: "assets/img/Task-icon.png",
     class: "",
-    role: ["develop"],
+    role: ["develop", "monitor"],
     hidden: false
   },
   {
@@ -75,7 +75,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-log",
     icon: "assets/img/Provisionhistory-icon.png",
     class: "",
-    role: ["develop", "DOH"],
+    role: ["develop", "DOH", "monitor"],
     hidden: false
   },
   {

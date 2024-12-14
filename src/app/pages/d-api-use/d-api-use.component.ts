@@ -67,11 +67,7 @@ export interface editGroup {
   styleUrls: ["./d-api-use.component.css"]
 })
 export class DApiUseComponent implements OnInit {
-  minutes = [
-    { value: 60, name: "60 Minute" },
-    { value: 120, name: "120 Minute" },
-    { value: 180, name: "180 Minute" }
-  ];
+
   selectedValue: any;
   itemsAction: MenuItem[];
   alarmGroupDialog: boolean;
@@ -112,6 +108,9 @@ export class DApiUseComponent implements OnInit {
   // selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
   api_id: string = "";
   selectedDuration: any = {};
+  fromDate: Date = new Date(); // วันที่ปัจจุบัน
+  toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -376,10 +375,25 @@ export class DApiUseComponent implements OnInit {
   }
 
   createToken() {
-    // console.log(this.selectedValues)
+
+    const formatDate = (date: Date | null): string =>
+      date
+        ? `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
+        : '';
+
+    // console.log({
+    //   requestDetails: this.requestDetails,
+    //   selectedDuration: this.selectedDuration,
+    //   fromDate: formatDate(this.fromDate),
+    //   toDate: formatDate(this.toDate),
+    // });
+
+
+    // // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     // ////debugger;
+    // const apiUrl = "http://127.0.0.1:8000/token/create";
     const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
@@ -390,7 +404,9 @@ export class DApiUseComponent implements OnInit {
         username: userdata["username"],
         route_id: this.api_id,
         details: this.requestDetails,
-        duration: this.selectedDuration["value"]
+        duration: this.selectedDuration["value"],
+        from_date: formatDate(this.fromDate),
+        to_date: formatDate(this.toDate)
       })
       .subscribe(
         data => {
@@ -550,6 +566,7 @@ export class DApiUseComponent implements OnInit {
     { label: "30 วัน", value: "30" },
     { label: "60 วัน", value: "60" },
     { label: "90 วัน", value: "90" },
+    { label: "กำหนดวัน", value: "-1" },
     { label: "ไม่มีหมดอายุ", value: "0" }
   ];
 
@@ -560,7 +577,6 @@ export class DApiUseComponent implements OnInit {
   }
 
   openEditDialog(param) {
-    //debugger
     this.requestDialog = true;
     this.api_id = param.route_id;
     this.requestDetails = param.details;
@@ -569,6 +585,13 @@ export class DApiUseComponent implements OnInit {
       data => data.value === param.duration.toString()
     );
     this.selectedDuration = this.durationOptions[index];
+    // แปลง from_at และ to_at เป็น Date
+    this.fromDate = this.convertToDate(param.from_at);
+    this.toDate = this.convertToDate(param.to_at);
+  }
+
+  convertToDate(dateStr: string): Date | null {
+    return dateStr ? new Date(dateStr) : null;
   }
 
   // ฟังก์ชันสำหรับปิด Dialog

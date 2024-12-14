@@ -112,6 +112,10 @@ export class DApiApproveComponent implements OnInit {
   selectAdminDuration: any = {};
   user_id: any;
   route_id: any;
+  fromDate: Date = new Date(); // วันที่ปัจจุบัน
+  toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+  fromAdminDate: Date = new Date(); // วันที่ปัจจุบัน
+  toAdminDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
 
   // ตัวเลือกสำหรับ Dropdown
   durationOptions = [
@@ -119,6 +123,7 @@ export class DApiApproveComponent implements OnInit {
     { label: "30 วัน", value: "30" },
     { label: "60 วัน", value: "60" },
     { label: "90 วัน", value: "90" },
+    { label: "กำหนดวัน", value: "-1" },
     { label: "ไม่มีหมดอายุ", value: "0" }
   ];
 
@@ -218,13 +223,20 @@ export class DApiApproveComponent implements OnInit {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+    const formatDate = (date: Date | null): string =>
+      date
+        ? `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
+        : '';
+
+
+    const apiUrl = "http://127.0.0.1:8000/token/approve";
+    //const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
     //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
     // const apiUrl =
     // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    // //debugger
+    debugger
     this.http
       .post<any>(apiUrl, {
         user_id: this.user_id,
@@ -233,7 +245,9 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: this.selectAdminDuration["value"]
+        duration: this.selectAdminDuration["value"],
+        from_admin_date: formatDate(this.fromAdminDate),
+        to_admin_date: formatDate(this.toAdminDate)
       })
       .subscribe(
         data => {
@@ -348,6 +362,10 @@ export class DApiApproveComponent implements OnInit {
       );
       this.selectedDuration = this.durationOptions[index];
       this.selectAdminDuration = this.durationOptions[index];
+      this.fromDate = this.convertToDate(group.from_at);
+      this.toDate = this.convertToDate(group.to_at);
+      this.fromAdminDate = this.convertToDate(group.from_at);
+      this.toAdminDate = this.convertToDate(group.to_at);
       this.approveDialog = true;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
@@ -357,6 +375,10 @@ export class DApiApproveComponent implements OnInit {
       console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
       // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
     }
+  }
+
+  convertToDate(dateStr: string): Date | null {
+    return dateStr ? new Date(dateStr) : null;
   }
 
   actionItem(AlarmGroup: alarmGroup) {

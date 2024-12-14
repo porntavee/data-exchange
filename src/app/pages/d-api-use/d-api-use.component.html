@@ -586,6 +586,7 @@
         style="width: 100%;"
       ></textarea>
     </div>
+
     <div class="p-field" style="margin-top: 20px;">
       <label for="duration" style="font-weight: bold;">เลือกระยะเวลา</label>
       <p-dropdown
@@ -596,8 +597,37 @@
         optionLabel="label"
         style="width: 100%;"
       ></p-dropdown>
+      <!-- {{selectedDuration.value}} -->
+    </div>
+
+    <div *ngIf="selectedDuration.value === '-1'" class="p-field" style="margin-top: 20px;">
+      <!-- <label style="font-weight: bold;">วันที่</label> -->
+       <!-- {{fromDate}} -->
+      <div class="row">
+        <div class="col-6">
+          <label for="fromDate">ตั้งแต่วันที่</label>
+          <p-calendar
+            id="fromDate"
+            [(ngModel)]="fromDate"
+            dateFormat="dd-mm-yy"
+            placeholder="เลือกวันที่เริ่มต้น"
+            style="width: 100%;"
+          ></p-calendar>
+        </div>
+        <div class="col-6">
+          <label for="toDate">ถึงวันที่</label>
+          <p-calendar
+            id="toDate"
+            [(ngModel)]="toDate"
+            dateFormat="dd-mm-yy"
+            placeholder="เลือกวันที่สิ้นสุด"
+            style="width: 100%;"
+          ></p-calendar>
+        </div>
+      </div>
     </div>
   </ng-template>
+
   <ng-template pTemplate="footer">
     <div style="float: right;">
       <button
