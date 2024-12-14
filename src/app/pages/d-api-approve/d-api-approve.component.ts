@@ -229,8 +229,8 @@ export class DApiApproveComponent implements OnInit {
         : '';
 
 
-    const apiUrl = "http://127.0.0.1:8000/token/approve";
-    //const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+    // const apiUrl = "http://127.0.0.1:8000/token/approve";
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     // const apiUrl =
     //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
