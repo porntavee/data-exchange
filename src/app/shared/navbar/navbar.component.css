@@ -3,24 +3,24 @@
     flex-direction: column;
     align-items: end;
   } */
-  
-  .row {
-    display: flex;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  
-  .column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: baseline; /* Center checkboxes vertically in each column */
-  }
-  
-  .c-btn {
-    padding-left: 10px;
-    padding-right: 10px;
-    cursor: pointer;
+
+.row {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline; /* Center checkboxes vertically in each column */
+}
+
+.c-btn {
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
 }
 
 @keyframes blink {
@@ -32,6 +32,12 @@
   }
   100% {
     background-color: transparent !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar-expand-lg .navbar-collapse {
+    display: none; /* ซ่อน collapse */
   }
 }
 
@@ -63,10 +69,3 @@
 .nav-link:hover {
   color: #adb5bd; /* เปลี่ยนสีเมื่อ hover */
 }
-
-
-
-
-
-
-

@@ -463,9 +463,13 @@ tr:nth-child(odd) {
 }
 
 .truncate {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: -webkit-box; /* ใช้ flexbox สำหรับข้อความ */
+  -webkit-box-orient: vertical; /* จัดข้อความในแนวตั้ง */
+  overflow: hidden; /* ซ่อนข้อความที่เกิน */
+  text-overflow: ellipsis; /* เพิ่ม "..." หากข้อความถูกตัด */
+  line-clamp: 3; /* กำหนดจำนวนบรรทัดที่แสดง (ตัวอย่าง 3 บรรทัด) */
+  -webkit-line-clamp: 3; /* ใช้ line-clamp */
+  width: 150px;
 }
 
 @media screen and (max-width: 1200px) {

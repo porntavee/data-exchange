@@ -315,9 +315,6 @@ export class DApiComponent implements OnInit {
     this.isLoadingalarmGroups = false;
     // this.changeDetection.detectChanges();
   }
-  menuVlue(task) {
-    this.lineGroupService.valueSource(task);
-  }
 
   // Method ที่มีให้เลือก
   availableMethods: string[] = ["POST", "GET", "PUT", "DELETE"];
@@ -343,13 +340,44 @@ export class DApiComponent implements OnInit {
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
     // console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
+  openMenuWithItems(group: any, event: Event, menu: any) {
+    this.menuVlue(group); // กำหนดค่าหรืออัปเดต itemsAction
+    menu.toggle(event); // เปิดเมนู
+  }
+
+  menuVlue(group: any) {
+    // อัปเดตรายการเมนู
+    this.itemsAction = [
+      {
+        label: "View Data",
+        icon: "pi pi-eye",
+        command: () => this.readRouteById(group)
+      },
+      {
+        label: "Edit",
+        icon: "pi pi-pencil",
+        command: () => this.editData(group)
+      }
+    ];
+  }
+
+  viewData(group: any) {
+    // ฟังก์ชันสำหรับดูข้อมูล
+    console.log("Viewing data for group:", group);
+  }
+
+  editData(group: any) {
+    // ฟังก์ชันสำหรับแก้ไขข้อมูล
+    console.log("Editing data for group:", group);
+  }
+
   reboot() {
     let model = {};
-    const apiUrl = "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         // console.log("Received data:", data);
-
         // //debugger
       },
       error => {
@@ -390,7 +418,8 @@ export class DApiComponent implements OnInit {
 
     let jsonStr = JSON.stringify(model);
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute';
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
@@ -478,7 +507,8 @@ export class DApiComponent implements OnInit {
     // console.log(this.selectedValues)
 
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
@@ -502,7 +532,9 @@ export class DApiComponent implements OnInit {
     this.selectedValues = this.availableMethods.filter(method =>
       methodsArray.includes(method)
     );
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/" + param.id;
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/" +
+      param.id;
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       data => {

@@ -264,12 +264,16 @@ tr:nth-child(odd) {
   width: 8px !important;
   height: 8px !important;
 }
-::ng-deep .p-datatable-scrollable .p-datatable-wrapper::-webkit-scrollbar-track {
+::ng-deep
+  .p-datatable-scrollable
+  .p-datatable-wrapper::-webkit-scrollbar-track {
   background-color: #e4e4e4 !important;
   border-radius: 100px !important;
 }
 
-::ng-deep .p-datatable-scrollable .p-datatable-wrapper::-webkit-scrollbar-thumb {
+::ng-deep
+  .p-datatable-scrollable
+  .p-datatable-wrapper::-webkit-scrollbar-thumb {
   border-radius: 100px !important;
   background-image: linear-gradient(
     180deg,
@@ -313,8 +317,13 @@ tr:nth-child(odd) {
 }
 
 .truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box; /* ใช้ flexbox สำหรับข้อความ */
+  -webkit-box-orient: vertical; /* จัดข้อความในแนวตั้ง */
+  overflow: hidden; /* ซ่อนข้อความที่เกิน */
+  text-overflow: ellipsis; /* เพิ่ม "..." หากข้อความถูกตัด */
+  line-clamp: 3; /* กำหนดจำนวนบรรทัดที่แสดง (ตัวอย่าง 3 บรรทัด) */
+  -webkit-line-clamp: 3; /* ใช้ line-clamp */
+  width: 150px;
 }
 
 th,

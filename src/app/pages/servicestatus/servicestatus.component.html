@@ -179,7 +179,9 @@
                           *ngIf="isLoading"
                           styleClass="custom-spinner"
                         ></p-progressSpinner>
-                        <div>{{ tab.header.ram }} GB</div>
+                        <div style="font-weight: bold; font-size: 32px;">
+                          {{ tab.header.ram }} GB
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -197,7 +199,7 @@
                           *ngIf="isLoading"
                           styleClass="custom-spinner"
                         ></p-progressSpinner>
-                        <div>
+                        <div style="font-weight: bold; font-size: 32px;">
                           {{ tab.header.core }}
                         </div>
                       </div>
