@@ -351,12 +351,12 @@ export class DApiComponent implements OnInit {
       {
         label: "View Data",
         icon: "pi pi-eye",
-        command: () => this.readRouteById(group)
+        command: () => this.tryExecute2(event, group)
       },
       {
         label: "Edit",
         icon: "pi pi-pencil",
-        command: () => this.editData(group)
+        command: () => this.readRouteById(group)
       }
     ];
   }

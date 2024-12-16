@@ -43,7 +43,6 @@
                 >?</span
               >
             </div>
-
             <div
               class="card-body d-flex flex-column align-items-center text-center"
             >
@@ -67,6 +66,9 @@
                     : "ยังไม่เปิดใช้งาน"
                 }}
               </button>
+              <div style="color: antiquewhite; font-weight: bold;">
+                Status: {{ status }} || data amount: {{ dataAmount }}
+              </div>
             </div>
           </div>
         </div>
@@ -600,9 +602,13 @@
       <!-- {{selectedDuration.value}} -->
     </div>
 
-    <div *ngIf="selectedDuration.value === '-1'" class="p-field" style="margin-top: 20px;">
+    <div
+      *ngIf="selectedDuration.value === '-1'"
+      class="p-field"
+      style="margin-top: 20px;"
+    >
       <!-- <label style="font-weight: bold;">วันที่</label> -->
-       <!-- {{fromDate}} -->
+      <!-- {{fromDate}} -->
       <div class="row">
         <div class="col-6">
           <label for="fromDate">ตั้งแต่วันที่</label>

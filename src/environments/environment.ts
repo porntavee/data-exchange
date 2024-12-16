@@ -8,6 +8,7 @@ export const environment = {
   apiUrl: "https://dsslocal.linkflow.co.th/api/staging",
   loginURL: "https://dss.motorway.go.th:4433/minsight/api/",
   dataExchangeURL: "https://dss.motorway.go.th:4433/dxc/api",
+  dataExchange: "https://dss.motorway.go.th:4433/",
   serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
   DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
   backupURL: "https://dss.motorway.go.th:4433/minsight/api",

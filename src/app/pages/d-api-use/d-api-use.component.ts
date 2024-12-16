@@ -8,7 +8,7 @@ import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
 import { threadId } from "worker_threads";
 import jwt_decode from "jwt-decode";
-
+import { DApiUseService } from "@app/d-api-use.service";
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -67,7 +67,6 @@ export interface editGroup {
   styleUrls: ["./d-api-use.component.css"]
 })
 export class DApiUseComponent implements OnInit {
-
   selectedValue: any;
   itemsAction: MenuItem[];
   alarmGroupDialog: boolean;
@@ -110,6 +109,8 @@ export class DApiUseComponent implements OnInit {
   selectedDuration: any = {};
   fromDate: Date = new Date(); // วันที่ปัจจุบัน
   toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+  status: string;
+  dataAmount: any;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -118,7 +119,8 @@ export class DApiUseComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private titleService: Title,
     public themeService: ThemeService,
-    private http: HttpClient
+    private http: HttpClient,
+    private DApiService: DApiUseService
   ) {
     this.titleService.setTitle("API Library");
     // this.actionItems = [
@@ -248,101 +250,42 @@ export class DApiUseComponent implements OnInit {
     this.submitted = false;
   }
   ngOnInit() {
-    // this.alarmGroups = [{
-    //   id: 1,
-    //   tag: 'Trafic Daily',
-    //   endpoints: '/trafic_daily',
-    //   methods: 'POST'
-    // },
-    // {
-    //   id: 2,
-    //   tag: 'Trafic Monthly',
-    //   endpoints: '/trafic_monthly',
-    //   methods: 'POST,GET'
-    // }]
+    // this.DApiService.Kpimodel().subscribe({
+    //   next: data => {
+    //     console.log("Data received:", data);
+    //   },
+    //   error: error => {
+    //     console.error("Error occurred:", error);
+    //   },
+    //   complete: () => {
+    //     console.log("Subscription complete.");
+    //   }
+    // });
+    this.DApiService.point_blackspot().subscribe({
+      next: data => {
+        this.status = data.success ? "Success" : "Failed";
+        this.dataAmount = data.data.length;
+      },
+      error: err => {
+        this.status = "Error";
+        this.dataAmount = 0;
+        console.error(err);
+      }
+    });
 
     this.readRoute();
     this.readToken();
 
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
-
-    // this.lineGroupService.getLineGroupInfo().subscribe({
-    //   next: datas => {
-    //     this.lineGroups = datas;
-    //     this.isLoading = false;
-    //     datas.forEach((data, index) => {
-    //       this.lineGroups[index].enable = data.enable ? true : false;
-    //       this.changeDetection.detectChanges();
-    //     });
-    //   },
-    //   error: error => {
-    //     this.isLoading = false;
-    //     if (error.status == "401") {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-
-    // this.lineGroupService.getMessageGroup().subscribe({
-    //   next: datas => {
-    //     this.alarmGroups = datas;
-    //     this.isLoadingalarmGroups = false;
-    //     this.changeDetection.detectChanges();
-    //   },
-    //   error: error => {
-    //     this.isLoadingalarmGroups = false;
-    //     if (error.status == 401) {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
-    // this.lineGroupService.currentMessage.subscribe(AlarmGroup => {
-    //   if (AlarmGroup != undefined) {
-    //     this.itemsAction = [
-    //       {
-    //         label: "AlarmGroup",
-    //         items: [
-    //           {
-    //             label: "View",
-    //             icon: "pi pi-fw pi-search",
-    //             command: event => {
-    //               this.lineread(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Edit",
-    //             icon: "pi pi-fw pi-pencil",
-    //             command: event => {
-    //               this.editline(AlarmGroup);
-    //             }
-    //           },
-    //           {
-    //             label: "Delete",
-    //             icon: "pi pi-fw pi-trash",
-    //             command: event => {
-    //               this.deleteGroup(AlarmGroup);
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     ];
-    //   }
-    // });
   }
   readRoute() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" + userdata["id"];
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" +
+      userdata["id"];
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/' + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
@@ -360,7 +303,9 @@ export class DApiUseComponent implements OnInit {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" +
+      userdata["id"];
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
@@ -375,11 +320,15 @@ export class DApiUseComponent implements OnInit {
   }
 
   createToken() {
-
     const formatDate = (date: Date | null): string =>
       date
-        ? `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
-        : '';
+        ? `${date.getFullYear()}${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        : "";
 
     // console.log({
     //   requestDetails: this.requestDetails,
@@ -388,13 +337,13 @@ export class DApiUseComponent implements OnInit {
     //   toDate: formatDate(this.toDate),
     // });
 
-
     // // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     // ////debugger;
     // const apiUrl = "http://127.0.0.1:8000/token/create";
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     ////debugger;
