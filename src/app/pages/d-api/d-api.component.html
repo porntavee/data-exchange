@@ -85,7 +85,7 @@
             </ng-template>
 
             <ng-template pTemplate="body" let-group let-rowIndex>
-              <tr>
+              <tr (click)="readRouteById(group)">
                 <td style="text-align: center;">{{ group.id }}</td>
                 <td class="truncate" title="{{ group.tag }}">
                   {{ group.tag }}
@@ -104,17 +104,12 @@
                   }}
                 </td>
                 <td style="text-align: center;">
-                  <p-menu
-                    #menu
-                    [popup]="true"
-                    [model]="itemsAction"
-                    appendTo="body"
-                  ></p-menu>
                   <button
                     pButton
-                    type="text"
-                    (click)="openMenuWithItems(group, $event, menu)"
-                    icon="pi pi-ellipsis-h"
+                    pRipple
+                    label="View Data"
+                    class="p-button-primary"
+                    (click)="tryExecute2($event, group)"
                   ></button>
                 </td>
               </tr>
