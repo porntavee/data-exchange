@@ -111,6 +111,7 @@ export class DApiUseComponent implements OnInit {
   toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
   status: string;
   dataAmount: any;
+  viewDialog: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -123,6 +124,18 @@ export class DApiUseComponent implements OnInit {
     private DApiService: DApiUseService
   ) {
     this.titleService.setTitle("API Library");
+    this.itemsAction = [
+      {
+        label: "View",
+        icon: "pi pi-eye",
+        command: event => this.viewItem(event.item.data)
+      },
+      {
+        label: "Edit",
+        icon: "pi pi-pencil",
+        command: event => this.openEditDialog(event.item.data)
+      }
+    ];
     // this.actionItems = [
     //   {
     //     icon: "pi pi-fw pi-file",
@@ -184,6 +197,37 @@ export class DApiUseComponent implements OnInit {
     ];
   }
   emailsendline: any;
+
+  viewItem(param) {
+    this.viewDialog = true;
+    this.api_id = param.route_id;
+    this.requestDetails = param.details;
+    this.selectedDuration = { value: param.duration };
+    var index = this.durationOptions.findIndex(
+      data => data.value === param.duration.toString()
+    );
+    this.selectedDuration = this.durationOptions[index];
+    // แปลง from_at และ to_at เป็น Date
+    this.fromDate = this.convertToDate(param.from_at);
+    this.toDate = this.convertToDate(param.to_at);
+  }
+
+  openViewDailog() {
+    this.symbolData = [];
+    this.alarmGroup = {};
+    this.symbolDataAdded = [];
+    this.symbolString = [];
+    this.nameSearch = null;
+    this.ipSearch = null;
+    this.submitted = false;
+    this.alarmGroupDialog = true;
+    this.hasNoSearchResult = false;
+    this.dialogHeader = "Add new";
+    this.check = false;
+    this.check1 = true;
+    this.emailsendline = "";
+  }
+
   openDailog() {
     this.symbolData = [];
     this.alarmGroup = {};
@@ -279,6 +323,7 @@ export class DApiUseComponent implements OnInit {
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
   }
+
   readRoute() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
@@ -538,7 +583,6 @@ export class DApiUseComponent implements OnInit {
     this.fromDate = this.convertToDate(param.from_at);
     this.toDate = this.convertToDate(param.to_at);
   }
-
   convertToDate(dateStr: string): Date | null {
     return dateStr ? new Date(dateStr) : null;
   }
