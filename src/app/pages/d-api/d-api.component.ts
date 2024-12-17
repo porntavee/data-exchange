@@ -519,8 +519,8 @@ export class DApiComponent implements OnInit {
 
         // เรียก tryExecute2 สำหรับทุก group โดยไม่ต้องเปิด Dialog
         this.alarmGroups.forEach(group => {
-          const mockEvent = new Event("init"); // อีเวนต์จำลอง
-          this.tryExecute2(mockEvent, group, true); // skipDialog = true
+          // const mockEvent = new Event("init"); // อีเวนต์จำลอง
+          // this.tryExecute2(mockEvent, group, true); // skipDialog = true
         });
       },
       error => {
