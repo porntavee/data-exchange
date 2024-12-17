@@ -49,10 +49,11 @@
           <th pSortableColumn="created_at" style="width: 20%;">
             วันที่<p-sortIcon field="created_at"></p-sortIcon>
           </th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-group let-rowIndex>
-        <tr (click)="openDailog(group)">
+        <tr>
           <td class="truncate" title="{{ group.tag }}">
             {{ group.tag }}
           </td>
@@ -67,6 +68,20 @@
             title="{{ group.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
           >
             {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
+          </td>
+          <td style="text-align: center;">
+            <p-menu
+              #menu
+              [popup]="true"
+              [model]="itemsAction"
+              appendTo="body"
+            ></p-menu>
+            <button
+              pButton
+              type="text"
+              (click)="openMenuWithItems(group, $event, menu)"
+              icon="pi pi-ellipsis-h"
+            ></button>
           </td>
         </tr>
       </ng-template>

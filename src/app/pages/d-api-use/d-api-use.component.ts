@@ -29,6 +29,7 @@ export interface alarmGroup {
   email?: string;
   status?: string;
   data?: string;
+  statusAPI?: string;
 }
 
 export interface routeAPI {
@@ -38,6 +39,7 @@ export interface routeAPI {
   methods?: string;
   status?: string;
   data?: string;
+  statusAPI?: string;
 }
 export interface editlistGroup {
   symbol_id?: string[];
@@ -339,12 +341,12 @@ export class DApiUseComponent implements OnInit {
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         // เก็บข้อมูลใน Array กรณี API สำเร็จ
-        this.alarmGroups[index].status = data.status;
+        this.alarmGroups[index].statusAPI = data.status;
         this.alarmGroups[index].data = data.data.length;
       },
       error => {
         // เก็บข้อมูลใน Array กรณีเกิด Error
-        this.alarmGroups[index].status = "Error";
+        this.alarmGroups[index].statusAPI = "Error";
         this.alarmGroups[index].data = "Error";
       },
       () => {
@@ -353,35 +355,38 @@ export class DApiUseComponent implements OnInit {
     );
   }
 
-  readRoute() {
+  async readRoute() {
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
 
-    this.http.get<any>(apiUrl).subscribe(
-      data => {
-        this.alarmGroups = data.data;
-
-        // เรียก tryExecute2 สำหรับทุก group โดยไม่ต้องเปิด Dialog
-        this.alarmGroups.forEach((group, index) => {
-          console.log(group.endpoints, index);
-          this.alarmGroups[index].endpoints = group.endpoints;
-          const mockEvent = new Event("init"); // อีเวนต์จำลอง
-          this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
-        });
-      },
-      error => {
-        console.error("Error fetching data:", error);
-      }
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.http.get<any>(apiUrl).subscribe(
+        data => {
+          this.alarmGroups = data.data;
+          console.log("Received data:", data.data);
+          this.alarmGroups.forEach((group, index) => {
+            this.alarmGroups[index].status = group.status;
+            const mockEvent = new Event("init");
+            this.tryExecute2(mockEvent, group, true, index);
+          });
+          this.tokenList = data.data;
+          resolve();
+        },
+        error => {
+          console.error("Error fetching polygon data:", error);
+          reject(error);
+        }
+      );
+    });
   }
 
   apiResults: {
     name: string;
-    status: string;
+    statusAPI: string;
     dataAmount: number | null;
   }[] = [];
 
-  readToken() {
+  async readToken() {
     // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
@@ -391,8 +396,15 @@ export class DApiUseComponent implements OnInit {
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
+        this.alarmGroups = data.data;
         console.log("Received data:", data.data);
-        // ////debugger;
+        this.alarmGroups.forEach((group, index) => {
+          console.log(group, index);
+          this.alarmGroups[index].status = group.status;
+          console.log(this.alarmGroups[index].status);
+          const mockEvent = new Event("init"); // อีเวนต์จำลอง
+          this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
+        });
         this.tokenList = data.data;
       },
       error => {
@@ -401,7 +413,7 @@ export class DApiUseComponent implements OnInit {
     );
   }
 
-  createToken() {
+  async createToken() {
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -412,23 +424,9 @@ export class DApiUseComponent implements OnInit {
             .padStart(2, "0")}`
         : "";
 
-    // console.log({
-    //   requestDetails: this.requestDetails,
-    //   selectedDuration: this.selectedDuration,
-    //   fromDate: formatDate(this.fromDate),
-    //   toDate: formatDate(this.toDate),
-    // });
-
-    // // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
-
-    // ////debugger;
-    // const apiUrl = "http://127.0.0.1:8000/token/create";
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
-    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
-    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
-    ////debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: userdata["id"],
@@ -440,14 +438,17 @@ export class DApiUseComponent implements OnInit {
         to_date: formatDate(this.toDate)
       })
       .subscribe(
-        data => {
-          console.log("Received data:", data.data);
+        async data => {
           this.requestDialog = false;
-          this.readRoute();
-          this.readToken();
+
+          // เรียก readRoute และรอให้เสร็จ
+          await this.readRoute();
+
+          // เรียก readToken ต่อเมื่อ readRoute เสร็จ
+          await this.readToken();
         },
         error => {
-          console.error("Error fetching polygon data:", error);
+          console.error("Error creating token:", error);
         }
       );
   }
@@ -464,7 +465,7 @@ export class DApiUseComponent implements OnInit {
       .lineGroupChangeStatus(groupdata.id, event.checked)
       .subscribe(result => {
         this.submitted = false;
-        //console.log("success");
+        console.log(result);
       });
   }
 
@@ -604,7 +605,8 @@ export class DApiUseComponent implements OnInit {
   openRequestDialog(param) {
     //debugger
     this.requestDialog = true;
-    this.api_id = param.api_id;
+    this.api_id = param.status;
+    console.log(this.api_id);
   }
 
   openEditDialog(param) {

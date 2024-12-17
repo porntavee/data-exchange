@@ -107,7 +107,6 @@ export class DApiLogComponent implements OnInit {
     const today = new Date();
     const currentMonth = today.getMonth() + 1; // JavaScript months are 0-indexed
     const currentYear = today.getFullYear();
-
     // กำหนดค่าเริ่มต้น
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
@@ -128,10 +127,32 @@ export class DApiLogComponent implements OnInit {
     // this.initializeChartOptions(); // เริ่มต้นแสดงผล
   }
 
+  openMenuWithItems(group: any, event: Event, menu: any) {
+    this.menuVlue(group); // กำหนดค่าหรืออัปเดต itemsAction
+    menu.toggle(event); // เปิดเมนู
+  }
+
+  menuVlue(group: any) {
+    // อัปเดตรายการเมนู
+    this.itemsAction = [
+      {
+        label: "View Data",
+        icon: "pi pi-eye",
+        command: () => this.openDailog(group)
+      }
+      // {
+      // label: "Edit",
+      // icon: "pi pi-pencil"
+      // command: () => this.readRouteById(group)
+      // }
+    ];
+  }
+
   readLog() {
     let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
@@ -146,7 +167,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   readMonthLog() {
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read";
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
     this.http
       .post<any>(apiUrl, {
@@ -167,7 +189,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   readYearLog() {
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/year/read";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/year/read";
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/month/read';
     this.http
       .post<any>(apiUrl, { year: this.selectedYear, token: this.token })
@@ -252,16 +275,16 @@ export class DApiLogComponent implements OnInit {
       xAxis: {
         categories,
         labels: {
-          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ label แกน X
+          style: { color: "#FFFFFF", fontFamily: "Prompt" } // สีของ label แกน X
         }
       },
       yAxis: {
         title: {
           text: "จำนวน Session",
-          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ title แกน Y
+          style: { color: "#FFFFFF", fontFamily: "Prompt" } // สีของ title แกน Y
         },
         labels: {
-          style: { color: "#FFFFFF",fontFamily: "Prompt", } // สีของ label แกน Y
+          style: { color: "#FFFFFF", fontFamily: "Prompt" } // สีของ label แกน Y
         },
         min: 0 // ค่าเริ่มต้นของแกน Y
       },
@@ -274,7 +297,6 @@ export class DApiLogComponent implements OnInit {
         }
       ],
       tooltip: {
-       
         style: {
           fontFamily: "Prompt",
           fontSize: "16px"
@@ -287,7 +309,7 @@ export class DApiLogComponent implements OnInit {
           borderWidth: 0,
           dataLabels: {
             enabled: true,
-            style: { color: "#FFFFFF",fontFamily: "Prompt", }
+            style: { color: "#FFFFFF", fontFamily: "Prompt" }
           }
         }
       },
@@ -298,7 +320,7 @@ export class DApiLogComponent implements OnInit {
         enabled: false // ซ่อนการ export
       },
       legend: {
-        itemStyle: { color: "#FFFFFF",fontFamily: "Prompt", }
+        itemStyle: { color: "#FFFFFF", fontFamily: "Prompt" }
       }
     };
   }

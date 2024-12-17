@@ -77,9 +77,9 @@
               >
                 <span
                   [ngClass]="{
-                    'green-dot': group.status === 200,
-                    'red-dot': group.status !== 200,
-                    'yellow-dot': !group.status
+                    'green-dot': group.statusAPI === 200,
+                    'red-dot': group.statusAPI !== 200,
+                    'yellow-dot': !group.statusAPI
                   }"
                   class="status-dot"
                 ></span>
