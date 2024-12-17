@@ -10,6 +10,9 @@
         </div>
       </div>
       <div class="p-toolbar-group-right">
+        <div style="margin-right: 8px; font-weight: bolder;">
+          Interval Time Every 15 Mintues
+        </div>
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input
@@ -51,6 +54,9 @@
                 style="font-size:18px; font-weight: bold; color:white"
                 >{{ group.tag }}</span
               >
+              <div style="font-weight: bold; color:white">
+                {{ group.endpoints }}
+              </div>
               <button
                 class="btn mt-3"
                 [ngClass]="{
@@ -66,8 +72,20 @@
                     : "ยังไม่เปิดใช้งาน"
                 }}
               </button>
-              <div style="color: antiquewhite; font-weight: bold;">
-                Status: {{ status }} || data amount: {{ dataAmount }}
+              <div
+                style="color: antiquewhite; font-weight: bold; display: flex; align-items: center;"
+              >
+                <span
+                  [ngClass]="{
+                    'green-dot': group.status === 200,
+                    'red-dot': group.status !== 200,
+                    'yellow-dot': !group.status
+                  }"
+                  class="status-dot"
+                ></span>
+                <span style="margin-left: 0.5rem;">
+                  {{ group.data }}
+                </span>
               </div>
             </div>
           </div>

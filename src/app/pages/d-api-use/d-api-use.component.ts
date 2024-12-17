@@ -27,6 +27,8 @@ export interface alarmGroup {
   symbol_list?: string[];
   flag?: string[];
   email?: string;
+  status?: string;
+  data?: string;
 }
 
 export interface routeAPI {
@@ -34,6 +36,8 @@ export interface routeAPI {
   tag?: string;
   endpoints?: string;
   methods?: string;
+  status?: string;
+  data?: string;
 }
 export interface editlistGroup {
   symbol_id?: string[];
@@ -112,6 +116,8 @@ export class DApiUseComponent implements OnInit {
   status: string;
   dataAmount: any;
   viewDialog: boolean;
+  groupsData: any;
+  intervalId: NodeJS.Timeout;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -294,55 +300,86 @@ export class DApiUseComponent implements OnInit {
     this.submitted = false;
   }
   ngOnInit() {
-    // this.DApiService.Kpimodel().subscribe({
-    //   next: data => {
-    //     console.log("Data received:", data);
-    //   },
-    //   error: error => {
-    //     console.error("Error occurred:", error);
-    //   },
-    //   complete: () => {
-    //     console.log("Subscription complete.");
-    //   }
-    // });
-    this.DApiService.point_blackspot().subscribe({
-      next: data => {
-        this.status = data.success ? "Success" : "Failed";
-        this.dataAmount = data.data.length;
-      },
-      error: err => {
-        this.status = "Error";
-        this.dataAmount = 0;
-        console.error(err);
-      }
-    });
-
     this.readRoute();
-    this.readToken();
+    this.intervalId = setInterval(() => {
+      this.readRoute();
+    }, 5 * 60 * 1000);
 
+    this.readToken();
+    // this.tryExecute2();
+    // this.fetchAndMapData();
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
   }
 
-  readRoute() {
-    // console.log(this.selectedValues)
-    let userdata = jwt_decode(localStorage.getItem("token"));
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  tryExecute2(
+    event: Event,
+    param: any,
+    skipDialog: boolean = false,
+    index
+  ): void {
+    this.isLoadingalarmGroups = true;
+
+    event?.stopPropagation(); // ป้องกันเหตุการณ์ซ้อนทับ
+
+    let model = {
+      dataset_id: param.dataset_id,
+      query_string: param.query
+    };
 
     const apiUrl =
-      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" +
-      userdata["id"];
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/' + userdata["id"];
-    this.http.get<any>(apiUrl).subscribe(
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
+
+    this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log("Received data:", data.data);
-        // ////debugger
-        this.alarmGroups = data.data;
+        // เก็บข้อมูลใน Array กรณี API สำเร็จ
+        this.alarmGroups[index].status = data.status;
+        this.alarmGroups[index].data = data.data.length;
       },
       error => {
-        console.error("Error fetching polygon data:", error);
+        // เก็บข้อมูลใน Array กรณีเกิด Error
+        this.alarmGroups[index].status = "Error";
+        this.alarmGroups[index].data = "Error";
+      },
+      () => {
+        this.isLoadingalarmGroups = false; // จบการโหลด ไม่ว่าจะ success หรือ error
       }
     );
   }
+
+  readRoute() {
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
+
+    this.http.get<any>(apiUrl).subscribe(
+      data => {
+        this.alarmGroups = data.data;
+
+        // เรียก tryExecute2 สำหรับทุก group โดยไม่ต้องเปิด Dialog
+        this.alarmGroups.forEach((group, index) => {
+          console.log(group.endpoints, index);
+          this.alarmGroups[index].endpoints = group.endpoints;
+          const mockEvent = new Event("init"); // อีเวนต์จำลอง
+          this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
+        });
+      },
+      error => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  apiResults: {
+    name: string;
+    status: string;
+    dataAmount: number | null;
+  }[] = [];
 
   readToken() {
     // console.log(this.selectedValues)

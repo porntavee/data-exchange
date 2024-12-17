@@ -407,35 +407,41 @@ export class DApiComponent implements OnInit {
     );
   }
 
-  tryExecute2(event: Event, param): void {
+  tryExecute2(event: Event, param: any, skipDialog: boolean = false): void {
     this.isLoadingalarmGroups = true;
 
-    event.stopPropagation(); // หยุดการส่งต่อเหตุการณ์ไปยัง <tr>
+    event?.stopPropagation(); // ป้องกันเหตุการณ์ซ้อนทับ
+
     let model = {
       dataset_id: param.dataset_id,
       query_string: param.query
     };
 
-    let jsonStr = JSON.stringify(model);
-
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute';
+
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        // console.log("Received data:", data);
-        this.jsonData = data.data;
-        // //debugger
-        this.dialogHeader = param.tag + " Data";
-        this.isLoadingalarmGroups = false;
-        this.executeDialog = true;
+        console.log(
+          "Received data for group:",
+          param,
+          "Data:",
+          data.data,
+          "Status:",
+          data.status
+        );
+
+        if (!skipDialog) {
+          // เปิด Dialog เฉพาะเมื่อจำเป็น
+          this.jsonData = data.data;
+          this.dialogHeader = param.tag + " Data";
+          this.isLoadingalarmGroups = false;
+          this.executeDialog = true;
+        }
       },
       error => {
-        this.dialogHeader = param.tag + " can not execute. มีบางอย่างผิดพลาด";
+        console.error("Error fetching data for group:", param, "Error:", error);
         this.isLoadingalarmGroups = false;
-        this.executeDialog = true;
-        this.jsonData = "";
-        console.error("Error fetching polygon data:", error);
       }
     );
   }
@@ -504,19 +510,21 @@ export class DApiComponent implements OnInit {
   }
 
   readRoute() {
-    // console.log(this.selectedValues)
-
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read';
+
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        // console.log("Received data:", data.data);
         this.alarmGroups = data.data;
+
+        // เรียก tryExecute2 สำหรับทุก group โดยไม่ต้องเปิด Dialog
+        this.alarmGroups.forEach(group => {
+          const mockEvent = new Event("init"); // อีเวนต์จำลอง
+          this.tryExecute2(mockEvent, group, true); // skipDialog = true
+        });
       },
       error => {
-        console.error("Error fetching polygon data:", error);
+        console.error("Error fetching data:", error);
       }
     );
   }
