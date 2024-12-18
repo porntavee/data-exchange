@@ -139,7 +139,6 @@ export class DApiUseComponent implements OnInit {
         // ยกเลิกการเรียก API เมื่อมีการเปลี่ยนเส้นทาง
         if (this.apiSubscription) {
           this.apiSubscription.unsubscribe();
-          console.log("API call canceled due to route change");
         }
       }
     });
@@ -276,8 +275,6 @@ export class DApiUseComponent implements OnInit {
     if (AlarmGroup.email != null || AlarmGroup.email != "") {
       this.emailsendline = AlarmGroup.email;
     }
-    // console.log(AlarmGroup.flag)
-    // console.log(AlarmGroup)
     this.lineGroupService
       .getGroupMessageinfo(this.editalarmGroups1.group_id)
       .subscribe({
@@ -298,7 +295,6 @@ export class DApiUseComponent implements OnInit {
   }
   changecheck(event) {
     // this.alarmGroup.flag = event.checked;
-    // console.log(event);
   }
   hideDialog() {
     this.alarmGroupDialog = false;
@@ -347,7 +343,6 @@ export class DApiUseComponent implements OnInit {
 
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log(data);
         // เก็บข้อมูลใน Array กรณี API สำเร็จ
         this.alarmGroups[index].statusAPI = data.status;
         this.alarmGroups[index].data = data.data.length;
@@ -377,12 +372,8 @@ export class DApiUseComponent implements OnInit {
             element => element.active === true
           );
 
-          console.log("Filtered active groups:", activeGroups);
-
           // วนลูปเฉพาะรายการที่ active = true
           activeGroups.forEach((group, index) => {
-            console.log(`Group ${index}:`, group);
-
             const mockEvent = new Event("init");
             this.tryExecute2(mockEvent, group, true, index);
           });
@@ -393,7 +384,6 @@ export class DApiUseComponent implements OnInit {
           resolve(); // แจ้งว่า Promise สำเร็จ
         },
         error => {
-          console.error("Error fetching polygon data:", error);
           reject(error); // แจ้งว่า Promise ล้มเหลว
         }
       );
@@ -407,7 +397,6 @@ export class DApiUseComponent implements OnInit {
   }[] = [];
 
   async readToken() {
-    // console.log(this.selectedValues)
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     const apiUrl =
@@ -416,21 +405,16 @@ export class DApiUseComponent implements OnInit {
     // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        this.alarmGroups = data.data;
-        console.log("Received data:", data.data);
+        // this.alarmGroups = data.data;
         this.alarmGroups.forEach((group, index) => {
-          console.log(group, index);
           this.alarmGroups[index].status = group.status;
-          console.log(this.alarmGroups[index].status);
           const mockEvent = new Event("init"); // อีเวนต์จำลอง
           // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         });
         this.tokenList = data.data;
         // this.changeDetection.detectChanges();
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
 
@@ -444,7 +428,6 @@ export class DApiUseComponent implements OnInit {
             .toString()
             .padStart(2, "0")}`
         : "";
-    console.log(this.api_id);
     let userdata = jwt_decode(localStorage.getItem("token"));
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
@@ -468,9 +451,7 @@ export class DApiUseComponent implements OnInit {
           // เรียก readToken ต่อเมื่อ readRoute เสร็จ
           await this.readToken();
         },
-        error => {
-          console.error("Error creating token:", error);
-        }
+        error => {}
       );
   }
 
@@ -486,7 +467,6 @@ export class DApiUseComponent implements OnInit {
       .lineGroupChangeStatus(groupdata.id, event.checked)
       .subscribe(result => {
         this.submitted = false;
-        console.log(result);
       });
   }
 
@@ -625,10 +605,8 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     //debugger
-    console.log(param.api_id);
     this.requestDialog = true;
     this.api_id = param.api_id;
-    console.log(this.api_id);
   }
 
   openEditDialog(param) {
@@ -655,8 +633,6 @@ export class DApiUseComponent implements OnInit {
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   saveRequest(): void {
-    console.log("รายละเอียด:", this.requestDetails);
-    console.log("ระยะเวลาที่เลือก:", this.selectedDuration);
     this.requestDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }

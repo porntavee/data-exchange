@@ -50,7 +50,13 @@
             [rows]="10"
             [paginator]="true"
             [loading]="isLoadingalarmGroups"
-            [globalFilterFields]="['id', 'tag', 'endpoints']"
+            [globalFilterFields]="[
+              'id',
+              'tag',
+              'endpoints',
+              'type',
+              'description'
+            ]"
             [(selection)]="alarmGroups"
             dataKey="group_id"
             styleClass="f-color-w"
