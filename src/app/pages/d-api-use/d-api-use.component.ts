@@ -352,6 +352,7 @@ export class DApiUseComponent implements OnInit {
 
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
+        console.log(data);
         // เก็บข้อมูลใน Array กรณี API สำเร็จ
         this.alarmGroups[index].statusAPI = data.status;
         this.alarmGroups[index].data = data.data.length;
@@ -383,9 +384,9 @@ export class DApiUseComponent implements OnInit {
             // this.alarmGroups[index].status = group.status;
             // console.warn(group.status);
             const mockEvent = new Event("init");
-            // this.tryExecute2(mockEvent, group, true, index);
+            this.tryExecute2(mockEvent, group, true, index);
           });
-          this.tokenList = data.data;
+          // this.tokenList = data.data;
           resolve();
         },
         error => {
@@ -419,7 +420,7 @@ export class DApiUseComponent implements OnInit {
           this.alarmGroups[index].status = group.status;
           console.log(this.alarmGroups[index].status);
           const mockEvent = new Event("init"); // อีเวนต์จำลอง
-          this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
+          // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         });
         this.tokenList = data.data;
         // this.changeDetection.detectChanges();
@@ -440,7 +441,7 @@ export class DApiUseComponent implements OnInit {
             .toString()
             .padStart(2, "0")}`
         : "";
-
+    console.log(this.api_id);
     let userdata = jwt_decode(localStorage.getItem("token"));
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
@@ -621,8 +622,9 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     //debugger
+    console.log(param.api_id);
     this.requestDialog = true;
-    this.api_id = param.status;
+    this.api_id = param.api_id;
     console.log(this.api_id);
   }
 

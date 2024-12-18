@@ -66,6 +66,7 @@
                 }"
                 style="font-size:16px; color:black"
                 (click)="openRequestDialog(group)"
+                [disabled]="group.status == 1 || group.status == 2"
               >
                 {{
                   group.status == 1
@@ -75,6 +76,7 @@
                     : "ยังไม่เปิดใช้งาน"
                 }}
               </button>
+
               <div
                 style="color: antiquewhite; font-weight: bold; display: flex; align-items: center;"
               >
@@ -234,7 +236,7 @@
 
       <ng-template pTemplate="summary">
         <div class="p-d-flex p-ai-center p-jc-between">
-          Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+          Total {{ alarmGroups ? tokenList.length : 0 }} groups.
         </div>
       </ng-template>
     </p-table>
