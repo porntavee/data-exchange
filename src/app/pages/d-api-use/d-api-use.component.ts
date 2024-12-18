@@ -367,8 +367,11 @@ export class DApiUseComponent implements OnInit {
   }
 
   async readRoute() {
+    let userdata = jwt_decode(localStorage.getItem("token"));
+
     const apiUrl =
-      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" +
+      userdata["id"];
 
     return new Promise<void>((resolve, reject) => {
       this.http.get<any>(apiUrl).subscribe(
