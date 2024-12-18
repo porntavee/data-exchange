@@ -9,6 +9,7 @@ import { HttpClient } from "@angular/common/http";
 import { threadId } from "worker_threads";
 import jwt_decode from "jwt-decode";
 import { DApiUseService } from "@app/d-api-use.service";
+import { Router, NavigationEnd } from "@angular/router";
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -120,6 +121,7 @@ export class DApiUseComponent implements OnInit {
   viewDialog: boolean;
   groupsData: any;
   intervalId: NodeJS.Timeout;
+  apiSubscription: any;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -129,8 +131,18 @@ export class DApiUseComponent implements OnInit {
     private titleService: Title,
     public themeService: ThemeService,
     private http: HttpClient,
-    private DApiService: DApiUseService
+    private DApiService: DApiUseService,
+    private router: Router
   ) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // ยกเลิกการเรียก API เมื่อมีการเปลี่ยนเส้นทาง
+        if (this.apiSubscription) {
+          this.apiSubscription.unsubscribe();
+          console.log("API call canceled due to route change");
+        }
+      }
+    });
     this.titleService.setTitle("API Library");
     this.itemsAction = [
       {
@@ -345,12 +357,11 @@ export class DApiUseComponent implements OnInit {
         this.alarmGroups[index].data = data.data.length;
       },
       error => {
-        // เก็บข้อมูลใน Array กรณีเกิด Error
         this.alarmGroups[index].statusAPI = "Error";
         this.alarmGroups[index].data = "Error";
       },
       () => {
-        this.isLoadingalarmGroups = false; // จบการโหลด ไม่ว่าจะ success หรือ error
+        this.isLoadingalarmGroups = false; // การโหลดเสร็จ
       }
     );
   }
@@ -363,11 +374,13 @@ export class DApiUseComponent implements OnInit {
       this.http.get<any>(apiUrl).subscribe(
         data => {
           this.alarmGroups = data.data;
-          console.log("Received data:", data.data);
+          // console.log("Received data:", data.data);
           this.alarmGroups.forEach((group, index) => {
-            this.alarmGroups[index].status = group.status;
+            // console.log(group);
+            // this.alarmGroups[index].status = group.status;
+            // console.warn(group.status);
             const mockEvent = new Event("init");
-            this.tryExecute2(mockEvent, group, true, index);
+            // this.tryExecute2(mockEvent, group, true, index);
           });
           this.tokenList = data.data;
           resolve();
@@ -406,6 +419,7 @@ export class DApiUseComponent implements OnInit {
           this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         });
         this.tokenList = data.data;
+        // this.changeDetection.detectChanges();
       },
       error => {
         console.error("Error fetching polygon data:", error);

@@ -60,14 +60,17 @@
               <button
                 class="btn mt-3"
                 [ngClass]="{
-                  'btn-warning': group.status !== 1 && group.status !== 2,
-                  'btn-success': group.status == 1 || group.status == 2
+                  'btn-info': group.status == 1,
+                  'btn-success': group.status == 2,
+                  'btn-warning': group.status !== 1 && group.status !== 2
                 }"
                 style="font-size:16px; color:black"
                 (click)="openRequestDialog(group)"
               >
                 {{
-                  group.status == 1 || group.status == 2
+                  group.status == 1
+                    ? "รอตรวจสอบจากเจ้าหน้าที่"
+                    : group.status == 2
                     ? "เปิดใช้งานแล้ว"
                     : "ยังไม่เปิดใช้งาน"
                 }}
