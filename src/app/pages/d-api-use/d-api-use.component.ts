@@ -146,11 +146,6 @@ export class DApiUseComponent implements OnInit {
     this.titleService.setTitle("API Library");
     this.itemsAction = [
       {
-        label: "View",
-        icon: "pi pi-eye",
-        command: event => this.viewItem(event.item.data)
-      },
-      {
         label: "Edit",
         icon: "pi pi-pencil",
         command: event => this.openEditDialog(event.item.data)
@@ -377,21 +372,29 @@ export class DApiUseComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.http.get<any>(apiUrl).subscribe(
         data => {
-          this.alarmGroups = data.data;
-          // console.log("Received data:", data.data);
-          this.alarmGroups.forEach((group, index) => {
-            // console.log(group);
-            // this.alarmGroups[index].status = group.status;
-            // console.warn(group.status);
+          // กรองเฉพาะรายการที่ active = true
+          const activeGroups = data.data.filter(
+            element => element.active === true
+          );
+
+          console.log("Filtered active groups:", activeGroups);
+
+          // วนลูปเฉพาะรายการที่ active = true
+          activeGroups.forEach((group, index) => {
+            console.log(`Group ${index}:`, group);
+
             const mockEvent = new Event("init");
             this.tryExecute2(mockEvent, group, true, index);
           });
-          // this.tokenList = data.data;
-          resolve();
+
+          // เก็บข้อมูลที่กรองไว้ใน alarmGroups
+          this.alarmGroups = activeGroups;
+
+          resolve(); // แจ้งว่า Promise สำเร็จ
         },
         error => {
           console.error("Error fetching polygon data:", error);
-          reject(error);
+          reject(error); // แจ้งว่า Promise ล้มเหลว
         }
       );
     });
