@@ -51,7 +51,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api",
     icon: "assets/img/Linemanagement-icon.png",
     class: "",
-    role: ["develop", "monitor"],
+    role: ["develop"],
     hidden: false
   },
   {
@@ -67,7 +67,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-approve",
     icon: "assets/img/Task-icon.png",
     class: "",
-    role: ["develop", "monitor"],
+    role: ["develop"],
     hidden: false
   },
   {
@@ -75,7 +75,7 @@ export const ROUTES: RouteInfo[] = [
     path: "/d-api-log",
     icon: "assets/img/Provisionhistory-icon.png",
     class: "",
-    role: ["develop", "DOH", "monitor"],
+    role: ["develop", "DOH"],
     hidden: false
   },
   {
@@ -94,263 +94,6 @@ export const ROUTES: RouteInfo[] = [
     role: ["develop", "DOH"],
     hidden: false
   }
-
-  // {
-  //   title: "DASHBOARD",
-  //   icon: "assets/img/Dashboard-icon.png",
-  //   path: "/dashboard",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "ALARM",
-  //   icon: "assets/img/alarm-icon.png",
-  //   icon_drop: "fa fa-caret-down",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: "/alarm",
-  //       title: "ALARM TRAP",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "ALARM"
-  //     },
-  //     {
-  //       path: "/alarmhistory",
-  //       title: "ALARM THRESHOLD",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "ALARM"
-  //     },
-  //     {
-  //       path: "/alarm-trap-history",
-  //       title: "ALARM TRAP HISTORY",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "ALARM"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "TASK",
-  //   icon: "assets/img/Task-icon.png",
-  //   icon_drop: "fa fa-caret-down",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: "/task",
-  //       title: "TASK MANAGEMENT",
-  //       class: "",
-  //       role: ["super admin", "admin"],
-  //       parent: "TASK"
-  //     },
-  //     {
-  //       path: "/schedule",
-  //       title: "SCHEDULED TASKS",
-  //       class: "",
-  //       role: ["super admin", "admin"],
-  //       parent: "TASK"
-  //     },
-  //     {
-  //       path: "/report",
-  //       title: "TASK RESULT",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "TASK"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "CUSTOMER REPORT",
-  //   icon: "assets/img/Customer-icon.png",
-  //   icon_drop: "fa fa-caret-down",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: "/customerreport",
-  //       title: "MANAGE CIRCUIT ID",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "CUSTOMER REPORT"
-  //     },
-  //     {
-  //       path: "/catidhistory",
-  //       title: "CIRCUIT ID HISTORY",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "CUSTOMER REPORT"
-  //     },
-  //     {
-  //       path: "/dailysummary",
-  //       title: "DAILY SUMMARY",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "CUSTOMER REPORT"
-  //     },
-  //     {
-  //       path: "/trafficmonthly",
-  //       title: "MONTHLY SUMMARY",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "CUSTOMER REPORT"
-  //     },
-  //     {
-  //       path: "/availability",
-  //       title: "DEVICE AVAILABILITY",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "CUSTOMER REPORT"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "TOPOLOGY",
-  //   path: "/topologymap",
-  //   icon: "assets/img/Topology-icon.png",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false
-  // },
-
-  // // {
-  // //   title: "REMOTE",
-  // //   path: "/telnet",
-  // //   icon: "assets/img/Remote-icon.png",
-  // //   class: "",
-  // //   role: ["super admin", "admin"],
-  // //   hidden: false
-  // // },
-  // {
-  //   title: "LINE MANAGEMENT",
-  //   path: "/linechatbot",
-  //   icon: "assets/img/Line management-icon.png",
-  //   class: "",
-  //   role: ["super admin", "admin"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "ACCESS LOGS",
-  //   path: "/log",
-  //   icon: "assets/img/access-icon.png",
-  //   class: "",
-  //   role: ["super admin"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "SCRIPT TEMPLATE",
-  //   path: "/script",
-  //   icon: "assets/img/Script template-icon.png",
-  //   class: "",
-  //   role: ["super admin", "admin"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "PROVISIONING HISTORY",
-  //   path: "/provisioninghistory",
-  //   icon: "assets/img/Provision history-icon.png",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "THROUGHPUT",
-  //   icon: "assets/img/Throughput-icon.png",
-  //   icon_drop: "fa fa-caret-down",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: "/throughput",
-  //       title: "THROUGHPUT TEST",
-  //       class: "",
-  //       role: ["super admin", "admin"],
-  //       parent: "THROUGHPUT"
-  //     },
-  //     {
-  //       path: "/throughputreport",
-  //       title: "THROUGHPUT REPORT",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "THROUGHPUT"
-  //     }
-  //     // {
-  //     //   path: "/topchart",
-  //     //   title: "REPORT",
-  //     //   class: "",
-  //     //   role: ["super admin", "admin", "monitor"],
-  //     //   parent: "THROUGHPUT"
-  //     // }
-  //   ]
-  // },
-  // {
-  //   title: "REPORT",
-  //   path: "/topchart",
-  //   icon: "assets/img/Report-icon.png",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false
-  // },
-  // {
-  //   title: "MANAGE DEVICE",
-  //   icon: "assets/img/managedevice-icon.png",
-  //   icon_drop: "fa fa-caret-down",
-  //   class: "",
-  //   role: ["super admin", "admin", "monitor"],
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: "/managedeviceauthen",
-  //       title: "MANAGE NODE (RAISECOM)",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "MANAGE DEVICE"
-  //     },
-  //     {
-  //       path: "/managedeviceother",
-  //       title: "MANAGE NODE (OTHER)",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "MANAGE DEVICE"
-  //     },
-  //     {
-  //       path: "/managedeviceprofile",
-  //       title: "MANAGE PROFILE",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "MANAGE DEVICE"
-  //     },
-  //     {
-  //       path: "/SnpmProfile",
-  //       title: "MANAGE SNMP PROFILE",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "MANAGE DEVICE"
-  //     },
-  //     {
-  //       path: "/AlarmProfile",
-  //       title: "MANAGE ALARM THRESHOLD",
-  //       class: "",
-  //       role: ["super admin", "admin", "monitor"],
-  //       parent: "MANAGE DEVICE"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "SERVICE STATUS",
-  //   path: "/servicestatus",
-  //   icon: "assets/img/service-icon.png",
-  //   class: "",
-  //   role: ["super admin"],
-  //   hidden: false
-  // }
 ];
 @Component({
   moduleId: module.id,

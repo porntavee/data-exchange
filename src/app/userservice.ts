@@ -87,7 +87,7 @@ export class UserService {
   createUser(userdata) {
     const headers = { "content-type": "application/json" };
     const body = JSON.stringify(userdata);
-    return this.http.post<any>(environment.apiUrl + "/user/register", body, {
+    return this.http.post<any>(environment.loginURL + "/user/register", body, {
       headers: headers
     });
   }

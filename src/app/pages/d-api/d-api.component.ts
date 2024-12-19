@@ -148,7 +148,7 @@ export class DApiComponent implements OnInit {
   check1: boolean;
   invalid: string;
   actionItems: MenuItem[] | undefined;
-  selectedValues: string[];
+  selectedValues: string | string[] = "";
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
 
@@ -244,6 +244,11 @@ export class DApiComponent implements OnInit {
     this.check = false;
     this.check1 = true;
     this.emailsendline = "";
+    if (this.availableMethods && this.availableMethods.length > 0) {
+      this.selectedValues = [this.availableMethods[0]];
+    } else {
+      console.warn("No available methods found.");
+    }
   }
   editline(AlarmGroup: alarmGroup) {
     this.symbolData = [];
@@ -440,7 +445,11 @@ export class DApiComponent implements OnInit {
         }
       },
       error => {
-        console.error("Error fetching data for group:", param, "Error:", error);
+        this.messageService.add({
+          severity: "error",
+          summary: "Error Fetching Data",
+          detail: `Error: ${error.message}`
+        });
         this.isLoadingalarmGroups = false;
       }
     );

@@ -190,7 +190,8 @@ export class DApiApproveComponent implements OnInit {
   readToken() {
     // console.log(this.selectedValues)
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
 
     // const apiUrl =
     //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
@@ -225,18 +226,18 @@ export class DApiApproveComponent implements OnInit {
 
     const formatDate = (date: Date | null): string =>
       date
-        ? `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`
-        : '';
+        ? `${date.getFullYear()}${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        : "";
 
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
-    // const apiUrl = "http://127.0.0.1:8000/token/approve";
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-
-    // const apiUrl =
-    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    // const apiUrl =
-    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    debugger
+    debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: this.user_id,
@@ -264,14 +265,19 @@ export class DApiApproveComponent implements OnInit {
   reject() {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
+    const formatDate = (date: Date | null): string =>
+      date
+        ? `${date.getFullYear()}${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        : "";
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
-    // const apiUrl =
-    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    // const apiUrl =
-    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    // //debugger
     this.http
       .post<any>(apiUrl, {
         user_id: this.user_id,
@@ -280,7 +286,9 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: this.selectAdminDuration["value"]
+        duration: this.selectAdminDuration["value"],
+        from_admin_date: formatDate(this.fromAdminDate),
+        to_admin_date: formatDate(this.toAdminDate)
       })
       .subscribe(
         data => {
@@ -297,13 +305,18 @@ export class DApiApproveComponent implements OnInit {
   close() {
     let userdata = jwt_decode(localStorage.getItem("token"));
     console.log(userdata);
+    const formatDate = (date: Date | null): string =>
+      date
+        ? `${date.getFullYear()}${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}${date
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        : "";
 
-    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-
-    // const apiUrl =
-    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-    // const apiUrl =
-    // "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
     this.http
       .post<any>(apiUrl, {
@@ -313,7 +326,9 @@ export class DApiApproveComponent implements OnInit {
         admin_id: userdata["id"],
         admin_name: userdata["username"],
         details: this.adminDetails,
-        duration: "0"
+        duration: "0",
+        from_admin_date: formatDate(this.fromAdminDate),
+        to_admin_date: formatDate(this.toAdminDate)
       })
       .subscribe(
         data => {
@@ -365,11 +380,13 @@ export class DApiApproveComponent implements OnInit {
       this.fromDate = this.convertToDate(group.from_at);
       this.toDate = this.convertToDate(group.to_at);
       this.fromAdminDate = this.convertToDate(group.from_at);
+      console.log(this.fromAdminDate);
       this.toAdminDate = this.convertToDate(group.to_at);
       this.approveDialog = true;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
+      console.log(this.user_id, this.route_id);
       this.close();
     } else {
       console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);

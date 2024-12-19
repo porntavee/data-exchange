@@ -226,9 +226,9 @@
             ></p-menu>
             <button
               pButton
-              type="text"
-              (click)="menu.toggle($event)"
+              type="button"
               icon="pi pi-ellipsis-h"
+              (click)="setSelectedGroup(group); menu.toggle($event)"
             ></button>
           </td>
         </tr>

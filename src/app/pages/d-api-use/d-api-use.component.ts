@@ -8,7 +8,7 @@ import { ThemeService } from "app/theme.service";
 import { HttpClient } from "@angular/common/http";
 import { threadId } from "worker_threads";
 import jwt_decode from "jwt-decode";
-import { DApiUseService } from "@app/d-api-use.service";
+// import { DApiUseService } from "@app/d-api-use.service";
 import { Router, NavigationEnd } from "@angular/router";
 export interface LineGroup {
   id?: number;
@@ -122,6 +122,7 @@ export class DApiUseComponent implements OnInit {
   groupsData: any;
   intervalId: NodeJS.Timeout;
   apiSubscription: any;
+  filteredGroups: routeAPI[];
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -131,7 +132,7 @@ export class DApiUseComponent implements OnInit {
     private titleService: Title,
     public themeService: ThemeService,
     private http: HttpClient,
-    private DApiService: DApiUseService,
+    // private DApiService: DApiUseService,
     private router: Router
   ) {
     this.router.events.subscribe(event => {
@@ -147,7 +148,7 @@ export class DApiUseComponent implements OnInit {
       {
         label: "Edit",
         icon: "pi pi-pencil",
-        command: event => this.openEditDialog(event.item.data)
+        command: event => this.openEditDialog(this.selectedGroups)
       }
     ];
     // this.actionItems = [
@@ -178,6 +179,11 @@ export class DApiUseComponent implements OnInit {
     //     ]
     //   }
     // ];
+  }
+
+  setSelectedGroup(group: any) {
+    this.selectedGroups = group;
+    console.log("Selected Group:", this.selectedGroups);
   }
 
   actionItem(AlarmGroup: alarmGroup) {
@@ -215,6 +221,7 @@ export class DApiUseComponent implements OnInit {
   viewItem(param) {
     this.viewDialog = true;
     this.api_id = param.route_id;
+    console.log(this.api_id);
     this.requestDetails = param.details;
     this.selectedDuration = { value: param.duration };
     var index = this.durationOptions.findIndex(
@@ -396,6 +403,17 @@ export class DApiUseComponent implements OnInit {
     dataAmount: number | null;
   }[] = [];
 
+  filterGlobal(value: string) {
+    this.filteredGroups = [...this.alarmGroups];
+    const searchTerm = value.toLowerCase();
+    this.filteredGroups = this.alarmGroups.filter(
+      group =>
+        group.tag.toLowerCase().includes(searchTerm) ||
+        group.endpoints.toLowerCase().includes(searchTerm) ||
+        group.data.toLowerCase().includes(searchTerm)
+    );
+  }
+
   async readToken() {
     let userdata = jwt_decode(localStorage.getItem("token"));
 
@@ -412,6 +430,7 @@ export class DApiUseComponent implements OnInit {
           // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         });
         this.tokenList = data.data;
+        console.log(this.tokenList);
         // this.changeDetection.detectChanges();
       },
       error => {}
@@ -429,6 +448,15 @@ export class DApiUseComponent implements OnInit {
             .padStart(2, "0")}`
         : "";
     let userdata = jwt_decode(localStorage.getItem("token"));
+    console.log(
+      userdata["id"],
+      userdata["username"],
+      this.api_id,
+      this.requestDetails,
+      this.selectedDuration["value"],
+      formatDate(this.fromDate),
+      formatDate(this.toDate)
+    );
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     this.http
@@ -605,23 +633,40 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     //debugger
+    console.log(param);
     this.requestDialog = true;
     this.api_id = param.api_id;
   }
 
   openEditDialog(param) {
+    if (!param) {
+      console.error("No data passed to the dialog.");
+      return;
+    }
+
     this.requestDialog = true;
+
+    console.log("Received Param:", param);
+
     this.api_id = param.route_id;
     this.requestDetails = param.details;
-    this.selectedDuration = { value: param.duration };
-    var index = this.durationOptions.findIndex(
-      data => data.value === param.duration.toString()
+
+    console.log("API ID:", this.api_id);
+    console.log("Request Details:", this.requestDetails);
+
+    this.selectedDuration = this.durationOptions.find(
+      data => data.value === "15"
     );
-    this.selectedDuration = this.durationOptions[index];
-    // แปลง from_at และ to_at เป็น Date
+
+    console.log("Selected Duration:", this.selectedDuration);
+
     this.fromDate = this.convertToDate(param.from_at);
     this.toDate = this.convertToDate(param.to_at);
+
+    console.log("From Date:", this.fromDate);
+    console.log("To Date:", this.toDate);
   }
+
   convertToDate(dateStr: string): Date | null {
     return dateStr ? new Date(dateStr) : null;
   }

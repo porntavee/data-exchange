@@ -94,8 +94,10 @@ export class UserComponent implements OnInit {
     ];
     this.roles = [
       { name: "monitor", id: 0 },
-      { name: "admin", id: 1 },
-      { name: "super admin", id: 2 }
+      { name: "DOH", id: 2 },
+      { name: "POL", id: 3 },
+      { name: "develop", id: 4 }
+      // develop", "DOH", "POL", "monitor"
     ];
     this.selectedRole = this.roles[0];
   }
@@ -119,24 +121,24 @@ export class UserComponent implements OnInit {
         }
       }
     });
-    this.userService.getUserZone().subscribe({
-      next: datas => {
-        this.zonelist = datas;
-        // this.selectedZone = datas[0]
-        // console.log(datas)
-        // this.alarmGroups = datas;
-        // this.changeDetection.detectChanges();
-      },
-      error: error => {
-        if (error.status == 401) {
-          this.messageService.add({
-            severity: "error",
-            summary: "Error",
-            detail: "Session expired, please logout and login again."
-          });
-        }
-      }
-    });
+    // this.userService.getUserZone().subscribe({
+    //   next: datas => {
+    //     this.zonelist = datas;
+    //     // this.selectedZone = datas[0]
+    //     // console.log(datas)
+    //     // this.alarmGroups = datas;
+    //     // this.changeDetection.detectChanges();
+    //   },
+    //   error: error => {
+    //     if (error.status == 401) {
+    //       this.messageService.add({
+    //         severity: "error",
+    //         summary: "Error",
+    //         detail: "Session expired, please logout and login again."
+    //       });
+    //     }
+    //   }
+    // });
     this.userService.currentMessage.subscribe(user => {
       if (user != undefined) {
         this.itemsAction = [

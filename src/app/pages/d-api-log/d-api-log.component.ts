@@ -352,7 +352,7 @@ export class DApiLogComponent implements OnInit {
     return {
       chart: {
         type: "line",
-        backgroundColor: "#1a2d45",
+        backgroundColor: "transparent",
         height: 400
       },
       xAxis: {
