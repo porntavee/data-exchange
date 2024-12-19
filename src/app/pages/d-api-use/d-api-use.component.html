@@ -66,7 +66,6 @@
                 }"
                 style="font-size:16px; color:black"
                 (click)="openRequestDialog(group)"
-                [disabled]="group.status == 1 || group.status == 2"
               >
                 {{
                   group.status == 1
@@ -80,17 +79,19 @@
               <div
                 style="color: antiquewhite; font-weight: bold; display: flex; align-items: center;"
               >
-                <span
-                  [ngClass]="{
-                    'green-dot': group.statusAPI === 200,
-                    'red-dot': group.statusAPI !== 200,
-                    'yellow-dot': !group.statusAPI
-                  }"
-                  class="status-dot"
-                ></span>
-                <span style="margin-left: 0.5rem;">
-                  {{ group.data }}
-                </span>
+                <div *ngIf="userGroupCheck === 'develop'">
+                  <span
+                    [ngClass]="{
+                      'green-dot': group.statusAPI === 200,
+                      'red-dot': group.statusAPI !== 200,
+                      'yellow-dot': !group.statusAPI
+                    }"
+                    class="status-dot"
+                  ></span>
+                  <span style="margin-left: 0.5rem;">
+                    {{ group.data }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

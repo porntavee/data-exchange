@@ -10,6 +10,8 @@ import { threadId } from "worker_threads";
 import jwt_decode from "jwt-decode";
 // import { DApiUseService } from "@app/d-api-use.service";
 import { Router, NavigationEnd } from "@angular/router";
+import { Subscription } from "rxjs";
+
 export interface LineGroup {
   id?: number;
   line_group_id?: string;
@@ -74,6 +76,177 @@ export interface editGroup {
   styleUrls: ["./d-api-use.component.css"]
 })
 export class DApiUseComponent implements OnInit {
+  userGroup: any;
+  roleType = [
+    {
+      id: 1,
+      name: "ประชาชน",
+      adminwebname: "กลุ่มเจ้าหน้าที่ทั่วไป",
+      adminwebshow: 1,
+      admindssshow: 1
+    },
+    {
+      id: 2,
+      name: "vip",
+      adminwebname: "vip",
+      adminwebshow: 0,
+      admindssshow: 1
+    },
+    {
+      id: 3,
+      name: "หน่วยกู้ภัยสุวรรณภูมิ",
+      adminwebname: "กลุ่มเจ้าหน้าที่กู้ภัยสุวรรณภูมิ",
+      adminwebshow: 2,
+      admindssshow: 1
+    },
+    {
+      id: 4,
+      name: "หน่วยกู้ภัยบางปะกง",
+      adminwebname: "กลุ่มเจ้าหน้าที่กู้ภัยบางปะกง",
+      adminwebshow: 3,
+      admindssshow: 1
+    },
+    {
+      id: 5,
+      name: "หน่วยกู้ภัยคลองหลวง",
+      adminwebname: "กลุ่มเจ้าหน้าที่กู้ภัยคลองหลวง",
+      adminwebshow: 4,
+      admindssshow: 1
+    },
+    {
+      id: 6,
+      name: "หน่วยกู้ภัยรามอินทรา",
+      adminwebname: "กลุ่มเจ้าหน้าที่กู้ภัยรามอินทรา",
+      adminwebshow: 5,
+      admindssshow: 1
+    },
+    {
+      id: 7,
+      name: "ตำรวจ",
+      adminwebname: "กลุ่มตำรวจทางหลวง",
+      adminwebshow: 7,
+      admindssshow: 1
+    },
+    {
+      id: 8,
+      name: "MA",
+      adminwebname: "MA",
+      adminwebshow: 0,
+      admindssshow: 1
+    },
+    {
+      id: 9,
+      name: "CCB ลาดกระบัง",
+      adminwebname: "CCB ลาดกระบัง",
+      adminwebshow: 0,
+      admindssshow: 1
+    },
+    {
+      id: 10,
+      name: "CCB พัทยา",
+      adminwebname: "CCB พัทยา",
+      adminwebshow: 0,
+      admindssshow: 1
+    },
+    {
+      id: 11,
+      name: "หน่วยกู้ภัยแหลมฉบัง",
+      adminwebname: "กลุ่มเจ้าหน้าที่กู้ภัยแหลมฉบัง",
+      adminwebshow: 6,
+      admindssshow: 1
+    },
+    {
+      id: 12,
+      name: "cctv test",
+      adminwebname: "cctvtest",
+      adminwebshow: 8,
+      admindssshow: 1
+    },
+    {
+      id: 13,
+      name: "หมวดคลองหลวง",
+      adminwebname: "หมวดคลองหลวง",
+      adminwebshow: 9,
+      admindssshow: 1
+    },
+    {
+      id: 14,
+      name: "หมวดคันนายาว",
+      adminwebname: "หมวดคันนายาว",
+      adminwebshow: 10,
+      admindssshow: 1
+    },
+    {
+      id: 15,
+      name: "หมวดลาดกระบัง",
+      adminwebname: "หมวดลาดกระบัง",
+      adminwebshow: 11,
+      admindssshow: 1
+    },
+    {
+      id: 16,
+      name: "หมวดพานทอง",
+      adminwebname: "หมวดพานทอง",
+      adminwebshow: 12,
+      admindssshow: 1
+    },
+    {
+      id: 17,
+      name: "หมวดแหลมฉบัง",
+      adminwebname: "หมวดแหลมฉบัง",
+      adminwebshow: 13,
+      admindssshow: 1
+    },
+    {
+      id: 18,
+      name: "หมวดพัทยา",
+      adminwebname: "หมวดพัทยา",
+      adminwebshow: 14,
+      admindssshow: 1
+    },
+    {
+      id: 19,
+      name: "มาบตาพุด",
+      adminwebname: "มาบตาพุด",
+      adminwebshow: 15,
+      admindssshow: 1
+    },
+    {
+      id: 25,
+      name: "ตำรวจอ่อนนุช",
+      adminwebname: "ตำรวจอ่อนนุช",
+      adminwebshow: 16,
+      admindssshow: 1
+    },
+    {
+      id: 26,
+      name: "ตำรวจเขาดิน",
+      adminwebname: "ตำรวจเขาดิน",
+      adminwebshow: 17,
+      admindssshow: 1
+    },
+    {
+      id: 27,
+      name: "ตำรวจเขาเขียว และมาบประชัน",
+      adminwebname: "ตำรวจเขาเขียว และมาบประชัน",
+      adminwebshow: 18,
+      admindssshow: 1
+    },
+    {
+      id: 28,
+      name: "Test",
+      adminwebname: "Test",
+      adminwebshow: 19,
+      admindssshow: 1
+    },
+    {
+      id: 29,
+      name: "",
+      adminwebname: "",
+      adminwebshow: 20,
+      admindssshow: 1
+    }
+  ];
   selectedValue: any;
   itemsAction: MenuItem[];
   alarmGroupDialog: boolean;
@@ -123,7 +296,8 @@ export class DApiUseComponent implements OnInit {
   intervalId: NodeJS.Timeout;
   apiSubscription: any;
   filteredGroups: routeAPI[];
-
+  apiSubscriptions: Subscription[] = [];
+  userGroupCheck: any;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -132,6 +306,7 @@ export class DApiUseComponent implements OnInit {
     private titleService: Title,
     public themeService: ThemeService,
     private http: HttpClient,
+
     // private DApiService: DApiUseService,
     private router: Router
   ) {
@@ -151,35 +326,58 @@ export class DApiUseComponent implements OnInit {
         command: event => this.openEditDialog(this.selectedGroups)
       }
     ];
-    // this.actionItems = [
-    //   {
-    //     icon: "pi pi-fw pi-file",
-    //     items: [
-    //       {
-    //         label: "View",
-    //         icon: "pi pi-fw pi-info",
-    //         command: event => {
-    //           // this.lineread(this.group)
-    //         }
-    //       },
-    //       {
-    //         label: "Edit Task",
-    //         icon: "pi pi-fw pi-pencil",
-    //         command: event => {
-    //           // this.editline(this.group)
-    //         }
-    //       },
-    //       {
-    //         label: "Delete",
-    //         icon: "pi pi-fw pi-trash",
-    //         command: event => {
-    //           // this.deleteGroup(this.group)
-    //         }
-    //       }
-    //     ]
-    //   }
-    // ];
   }
+
+  getUserGroup(userdata, roleType) {
+    console.log("User Data:", userdata);
+    console.log("Role Types:", roleType);
+
+    // หา roleType ที่ตรงกับ cctv_group ของ userdata
+    const matchedRole = roleType.find(role => role.id === userdata.cctv_group);
+    console.log("Matched Role:", matchedRole);
+
+    if (matchedRole) {
+      const name = matchedRole.name;
+      console.log("Matched Role Name:", name);
+
+      // เงื่อนไข VIP, กู้ภัย, หมวด
+      if (["VIP", "กู้ภัย", "หมวด"].some(term => name.includes(term))) {
+        this.userGroupCheck = "DOH";
+        console.log("Group: DOH");
+        return;
+      }
+
+      // เงื่อนไข ตำรวจ
+      if (name.includes("ตำรวจ")) {
+        this.userGroupCheck = "POL";
+        console.log("Group: POL");
+        return;
+      }
+    }
+
+    // เงื่อนไข username ที่ตรงกับรายชื่อพิเศษ
+    const specialUsers = [
+      "charoenwasit",
+      "panuwat",
+      "saengdao",
+      "Palm",
+      "sk",
+      "minsight"
+    ];
+    console.log("Checking special users:", specialUsers);
+
+    if (specialUsers.includes(userdata.user_name)) {
+      this.userGroupCheck = "develop";
+      console.log("Group: develop");
+      return;
+    }
+
+    // กรณีที่ไม่เข้าเงื่อนไขใด ๆ
+    this.userGroupCheck = "general";
+    console.log("Group: general");
+  }
+
+  // หา roleType ที่ตรงกับ cctv_group ของ userdata
 
   setSelectedGroup(group: any) {
     this.selectedGroups = group;
@@ -312,12 +510,13 @@ export class DApiUseComponent implements OnInit {
     this.submitted = false;
   }
   ngOnInit() {
+    this.readToken();
     this.readRoute();
     this.intervalId = setInterval(() => {
       this.readRoute();
     }, 5 * 60 * 1000);
-
-    this.readToken();
+    let userdata = jwt_decode(localStorage.getItem("token"));
+    this.userGroup = this.getUserGroup(userdata, this.roleType);
     // this.tryExecute2();
     // this.fetchAndMapData();
     this.isLoadingalarmGroups = false;
@@ -328,6 +527,7 @@ export class DApiUseComponent implements OnInit {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    this.apiSubscriptions.forEach(sub => sub.unsubscribe());
   }
 
   tryExecute2(
@@ -336,6 +536,10 @@ export class DApiUseComponent implements OnInit {
     skipDialog: boolean = false,
     index
   ): void {
+    if (this.userGroupCheck !== "develop") {
+      console.log("Not allowed: userGroupCheck is not 'develop'");
+      return; // ออกจากฟังก์ชันทันทีถ้าไม่ใช่
+    }
     this.isLoadingalarmGroups = true;
 
     event?.stopPropagation(); // ป้องกันเหตุการณ์ซ้อนทับ
@@ -348,7 +552,7 @@ export class DApiUseComponent implements OnInit {
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
 
-    this.http.post<any>(apiUrl, model).subscribe(
+    const sub = this.http.post<any>(apiUrl, model).subscribe(
       data => {
         // เก็บข้อมูลใน Array กรณี API สำเร็จ
         this.alarmGroups[index].statusAPI = data.status;
@@ -362,6 +566,13 @@ export class DApiUseComponent implements OnInit {
         this.isLoadingalarmGroups = false; // การโหลดเสร็จ
       }
     );
+
+    this.apiSubscriptions.push(sub);
+  }
+
+  processActiveGroup(group: any, index: number): void {
+    const mockEvent = new Event("init");
+    this.tryExecute2(mockEvent, group, true, index);
   }
 
   async readRoute() {
@@ -381,10 +592,8 @@ export class DApiUseComponent implements OnInit {
 
           // วนลูปเฉพาะรายการที่ active = true
           activeGroups.forEach((group, index) => {
-            const mockEvent = new Event("init");
-            this.tryExecute2(mockEvent, group, true, index);
+            this.processActiveGroup(group, index);
           });
-
           // เก็บข้อมูลที่กรองไว้ใน alarmGroups
           this.alarmGroups = activeGroups;
 
@@ -397,21 +606,33 @@ export class DApiUseComponent implements OnInit {
     });
   }
 
-  apiResults: {
-    name: string;
-    statusAPI: string;
-    dataAmount: number | null;
-  }[] = [];
+  async readRoute2() {
+    let userdata = jwt_decode(localStorage.getItem("token"));
 
-  filterGlobal(value: string) {
-    this.filteredGroups = [...this.alarmGroups];
-    const searchTerm = value.toLowerCase();
-    this.filteredGroups = this.alarmGroups.filter(
-      group =>
-        group.tag.toLowerCase().includes(searchTerm) ||
-        group.endpoints.toLowerCase().includes(searchTerm) ||
-        group.data.toLowerCase().includes(searchTerm)
-    );
+    const apiUrl =
+      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" +
+      userdata["id"];
+
+    return new Promise<void>((resolve, reject) => {
+      this.http.get<any>(apiUrl).subscribe(
+        data => {
+          // กรองเฉพาะรายการที่ active = true
+          const activeGroups = data.data.filter(
+            element => element.active === true
+          );
+
+          // วนลูปเฉพาะรายการที่ active = true
+          activeGroups.forEach((group, index) => {});
+          // เก็บข้อมูลที่กรองไว้ใน alarmGroups
+          this.alarmGroups = activeGroups;
+
+          resolve(); // แจ้งว่า Promise สำเร็จ
+        },
+        error => {
+          reject(error); // แจ้งว่า Promise ล้มเหลว
+        }
+      );
+    });
   }
 
   async readToken() {
@@ -424,13 +645,13 @@ export class DApiUseComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe(
       data => {
         // this.alarmGroups = data.data;
-        this.alarmGroups.forEach((group, index) => {
-          this.alarmGroups[index].status = group.status;
-          const mockEvent = new Event("init"); // อีเวนต์จำลอง
-          // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
-        });
+        // this.alarmGroups.forEach((group, index) => {
+        //   this.alarmGroups[index].status = group.status;
+        //   const mockEvent = new Event("init"); // อีเวนต์จำลอง
+        //   // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
+        // });
         this.tokenList = data.data;
-        console.log(this.tokenList);
+        // console.log(this.tokenList);
         // this.changeDetection.detectChanges();
       },
       error => {}
@@ -474,13 +695,30 @@ export class DApiUseComponent implements OnInit {
           this.requestDialog = false;
 
           // เรียก readRoute และรอให้เสร็จ
-          await this.readRoute();
+          await this.readRoute2();
 
           // เรียก readToken ต่อเมื่อ readRoute เสร็จ
           await this.readToken();
         },
         error => {}
       );
+  }
+
+  apiResults: {
+    name: string;
+    statusAPI: string;
+    dataAmount: number | null;
+  }[] = [];
+
+  filterGlobal(value: string) {
+    this.filteredGroups = [...this.alarmGroups];
+    const searchTerm = value.toLowerCase();
+    this.filteredGroups = this.alarmGroups.filter(
+      group =>
+        group.tag.toLowerCase().includes(searchTerm) ||
+        group.endpoints.toLowerCase().includes(searchTerm) ||
+        group.data.toLowerCase().includes(searchTerm)
+    );
   }
 
   menuVlue(task) {
