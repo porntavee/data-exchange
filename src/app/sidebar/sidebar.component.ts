@@ -197,6 +197,7 @@ export class SidebarComponent implements OnInit {
   }
 
   linkmini(value, title, subtitle) {
+    
     this.router.navigate([value]);
     this.AdminLayoutService.sideiconClass("Defult");
     if (title == "DASHBOARD") {
@@ -212,30 +213,25 @@ export class SidebarComponent implements OnInit {
         }
       }
     }
-    const substr = "-active.png";
-    const subArr = this.menuItems.filter(str => str.icon.includes(substr));
-    var listmenu = this.menuItems.filter(str => str.title == title);
-    // console.log(listmenu)
-    if (subArr.length != 0) {
-      if (subArr[0].title == title) {
-        // console.log('hi')
-      } else {
-        if (listmenu.length != 0) {
-          listmenu[0].icon = listmenu[0].icon.replace(".png", "-active.png");
-          listmenu[0].class = "ng-star-inserted active";
-          // console.log('hi')
-        }
-        subArr[0].icon = subArr[0].icon.replace("-active.png", ".png");
-        subArr[0].class = "ng-star-inserted";
-        // console.log(subArr)
+    const substr = "-active";
+    
+    this.menuItems = this.menuItems.map(item => {
+      // ลบ '-active' แค่ครั้งแรกที่เจอจาก icon ทุกๆ รายการ
+      if (item.icon.includes(substr)) {
+        item.icon = item.icon.replace(/-active/g, "");// ลบครั้งแรกที่พบ
       }
-    } else {
-      if (listmenu.length != 0) {
-        listmenu[0].icon = listmenu[0].icon.replace(".png", "-active.png");
-        listmenu[0].class = "ng-star-inserted active";
-        // console.log('hi')
-      }
-    }
+    
+      // ถ้า path ตรงกับ currentURL ให้แทนที่คำว่า '-active' ใน icon
+      if (item.path === value) {
+        item.icon = item.icon.replace(".png", "-active.png"); // หรือใช้คำที่ต้องการแทนที่
+      } 
+      // else {
+      //   item.icon = item.icon.replace("-active.png", ".png");
+      // }
+    
+      return item;
+    });
+    
     this.menuItems.forEach(data => {
       if (data.title == title) {
         if (data.children != undefined) {
@@ -1705,42 +1701,7 @@ export class SidebarComponent implements OnInit {
         });
       }
     });
-    var classicon = this.menuItems.filter(data => data.path == this.router.url);
-    if (classicon.length != 0) {
-      classicon[0].icon = classicon[0].icon.replace(".png", "-active.png");
-    } else {
-      this.menuItems.forEach(menu => {
-        if (menu.children != undefined) {
-          var children = menu.children.filter(
-            data => data.path == this.router.url
-          );
-
-          if (children.length != 0) {
-            if (children[0].parent == menu.title) {
-              const subArr = menu.icon.includes("-active.png");
-              if (subArr != true) {
-                menu.icon = menu.icon.replace(".png", "-active.png");
-              }
-              if (menu.hidden == true) {
-                menu.icon_drop = "fa fa-caret-up";
-              }
-              menu.class = "ng-star-inserted active";
-            }
-          } else {
-            // console.log(menu)
-            if (menu.hidden == true) {
-              menu.hidden = false;
-              menu.icon_drop = "fa fa-caret-down";
-            }
-            menu.icon = menu.icon.replace("-active.png", ".png");
-            menu.class = "ng-star-inserted";
-          }
-        } else {
-          menu.icon = menu.icon.replace("-active.png", ".png");
-          menu.class = "ng-star-inserted";
-        }
-      });
-    }
+    
     this.AdminLayoutService.sideiconMessage.subscribe(data => {
       if (data == "devicelist") {
         const substr = "-active.png";
@@ -1897,6 +1858,60 @@ export class SidebarComponent implements OnInit {
                 value.styleClass = "";
               }
             });
+          });
+        }
+      } else if (data == "logout"){
+        const substr = "-active"; // คำที่ต้องการลบ
+        
+        var currentURL = this.router.url;
+        this.menuItems = this.menuItems.map(item => {
+          // ลบ '-active' แค่ครั้งแรกที่เจอจาก icon ทุกๆ รายการ
+          if (item.icon.includes(substr)) {
+            item.icon = item.icon.replace(/-active/g, ""); // ลบครั้งแรกที่พบ
+          }
+        
+          // ถ้า path ตรงกับ currentURL ให้แทนที่คำว่า '-active' ใน icon
+          if (item.path === currentURL) {
+            item.icon = item.icon.replace(".png", "-active.png"); // หรือใช้คำที่ต้องการแทนที่
+          } 
+        
+          return item;
+        });
+      } else {
+        var classicon = this.menuItems.filter(data => data.path == this.router.url);
+        if (classicon.length != 0) {
+          classicon[0].icon = classicon[0].icon.replace(".png", "-active.png");
+        } else {
+          this.menuItems.forEach(menu => {
+            if (menu.children != undefined) {
+              var children = menu.children.filter(
+                data => data.path == this.router.url
+              );
+
+              if (children.length != 0) {
+                if (children[0].parent == menu.title) {
+                  const subArr = menu.icon.includes("-active.png");
+                  if (subArr != true) {
+                    menu.icon = menu.icon.replace(".png", "-active.png");
+                  }
+                  if (menu.hidden == true) {
+                    menu.icon_drop = "fa fa-caret-up";
+                  }
+                  menu.class = "ng-star-inserted active";
+                }
+              } else {
+                // console.log(menu)
+                if (menu.hidden == true) {
+                  menu.hidden = false;
+                  menu.icon_drop = "fa fa-caret-down";
+                }
+                menu.icon = menu.icon.replace("-active.png", ".png");
+                menu.class = "ng-star-inserted";
+              }
+            } else {
+              menu.icon = menu.icon.replace("-active.png", ".png");
+              menu.class = "ng-star-inserted";
+            }
           });
         }
       }
