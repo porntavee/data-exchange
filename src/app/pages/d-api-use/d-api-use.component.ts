@@ -893,7 +893,7 @@ export class DApiUseComponent implements OnInit {
     console.log("Request Details:", this.requestDetails);
 
     this.selectedDuration = this.durationOptions.find(
-      data => data.value === "15"
+      data => data.value === param.duration
     );
 
     console.log("Selected Duration:", this.selectedDuration);
