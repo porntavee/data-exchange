@@ -76,7 +76,7 @@ export class AuthService {
     const body = JSON.stringify({ username: username, password: password });
     return this.http
       .post<any>(
-        `${environment.loginURL}/authen/login`,
+        `${environment.loginURL}authen/login`,
         JSON.stringify({ username: username, password: password }),
         { headers: headers }
       )
