@@ -90,6 +90,7 @@ export class DApiLogComponent implements OnInit {
 
   token = "";
   logList: any = [];
+  isMobile: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -123,8 +124,19 @@ export class DApiLogComponent implements OnInit {
 
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
-
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
     // this.initializeChartOptions(); // เริ่มต้นแสดงผล
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+    this.changeDetection.detectChanges(); // อัพเดตการแสดงผล
+    console.log(this.isMobile);
   }
 
   openMenuWithItems(group: any, event: Event, menu: any) {

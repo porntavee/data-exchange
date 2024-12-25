@@ -246,24 +246,33 @@
         </div>
       </div>
     </p-toolbar>
-    <p-table
-      [value]="products"
-      responsiveLayout="scroll"
-      [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
-      class="ui-table-scrollable"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Filename</th>
-          <th>Created At</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-product>
-        <tr>
-          <td>{{ product.filename }}</td>
-          <td>{{ product.created_at }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <div *ngIf="!isMobile">
+      <p-table
+        [value]="products"
+        responsiveLayout="scroll"
+        [tableStyle]="{ 'min-width': '800px', 'background-color': '#3E5774' }"
+        class="ui-table-scrollable"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Filename</th>
+            <th>Created At</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.filename }}</td>
+            <td>{{ product.created_at }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <div *ngIf="isMobile">
+      <div *ngFor="let product of products" class="mobile-card">
+        <p><strong>Filename:</strong> {{ product.filename }}</p>
+        <p><strong>Created At:</strong> {{ product.created_at }}</p>
+      </div>
+    </div>
   </div>
 </div>

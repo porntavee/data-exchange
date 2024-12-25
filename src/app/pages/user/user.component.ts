@@ -72,6 +72,7 @@ export class UserComponent implements OnInit {
     "^(?=.*[A-Z])(?=.*[!@#$%^&*+_])(?=.*[0-9])(?=.*[a-z]).{8,}$";
   isValid: boolean = false;
   itemsAction: MenuItem[];
+  isMobile: boolean;
   constructor(
     private userService: UserService,
     private messageService: MessageService,
@@ -104,6 +105,8 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.themeService.currentpage("/user");
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
     this.maxDate = new Date();
     this.userService.getUser().subscribe({
       next: data => {
@@ -158,6 +161,15 @@ export class UserComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy() {
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+  }
+
   menuVlue(user) {
     this.userService.valueSource(user);
   }

@@ -41,96 +41,92 @@
       </div>
     </p-toolbar>
 
-    <div class="row mx-0" style="position: relative; z-index: 0;">
-      <div class="col-12">
-        <div class="table-container">
-          <p-table
-            #dt
-            [value]="alarmGroups"
-            [rows]="10"
-            [paginator]="true"
-            [loading]="isLoadingalarmGroups"
-            [globalFilterFields]="[
-              'id',
-              'tag',
-              'endpoints',
-              'type',
-              'description'
-            ]"
-            [(selection)]="alarmGroups"
-            dataKey="group_id"
-            styleClass="f-color-w"
-            scrollable="true"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            [showCurrentPageReport]="true"
-          >
-            <ng-template pTemplate="header">
-              <tr>
-                <th
-                  style="width: 10%; text-align: center;"
-                  pSortableColumn="id"
-                >
-                  ID <p-sortIcon field="id"></p-sortIcon>
-                </th>
-                <th style="width: 20%;" pSortableColumn="tag">
-                  Tag <p-sortIcon field="tag"></p-sortIcon>
-                </th>
-                <th style="width: 20%;" pSortableColumn="endpoints">
-                  Endpoints <p-sortIcon field="endpoints"></p-sortIcon>
-                </th>
-                <th style="width: 15%;" pSortableColumn="type">
-                  Type <p-sortIcon field="type"></p-sortIcon>
-                </th>
-                <th style="width: 25%;" pSortableColumn="methods">
-                  Description <p-sortIcon field="methods"></p-sortIcon>
-                </th>
-                <th style="width: 10%;">
-                  Action
-                </th>
-              </tr>
-            </ng-template>
+    <!-- Table View -->
+    <div *ngIf="!isMobile">
+      <p-table
+        #dt
+        [value]="alarmGroups"
+        [rows]="10"
+        [paginator]="true"
+        [loading]="isLoadingalarmGroups"
+        [globalFilterFields]="['id', 'tag', 'endpoints', 'type', 'description']"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">
+              ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="tag">
+              Tag <p-sortIcon field="tag"></p-sortIcon>
+            </th>
+            <th pSortableColumn="endpoints">
+              Endpoints <p-sortIcon field="endpoints"></p-sortIcon>
+            </th>
+            <th pSortableColumn="type">
+              Type <p-sortIcon field="type"></p-sortIcon>
+            </th>
+            <th pSortableColumn="description">
+              Description <p-sortIcon field="description"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
 
-            <ng-template pTemplate="body" let-group let-rowIndex>
-              <tr>
-                <td style="text-align: center;">{{ group.id }}</td>
-                <td class="truncate" title="{{ group.tag }}">
-                  {{ group.tag }}
-                </td>
-                <td class="truncate" title="{{ group.endpoints }}">
-                  {{ group.endpoints }}
-                </td>
-                <td class="truncate" title="{{ group.type }}">
-                  {{ group.type }}
-                </td>
-                <td class="truncate" title="{{ group.description }}">
-                  {{
-                    group.description?.length > 30
-                      ? (group.description | slice: 0:30) + "..."
-                      : group.description
-                  }}
-                </td>
-                <td style="text-align: center;">
-                  <p-menu
-                    #menu
-                    [popup]="true"
-                    [model]="itemsAction"
-                    appendTo="body"
-                  ></p-menu>
-                  <button
-                    pButton
-                    type="text"
-                    (click)="openMenuWithItems(group, $event, menu)"
-                    icon="pi pi-ellipsis-h"
-                  ></button>
-                </td>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="summary">
-              <div class="p-d-flex p-ai-center p-jc-between">
-                Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
-              </div>
-            </ng-template>
-          </p-table>
+        <ng-template pTemplate="body" let-group>
+          <tr>
+            <td>{{ group.id }}</td>
+            <td>{{ group.tag }}</td>
+            <td>{{ group.endpoints }}</td>
+            <td>{{ group.type }}</td>
+            <td>{{ group.description }}</td>
+            <td style="text-align: center;">
+              <p-menu
+                #menu
+                [popup]="true"
+                [model]="itemsAction"
+                appendTo="body"
+              ></p-menu>
+              <button
+                pButton
+                type="text"
+                (click)="openMenuWithItems(group, $event, menu)"
+                icon="pi pi-ellipsis-h"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="summary">
+          <div>Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.</div>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile Card View -->
+    <div *ngIf="isMobile">
+      <div *ngFor="let group of alarmGroups" class="mobile-card">
+        <p><strong>ID:</strong> {{ group.id }}</p>
+        <p><strong>Tag:</strong> {{ group.tag }}</p>
+        <p><strong>Endpoints:</strong> {{ group.endpoints }}</p>
+        <p><strong>Type:</strong> {{ group.type }}</p>
+        <p><strong>Description:</strong> {{ group.description }}</p>
+        <div style="text-align: center;">
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsAction"
+            appendTo="body"
+          ></p-menu>
+          <button
+            pButton
+            type="text"
+            (click)="openMenuWithItems(group, $event, menu)"
+            icon="pi pi-ellipsis-h"
+          ></button>
         </div>
       </div>
     </div>
@@ -438,12 +434,11 @@
 
 <p-dialog
   [(visible)]="executeDialog"
-  [style]="{ width: '1200px' }"
+  [style]="{ width: isMobile ? '100%' : '1200px' }"
   styleClass="modalResponsivo"
   [(header)]="dialogHeader"
   [loading]="isLoadingalarmGroups"
   [modal]="true"
-  styleClass="p-fluid"
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
   (onHide)="hideDialog()"
 >

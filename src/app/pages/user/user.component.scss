@@ -472,6 +472,23 @@ tr:nth-child(odd) {
   width: 150px;
 }
 
+.mobile-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #051a4b;
+  color: white;
+}
+
+.mobile-card p {
+  margin: 5px 0;
+}
+
+.mobile-card strong {
+  color: grey;
+}
+
 @media screen and (max-width: 1200px) {
   .myDIV1 {
     width: 100px; /* Need to specify a width (can be any unit). overflow: hidden does nothing unless the width of .title is less than the width of the containing content */

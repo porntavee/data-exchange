@@ -126,6 +126,7 @@ export class DApiApproveComponent implements OnInit {
     { label: "กำหนดวัน", value: "-1" },
     { label: "ไม่มีหมดอายุ", value: "0" }
   ];
+  isMobile: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -184,6 +185,17 @@ export class DApiApproveComponent implements OnInit {
 
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
+
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
   }
 
   filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง

@@ -25,7 +25,6 @@
   z-index: 2; /* ให้เนื้อหาสูงกว่าพื้นหลัง */
 }
 .table-container {
-  border-radius: 10px;
   overflow: hidden;
   border: 1px solid #061949;
 }
@@ -110,6 +109,23 @@
 .p-table table {
   table-layout: fixed; /* บังคับให้ขนาดคอลัมน์คงที่ */
   width: 100%;
+}
+
+.mobile-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #051a4b;
+  color: white;
+}
+
+.mobile-card p {
+  margin: 5px 0;
+}
+
+.mobile-card strong {
+  color: grey;
 }
 
 .truncate {

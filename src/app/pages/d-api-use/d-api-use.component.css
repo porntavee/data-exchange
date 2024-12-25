@@ -301,6 +301,27 @@ tr:nth-child(odd) {
   box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5) !important;
 }
 
+.mobile-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #051a4b;
+  color: white;
+}
+
+.mobile-card p {
+  margin: 5px 0;
+}
+
+.mobile-card strong {
+  color: grey;
+}
+
+p-datatable-thead {
+  display: none !important;
+}
+
 @media screen and (max-width: 480px) {
   .Searchtxt {
     width: 120px !important;

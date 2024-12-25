@@ -1,4 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectorRef,
+  HostListener
+} from "@angular/core";
 import { Product } from "@app/product";
 import { ProductService } from "@app/productservice";
 import { ConfirmationService, MenuItem } from "primeng/api";
@@ -151,7 +157,7 @@ export class DApiComponent implements OnInit {
   selectedValues: string | string[] = "";
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
-
+  isMobile: boolean = false;
   executeDialog: boolean = false;
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -315,10 +321,16 @@ export class DApiComponent implements OnInit {
     //   endpoints: '/trafic_monthly',
     //   methods: 'POST,GET'
     // }]
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
     this.readRoute();
 
     this.isLoadingalarmGroups = false;
     // this.changeDetection.detectChanges();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
   }
 
   // Method ที่มีให้เลือก
@@ -329,6 +341,10 @@ export class DApiComponent implements OnInit {
 
   // เก็บข้อมูล Methods ที่ถูกสร้างเป็น JSON String
   methods: string = "";
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
+  }
 
   // ฟังก์ชันสำหรับเพิ่ม/ลบ Method ที่ถูกเลือก
   toggleMethodSelection(method: string): void {

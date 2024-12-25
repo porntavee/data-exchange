@@ -298,6 +298,7 @@ export class DApiUseComponent implements OnInit {
   filteredGroups: routeAPI[];
   apiSubscriptions: Subscription[] = [];
   userGroupCheck: any;
+  isMobile: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -421,11 +422,12 @@ export class DApiUseComponent implements OnInit {
     this.api_id = param.route_id;
     console.log(this.api_id);
     this.requestDetails = param.details;
-    this.selectedDuration = { value: param.duration };
-    var index = this.durationOptions.findIndex(
-      data => data.value === param.duration.toString()
-    );
-    this.selectedDuration = this.durationOptions[index];
+    // this.selectedDuration = { value: param.duration };
+    // var index = this.durationOptions.findIndex(
+    //   data => data.value === param.duration.toString()
+    // );
+    // this.selectedDuration = this.durationOptions[index];
+    this.selectedDuration = "0";
     // แปลง from_at และ to_at เป็น Date
     this.fromDate = this.convertToDate(param.from_at);
     this.toDate = this.convertToDate(param.to_at);
@@ -521,6 +523,8 @@ export class DApiUseComponent implements OnInit {
     // this.fetchAndMapData();
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -528,6 +532,11 @@ export class DApiUseComponent implements OnInit {
       clearInterval(this.intervalId);
     }
     this.apiSubscriptions.forEach(sub => sub.unsubscribe());
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
   }
 
   tryExecute2(
@@ -873,6 +882,7 @@ export class DApiUseComponent implements OnInit {
     //debugger
     console.log(param);
     this.requestDialog = true;
+    this.requestDetails = "";
     this.api_id = param.api_id;
   }
 
@@ -892,10 +902,7 @@ export class DApiUseComponent implements OnInit {
     console.log("API ID:", this.api_id);
     console.log("Request Details:", this.requestDetails);
 
-    this.selectedDuration = this.durationOptions.find(
-      data => data.value === param.duration
-    );
-
+    this.selectedDuration = "0";
     console.log("Selected Duration:", this.selectedDuration);
 
     this.fromDate = this.convertToDate(param.from_at);

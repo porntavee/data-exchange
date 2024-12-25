@@ -58,6 +58,7 @@ export class ServicestatusComponent implements OnInit {
   intervalId: NodeJS.Timeout;
   isNodata: boolean;
   lastProcessedMinute: number;
+  isMobile: boolean;
   constructor(
     public themeService: ThemeService,
     private titleService: Title,
@@ -127,6 +128,8 @@ export class ServicestatusComponent implements OnInit {
         console.error("Error fetching backup data", error); // จัดการข้อผิดพลาด
       }
     );
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize.bind(this));
     this.intervalId = setInterval(() => {
       const now = new Date();
       const currentMinute = now.getMinutes();
@@ -198,6 +201,11 @@ export class ServicestatusComponent implements OnInit {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 768;
   }
 
   onOptionChange(event: any) {

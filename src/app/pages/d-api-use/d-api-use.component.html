@@ -119,128 +119,134 @@
       </div>
     </p-toolbar>
 
-    <p-table
-      #dt
-      [value]="tokenList"
-      [rows]="10"
-      [paginator]="true"
-      [loading]="isLoadingalarmGroups"
-      [globalFilterFields]="['id', 'tag', 'endpoints', 'expires_at', 'token']"
-      [(selection)]="tokenList"
-      dataKey="group_id"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [showCurrentPageReport]="true"
-      responsiveLayout="scroll"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th style="text-align:center;" pSortableColumn="id" class="col-1">
-            ลำดับ
-            <p-sortIcon field="id"></p-sortIcon>
-          </th>
-          <th pSortableColumn="status" class="col-1">
-            Status
-            <p-sortIcon field="status"></p-sortIcon>
-          </th>
-          <th pSortableColumn="tag" class="col-2">
-            Tag
-            <p-sortIcon field="tag"></p-sortIcon>
-          </th>
-          <th pSortableColumn="endpoints" class="col-2">
-            End Point
-            <p-sortIcon field="endpoints"></p-sortIcon>
-          </th>
-          <th pSortableColumn="token" class="col-3">
-            API Key
-            <p-sortIcon field="token"></p-sortIcon>
-          </th>
-          <th pSortableColumn="expires_at" class="col-2">
-            วันที่หมดอายุ
-            <p-sortIcon field="expires_at"></p-sortIcon>
-          </th>
-          <th></th>
-        </tr>
-      </ng-template>
+    <!-- Desktop View -->
+    <div *ngIf="!isMobile">
+      <p-table
+        #dt
+        [value]="tokenList"
+        [rows]="10"
+        [paginator]="true"
+        [loading]="isLoadingalarmGroups"
+        [globalFilterFields]="['id', 'tag', 'endpoints', 'expires_at', 'token']"
+        dataKey="group_id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">
+              ลำดับ <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">
+              Status <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="tag">
+              Tag <p-sortIcon field="tag"></p-sortIcon>
+            </th>
+            <th pSortableColumn="endpoints">
+              End Point <p-sortIcon field="endpoints"></p-sortIcon>
+            </th>
+            <th pSortableColumn="token">
+              API Key <p-sortIcon field="token"></p-sortIcon>
+            </th>
+            <th pSortableColumn="expires_at">
+              วันที่หมดอายุ <p-sortIcon field="expires_at"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-group let-rowIndex>
-        <tr>
-          <td style="text-align:center;">{{ group.row_number }}</td>
-          <td>
-            <div
-              id="myDIV2"
-              [ngClass]="{
-                'bg-success text-white':
-                  group.status_description === 'เปิดใช้งาน',
-                'bg-primary text-white':
-                  group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
-                'bg-danger text-white': group.status_description === 'ปฏิเสธ',
-                'bg-secondary text-white':
-                  group.status_description === 'ปิดใช้งาน'
-              }"
-              style="font-size:16px; color:black"
-              class="p-2 rounded text-center position-relative"
-              title="{{ group.status_description }}"
-            >
-              {{ group.status_description }}
-              <span
-                *ngIf="group.status_description === 'ปฏิเสธ'"
-                pTooltip="{{ group.admin_details }}"
-                tooltipPosition="top"
-                style="
-                display: inline-block;
-                margin-left: 8px;
-                background-color: white;
-                color: red;
-                font-weight: bold;
-                border-radius: 50%;
-                padding: 0.4rem 0.8rem;
-                cursor: pointer;
-                font-size: 0.8rem;
-              "
+        <ng-template pTemplate="body" let-group>
+          <tr>
+            <td>{{ group.row_number }}</td>
+            <td>
+              <div
+                [ngClass]="{
+                  'bg-success text-white':
+                    group.status_description === 'เปิดใช้งาน',
+                  'bg-primary text-white':
+                    group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+                  'bg-danger text-white': group.status_description === 'ปฏิเสธ',
+                  'bg-secondary text-white':
+                    group.status_description === 'ปิดใช้งาน'
+                }"
+                class="p-2 rounded text-center"
+                title="{{ group.status_description }}"
               >
-                ?
-              </span>
-            </div>
-          </td>
-          <td>
-            <div id="myDIV1" title="{{ group.tag }}">{{ group.tag }}</div>
-          </td>
-          <td>
-            <div id="myDIV1" title="{{ group.endpoints }}">
-              {{ group.endpoints }}
-            </div>
-          </td>
-          <td>
-            <div id="myDIV2" title="{{ group.token }}">{{ group.token }}</div>
-          </td>
-          <td>
-            <div id="myDIV2" title="{{ group.expires_at }}">
-              {{ group.expires_at | date: "dd/MM/yyyy" }}
-            </div>
-          </td>
-          <td>
-            <p-menu
-              #menu
-              [popup]="true"
-              [model]="itemsAction"
-              appendTo="body"
-            ></p-menu>
-            <button
-              pButton
-              type="button"
-              icon="pi pi-ellipsis-h"
-              (click)="setSelectedGroup(group); menu.toggle($event)"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
+                {{ group.status_description }}
+              </div>
+            </td>
+            <td>{{ group.tag }}</td>
+            <td>{{ group.endpoints }}</td>
+            <td>{{ group.token }}</td>
+            <td>{{ group.expires_at | date: "dd/MM/yyyy" }}</td>
+            <td style="text-align: center;">
+              <p-menu
+                #menu
+                [popup]="true"
+                [model]="itemsAction"
+                appendTo="body"
+              ></p-menu>
+              <button
+                pButton
+                type="text"
+                (click)="setSelectedGroup(group); menu.toggle($event)"
+                icon="pi pi-ellipsis-h"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-between">
-          Total {{ alarmGroups ? tokenList.length : 0 }} groups.
+        <ng-template pTemplate="summary">
+          <div>Total {{ tokenList ? tokenList.length : 0 }} groups.</div>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <!-- Mobile View -->
+    <div *ngIf="isMobile">
+      <div *ngFor="let group of tokenList" class="mobile-card">
+        <p><strong>ลำดับ:</strong> {{ group.row_number }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success text-white':
+                group.status_description === 'เปิดใช้งาน',
+              'bg-primary text-white':
+                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+              'bg-danger text-white': group.status_description === 'ปฏิเสธ',
+              'bg-secondary text-white':
+                group.status_description === 'ปิดใช้งาน'
+            }"
+            >{{ group.status_description }}</span
+          >
+        </p>
+        <p><strong>Tag:</strong> {{ group.tag }}</p>
+        <p><strong>End Point:</strong> {{ group.endpoints }}</p>
+        <p><strong>API Key:</strong> {{ group.token }}</p>
+        <p>
+          <strong>Expires At:</strong>
+          {{ group.expires_at | date: "dd/MM/yyyy" }}
+        </p>
+        <div style="text-align: center;">
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsAction"
+            appendTo="body"
+          ></p-menu>
+          <button
+            pButton
+            type="text"
+            (click)="setSelectedGroup(group); menu.toggle($event)"
+            icon="pi pi-ellipsis-h"
+          ></button>
         </div>
-      </ng-template>
-    </p-table>
+      </div>
+    </div>
   </div>
 </div>
 <p-dialog

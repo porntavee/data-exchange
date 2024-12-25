@@ -17,6 +17,7 @@
 
   height: calc(100vh - 120px);
 }
+
 .bgcards::-webkit-scrollbar {
   display: none; /* ซ่อน scrollbar */
 }
@@ -25,7 +26,6 @@
   z-index: 2; /* ให้เนื้อหาสูงกว่าพื้นหลัง */
 }
 .table-container {
-  border-radius: 10px;
   overflow: hidden;
   border: 1px solid #061949;
 }
@@ -206,6 +206,23 @@ tr:nth-child(odd) {
 .table-responsive {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.mobile-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #051a4b;
+  color: white;
+}
+
+.mobile-card p {
+  margin: 5px 0;
+}
+
+.mobile-card strong {
+  color: grey;
 }
 
 /* สำหรับปุ่มใน toolbar สามารถใช้ flex เพื่อจัดวางปุ่มเป็นแถวเดียวกันให้เลื่อนหรือเรียงลงได้เมื่อจอเล็ก */
@@ -417,6 +434,36 @@ tr:nth-child(odd) {
 .p-table table {
   table-layout: fixed; /* บังคับให้ขนาดคอลัมน์คงที่ */
   width: 100%;
+}
+
+/* Default: Show desktop table, hide mobile view */
+.desktop-table {
+  display: table;
+}
+.mobile-view {
+  display: none;
+}
+
+/* On small screens: Show mobile view, hide desktop table */
+@media screen and (max-width: 768px) {
+  .desktop-table {
+    display: none;
+  }
+  .mobile-view {
+    display: block;
+  }
+
+  .mobile-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .mobile-item div {
+    margin-bottom: 5px;
+  }
 }
 
 .truncate {

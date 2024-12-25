@@ -65,74 +65,114 @@
         </span>
       </div>
     </p-toolbar>
-    <p-table
-      #dt
-      [value]="users"
-      [rows]="10"
-      [paginator]="true"
-      scrollable="true"
-      [globalFilterFields]="[
-        'firstname',
-        'firstname | lastname',
-        'lastname',
-        'status',
-        'username',
-        'role'
-      ]"
-      [(selection)]="selectedUsers"
-      dataKey="id"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [showCurrentPageReport]="true"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th style="width: 5rem">
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
-          <th style="width: 15%" pSortableColumn="firstname">
-            Name <p-sortIcon field="firstname"></p-sortIcon>
-          </th>
-          <th style="width: 15%" pSortableColumn="username">
-            Username <p-sortIcon field="username"></p-sortIcon>
-          </th>
-          <th style="width: 25%" pSortableColumn="email">
-            Email <p-sortIcon field="email"></p-sortIcon>
-          </th>
-          <th style="width: 10%" pSortableColumn="role">
-            Role <p-sortIcon field="role"></p-sortIcon>
-          </th>
-          <th style="width: 15%" pSortableColumn="zone_name">
-            Zone <p-sortIcon field="zone_name"></p-sortIcon>
-          </th>
-          <th style="width: 15%" pSortableColumn="created_at">
-            Create at <p-sortIcon field="created_at"></p-sortIcon>
-          </th>
-          <th style="width: 5%"></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-user>
-        <tr>
-          <td>
-            <p-tableCheckbox [value]="user"></p-tableCheckbox>
-          </td>
-          <td>{{ user.firstname }} {{ user.lastname }}</td>
-          <td class="truncate" title="{{ user.username }}">
-            {{ user.username }}
-          </td>
-          <td class="truncate" title="{{ user.email }}">
-            {{ user.email }}
-          </td>
-          <td>{{ user.role }}</td>
-          <td class="truncate" title="{{ user.zone_name }}">
-            {{ user.zone_name }}
-          </td>
-          <td
-            class="truncate"
-            title="{{ user.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
-          >
+    <div class="table-container">
+      <!-- Table View -->
+      <div *ngIf="!isMobile">
+        <p-table
+          #dt
+          [value]="users"
+          [rows]="10"
+          [paginator]="true"
+          scrollable="true"
+          [globalFilterFields]="[
+            'firstname',
+            'firstname | lastname',
+            'lastname',
+            'status',
+            'username',
+            'role'
+          ]"
+          [(selection)]="selectedUsers"
+          dataKey="id"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [showCurrentPageReport]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 5rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th style="width: 15%" pSortableColumn="firstname">
+                Name <p-sortIcon field="firstname"></p-sortIcon>
+              </th>
+              <th style="width: 15%" pSortableColumn="username">
+                Username <p-sortIcon field="username"></p-sortIcon>
+              </th>
+              <th style="width: 25%" pSortableColumn="email">
+                Email <p-sortIcon field="email"></p-sortIcon>
+              </th>
+              <th style="width: 10%" pSortableColumn="role">
+                Role <p-sortIcon field="role"></p-sortIcon>
+              </th>
+              <th style="width: 15%" pSortableColumn="zone_name">
+                Zone <p-sortIcon field="zone_name"></p-sortIcon>
+              </th>
+              <th style="width: 15%" pSortableColumn="created_at">
+                Create at <p-sortIcon field="created_at"></p-sortIcon>
+              </th>
+              <th style="width: 5%"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="user"></p-tableCheckbox>
+              </td>
+              <td>{{ user.firstname }} {{ user.lastname }}</td>
+              <td class="truncate" title="{{ user.username }}">
+                {{ user.username }}
+              </td>
+              <td class="truncate" title="{{ user.email }}">
+                {{ user.email }}
+              </td>
+              <td>{{ user.role }}</td>
+              <td class="truncate" title="{{ user.zone_name }}">
+                {{ user.zone_name }}
+              </td>
+              <td
+                class="truncate"
+                title="{{ user.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
+              >
+                {{ user.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
+              </td>
+              <td>
+                <p-menu
+                  #menu
+                  [popup]="true"
+                  [model]="itemsAction"
+                  appendTo="body"
+                ></p-menu>
+                <button
+                  pButton
+                  type="text"
+                  (click)="menu.toggle($event)"
+                  (click)="menuVlue(user)"
+                  icon="pi pi-ellipsis-h"
+                ></button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              In total there are {{ users ? users.length : 0 }} users.
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div *ngIf="isMobile">
+        <div *ngFor="let user of users" class="mobile-card">
+          <p><strong>Name:</strong> {{ user.firstname }} {{ user.lastname }}</p>
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Role:</strong> {{ user.role }}</p>
+          <p><strong>Zone:</strong> {{ user.zone_name }}</p>
+          <p>
+            <strong>Create at:</strong>
             {{ user.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
-          </td>
-          <td>
+          </p>
+          <div style="text-align: center;">
             <p-menu
               #menu
               [popup]="true"
@@ -146,15 +186,10 @@
               (click)="menuVlue(user)"
               icon="pi pi-ellipsis-h"
             ></button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-between">
-          In total there are {{ users ? users.length : 0 }} users.
+          </div>
         </div>
-      </ng-template>
-    </p-table>
+      </div>
+    </div>
   </div>
 </div>
 <p-dialog

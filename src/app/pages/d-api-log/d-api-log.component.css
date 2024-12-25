@@ -326,6 +326,23 @@ tr:nth-child(odd) {
   width: 150px;
 }
 
+.mobile-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #051a4b;
+  color: white;
+}
+
+.mobile-card p {
+  margin: 5px 0;
+}
+
+.mobile-card strong {
+  color: grey;
+}
+
 th,
 td {
   text-align: left;

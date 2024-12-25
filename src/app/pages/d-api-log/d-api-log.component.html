@@ -21,76 +21,101 @@
         </span>
       </div>
     </p-toolbar>
+    <div *ngIf="!isMobile">
+      <p-table
+        #dt
+        [value]="tokenList"
+        [rows]="10"
+        [paginator]="true"
+        [loading]="isLoadingalarmGroups"
+        [globalFilterFields]="['id', 'tag', 'endpoints', 'user_id']"
+        [(selection)]="alarmGroups"
+        dataKey="group_id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        scrollable="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="tag" style="width: 20%;">
+              Tag<p-sortIcon field="tag"></p-sortIcon>
+            </th>
+            <th pSortableColumn="endpoints" style="width: 40%;">
+              Endpoint<p-sortIcon field="endpoints"></p-sortIcon>
+            </th>
+            <th pSortableColumn="user_id" style="width: 20%;">
+              User<p-sortIcon field="user_id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="created_at" style="width: 20%;">
+              วันที่<p-sortIcon field="created_at"></p-sortIcon>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-group let-rowIndex>
+          <tr>
+            <td class="truncate" title="{{ group.tag }}">{{ group.tag }}</td>
+            <td class="truncate" title="{{ group.endpoints }}">
+              {{ group.endpoints }}
+            </td>
+            <td class="truncate" title="{{ group.user_id }}">
+              {{ group.user_id }}
+            </td>
+            <td
+              class="truncate"
+              title="{{ group.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
+            >
+              {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
+            </td>
+            <td style="text-align: center;">
+              <p-menu
+                #menu
+                [popup]="true"
+                [model]="itemsAction"
+                appendTo="body"
+              ></p-menu>
+              <button
+                pButton
+                type="text"
+                (click)="openMenuWithItems(group, $event, menu)"
+                icon="pi pi-ellipsis-h"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
 
-    <p-table
-      #dt
-      [value]="tokenList"
-      [rows]="10"
-      [paginator]="true"
-      [loading]="isLoadingalarmGroups"
-      [globalFilterFields]="['id', 'tag', 'endpoints', 'user_id']"
-      [(selection)]="alarmGroups"
-      dataKey="group_id"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [showCurrentPageReport]="true"
-      scrollable="true"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th pSortableColumn="tag" style="width: 20%;">
-            Tag<p-sortIcon field="tag"></p-sortIcon>
-          </th>
-          <th pSortableColumn="endpoints" style="width: 40%;">
-            Endpoint<p-sortIcon field="endpoints"></p-sortIcon>
-          </th>
-          <th pSortableColumn="user_id" style="width: 20%;">
-            User<p-sortIcon field="user_id"></p-sortIcon>
-          </th>
-          <th pSortableColumn="created_at" style="width: 20%;">
-            วันที่<p-sortIcon field="created_at"></p-sortIcon>
-          </th>
-          <th></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-group let-rowIndex>
-        <tr>
-          <td class="truncate" title="{{ group.tag }}">
-            {{ group.tag }}
-          </td>
-          <td class="truncate" title="{{ group.endpoints }}">
-            {{ group.endpoints }}
-          </td>
-          <td class="truncate" title="{{ group.user_id }}">
-            {{ group.user_id }}
-          </td>
-          <td
-            class="truncate"
-            title="{{ group.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
-          >
-            {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
-          </td>
-          <td style="text-align: center;">
-            <p-menu
-              #menu
-              [popup]="true"
-              [model]="itemsAction"
-              appendTo="body"
-            ></p-menu>
-            <button
-              pButton
-              type="text"
-              (click)="openMenuWithItems(group, $event, menu)"
-              icon="pi pi-ellipsis-h"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-between">
-          Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
+    <div *ngIf="isMobile">
+      <div *ngFor="let group of alarmGroups" class="mobile-card">
+        <p><strong>Tag:</strong> {{ group.tag }}</p>
+        <p><strong>Endpoint:</strong> {{ group.endpoints }}</p>
+        <p><strong>User:</strong> {{ group.user_id }}</p>
+        <p>
+          <strong>วันที่:</strong>
+          {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
+        </p>
+        <div style="text-align: center;">
+          <p-menu
+            #menu
+            [popup]="true"
+            [model]="itemsAction"
+            appendTo="body"
+          ></p-menu>
+          <button
+            pButton
+            type="text"
+            (click)="openMenuWithItems(group, $event, menu)"
+            icon="pi pi-ellipsis-h"
+          ></button>
         </div>
-      </ng-template>
-    </p-table>
+      </div>
+    </div>
   </div>
 </div>
 <p-dialog
