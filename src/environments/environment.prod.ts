@@ -5,12 +5,16 @@
 
 export const environment = {
   production: true,
-  rountURL: "https://dsslocal.linkflow.co.th/",
-  serviceURL: "https://dsslocal.linkflow.co.th/api/staging/callapi",
-  apiUrl: "https://dsslocal.linkflow.co.th/api/v1",
+  rountURL: "https://dss.motorway.go.th:4433/",
+  loginURL: "https://dss.motorway.go.th:4433/minsight/api/",
+  dataExchangeURL: "https://dss.motorway.go.th:4433/dxc/api",
+  backupURL: "https://dss.motorway.go.th:4433/minsight/api",
+  serviceURL: "https://dss.motorway.go.th:4433/api/staging/callapi",
+  apiUrl: "https://dss.motorway.go.th:4433/api/v1",
   DSSURL: "https://dss.motorway.go.th/dssadmin/index.php/api",
+  dataExchange: "https://dss.motorway.go.th:4433/",
   // serviceURL:"10.11.2.73:3009",
-  baseUrl: "https://dsslocal.linkflow.co.th/",
+  baseUrl: "https://dss.motorway.go.th:4433/",
   websocketUrl: "wss://dsslocal.linkflow.co.th/websocket/v1/remote",
   allowedDomains: [
     "dss.motorway.go.th:4433",
