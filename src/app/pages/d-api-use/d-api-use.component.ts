@@ -537,12 +537,11 @@ export class DApiUseComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 1021;
+    this.isMobile = window.innerWidth < 960;
   }
 
   getFilteredGroups() {
     console.log(this.searchText);
-
     if (!this.searchText) {
       return this.alarmGroups; // If no search text, return all groups
     }

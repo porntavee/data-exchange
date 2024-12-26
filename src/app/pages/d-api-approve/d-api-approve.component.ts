@@ -195,7 +195,7 @@ export class DApiApproveComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 1018;
+    this.isMobile = window.innerWidth < 961;
     console.log(this.isMobile);
   }
 

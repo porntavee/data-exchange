@@ -167,7 +167,7 @@ export class UserComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 1021;
+    this.isMobile = window.innerWidth < 960;
   }
 
   menuVlue(user) {

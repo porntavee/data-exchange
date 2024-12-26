@@ -134,7 +134,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 1021;
+    this.isMobile = window.innerWidth < 960;
+    console.log(window.innerWidth);
     this.changeDetection.detectChanges(); // อัพเดตการแสดงผล
     console.log(this.isMobile);
   }
