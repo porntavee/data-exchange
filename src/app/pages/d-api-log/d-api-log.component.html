@@ -36,64 +36,42 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="tag" style="width: 20%; text-align: center;">
+          <th pSortableColumn="tag" style="width: 20%; ">
             Tag<p-sortIcon field="tag"></p-sortIcon>
           </th>
-          <th
-            pSortableColumn="endpoints"
-            style="width: 20%; text-align: center;"
-          >
+          <th pSortableColumn="endpoints" style="width: 20%;">
             Endpoint<p-sortIcon field="endpoints"></p-sortIcon>
           </th>
-          <th pSortableColumn="user_id" style="width: 20%; text-align: center;">
+          <th pSortableColumn="user_id" style="width: 20%;">
             User<p-sortIcon field="user_id"></p-sortIcon>
           </th>
-          <th
-            pSortableColumn="created_at"
-            style="width: 20%; text-align: center;"
-          >
+          <th pSortableColumn="created_at" style="width: 20%; ">
             วันที่<p-sortIcon field="created_at"></p-sortIcon>
           </th>
-          <th style="width: 20%; text-align: center;"></th>
+          <th style="width: 20%;"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-group let-rowIndex>
-        <tr style="text-align: center;">
-          <td
-            style="text-align: center;"
-            *ngIf="!isMobile"
-            class="truncate"
-            title="{{ group.tag }}"
-          >
+        <tr>
+          <td *ngIf="!isMobile" class="truncate" title="{{ group.tag }}">
             {{ group.tag }}
           </td>
           <td *ngIf="isMobile" class="truncate" title="{{ group.tag }}">
             Tag: {{ group.tag }}
           </td>
-          <td
-            style="text-align: center;"
-            *ngIf="!isMobile"
-            class="truncate"
-            title="{{ group.endpoints }}"
-          >
+          <td *ngIf="!isMobile" class="truncate" title="{{ group.endpoints }}">
             {{ group.endpoints }}
           </td>
           <td *ngIf="isMobile" class="truncate" title="{{ group.endpoints }}">
             Endpoint: {{ group.endpoints }}
           </td>
-          <td
-            style="text-align: center;"
-            *ngIf="!isMobile"
-            class="truncate"
-            title="{{ group.user_id }}"
-          >
+          <td *ngIf="!isMobile" class="truncate" title="{{ group.user_id }}">
             {{ group.user_id }}
           </td>
           <td *ngIf="isMobile" class="truncate" title="{{ group.user_id }}">
             User: {{ group.user_id }}
           </td>
           <td
-            style="text-align: center;"
             *ngIf="!isMobile"
             class="truncate"
             title="{{ group.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
@@ -101,14 +79,13 @@
             {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
           </td>
           <td
-            style="text-align: center;"
             *ngIf="isMobile"
             class="truncate"
             title="{{ group.created_at | date: 'dd-MM-YYYY HH:mm:ss' }}"
           >
             วันที่: {{ group.created_at | date: "dd-MM-YYYY HH:mm:ss" }}
           </td>
-          <td style="text-align: center;">
+          <td>
             <p-menu
               #menu
               [popup]="true"
@@ -123,11 +100,6 @@
             ></button>
           </td>
         </tr>
-      </ng-template>
-      <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-center">
-          Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
-        </div>
       </ng-template>
     </p-table>
   </div>

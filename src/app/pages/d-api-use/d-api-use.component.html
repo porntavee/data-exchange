@@ -173,7 +173,7 @@
                   'bg-secondary text-white':
                     group.status_description === 'ปิดใช้งาน'
                 }"
-                class="p-2 rounded text-center"
+                class="p-2 rounded"
                 title="{{ group.status_description }}"
               >
                 {{ group.status_description }}
@@ -195,7 +195,7 @@
                   'bg-secondary text-white':
                     group.status_description === 'ปิดใช้งาน'
                 }"
-                class="p-2 rounded text-center"
+                class="p-2 rounded"
                 title="{{ group.status_description }}"
               >
                 {{ group.status_description }}
@@ -218,7 +218,7 @@
               วันที่หมดอายุ: {{ group.expires_at | date: "dd/MM/yyyy" }}
             </td>
 
-            <td style="text-align: center;">
+            <td>
               <p-menu
                 #menu
                 [popup]="true"
@@ -233,10 +233,6 @@
               ></button>
             </td>
           </tr>
-        </ng-template>
-
-        <ng-template pTemplate="summary">
-          <div>Total {{ tokenList ? tokenList.length : 0 }} groups.</div>
         </ng-template>
       </p-table>
     </div>

@@ -61,31 +61,28 @@
           >
             <ng-template pTemplate="header">
               <tr>
-                <th style="text-align: center;" pSortableColumn="username">
+                <th pSortableColumn="username">
                   User <p-sortIcon field="username"></p-sortIcon>
                 </th>
-                <th style="text-align: center;" pSortableColumn="tag">
+                <th pSortableColumn="tag">
                   Tag <p-sortIcon field="tag"></p-sortIcon>
                 </th>
-                <th style="text-align: center;" pSortableColumn="endpoints">
+                <th pSortableColumn="endpoints">
                   End Point <p-sortIcon field="endpoints"></p-sortIcon>
                 </th>
-                <th style="text-align: center;" pSortableColumn="request_at">
+                <th pSortableColumn="request_at">
                   Request Date <p-sortIcon field="request_at"></p-sortIcon>
                 </th>
-                <th style="text-align: center;" pSortableColumn="approve_at">
+                <th pSortableColumn="approve_at">
                   Approve Date <p-sortIcon field="approve_at"></p-sortIcon>
                 </th>
-                <th style="text-align: center;" pSortableColumn="admin_name">
+                <th pSortableColumn="admin_name">
                   Approve By <p-sortIcon field="admin_name"></p-sortIcon>
                 </th>
-                <th
-                  style="text-align: center;"
-                  pSortableColumn="status_description"
-                >
+                <th pSortableColumn="status_description">
                   Status <p-sortIcon field="status_description"></p-sortIcon>
                 </th>
-                <th style="text-align: center;"></th>
+                <th></th>
               </tr>
             </ng-template>
 
@@ -94,43 +91,29 @@
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  style="text-align: center;"
                   title="{{ group.username }}"
                 >
                   {{ group.username }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
-                  User: {{ group.username }}
-                </td>
+                <td *ngIf="isMobile">User: {{ group.username }}</td>
 
-                <td
-                  *ngIf="!isMobile"
-                  class="truncate"
-                  style="text-align: center;"
-                  title="{{ group.tag }}"
-                >
+                <td *ngIf="!isMobile" class="truncate" title="{{ group.tag }}">
                   {{ group.tag }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
-                  Tag: {{ group.tag }}
-                </td>
+                <td *ngIf="isMobile">Tag: {{ group.tag }}</td>
 
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  style="text-align: center;"
                   title="{{ group.endpoints }}"
                 >
                   {{ group.endpoints }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
-                  End Point: {{ group.endpoints }}
-                </td>
+                <td *ngIf="isMobile">End Point: {{ group.endpoints }}</td>
 
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  style="text-align: center;"
                   title="{{ group.request_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
                 >
                   {{
@@ -139,7 +122,7 @@
                       : "-"
                   }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
+                <td *ngIf="isMobile">
                   Request Date:
                   {{
                     group.request_at
@@ -151,7 +134,6 @@
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  style="text-align: center;"
                   title="{{ group.approve_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
                 >
                   {{
@@ -160,7 +142,7 @@
                       : "-"
                   }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
+                <td *ngIf="isMobile">
                   Approve Date:
                   {{
                     group.approve_at
@@ -172,16 +154,13 @@
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  style="text-align: center;"
                   title="{{ group.admin_name }}"
                 >
                   {{ group.admin_name }}
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
-                  Approve By: {{ group.admin_name }}
-                </td>
+                <td *ngIf="isMobile">Approve By: {{ group.admin_name }}</td>
 
-                <td *ngIf="!isMobile" style="text-align: center;">
+                <td *ngIf="!isMobile">
                   <div
                     class="truncate p-2 rounded text-center"
                     [ngClass]="{
@@ -200,7 +179,10 @@
                     {{ group.status_description }}
                   </div>
                 </td>
-                <td *ngIf="isMobile" style="text-align: center;">
+                <td
+                  *ngIf="isMobile"
+                  style="display: flex; justify-content: flex-start;"
+                >
                   Status:
                   <div
                     class="truncate p-2 rounded text-center"
@@ -221,7 +203,7 @@
                   </div>
                 </td>
 
-                <td style="text-align: center;">
+                <td>
                   <p-menu
                     #menu
                     [popup]="true"
@@ -236,12 +218,6 @@
                   ></button>
                 </td>
               </tr>
-            </ng-template>
-
-            <ng-template pTemplate="summary">
-              <div style="text-align: center;">
-                Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
-              </div>
             </ng-template>
           </p-table>
         </div>
