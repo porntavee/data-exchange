@@ -40,196 +40,197 @@
       <div class="col-12">
         <div class="table-container">
           <!-- Table View -->
-          <div *ngIf="!isMobile">
-            <p-table
-              #dt
-              [value]="filteredList"
-              [rows]="10"
-              [paginator]="true"
-              [loading]="isLoadingalarmGroups"
-              [globalFilterFields]="[
-                'id',
-                'tag',
-                'endpoints',
-                'username',
-                'admin_name',
-                'status_description'
-              ]"
-              [(selection)]="alarmGroups"
-              dataKey="group_id"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-              [showCurrentPageReport]="true"
-              scrollable="true"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th
-                    style="width: 5%; text-align: center;"
-                    pSortableColumn="row_number2"
-                  >
-                    ลำดับ <p-sortIcon field="row_number"></p-sortIcon>
-                  </th>
-                  <th style="width: 10%;" pSortableColumn="username">
-                    User <p-sortIcon field="username"></p-sortIcon>
-                  </th>
-                  <th style="width: 10%;" pSortableColumn="tag">
-                    Tag <p-sortIcon field="tag"></p-sortIcon>
-                  </th>
-                  <th style="width: 20%;" pSortableColumn="endpoints">
-                    End Point <p-sortIcon field="endpoints"></p-sortIcon>
-                  </th>
-                  <th style="width: 15%;" pSortableColumn="request_at">
-                    Request Date <p-sortIcon field="request_at"></p-sortIcon>
-                  </th>
-                  <th style="width: 15%;" pSortableColumn="approve_at">
-                    Approve Date <p-sortIcon field="approve_at"></p-sortIcon>
-                  </th>
-                  <th style="width: 10%;" pSortableColumn="admin_name">
-                    Approve By <p-sortIcon field="admin_name"></p-sortIcon>
-                  </th>
-                  <th style="width: 10%;" pSortableColumn="status_description">
-                    Status <p-sortIcon field="status_description"></p-sortIcon>
-                  </th>
-                  <th style="width: 5%;"></th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-group>
-                <tr>
-                  <td style="text-align: center;">{{ group.row_number2 }}</td>
-                  <td class="truncate" title="{{ group.username }}">
-                    {{ group.username }}
-                  </td>
-                  <td class="truncate" title="{{ group.tag }}">
-                    {{ group.tag }}
-                  </td>
-                  <td class="truncate" title="{{ group.endpoints }}">
-                    {{ group.endpoints }}
-                  </td>
-                  <td
-                    class="truncate"
-                    title="{{ group.request_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
-                  >
-                    {{
-                      group.request_at
-                        ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
-                        : "-"
-                    }}
-                  </td>
-                  <td
-                    class="truncate"
-                    title="{{ group.approve_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
-                  >
-                    {{
-                      group.approve_at
-                        ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
-                        : "-"
-                    }}
-                  </td>
-                  <td class="truncate" title="{{ group.admin_name }}">
-                    {{ group.admin_name }}
-                  </td>
-                  <td>
-                    <div
-                      class="truncate p-2 rounded text-center"
-                      [ngClass]="{
-                        'bg-success text-white':
-                          group.status_description === 'เปิดใช้งาน',
-                        'bg-primary text-white':
-                          group.status_description ===
-                          'รอตรวจสอบจากเจ้าหน้าที่',
-                        'bg-danger text-white':
-                          group.status_description === 'ปฏิเสธ',
-                        'bg-secondary text-white':
-                          group.status_description === 'ปิดใช้งาน'
-                      }"
-                      style="font-size: 16px;"
-                      title="{{ group.status_description }}"
-                    >
-                      {{ group.status_description }}
-                    </div>
-                  </td>
-                  <td style="text-align: center;">
-                    <p-menu
-                      #menu
-                      [popup]="true"
-                      [model]="itemsAction"
-                      appendTo="body"
-                    ></p-menu>
-                    <button
-                      pButton
-                      type="text"
-                      (click)="openMenuWithItems(group, $event, menu)"
-                      icon="pi pi-ellipsis-h"
-                    ></button>
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="summary">
-                <div>
-                  Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
-                </div>
-              </ng-template>
-            </p-table>
-          </div>
+          <p-table
+            #dt
+            [value]="filteredList"
+            [rows]="10"
+            [paginator]="true"
+            [loading]="isLoadingalarmGroups"
+            [globalFilterFields]="[
+              'id',
+              'tag',
+              'endpoints',
+              'username',
+              'admin_name',
+              'status_description'
+            ]"
+            [(selection)]="alarmGroups"
+            dataKey="group_id"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="text-align: center;" pSortableColumn="row_number2">
+                  ลำดับ <p-sortIcon field="row_number"></p-sortIcon>
+                </th>
+                <th pSortableColumn="username">
+                  User <p-sortIcon field="username"></p-sortIcon>
+                </th>
+                <th pSortableColumn="tag">
+                  Tag <p-sortIcon field="tag"></p-sortIcon>
+                </th>
+                <th pSortableColumn="endpoints">
+                  End Point <p-sortIcon field="endpoints"></p-sortIcon>
+                </th>
+                <th pSortableColumn="request_at">
+                  Request Date <p-sortIcon field="request_at"></p-sortIcon>
+                </th>
+                <th pSortableColumn="approve_at">
+                  Approve Date <p-sortIcon field="approve_at"></p-sortIcon>
+                </th>
+                <th pSortableColumn="admin_name">
+                  Approve By <p-sortIcon field="admin_name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="status_description">
+                  Status <p-sortIcon field="status_description"></p-sortIcon>
+                </th>
+                <th></th>
+              </tr>
+            </ng-template>
 
-          <!-- Mobile Card View -->
-          <div *ngIf="isMobile">
-            <div *ngFor="let group of filteredList" class="mobile-card">
-              <p><strong>ลำดับ:</strong> {{ group.row_number2 }}</p>
-              <p><strong>User:</strong> {{ group.username }}</p>
-              <p><strong>Tag:</strong> {{ group.tag }}</p>
-              <p><strong>End Point:</strong> {{ group.endpoints }}</p>
-              <p>
-                <strong>Request Date:</strong>
-                {{
-                  group.request_at
-                    ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
-                    : "-"
-                }}
-              </p>
-              <p>
-                <strong>Approve Date:</strong>
-                {{
-                  group.approve_at
-                    ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
-                    : "-"
-                }}
-              </p>
-              <p><strong>Approve By:</strong> {{ group.admin_name }}</p>
-              <p>
-                <strong>Status:</strong>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'bg-success text-white':
-                      group.status_description === 'เปิดใช้งาน',
-                    'bg-primary text-white':
-                      group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
-                    'bg-danger text-white':
-                      group.status_description === 'ปฏิเสธ',
-                    'bg-secondary text-white':
-                      group.status_description === 'ปิดใช้งาน'
-                  }"
+            <ng-template pTemplate="body" let-group>
+              <tr>
+                <td *ngIf="!isMobile" style="text-align: center;">
+                  {{ group.row_number2 }}
+                </td>
+                <td *ngIf="isMobile">ลำดับ: {{ group.row_number2 }}</td>
+
+                <td
+                  *ngIf="!isMobile"
+                  class="truncate"
+                  title="{{ group.username }}"
                 >
-                  {{ group.status_description }}
-                </span>
-              </p>
-              <div style="text-align: center;">
-                <p-menu
-                  #menu
-                  [popup]="true"
-                  [model]="itemsAction"
-                  appendTo="body"
-                ></p-menu>
-                <button
-                  pButton
-                  type="text"
-                  (click)="openMenuWithItems(group, $event, menu)"
-                  icon="pi pi-ellipsis-h"
-                ></button>
+                  {{ group.username }}
+                </td>
+                <td *ngIf="isMobile">User: {{ group.username }}</td>
+
+                <td *ngIf="!isMobile" class="truncate" title="{{ group.tag }}">
+                  {{ group.tag }}
+                </td>
+                <td *ngIf="isMobile">Tag: {{ group.tag }}</td>
+
+                <td
+                  *ngIf="!isMobile"
+                  class="truncate"
+                  title="{{ group.endpoints }}"
+                >
+                  {{ group.endpoints }}
+                </td>
+                <td *ngIf="isMobile">End Point: {{ group.endpoints }}</td>
+
+                <td
+                  *ngIf="!isMobile"
+                  class="truncate"
+                  title="{{ group.request_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+                >
+                  {{
+                    group.request_at
+                      ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }}
+                </td>
+                <td *ngIf="isMobile">
+                  Request Date:
+                  {{
+                    group.request_at
+                      ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }}
+                </td>
+
+                <td
+                  *ngIf="!isMobile"
+                  class="truncate"
+                  title="{{ group.approve_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+                >
+                  {{
+                    group.approve_at
+                      ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }}
+                </td>
+                <td *ngIf="isMobile">
+                  Approve Date:
+                  {{
+                    group.approve_at
+                      ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
+                      : "-"
+                  }}
+                </td>
+
+                <td
+                  *ngIf="!isMobile"
+                  class="truncate"
+                  title="{{ group.admin_name }}"
+                >
+                  {{ group.admin_name }}
+                </td>
+                <td *ngIf="isMobile">Approve By: {{ group.admin_name }}</td>
+
+                <td *ngIf="!isMobile">
+                  <div
+                    class="truncate p-2 rounded text-center"
+                    [ngClass]="{
+                      'bg-success text-white':
+                        group.status_description === 'เปิดใช้งาน',
+                      'bg-primary text-white':
+                        group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+                      'bg-danger text-white':
+                        group.status_description === 'ปฏิเสธ',
+                      'bg-secondary text-white':
+                        group.status_description === 'ปิดใช้งาน'
+                    }"
+                    style="font-size: 16px;"
+                    title="{{ group.status_description }}"
+                  >
+                    {{ group.status_description }}
+                  </div>
+                </td>
+                <td *ngIf="isMobile">
+                  Status:
+                  <div
+                    class="truncate p-2 rounded text-center"
+                    [ngClass]="{
+                      'bg-success text-white':
+                        group.status_description === 'เปิดใช้งาน',
+                      'bg-primary text-white':
+                        group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
+                      'bg-danger text-white':
+                        group.status_description === 'ปฏิเสธ',
+                      'bg-secondary text-white':
+                        group.status_description === 'ปิดใช้งาน'
+                    }"
+                    style="font-size: 16px;"
+                    title="{{ group.status_description }}"
+                  >
+                    {{ group.status_description }}
+                  </div>
+                </td>
+
+                <td style="text-align: center;">
+                  <p-menu
+                    #menu
+                    [popup]="true"
+                    [model]="itemsAction"
+                    appendTo="body"
+                  ></p-menu>
+                  <button
+                    pButton
+                    type="text"
+                    (click)="openMenuWithItems(group, $event, menu)"
+                    icon="pi pi-ellipsis-h"
+                  ></button>
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary">
+              <div>
+                Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.
               </div>
-            </div>
-          </div>
+            </ng-template>
+          </p-table>
         </div>
       </div>
     </div>

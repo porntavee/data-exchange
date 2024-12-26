@@ -321,17 +321,10 @@ export class LoginComponent implements OnInit {
                   this.authservice.settoken(localStorage.getItem("token"));
                   // ไม่แน่ใจว่า Token ถูกรึยัง
                   let userdata = jwt_decode(localStorage.getItem("token"));
-                  let role = userdata["role"];
-                  if (role == "develop") {
-                    const returnUrl =
-                      this.route.snapshot.queryParams["returnUrl"] || "/d-api";
-                    this.router.navigateByUrl(returnUrl);
-                  } else {
-                    const returnUrl =
-                      this.route.snapshot.queryParams["returnUrl"] ||
-                      "/d-api-use";
-                    this.router.navigateByUrl(returnUrl);
-                  }
+                  const returnUrl =
+                    this.route.snapshot.queryParams["returnUrl"] ||
+                    "/d-api-use";
+                  this.router.navigateByUrl(returnUrl);
                 },
                 error: error => {
                   if (error.error.status === 401) {
@@ -355,16 +348,9 @@ export class LoginComponent implements OnInit {
 
             // ไม่แน่ใจว่า Token ถูกรึยัง
             let userdata = jwt_decode(localStorage.getItem("token"));
-            let role = userdata["role"];
-            if (role == "develop") {
-              const returnUrl =
-                this.route.snapshot.queryParams["returnUrl"] || "/d-api";
-              this.router.navigateByUrl(returnUrl);
-            } else {
-              const returnUrl =
-                this.route.snapshot.queryParams["returnUrl"] || "/d-api-use";
-              this.router.navigateByUrl(returnUrl);
-            }
+            const returnUrl =
+              this.route.snapshot.queryParams["returnUrl"] || "/d-api-use";
+            this.router.navigateByUrl(returnUrl);
           }
         },
         error: error => {

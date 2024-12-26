@@ -42,72 +42,77 @@
     </p-toolbar>
 
     <!-- Table View -->
-    <div *ngIf="!isMobile">
-      <p-table
-        #dt
-        [value]="alarmGroups"
-        [rows]="10"
-        [paginator]="true"
-        [loading]="isLoadingalarmGroups"
-        [globalFilterFields]="['id', 'tag', 'endpoints', 'type', 'description']"
-        dataKey="id"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [showCurrentPageReport]="true"
-        responsiveLayout="scroll"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="id">
-              ID <p-sortIcon field="id"></p-sortIcon>
-            </th>
-            <th pSortableColumn="tag">
-              Tag <p-sortIcon field="tag"></p-sortIcon>
-            </th>
-            <th pSortableColumn="endpoints">
-              Endpoints <p-sortIcon field="endpoints"></p-sortIcon>
-            </th>
-            <th pSortableColumn="type">
-              Type <p-sortIcon field="type"></p-sortIcon>
-            </th>
-            <th pSortableColumn="description">
-              Description <p-sortIcon field="description"></p-sortIcon>
-            </th>
-            <th></th>
-          </tr>
-        </ng-template>
+    <p-table
+      #dt
+      [value]="alarmGroups"
+      [rows]="10"
+      [paginator]="true"
+      [loading]="isLoadingalarmGroups"
+      [globalFilterFields]="['id', 'tag', 'endpoints', 'type', 'description']"
+      dataKey="id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="tag">
+            Tag <p-sortIcon field="tag"></p-sortIcon>
+          </th>
+          <th pSortableColumn="endpoints">
+            Endpoints <p-sortIcon field="endpoints"></p-sortIcon>
+          </th>
+          <th pSortableColumn="type">
+            Type <p-sortIcon field="type"></p-sortIcon>
+          </th>
+          <th pSortableColumn="description">
+            Description <p-sortIcon field="description"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
 
-        <ng-template pTemplate="body" let-group>
-          <tr>
-            <td>{{ group.id }}</td>
-            <td>{{ group.tag }}</td>
-            <td>{{ group.endpoints }}</td>
-            <td>{{ group.type }}</td>
-            <td>{{ group.description }}</td>
-            <td style="text-align: center;">
-              <p-menu
-                #menu
-                [popup]="true"
-                [model]="itemsAction"
-                appendTo="body"
-              ></p-menu>
-              <button
-                pButton
-                type="text"
-                (click)="openMenuWithItems(group, $event, menu)"
-                icon="pi pi-ellipsis-h"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
+      <ng-template pTemplate="body" let-group>
+        <tr>
+          <td *ngIf="!isMobile">{{ group.id }}</td>
+          <td *ngIf="isMobile">ID: {{ group.id }}</td>
 
-        <ng-template pTemplate="summary">
-          <div>Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.</div>
-        </ng-template>
-      </p-table>
-    </div>
+          <td *ngIf="!isMobile">{{ group.tag }}</td>
+          <td *ngIf="isMobile">Tag: {{ group.tag }}</td>
+
+          <td *ngIf="!isMobile">{{ group.endpoints }}</td>
+          <td *ngIf="isMobile">Endpoints: {{ group.endpoints }}</td>
+
+          <td *ngIf="!isMobile">{{ group.type }}</td>
+          <td *ngIf="isMobile">Type: {{ group.type }}</td>
+
+          <td *ngIf="!isMobile">{{ group.description }}</td>
+          <td *ngIf="isMobile">Description: {{ group.description }}</td>
+
+          <td style="text-align: center;">
+            <p-menu
+              #menu
+              [popup]="true"
+              [model]="itemsAction"
+              appendTo="body"
+            ></p-menu>
+            <button
+              pButton
+              type="text"
+              (click)="openMenuWithItems(group, $event, menu)"
+              icon="pi pi-ellipsis-h"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="summary">
+        <div>Total {{ alarmGroups ? alarmGroups.length : 0 }} groups.</div>
+      </ng-template>
+    </p-table>
 
     <!-- Mobile Card View -->
-    <div *ngIf="isMobile">
+    <!-- <div *ngIf="isMobile">
       <div *ngFor="let group of alarmGroups" class="mobile-card">
         <p><strong>ID:</strong> {{ group.id }}</p>
         <p><strong>Tag:</strong> {{ group.tag }}</p>
@@ -129,7 +134,7 @@
           ></button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 <p-dialog

@@ -195,7 +195,8 @@ export class DApiApproveComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < 1018;
+    console.log(this.isMobile);
   }
 
   filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง

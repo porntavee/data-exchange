@@ -299,6 +299,7 @@ export class DApiUseComponent implements OnInit {
   apiSubscriptions: Subscription[] = [];
   userGroupCheck: any;
   isMobile: boolean;
+  searchText: any;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -536,7 +537,21 @@ export class DApiUseComponent implements OnInit {
   }
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < 1021;
+  }
+
+  getFilteredGroups() {
+    console.log(this.searchText);
+
+    if (!this.searchText) {
+      return this.alarmGroups; // If no search text, return all groups
+    }
+
+    return this.alarmGroups.filter(
+      group =>
+        group.tag.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        group.endpoints.toLowerCase().includes(this.searchText.toLowerCase())
+    );
   }
 
   tryExecute2(
