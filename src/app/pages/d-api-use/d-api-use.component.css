@@ -35,6 +35,15 @@
   border: 1px solid #061949;
 }
 
+@media screen and (max-width: 960px) {
+  #pr_id_33 .p-datatable-tbody > tr > td {
+    display: flex;
+    width: 100% !important;
+    align-items: center;
+    justify-content: flex-start !important;
+  }
+}
+
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #061949 !important;
   color: white;

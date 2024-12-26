@@ -80,7 +80,7 @@ export class UserComponent implements OnInit {
     private titleService: Title,
     public themeService: ThemeService
   ) {
-    this.titleService.setTitle("SED-User Manage");
+    this.titleService.setTitle("User Management");
 
     this.exportRangOption = [
       { name: "Weekly", value: "Weekly" },

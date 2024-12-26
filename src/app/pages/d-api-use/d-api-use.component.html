@@ -179,9 +179,13 @@
                 {{ group.status_description }}
               </div>
             </td>
-            <td *ngIf="isMobile">
+            <td
+              *ngIf="isMobile"
+              style="display: flex; justify-content: flex-start;"
+            >
               Status:
               <div
+                style="margin-left:8px"
                 [ngClass]="{
                   'bg-success text-white':
                     group.status_description === 'เปิดใช้งาน',

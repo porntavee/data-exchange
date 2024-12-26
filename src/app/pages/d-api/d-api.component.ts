@@ -343,7 +343,7 @@ export class DApiComponent implements OnInit {
   methods: string = "";
 
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < 961;
   }
 
   // ฟังก์ชันสำหรับเพิ่ม/ลบ Method ที่ถูกเลือก

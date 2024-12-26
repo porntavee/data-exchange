@@ -150,7 +150,7 @@ export class ServicestatusComponent implements OnInit {
       "--text-color-secondary"
     );
     const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-    this.titleService.setTitle("SED-Service status");
+    this.titleService.setTitle("Service Status");
     this.themeService.currentpage("/servicestatus");
     this.gridOptions = this.initialGridOptions;
 
