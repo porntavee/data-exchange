@@ -300,6 +300,7 @@ export class DApiUseComponent implements OnInit {
   userGroupCheck: any;
   isMobile: boolean;
   searchText: any;
+  today: Date = new Date(); // วันปัจจุบัน
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -897,6 +898,7 @@ export class DApiUseComponent implements OnInit {
     console.log(param);
     this.requestDialog = true;
     this.requestDetails = "";
+    this.selectedDuration = "0";
     this.api_id = param.api_id;
   }
 

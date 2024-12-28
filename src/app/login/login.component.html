@@ -1,4 +1,4 @@
-<div style="background-color:red">
+<div class="login-container" style="background-color: red;">
   <div
     class="login-background"
     [ngClass]="{
@@ -14,23 +14,19 @@
           'theme-saga-card': themeService.theme === 'saga-orange'
         }"
       >
-        <!-- <div class="col text-center p-5 pb-0">
-          <img src="assets/img/SED-logo.png">
-        </div> -->
         <div class="card-body">
-          <div class="flex-container" style="margin-top:-75px">
+          <!-- Logo -->
+          <div class="flex-container text-center">
             <img
               src="assets/img/data-exchange.png"
               alt="M Insight"
-              class="centered-image"
+              class="centered-image img-fluid"
+              style="max-width: 150px;"
             />
           </div>
 
-          <form
-            [formGroup]="form"
-            (ngSubmit)="onLogin()"
-            style="margin-top:-120px"
-          >
+          <!-- Login Form -->
+          <form [formGroup]="form" (ngSubmit)="onLogin()" class="mt-3">
             <div class="form-group">
               <label for="username">Username</label>
               <input
@@ -74,103 +70,99 @@
                 <label for="binary">Show Password</label>
               </div>
             </div>
-            <div class="form-group">
-              <div class="col text-center">
-                <button
-                  [disabled]="loading"
-                  class="btn btn-default"
-                  style="background-color: #677F9A;"
-                >
-                  <span
-                    *ngIf="loading"
-                    class="spinner-border spinner-border-sm mr-1"
-                  ></span>
-                  Login
-                </button>
-              </div>
+            <div class="form-group text-center">
+              <button [disabled]="loading" class="btn btn-primary w-100">
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm mr-1"
+                ></span>
+                Login
+              </button>
             </div>
           </form>
-          <!-- <button pButton label="Sign up" (click)="openDialog()"></button> -->
-          <div class="flex-container">
-            <span (click)="openDialog()" class="link-like"
-              >สมัครสมาชิกใหม่</span
-            >
+
+          <!-- Signup Link -->
+          <div class="text-center mt-3">
+            <span (click)="openDialog()" class="link-like">
+              สมัครสมาชิกใหม่
+            </span>
           </div>
 
-          <!-- Dialog ของ PrimeNG -->
+          <!-- Signup Dialog -->
           <p-dialog
             header="สมัครสมาชิก"
             [(visible)]="displayDialog"
             [modal]="true"
             [closable]="true"
             (onHide)="closeDialog()"
-            [style]="{ width: '650px' }"
+            [style]="{ width: '90%' }"
+            [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
           >
             <div>
               <form (ngSubmit)="createUser()">
-                <div class="p-field">
+                <div class="form-group">
                   <label for="firstName">First Name:</label>
                   <input
                     pInputText
                     id="firstName"
                     name="firstName"
                     [(ngModel)]="userData.firstname"
+                    class="form-control"
                     required
                   />
                 </div>
-
-                <div class="p-field">
+                <div class="form-group">
                   <label for="lastName">Last Name:</label>
                   <input
                     pInputText
                     id="lastName"
                     name="lastName"
                     [(ngModel)]="userData.lastname"
+                    class="form-control"
                     required
                   />
                 </div>
-
-                <div class="p-field">
+                <div class="form-group">
                   <label for="username">Username:</label>
                   <input
                     pInputText
                     id="username"
                     name="username"
                     [(ngModel)]="userData.username"
+                    class="form-control"
                     required
                   />
                 </div>
-
-                <div class="p-field">
+                <div class="form-group">
                   <label for="password">Password:</label>
                   <input
                     pInputText
                     id="password"
                     name="password"
                     [(ngModel)]="userData.password"
+                    class="form-control"
                     type="password"
                     required
                   />
                 </div>
-
-                <div class="p-field">
+                <div class="form-group">
                   <label for="confirmPassword">Confirm Password:</label>
                   <input
                     pInputText
                     id="confirmPassword"
                     name="confirmPassword"
                     [(ngModel)]="userData.confirmPassword"
+                    class="form-control"
                     type="password"
                     required
                   />
                 </div>
-
-                <div class="p-field">
+                <div class="form-group text-center">
                   <button
                     pButton
                     label="Submit"
                     type="submit"
-                    class="p-mt-2"
+                    class="btn btn-success w-100"
                   ></button>
                 </div>
               </form>
@@ -179,215 +171,6 @@
         </div>
       </div>
     </div>
-
-    <div>
-      <p-toast [style]="{ marginTop: '80px' }"></p-toast>
-
-      <div *ngIf="firstTimeLogin">
-        <div
-          class="card card-container"
-          [ngClass]="{
-            'theme-arya-card': themeService.theme === 'arya-orange',
-            'theme-saga-card': themeService.theme === 'saga-orange'
-          }"
-        >
-          <div class="col text-center p-5 pb-0">
-            <img src="assets/img/SED-logo.png" />
-          </div>
-          <div class="card-body">
-            <div class="form-group">
-              <div
-                style="font-weight: bold; display: flex; justify-content: center; margin-bottom:16px;"
-                [ngClass]="{
-                  'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'
-                }"
-              >
-                Please fill your phone number
-              </div>
-              <div class="container">
-                <input
-                  type="text"
-                  pInputText
-                  pKeyFilter="int"
-                  placeholder="Phonenumber"
-                  [(ngModel)]="phoneNumber"
-                  maxlength="10"
-                  style="width:100%"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div class="col text-center">
-                <button
-                  class="btn btn-default"
-                  style="background-color: #ef8157;"
-                  (click)="requestOTP()"
-                  [disabled]="phoneNumber.length !== 10"
-                >
-                  REQUEST OTP
-                </button>
-                <!-- <img *ngIf="isGenQRCode"
-                src='https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=otpauth%3A%2F%2Ftotp%2FEDIMS-WEB%3Fsecret%3DIVCESTKT%26issuer%3DEDIMS'
-                border=0> -->
-                <!-- <img *ngIf="isGenQRCode" src="data:image/png;base64,{{QRBase64}}"> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <p-toast [style]="{ marginTop: '80px' }"></p-toast>
-      <div *ngIf="otpState">
-        <div
-          class="card card-container"
-          [ngClass]="{
-            'theme-arya-card': themeService.theme === 'arya-orange',
-            'theme-saga-card': themeService.theme === 'saga-orange'
-          }"
-        >
-          <div class="col text-center p-5 pb-0">
-            <img src="assets/img/SED-logo.png" />
-          </div>
-          <div class="card-body">
-            <div class="form-group">
-              <div
-                style="font-weight: bold; display: flex; justify-content: center;"
-                [ngClass]="{
-                  'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'
-                }"
-              >
-                Please fill 6 digit from OTP
-              </div>
-              <label
-                style="display: flex; justify-content: center; align-items: center;"
-                >We already send OTP to your phone number</label
-              >
-              <div
-                style="display: flex; justify-content: center; align-items: center;"
-                [ngClass]="{
-                  'theme-arya-text': themeService.theme === 'arya-orange',
-                  'theme-saga-text': themeService.theme === 'saga-orange'
-                }"
-              >
-                Ref: {{ this.refCode }}
-              </div>
-              <div
-                class="container"
-                style="display: flex; justify-content: center; align-items: center;"
-              >
-                <!-- <p-inputNumber [(ngModel)]="otp_input" inputId="withoutgrouping" [useGrouping]="false"
-                  (onInput)="onInputChanged($event)">
-                </p-inputNumber> -->
-                <input
-                  pInputText
-                  pKeyFilter="int"
-                  placeholder="OTP Code"
-                  [(ngModel)]="otp_input"
-                  maxlength="6"
-                />
-              </div>
-            </div>
-            <div>
-              <div class="col text-center">
-                <button
-                  class="btn btn-default"
-                  style="background-color: #ef8157;"
-                  (click)="onSubmitOTP(otp)"
-                >
-                  Verify
-                </button>
-                <!-- <img *ngIf="isGenQRCode" src="data:image/png;base64,{{QRBase64}}"> -->
-                <div
-                  style="display: flex; justify-content: center; align-items: center;"
-                  [ngClass]="{
-                    'theme-arya-text': themeService.theme === 'arya-orange',
-                    'theme-saga-text': themeService.theme === 'saga-orange'
-                  }"
-                  (click)="resendOTP(event)"
-                  [disabled]="countdownnumber > 0"
-                >
-                  Resend {{ countdownnumber }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="twoFAState">
-      <div
-        class="card card-container"
-        [ngClass]="{
-          'theme-arya-card': themeService.theme === 'arya-orange',
-          'theme-saga-card': themeService.theme === 'saga-orange'
-        }"
-      >
-        <div class="col text-center p-5 pb-0">
-          <img src="assets/img/SED-logo.png" />
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <div
-              style="font-weight: bold; display: flex; justify-content: center;"
-              [ngClass]="{
-                'theme-arya-text': themeService.theme === 'arya-orange',
-                'theme-saga-text': themeService.theme === 'saga-orange'
-              }"
-            >
-              Please fill 6 digit from 2FA
-            </div>
-            <label
-              style="display: flex; justify-content: center; align-items: center;"
-              >Two-factor authentication</label
-            >
-            <div class="container">
-              <div
-                class="container"
-                style="display: flex; justify-content: center; align-items: center;"
-              >
-                <input
-                  pInputText
-                  pKeyFilter="int"
-                  placeholder="Two-factor code"
-                  [(ngModel)]="twoFA_input"
-                  maxlength="6"
-                />
-                <!-- <p-inputNumber [(ngModel)]="twoFA_input" mode="decimal" inputId="withoutgrouping"
-                    [useGrouping]="false" maxlength="6">
-                  </p-inputNumber> -->
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div class="col text-center">
-              <form
-                (ngSubmit)="onSubmit2FA()"
-                (keydown)="onFormKeyDown($event)"
-              >
-                <button
-                  type="submit"
-                  class="btn btn-default"
-                  style="background-color: #ef8157;"
-                >
-                  Verify
-                </button>
-              </form>
-
-              <img
-                *ngIf="isGenQRCode"
-                src="data:image/png;base64,{{ QRBase64 }}"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <p-toast [style]="{ marginTop: '80px' }"></p-toast>
   </div>
 </div>
