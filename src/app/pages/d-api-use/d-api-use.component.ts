@@ -918,7 +918,10 @@ export class DApiUseComponent implements OnInit {
     console.log("API ID:", this.api_id);
     console.log("Request Details:", this.requestDetails);
 
-    this.selectedDuration = "0";
+    this.selectedDuration = this.durationOptions.find(
+      // data => data.value === "15"
+      data => data.value === param.duration
+    );
     console.log("Selected Duration:", this.selectedDuration);
 
     this.fromDate = this.convertToDate(param.from_at);
