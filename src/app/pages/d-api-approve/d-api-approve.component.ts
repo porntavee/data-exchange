@@ -196,13 +196,10 @@ export class DApiApproveComponent implements OnInit {
 
   checkScreenSize() {
     this.isMobile = window.innerWidth < 961;
-    console.log(this.isMobile);
   }
 
   filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง
   readToken() {
-    // console.log(this.selectedValues)
-
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
 
@@ -210,7 +207,6 @@ export class DApiApproveComponent implements OnInit {
     //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        console.log("Received data:", data.data);
         //debugger
         this.tokenList = data.data;
 
@@ -227,15 +223,12 @@ export class DApiApproveComponent implements OnInit {
         // เริ่มต้น: ใช้ข้อมูลทั้งหมด
         this.filteredList = [...this.tokenList];
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
 
   approve() {
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata);
 
     const formatDate = (date: Date | null): string =>
       date
@@ -265,19 +258,15 @@ export class DApiApproveComponent implements OnInit {
       })
       .subscribe(
         data => {
-          console.log("Received data:", data.data);
           this.approveDialog = false;
           this.readToken();
         },
-        error => {
-          console.error("Error fetching polygon data:", error);
-        }
+        error => {}
       );
   }
 
   reject() {
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata);
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -305,19 +294,15 @@ export class DApiApproveComponent implements OnInit {
       })
       .subscribe(
         data => {
-          console.log("Received data:", data.data);
           this.approveDialog = false;
           this.readToken();
         },
-        error => {
-          console.error("Error fetching polygon data:", error);
-        }
+        error => {}
       );
   }
 
   close() {
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(userdata);
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -345,13 +330,10 @@ export class DApiApproveComponent implements OnInit {
       })
       .subscribe(
         data => {
-          console.log("Received data:", data.data);
           this.approveDialog = false;
           this.readToken();
         },
-        error => {
-          console.error("Error fetching polygon data:", error);
-        }
+        error => {}
       );
   }
 
@@ -376,9 +358,6 @@ export class DApiApproveComponent implements OnInit {
 
   toggleStatus(status: string, group: any) {
     if (status === "ตรวจสอบรายละเอียด") {
-      console.log(
-        `เรียกใช้งาน approve สำหรับ ${group.user_id} ด้วย route_id ${group.route_id}`
-      );
       //debugger
       // this.approve(group.user_id, group.route_id);
       this.requestDetails = group.details;
@@ -393,16 +372,13 @@ export class DApiApproveComponent implements OnInit {
       this.fromDate = this.convertToDate(group.from_at);
       this.toDate = this.convertToDate(group.to_at);
       this.fromAdminDate = this.convertToDate(group.from_at);
-      console.log(this.fromAdminDate);
       this.toAdminDate = this.convertToDate(group.to_at);
       this.approveDialog = true;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
-      console.log(this.user_id, this.route_id);
       this.close();
     } else {
-      console.log(`ยังไม่มีฟังก์ชันสำหรับ ${status} ณ ตอนนี้`);
       // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
     }
   }
@@ -475,8 +451,6 @@ export class DApiApproveComponent implements OnInit {
     if (AlarmGroup.email != null || AlarmGroup.email != "") {
       this.emailsendline = AlarmGroup.email;
     }
-    // console.log(AlarmGroup.flag)
-    // console.log(AlarmGroup)
     this.lineGroupService
       .getGroupMessageinfo(this.editalarmGroups1.group_id)
       .subscribe({
@@ -497,7 +471,6 @@ export class DApiApproveComponent implements OnInit {
   }
   changecheck(event) {
     this.alarmGroup.flag = event.checked;
-    // console.log(event);
   }
   hideDialog() {
     this.alarmGroupDialog = false;
@@ -528,7 +501,6 @@ export class DApiApproveComponent implements OnInit {
     ];
   }
   createGroup() {
-    // console.log(this.selectedValues)
     if (
       this.alarmGroup.group_name != undefined &&
       this.alarmGroup.group_description != undefined
@@ -631,7 +603,6 @@ export class DApiApproveComponent implements OnInit {
       .lineGroupChangeStatus(groupdata.id, event.checked)
       .subscribe(result => {
         this.submitted = false;
-        //console.log("success");
       });
   }
 
@@ -805,8 +776,6 @@ export class DApiApproveComponent implements OnInit {
 
   // ฟังก์ชันสำหรับบันทึกข้อมูล
   saveRequest(): void {
-    console.log("รายละเอียด:", this.requestDetails);
-    console.log("ระยะเวลาที่เลือก:", this.selectedDuration);
     this.approveDialog = false; // ปิด Dialog หลังจากบันทึก
   }
 }

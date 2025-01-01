@@ -122,11 +122,8 @@ export class ServicestatusComponent implements OnInit {
     this.ServicestatusService.getBackup().subscribe(
       data => {
         this.products = data.data; // อัปเดตข้อมูลใน products
-        console.log(data);
       },
-      error => {
-        console.error("Error fetching backup data", error); // จัดการข้อผิดพลาด
-      }
+      error => {}
     );
     this.checkScreenSize();
     window.addEventListener("resize", this.checkScreenSize.bind(this));
@@ -210,7 +207,6 @@ export class ServicestatusComponent implements OnInit {
 
   onOptionChange(event: any) {
     this.selectedOption = event.value; // อัปเดตค่าที่เลือก
-    console.log("Selected option:", event.value);
     // คุณสามารถดำเนินการอื่น ๆ ตามค่าที่เลือกได้
   }
 
@@ -364,7 +360,6 @@ export class ServicestatusComponent implements OnInit {
 
   drawHeaderSparkline() {
     this.cdr.detectChanges();
-    console.log(this.tabs);
 
     this.tabs.forEach((tab, index) => {
       // เรียงข้อมูลตาม timestamp (ค่าที่เก็บไว้ใน point[0])
@@ -571,10 +566,8 @@ export class ServicestatusComponent implements OnInit {
             })),
             isOpen: false
           }));
-          console.log(linuxTabs);
           tabs.push(...linuxTabs); // เพิ่มข้อมูล Linux ใน tabs
         } else if (linuxResult.status === "rejected") {
-          console.error("Error fetching Linux data:", linuxResult.reason);
         }
 
         // ตรวจสอบข้อมูล Windows
@@ -616,7 +609,6 @@ export class ServicestatusComponent implements OnInit {
           }));
           tabs.push(...windowTabs); // เพิ่มข้อมูล Windows ใน tabs
         } else if (windowResult.status === "rejected") {
-          console.error("Error fetching Windows data:", windowResult.reason);
         }
 
         // ตรวจสอบว่ามีข้อมูลใดถูกเพิ่มเข้ามาหรือไม่
@@ -624,13 +616,11 @@ export class ServicestatusComponent implements OnInit {
           this.addOrUpdateTabs(tabs);
         } else {
           this.isNodata = true; // กำหนดว่าไม่มีข้อมูล
-          console.error("No valid data received from Linux or Windows.");
         }
 
         this.isLoading = false; // ซ่อน spinner หลังจากโหลดข้อมูลเสร็จ
       })
       .catch(error => {
-        console.error("Error fetching data:", error);
         // this.isNodata = true; // กำหนดว่าไม่มีข้อมูลเมื่อเกิดข้อผิดพลาด
         this.isLoading = false; // ซ่อน spinner เมื่อเกิดข้อผิดพลาด
       });

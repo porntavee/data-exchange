@@ -253,7 +253,6 @@ export class DApiComponent implements OnInit {
     if (this.availableMethods && this.availableMethods.length > 0) {
       this.selectedValues = [this.availableMethods[0]];
     } else {
-      console.warn("No available methods found.");
     }
   }
   editline(AlarmGroup: alarmGroup) {
@@ -274,8 +273,7 @@ export class DApiComponent implements OnInit {
     if (AlarmGroup.email != null || AlarmGroup.email != "") {
       this.emailsendline = AlarmGroup.email;
     }
-    // console.log(AlarmGroup.flag)
-    // console.log(AlarmGroup)
+
     this.lineGroupService
       .getGroupMessageinfo(this.editalarmGroups1.group_id)
       .subscribe({
@@ -294,10 +292,7 @@ export class DApiComponent implements OnInit {
         }
       });
   }
-  changecheck(event) {
-    // this.alarmGroup.flag = event.checked;
-    // console.log(event);
-  }
+  changecheck(event) {}
   hideDialog() {
     this.alarmGroupDialog = false;
     this.submitted = false;
@@ -309,18 +304,6 @@ export class DApiComponent implements OnInit {
     this.submitted = false;
   }
   ngOnInit() {
-    // this.alarmGroups = [{
-    //   id: 1,
-    //   tag: 'Trafic Daily',
-    //   endpoints: '/trafic_daily',
-    //   methods: 'POST'
-    // },
-    // {
-    //   id: 2,
-    //   tag: 'Trafic Monthly',
-    //   endpoints: '/trafic_monthly',
-    //   methods: 'POST,GET'
-    // }]
     this.checkScreenSize();
     window.addEventListener("resize", this.checkScreenSize.bind(this));
     this.readRoute();
@@ -359,7 +342,6 @@ export class DApiComponent implements OnInit {
 
     // อัปเดตข้อมูลในรูปแบบ JSON String
     this.alarmGroup.methods = JSON.stringify(this.selectedMethods);
-    // console.log(this.alarmGroup.methods); // Debug ตรวจสอบค่า
   }
   openMenuWithItems(group: any, event: Event, menu: any) {
     this.menuVlue(group); // กำหนดค่าหรืออัปเดต itemsAction
@@ -384,12 +366,10 @@ export class DApiComponent implements OnInit {
 
   viewData(group: any) {
     // ฟังก์ชันสำหรับดูข้อมูล
-    console.log("Viewing data for group:", group);
   }
 
   editData(group: any) {
     // ฟังก์ชันสำหรับแก้ไขข้อมูล
-    console.log("Editing data for group:", group);
   }
 
   reboot() {
@@ -398,12 +378,9 @@ export class DApiComponent implements OnInit {
       "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        // console.log("Received data:", data);
         // //debugger
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
   tryExecute() {
@@ -418,13 +395,10 @@ export class DApiComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        // console.log("Received data:", data);
         this.jsonData = data.data;
         // //debugger
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
 
@@ -443,15 +417,6 @@ export class DApiComponent implements OnInit {
 
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        console.log(
-          "Received data for group:",
-          param,
-          "Data:",
-          data.data,
-          "Status:",
-          data.status
-        );
-
         if (!skipDialog) {
           // เปิด Dialog เฉพาะเมื่อจำเป็น
           this.jsonData = data.data;
@@ -479,8 +444,6 @@ export class DApiComponent implements OnInit {
   }
 
   createRoute() {
-    // console.log(this.selectedValues)
-
     let model = {
       id: 0,
       tag: this.alarmGroup.tag,
@@ -524,13 +487,10 @@ export class DApiComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
-        // console.log("Received data:", data);
         this.hideDialog();
         this.readRoute();
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
 
@@ -548,9 +508,7 @@ export class DApiComponent implements OnInit {
           // this.tryExecute2(mockEvent, group, true); // skipDialog = true
         });
       },
-      error => {
-        console.error("Error fetching data:", error);
-      }
+      error => {}
     );
   }
 
@@ -571,13 +529,10 @@ export class DApiComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read/' + param.id;
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        // console.log("Received data:", data.data);
         this.openDailog();
         this.alarmGroup = data.data;
       },
-      error => {
-        console.error("Error fetching polygon data:", error);
-      }
+      error => {}
     );
   }
 
@@ -601,10 +556,7 @@ export class DApiComponent implements OnInit {
               alert(`Error: ${response.message}`);
             }
           },
-          error => {
-            console.error("Error deleting route:", error);
-            alert("An error occurred while deleting the route.");
-          }
+          error => {}
         );
     }
   }
@@ -655,17 +607,12 @@ export class DApiComponent implements OnInit {
     this.http.put<any>(`${apiUrl}`, model).subscribe(
       response => {
         if (response.status === 200) {
-          console.log("Update successful:", response.message);
-
           this.hideDialog();
           this.readRoute();
         } else {
-          console.warn("Update failed:", response.message);
         }
       },
-      error => {
-        console.error("Error updating route:", error);
-      }
+      error => {}
     );
   }
   refresh(): void {
@@ -677,7 +624,6 @@ export class DApiComponent implements OnInit {
       .lineGroupChangeStatus(groupdata.id, event.checked)
       .subscribe(result => {
         this.submitted = false;
-        //console.log("success");
       });
   }
 

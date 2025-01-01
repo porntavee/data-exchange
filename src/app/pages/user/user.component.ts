@@ -110,9 +110,7 @@ export class UserComponent implements OnInit {
     this.maxDate = new Date();
     this.userService.getUser().subscribe({
       next: data => {
-        console.log(data.data);
         this.users = data.data;
-        console.log(this.users);
       },
       error: error => {
         if (error.status == 401) {
@@ -202,7 +200,6 @@ export class UserComponent implements OnInit {
 
   openNew() {
     this.user = {};
-    // console.log(this.user);
     this.submitted = false;
     this.userDialog = true;
     this.user.password = "";
@@ -257,12 +254,10 @@ export class UserComponent implements OnInit {
     this.isValid = false;
     this.invinvalid3 = "";
     this.dailog_header = "Edit user";
-    // console.log(user)
     var index = this.zonelist.findIndex(
       data => data.zone_name == user.zone_name
     );
     this.selectedZone = this.zonelist[index];
-    // console.log(this.zonelist[index])
     if (user.role == monitor) {
       this.selectedRole = this.roles[0];
     } else if (user.role == admin) {
@@ -320,17 +315,10 @@ export class UserComponent implements OnInit {
     this.invinvalid3 = "";
   }
   onChangeRole(event) {
-    //console.log('event value :' + event.value.name);
     this.user.role = event.value.name;
   }
   onChangeZone(event) {
     this.user.zone = event.value.id;
-    // var index = this.zonelist.findIndex(data => data.zone_name == event.value.zone_name)
-    // var list = this.zonelist[index]
-    // this.user.zone = this.zonelist[index].id;
-    // console.log(list);
-    // console.log(event.value);
-    // this.user.role = event.value.name;
   }
   saveUser() {
     if (
@@ -441,9 +429,7 @@ export class UserComponent implements OnInit {
       //   this.invalidUserName = "";
       this.invalidPassword = "";
       this.invalidRepeatPassword = "";
-      // console.log(this.user.password)
       if (this.user.password != "") {
-        // console.log("hi")
         if (!this.user.password.match(this.user_password)) {
           this.submitted = false;
           this.messageService.add({
@@ -468,7 +454,6 @@ export class UserComponent implements OnInit {
                       this.userService.getUser().subscribe({
                         next: data => {
                           this.users = data.result;
-                          console.log(this.users);
                         },
                         error: error => {
                           if (error.status == 401) {
@@ -629,28 +614,16 @@ export class UserComponent implements OnInit {
 
   onSelectRang(event) {
     if (event.option.value == this.exportRangValue) {
-      //console.log(this.exportRangValue);
       this.exportRangValue = [];
       this.exportRangValue = null;
-      //console.log(this.exportRangValue);
     }
     this.dateTo = null;
     this.dateForm = null;
     this.exportRangValue = [];
     this.exportRangValue = null;
-    //console.log(event);
-    //console.log(this.exportRangValue);
   }
 
   onInputCalendar(event) {
-    // //console.log("waaaweeeee");
-    //this.exportRangOption = [];
-    // this.exportRangOption = [
-    //     { "name": "Weekly", "value": "Weekly" },
-    //     { "name": "Monthly", "value": "Monthly" },
-    //     { "name": "Yearly", "value": "Yearly" }
-    // ]
-    //console.log(event);
     this.exportRangValue = null;
   }
   exportToExcel() {

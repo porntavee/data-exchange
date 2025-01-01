@@ -135,9 +135,7 @@ export class DApiLogComponent implements OnInit {
 
   checkScreenSize() {
     this.isMobile = window.innerWidth < 960;
-    console.log(window.innerWidth);
     this.changeDetection.detectChanges(); // อัพเดตการแสดงผล
-    console.log(this.isMobile);
   }
 
   openMenuWithItems(group: any, event: Event, menu: any) {
@@ -169,12 +167,10 @@ export class DApiLogComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        console.log("Received data:", data.data);
 
         this.tokenList = data.data;
       },
       error => {
-        console.error("Error fetching polygon data:", error);
       }
     );
   }
@@ -191,12 +187,10 @@ export class DApiLogComponent implements OnInit {
       })
       .subscribe(
         data => {
-          console.log("Received data:", data.data);
           this.logList = data.data;
           this.chartOptions5_1 = this.getMonthlyChartOptions(this.logList);
         },
         error => {
-          console.error("Error fetching polygon data:", error);
         }
       );
   }
@@ -209,12 +203,10 @@ export class DApiLogComponent implements OnInit {
       .post<any>(apiUrl, { year: this.selectedYear, token: this.token })
       .subscribe(
         data => {
-          console.log("Received data:", data.data);
           this.logList = data.data;
           this.chartOptions5_1 = this.getYearlyChartOptions(this.logList);
         },
         error => {
-          console.error("Error fetching polygon data:", error);
         }
       );
   }

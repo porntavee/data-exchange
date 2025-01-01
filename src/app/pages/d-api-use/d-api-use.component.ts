@@ -335,28 +335,21 @@ export class DApiUseComponent implements OnInit {
   }
 
   getUserGroup(userdata, roleType) {
-    console.log("User Data:", userdata);
-    console.log("Role Types:", roleType);
-
     // หา roleType ที่ตรงกับ cctv_group ของ userdata
     const matchedRole = roleType.find(role => role.id === userdata.cctv_group);
-    console.log("Matched Role:", matchedRole);
 
     if (matchedRole) {
       const name = matchedRole.name;
-      console.log("Matched Role Name:", name);
 
       // เงื่อนไข VIP, กู้ภัย, หมวด
       if (["VIP", "กู้ภัย", "หมวด"].some(term => name.includes(term))) {
         this.userGroupCheck = "DOH";
-        console.log("Group: DOH");
         return;
       }
 
       // เงื่อนไข ตำรวจ
       if (name.includes("ตำรวจ")) {
         this.userGroupCheck = "POL";
-        console.log("Group: POL");
         return;
       }
     }
@@ -370,24 +363,20 @@ export class DApiUseComponent implements OnInit {
       "sk",
       "minsight"
     ];
-    console.log("Checking special users:", specialUsers);
 
     if (specialUsers.includes(userdata.user_name)) {
       this.userGroupCheck = "develop";
-      console.log("Group: develop");
       return;
     }
 
     // กรณีที่ไม่เข้าเงื่อนไขใด ๆ
     this.userGroupCheck = "general";
-    console.log("Group: general");
   }
 
   // หา roleType ที่ตรงกับ cctv_group ของ userdata
 
   setSelectedGroup(group: any) {
     this.selectedGroups = group;
-    console.log("Selected Group:", this.selectedGroups);
   }
 
   actionItem(AlarmGroup: alarmGroup) {
@@ -425,7 +414,6 @@ export class DApiUseComponent implements OnInit {
   viewItem(param) {
     this.viewDialog = true;
     this.api_id = param.route_id;
-    console.log(this.api_id);
     this.requestDetails = param.details;
     // this.selectedDuration = { value: param.duration };
     // var index = this.durationOptions.findIndex(
@@ -434,7 +422,6 @@ export class DApiUseComponent implements OnInit {
     // this.selectedDuration = this.durationOptions[index];
     this.selectedDuration = "0";
     // แปลง from_at และ to_at เป็น Date
-    console.log("Hi2222");
     this.fromDate = this.convertToDate(param.from_at);
     this.toDate = this.convertToDate(param.to_at);
   }
@@ -889,7 +876,6 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     //debugger
-    console.log("Hi");
     this.requestDialog = true;
     this.requestDetails = "";
     this.selectedDuration = "0";
@@ -900,11 +886,9 @@ export class DApiUseComponent implements OnInit {
 
   openEditDialog(param) {
     if (!param) {
-      console.error("No data passed to the dialog.");
       return;
     }
 
-    console.log("edit");
     this.requestDialog = true;
     this.toDate = undefined;
     this.fromDate = undefined;
@@ -919,9 +903,6 @@ export class DApiUseComponent implements OnInit {
       ? this.convertToDate(param.from_at)
       : undefined;
     this.toDate = param.to_at ? this.convertToDate(param.to_at) : undefined;
-
-    console.log("fromDate:", this.fromDate);
-    console.log("toDate:", this.toDate);
   }
 
   checkIfMobile(): void {
