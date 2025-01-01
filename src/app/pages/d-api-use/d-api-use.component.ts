@@ -77,6 +77,9 @@ export interface editGroup {
 })
 export class DApiUseComponent implements OnInit {
   userGroup: any;
+  isMobile: boolean = false;
+  descriptionDialogVisible: boolean = false;
+  selectedDescription: string | null = null;
   roleType = [
     {
       id: 1,
@@ -298,9 +301,9 @@ export class DApiUseComponent implements OnInit {
   filteredGroups: routeAPI[];
   apiSubscriptions: Subscription[] = [];
   userGroupCheck: any;
-  isMobile: boolean;
   searchText: any;
   today: Date = new Date(); // วันปัจจุบัน
+  isReadOnly: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -431,6 +434,7 @@ export class DApiUseComponent implements OnInit {
     // this.selectedDuration = this.durationOptions[index];
     this.selectedDuration = "0";
     // แปลง from_at และ to_at เป็น Date
+    console.log("Hi2222");
     this.fromDate = this.convertToDate(param.from_at);
     this.toDate = this.convertToDate(param.to_at);
   }
@@ -516,6 +520,7 @@ export class DApiUseComponent implements OnInit {
   ngOnInit() {
     this.readToken();
     this.readRoute();
+    this.checkIfMobile();
     this.intervalId = setInterval(() => {
       this.readRoute();
     }, 5 * 60 * 1000);
@@ -542,7 +547,6 @@ export class DApiUseComponent implements OnInit {
   }
 
   getFilteredGroups() {
-    console.log(this.searchText);
     if (!this.searchText) {
       return this.alarmGroups; // If no search text, return all groups
     }
@@ -561,7 +565,6 @@ export class DApiUseComponent implements OnInit {
     index
   ): void {
     if (this.userGroupCheck !== "develop") {
-      console.log("Not allowed: userGroupCheck is not 'develop'");
       return; // ออกจากฟังก์ชันทันทีถ้าไม่ใช่
     }
     this.isLoadingalarmGroups = true;
@@ -675,7 +678,6 @@ export class DApiUseComponent implements OnInit {
         //   // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         // });
         this.tokenList = data.data;
-        // console.log(this.tokenList);
         // this.changeDetection.detectChanges();
       },
       error => {}
@@ -693,15 +695,7 @@ export class DApiUseComponent implements OnInit {
             .padStart(2, "0")}`
         : "";
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(
-      userdata["id"],
-      userdata["username"],
-      this.api_id,
-      this.requestDetails,
-      this.selectedDuration["value"],
-      formatDate(this.fromDate),
-      formatDate(this.toDate)
-    );
+
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     this.http
@@ -895,10 +889,12 @@ export class DApiUseComponent implements OnInit {
 
   openRequestDialog(param) {
     //debugger
-    console.log(param);
+    console.log("Hi");
     this.requestDialog = true;
     this.requestDetails = "";
     this.selectedDuration = "0";
+    this.fromDate = undefined;
+    this.toDate = undefined;
     this.api_id = param.api_id;
   }
 
@@ -908,24 +904,36 @@ export class DApiUseComponent implements OnInit {
       return;
     }
 
+    console.log("edit");
     this.requestDialog = true;
-
-    console.log("Received Param:", param);
+    this.toDate = undefined;
+    this.fromDate = undefined;
+    // ปลดล็อค readonly
+    this.isReadOnly = false;
 
     this.api_id = param.route_id;
     this.requestDetails = param.details;
-
-    console.log("API ID:", this.api_id);
-    console.log("Request Details:", this.requestDetails);
-
     this.selectedDuration = "0";
-    console.log("Selected Duration:", this.selectedDuration);
 
-    this.fromDate = this.convertToDate(param.from_at);
-    this.toDate = this.convertToDate(param.to_at);
+    this.fromDate = param.from_at
+      ? this.convertToDate(param.from_at)
+      : undefined;
+    this.toDate = param.to_at ? this.convertToDate(param.to_at) : undefined;
 
-    console.log("From Date:", this.fromDate);
-    console.log("To Date:", this.toDate);
+    console.log("fromDate:", this.fromDate);
+    console.log("toDate:", this.toDate);
+  }
+
+  checkIfMobile(): void {
+    this.isMobile = window.innerWidth <= 768; // ตรวจสอบว่าหน้าจอกว้าง <= 768px หรือไม่
+    window.addEventListener("resize", () => {
+      this.isMobile = window.innerWidth <= 768;
+    });
+  }
+
+  showDescription(description: string): void {
+    this.selectedDescription = description;
+    this.descriptionDialogVisible = true;
   }
 
   convertToDate(dateStr: string): Date | null {

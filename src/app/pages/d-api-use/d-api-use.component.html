@@ -1,6 +1,5 @@
 <p-toast></p-toast>
-<!-- <p-toolbar styleClass="p-mb-4">
-    </p-toolbar> -->
+
 <div class="col-12 card bgcards p-2" style="position: relative;">
   <div class="pt-4 pb-4">
     <p-toolbar styleClass="p-mb-4">
@@ -38,8 +37,9 @@
               *ngIf="group.description"
               class="position-absolute"
               style="top: 0; right: 0; margin: 0.5rem; cursor: pointer;"
-              pTooltip="{{ group.description }}"
+              [pTooltip]="!isMobile ? group.description : null"
               tooltipPosition="top"
+              (click)="isMobile && showDescription(group.description)"
             >
               <span
                 style="background-color: red; color: white; font-weight: bold; border-radius: 50%; padding: 0.4rem 0.8rem; font-size: 0.8rem;"
@@ -236,50 +236,6 @@
         </ng-template>
       </p-table>
     </div>
-
-    <!-- Mobile View -->
-    <!-- <div *ngIf="isMobile">
-      <div *ngFor="let group of tokenList" class="mobile-card">
-        <p><strong>ลำดับ:</strong> {{ group.row_number }}</p>
-        <p>
-          <strong>Status:</strong>
-          <span
-            class="badge"
-            [ngClass]="{
-              'bg-success text-white':
-                group.status_description === 'เปิดใช้งาน',
-              'bg-primary text-white':
-                group.status_description === 'รอตรวจสอบจากเจ้าหน้าที่',
-              'bg-danger text-white': group.status_description === 'ปฏิเสธ',
-              'bg-secondary text-white':
-                group.status_description === 'ปิดใช้งาน'
-            }"
-            >{{ group.status_description }}</span
-          >
-        </p>
-        <p><strong>Tag:</strong> {{ group.tag }}</p>
-        <p><strong>End Point:</strong> {{ group.endpoints }}</p>
-        <p><strong>API Key:</strong> {{ group.token }}</p>
-        <p>
-          <strong>Expires At:</strong>
-          {{ group.expires_at | date: "dd/MM/yyyy" }}
-        </p>
-        <div style="text-align: center;">
-          <p-menu
-            #menu
-            [popup]="true"
-            [model]="itemsAction"
-            appendTo="body"
-          ></p-menu>
-          <button
-            pButton
-            type="text"
-            (click)="setSelectedGroup(group); menu.toggle($event)"
-            icon="pi pi-ellipsis-h"
-          ></button>
-        </div>
-      </div>
-    </div> -->
   </div>
 </div>
 <p-dialog
@@ -392,14 +348,9 @@
                     </tr>
                   </ng-template>
                 </p-table>
-                <!-- <div class="col-12 pr-2" style="text-align: center; font-weight: bold; font-size: 2rem;"
-                            *ngIf="hasNoSearchResult">
-                            No seacrh result.
-                        </div> -->
               </div>
             </div>
           </div>
-          <!-- <input type="text"  pInputText id="symbol_name" [(ngModel)]="AlarmGroup.symbol_name" required autofocus disabled /> -->
         </div>
       </div>
     </div>
@@ -415,68 +366,6 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
 >
   <ng-template pTemplate="content">
-    <!-- <div class="col-12 justify-content-between flex">
-            <div class="row">
-
-                <input type="text" pInputText id="nameSearch" [(ngModel)]="nameSearch" autofocus (input)="nameInput()"
-                    class="nameSearch" placeholder="Search by Symbol Name" />
-
-                <input type="text" pInputText id="ipSearch" [(ngModel)]="ipSearch" (input)="ipInput()" class="ipSearch"
-                    placeholder="Search by IP Address" />
-
-                <button pButton pRipple label="Search" icon="pi pi-search" class="p-button ml-1 butSearch"
-                    (click)="searchSymbol()"></button>
-
-            </div>
-        </div> -->
-    <!-- <div class="col-12 col-sm-12 col-md-12 p-0">
-            <div class="row mx-0 mt-2">
-                <div class="col-12 pr-2">
-                    <p-table [value]="symbolData" responsiveLayout="scroll" scrollHeight="200px">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="text-align:center;" class="col-2 pl-0">
-                                    SYMBOL ID
-                                </th>
-                                <th class="col-4 pl-0">
-                                    SYMBOL Name
-                                </th>
-                                <th class="col-4 pl-0">
-                                    IP Address
-                                </th>
-                                <th class="col-2 pl-0">
-                                    Action
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" *ngIf="hasNoSearchResult; else otherField">
-                            <tr>
-                                <td colspan="4">No seacrh result.</td>
-                            </tr>
-                        </ng-template>
-                        <ng-template #otherField pTemplate="body" let-rowData>
-
-                            <tr>
-                                <td class="col-2 pl-0">{{rowData.SYMBOL_ID}}</td>
-                                <td class="col-4 pl-0">
-                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME1}}">{{rowData.SYMBOL_NAME1}}</div>
-                                </td>
-                                <td class="col-4 pl-0">
-                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME3}}">{{rowData.SYMBOL_NAME3}}</div>
-                                </td>
-                                <td class="col-2 pl-0">
-                                    <button pButton pRipple class="Newbuttd" (click)="addSymbol(rowData)"><i
-                                            class="pi pi-plus"></i></button>
-                                    <button pButton pRipple class="oldbut" (click)="addSymbol(rowData)">Add</button>
-                                </td>
-                            </tr>
-
-                        </ng-template>
-                    </p-table>
-               
-                </div>
-            </div>
-        </div> -->
     <div
       style="background-color: grey; width:100%; border-top: 1px dashed grey;"
     ></div>
@@ -582,12 +471,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div style="padding-top: 30px;">
-            <label for="email" style="font-weight: bold;">Email: </label>
-            <input type="text" pInputText id="email" [(ngModel)]="emailsendline" style="width: 50%; margin-left: 15px;"
-                placeholder="Optional" />
-        </div> -->
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
@@ -600,10 +483,6 @@
         [(ngModel)]="selectedValues"
       ></p-checkbox>
       &nbsp; &nbsp;
-      <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
-                (onChange)="changecheck($event)" [(ngModel)]="selectedValues"></p-checkbox> -->
-      <!-- <p-dropdown style="width: 120px; margin-left: 16px;" [options]="minutes" [(ngModel)]="selectedValue" optionLabel="name"
-                 placeholder="Resend interval"></p-dropdown> -->
     </div>
 
     <div style="float: right;">
@@ -686,8 +565,8 @@
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่เริ่มต้น"
             style="width: 100%;"
-            [disabled]="isReadOnly"
             [minDate]="today"
+            [showIcon]="true"
           ></p-calendar>
         </div>
         <div class="col-6">
@@ -699,6 +578,7 @@
             placeholder="เลือกวันที่สิ้นสุด"
             style="width: 100%;"
             [disabled]="isReadOnly"
+            [showIcon]="true"
           ></p-calendar>
         </div>
       </div>
@@ -725,6 +605,28 @@
         (click)="createToken()"
       ></button>
     </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="descriptionDialogVisible"
+  [style]="{ width: '300px' }"
+  [modal]="true"
+  [closable]="true"
+>
+  <ng-template pTemplate="header">
+    รายละเอียด
+  </ng-template>
+  <ng-template pTemplate="content">
+    <p>{{ selectedDescription }}</p>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="ปิด"
+      icon="pi pi-times"
+      (click)="descriptionDialogVisible = false"
+    ></button>
   </ng-template>
 </p-dialog>
 
@@ -760,7 +662,6 @@
         placeholder="เลือกระยะเวลา"
         optionLabel="label"
         style="width: 100%;"
-        [disabled]="true"
       >
         ></p-dropdown
       >
@@ -780,7 +681,6 @@
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่เริ่มต้น"
             style="width: 100%;"
-            [disabled]="true"
           >
             ></p-calendar
           >
@@ -793,7 +693,6 @@
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่สิ้นสุด"
             style="width: 100%;"
-            [disabled]="true"
           >
             ></p-calendar
           >

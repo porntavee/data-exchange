@@ -169,14 +169,6 @@
 html {
   box-sizing: border-box;
 }
-/* body {
-  background-color: #182432;
-  font-family: 'Varela Round', sans-serif;
-  line-height: 1.5;
-  margin: 0;
-  min-block-size: 100vh;
-  overflow-y: hidden;
-} */
 
 .form input {
   display: inline-block;
@@ -255,4 +247,20 @@ html {
   max-width: 400px;
   width: calc(100% - 48px);
   margin: 200px auto 0 auto;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* ทำให้กล่องอยู่กลางหน้าจอแบบเต็มจอ */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.card-container {
+  width: 100%;
+  max-width: 400px; /* กำหนดความกว้างสูงสุดของกล่อง */
+  padding: 1.5rem;
 }
