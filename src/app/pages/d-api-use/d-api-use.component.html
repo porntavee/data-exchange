@@ -242,7 +242,7 @@
       >
         <i
           class="pi pi-spin pi-spinner"
-          style="font-size: 5rem; margin-top: 24px;"
+          style="font-size: 5rem; margin-top: 24px; color:white"
         ></i>
       </div>
     </div>
@@ -566,32 +566,18 @@
       class="p-field"
       style="margin-top: 20px;"
     >
-      <div class="row">
-        <div class="col-6">
-          <label for="fromDate">ตั้งแต่วันที่</label>
-          <p-calendar
-            id="fromDate"
-            [(ngModel)]="fromDate"
-            dateFormat="dd-mm-yy"
-            placeholder="เลือกวันที่เริ่มต้น"
-            style="width: 100%;"
-            [minDate]="today"
-            [showIcon]="true"
-          ></p-calendar>
-        </div>
-        <div class="col-6">
-          <label for="toDate">ถึงวันที่</label>
-          <p-calendar
-            id="toDate"
-            [(ngModel)]="toDate"
-            dateFormat="dd-mm-yy"
-            placeholder="เลือกวันที่สิ้นสุด"
-            style="width: 100%;"
-            [disabled]="isReadOnly"
-            [showIcon]="true"
-          ></p-calendar>
-        </div>
-      </div>
+      <label for="rangeDates">ช่วงวันที่</label>
+      <p-calendar
+        id="rangeDates"
+        [(ngModel)]="rangeDates"
+        selectionMode="range"
+        dateFormat="dd-mm-yy"
+        placeholder="เลือกช่วงวันที่"
+        style="width: 100%;"
+        [readonlyInput]="true"
+        [minDate]="today"
+        [showIcon]="true"
+      ></p-calendar>
     </div>
   </ng-template>
 
@@ -632,7 +618,7 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog
+<!-- <p-dialog
   [(visible)]="viewDialog"
   [style]="{ width: '650px' }"
   [(header)]="requestDialogHeader"
@@ -702,6 +688,6 @@
       </div>
     </div>
   </ng-template>
-</p-dialog>
+</p-dialog> -->
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

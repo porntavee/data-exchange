@@ -108,7 +108,7 @@
     >
       <i
         class="pi pi-spin pi-spinner"
-        style="font-size: 5rem; margin-top: 24px;"
+        style="font-size: 5rem; margin-top: 24px; color:white"
       ></i>
     </div>
   </div>
@@ -269,7 +269,7 @@
       <div class="form-group" *ngIf="viewMode === 'monthly'">
         <label>เลือกเดือน</label>
         <p-dropdown
-          [options]="months"
+          [options]="filteredMonths"
           [(ngModel)]="selectedMonth"
           placeholder="เลือกเดือน"
           (onChange)="updateChart()"
@@ -281,12 +281,13 @@
       >
         <label>เลือกปี</label>
         <p-dropdown
-          [options]="years"
+          [options]="filteredYears"
           [(ngModel)]="selectedYear"
           placeholder="เลือกปี"
-          (onChange)="updateChart()"
+          (onChange)="onYearChange()"
         ></p-dropdown>
       </div>
+
       <highcharts-chart
         [Highcharts]="Highcharts5_1"
         [options]="chartOptions5_1"

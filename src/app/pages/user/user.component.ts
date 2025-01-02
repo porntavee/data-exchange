@@ -209,6 +209,7 @@ export class UserComponent implements OnInit {
     this.isValid = false;
     this.invinvalid3 = "";
     this.dailog_header = "Add new user";
+    this.selectedRole = this.roles[0];
   }
 
   deleteSelectedUsers() {
@@ -249,6 +250,7 @@ export class UserComponent implements OnInit {
   }
 
   editUser(user: User) {
+    this.selectedRole = this.roles[0];
     let monitor = "monitor";
     let admin = "admin";
     this.user = { ...user };

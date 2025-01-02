@@ -92,7 +92,8 @@ export class DApiLogComponent implements OnInit {
   logList: any = [];
   isMobile: boolean;
   isLoadingData: boolean;
-
+  filteredMonths: any[] = [];
+  filteredYears: any[] = [];
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -107,12 +108,21 @@ export class DApiLogComponent implements OnInit {
 
   ngOnInit() {
     const today = new Date();
-    const currentMonth = today.getMonth() + 1; // JavaScript months are 0-indexed
-    const currentYear = today.getFullYear();
-    // กำหนดค่าเริ่มต้น
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // JS months are 0-indexed
+
+    // Generate years dynamically
+    for (let year = 2000; year <= currentYear; year++) {
+      this.years.push({ label: year.toString(), value: year });
+    }
+
+    // Filter months and years based on the current date
+    this.updateAvailableOptions(currentYear, currentMonth);
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
-
+    this.filteredYears = [...this.years];
+    this.updateFilteredMonths(currentYear, currentMonth);
     // สร้างรายการปี (สมมติให้เป็นช่วง 5 ปีย้อนหลังและ 5 ปีข้างหน้า)
     const startYear = currentYear - 5;
     const endYear = currentYear + 5;
@@ -132,6 +142,46 @@ export class DApiLogComponent implements OnInit {
 
   ngOnDestroy() {
     window.removeEventListener("resize", this.checkScreenSize.bind(this));
+  }
+
+  updateFilteredMonths(currentYear: number, currentMonth: number) {
+    if (this.selectedYear === currentYear) {
+      // หากเป็นปีปัจจุบัน ให้กรองเดือนที่เกินจากเดือนปัจจุบัน
+      this.filteredMonths = this.months.filter(
+        month => month.value <= currentMonth
+      );
+    } else {
+      // หากเป็นปีอื่น ให้แสดงทุกเดือน
+      this.filteredMonths = [...this.months];
+    }
+  }
+
+  onYearChange() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
+    // อัปเดตรายการเดือนตามปีที่เลือก
+    this.updateFilteredMonths(currentYear, currentMonth);
+
+    // ล้างค่าเดือนที่เลือกหากไม่อยู่ในตัวเลือกที่กรอง
+    if (
+      this.selectedMonth &&
+      !this.filteredMonths.some(month => month.value === this.selectedMonth)
+    ) {
+      this.selectedMonth = null;
+    }
+  }
+
+  updateAvailableOptions(currentYear: number, currentMonth: number) {
+    this.filteredYears = this.years.filter(year => year.value <= currentYear);
+    if (this.selectedYear && this.selectedYear === currentYear) {
+      this.filteredMonths = this.months.filter(
+        month => month.value <= currentMonth
+      );
+    } else {
+      this.filteredMonths = [...this.months];
+    }
   }
 
   checkScreenSize() {

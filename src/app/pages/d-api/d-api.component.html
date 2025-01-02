@@ -112,7 +112,7 @@
     >
       <i
         class="pi pi-spin pi-spinner"
-        style="font-size: 5rem; margin-top: 24px;"
+        style="font-size: 5rem; margin-top: 24px; color:white"
       ></i>
     </div>
 
@@ -331,10 +331,11 @@
 
       <div class="row">
         <div
-          class="col-4 pr-0"
+          class="col-lg-6 col-md-12"
           *ngFor="let field of fieldConditions; let i = index"
         >
-          <label [for]="'param' + (i + 1)" style="font-weight: bold;">
+          <div style="margin-top:8px"></div>
+          <label [for]="'param' + (i + 1)" class="font-weight-bold">
             Field Condition {{ i + 1 }}
           </label>
 
@@ -344,7 +345,7 @@
             pInputText
             [id]="'param' + (i + 1)"
             [(ngModel)]="alarmGroup['param' + (i + 1)]"
-            [class]="'param' + (i + 1)"
+            class="form-control mb-2"
           />
 
           <!-- Dropdown สำหรับเลือกเงื่อนไข -->
@@ -352,9 +353,8 @@
             [options]="conditionOptions"
             [(ngModel)]="alarmGroup['operator' + (i + 1)]"
             placeholder="เลือกเงื่อนไข"
-            [style]="{ width: '240px', marginRight: '5px' }"
-          >
-          </p-dropdown>
+            style="width: 100%;"
+          ></p-dropdown>
         </div>
       </div>
 

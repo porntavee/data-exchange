@@ -305,6 +305,7 @@ export class DApiUseComponent implements OnInit {
   today: Date = new Date(); // วันปัจจุบัน
   isReadOnly: boolean;
   isLoadingData: boolean;
+  rangeDates: any;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -685,7 +686,8 @@ export class DApiUseComponent implements OnInit {
             .padStart(2, "0")}`
         : "";
     let userdata = jwt_decode(localStorage.getItem("token"));
-
+    console.log(formatDate(this.rangeDates[0]));
+    console.log(formatDate(this.rangeDates[1]));
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     this.http
@@ -695,8 +697,8 @@ export class DApiUseComponent implements OnInit {
         route_id: this.api_id,
         details: this.requestDetails,
         duration: this.selectedDuration["value"],
-        from_date: formatDate(this.fromDate),
-        to_date: formatDate(this.toDate)
+        from_date: formatDate(this.rangeDates[0]),
+        to_date: formatDate(this.rangeDates[1])
       })
       .subscribe(
         async data => {
@@ -882,7 +884,7 @@ export class DApiUseComponent implements OnInit {
     this.requestDialog = true;
     this.requestDetails = "";
     this.selectedDuration = "0";
-    this.fromDate = undefined;
+    this.rangeDates = undefined;
     this.toDate = undefined;
     this.api_id = param.api_id;
   }
@@ -894,7 +896,7 @@ export class DApiUseComponent implements OnInit {
 
     this.requestDialog = true;
     this.toDate = undefined;
-    this.fromDate = undefined;
+    this.rangeDates = undefined;
     // ปลดล็อค readonly
     this.isReadOnly = false;
 
