@@ -73,6 +73,7 @@ export class UserComponent implements OnInit {
   isValid: boolean = false;
   itemsAction: MenuItem[];
   isMobile: boolean;
+  isLoadingData: boolean;
   constructor(
     private userService: UserService,
     private messageService: MessageService,
@@ -104,12 +105,14 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoadingData = true;
     this.themeService.currentpage("/user");
     this.checkScreenSize();
     window.addEventListener("resize", this.checkScreenSize.bind(this));
     this.maxDate = new Date();
     this.userService.getUser().subscribe({
       next: data => {
+        this.isLoadingData = false;
         this.users = data.data;
       },
       error: error => {

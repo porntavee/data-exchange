@@ -159,6 +159,7 @@ export class DApiComponent implements OnInit {
   isLoadingalarmGroups: boolean = true;
   isMobile: boolean = false;
   executeDialog: boolean = false;
+  isLoadingData: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -495,11 +496,13 @@ export class DApiComponent implements OnInit {
   }
 
   readRoute() {
+    this.isLoadingData = true;
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read";
 
     this.http.get<any>(apiUrl).subscribe(
       data => {
+        this.isLoadingData = false;
         this.alarmGroups = data.data;
 
         // เรียก tryExecute2 สำหรับทุก group โดยไม่ต้องเปิด Dialog
@@ -508,7 +511,9 @@ export class DApiComponent implements OnInit {
           // this.tryExecute2(mockEvent, group, true); // skipDialog = true
         });
       },
-      error => {}
+      error => {
+        this.isLoadingData = true;
+      }
     );
   }
 

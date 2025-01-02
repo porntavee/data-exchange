@@ -220,6 +220,15 @@
               </tr>
             </ng-template>
           </p-table>
+          <div
+            *ngIf="isLoadingData"
+            style="display: flex; align-items: center; justify-content: center;"
+          >
+            <i
+              class="pi pi-spin pi-spinner"
+              style="font-size: 5rem; margin-top: 24px;"
+            ></i>
+          </div>
         </div>
       </div>
     </div>

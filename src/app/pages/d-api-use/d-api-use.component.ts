@@ -304,6 +304,7 @@ export class DApiUseComponent implements OnInit {
   searchText: any;
   today: Date = new Date(); // วันปัจจุบัน
   isReadOnly: boolean;
+  isLoadingData: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -650,6 +651,7 @@ export class DApiUseComponent implements OnInit {
   }
 
   async readToken() {
+    this.isLoadingData = true;
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     const apiUrl =
@@ -664,6 +666,7 @@ export class DApiUseComponent implements OnInit {
         //   const mockEvent = new Event("init"); // อีเวนต์จำลอง
         //   // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         // });
+        this.isLoadingData = false;
         this.tokenList = data.data;
         // this.changeDetection.detectChanges();
       },

@@ -91,6 +91,7 @@ export class DApiLogComponent implements OnInit {
   token = "";
   logList: any = [];
   isMobile: boolean;
+  isLoadingData: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -160,6 +161,7 @@ export class DApiLogComponent implements OnInit {
   }
 
   readLog() {
+    this.isLoadingData = true;
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     const apiUrl =
@@ -167,11 +169,10 @@ export class DApiLogComponent implements OnInit {
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
     this.http.get<any>(apiUrl).subscribe(
       data => {
-
+        this.isLoadingData = false;
         this.tokenList = data.data;
       },
-      error => {
-      }
+      error => {}
     );
   }
 
@@ -190,8 +191,7 @@ export class DApiLogComponent implements OnInit {
           this.logList = data.data;
           this.chartOptions5_1 = this.getMonthlyChartOptions(this.logList);
         },
-        error => {
-        }
+        error => {}
       );
   }
 
@@ -206,8 +206,7 @@ export class DApiLogComponent implements OnInit {
           this.logList = data.data;
           this.chartOptions5_1 = this.getYearlyChartOptions(this.logList);
         },
-        error => {
-        }
+        error => {}
       );
   }
 

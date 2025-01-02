@@ -152,6 +152,16 @@
         </ng-template>
       </p-table>
 
+      <div
+        *ngIf="isLoadingData"
+        style="display: flex; align-items: center; justify-content: center;"
+      >
+        <i
+          class="pi pi-spin pi-spinner"
+          style="font-size: 5rem; margin-top: 24px;"
+        ></i>
+      </div>
+
       <!-- Mobile Card View -->
       <!-- <div *ngIf="isMobile">
         <div *ngFor="let user of users" class="mobile-card">
@@ -346,20 +356,6 @@
             [options]="roles"
             [(ngModel)]="selectedRole"
             optionLabel="name"
-            [style]="{ width: '250px' }"
-            autofocus
-          ></p-dropdown>
-        </div>
-        <div class="col pr-0">
-          <label for="Role">Zone</label>
-          <p-dropdown
-            class="mx-2"
-            id="Role"
-            (onChange)="onChangeZone($event)"
-            [options]="zonelist"
-            placeholder="Select Zone"
-            [(ngModel)]="selectedZone"
-            optionLabel="zone_name"
             [style]="{ width: '250px' }"
             autofocus
           ></p-dropdown>

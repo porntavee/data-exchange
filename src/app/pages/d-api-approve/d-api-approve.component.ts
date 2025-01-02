@@ -127,6 +127,7 @@ export class DApiApproveComponent implements OnInit {
     { label: "ไม่มีหมดอายุ", value: "0" }
   ];
   isMobile: boolean;
+  isLoadingData: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -200,6 +201,7 @@ export class DApiApproveComponent implements OnInit {
 
   filteredList: any[] = []; // ข้อมูลที่ผ่านการกรอง
   readToken() {
+    this.isLoadingData = true;
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
 
@@ -207,6 +209,7 @@ export class DApiApproveComponent implements OnInit {
     //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
     this.http.get<any>(apiUrl).subscribe(
       data => {
+        this.isLoadingData = false;
         //debugger
         this.tokenList = data.data;
 
