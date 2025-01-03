@@ -114,11 +114,11 @@
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  title="{{ group.request_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+                  title="{{ group.request_at | date: 'dd-MM-yyyy HH:mm:ss' }}"
                 >
                   {{
                     group.request_at
-                      ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
+                      ? (group.request_at | date: "dd-MM-yyyy HH:mm:ss")
                       : "-"
                   }}
                 </td>
@@ -126,7 +126,7 @@
                   Request Date:
                   {{
                     group.request_at
-                      ? (group.request_at | date: "dd/MM/yyyy HH:mm:ss")
+                      ? (group.request_at | date: "dd-MM-yyyy HH:mm:ss")
                       : "-"
                   }}
                 </td>
@@ -134,11 +134,11 @@
                 <td
                   *ngIf="!isMobile"
                   class="truncate"
-                  title="{{ group.approve_at | date: 'dd/MM/yyyy HH:mm:ss' }}"
+                  title="{{ group.approve_at | date: 'dd-MM-yyyy HH:mm:ss' }}"
                 >
                   {{
                     group.approve_at
-                      ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
+                      ? (group.approve_at | date: "dd-MM-yyyy HH:mm:ss")
                       : "-"
                   }}
                 </td>
@@ -146,7 +146,7 @@
                   Approve Date:
                   {{
                     group.approve_at
-                      ? (group.approve_at | date: "dd/MM/yyyy HH:mm:ss")
+                      ? (group.approve_at | date: "dd-MM-yyyy HH:mm:ss")
                       : "-"
                   }}
                 </td>

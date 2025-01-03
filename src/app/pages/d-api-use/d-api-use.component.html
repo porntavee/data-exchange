@@ -213,10 +213,10 @@
             <td *ngIf="isMobile">API Key: {{ group.token }}</td>
 
             <td *ngIf="!isMobile">
-              {{ group.expires_at | date: "dd/MM/yyyy" }}
+              {{ group.expires_at | date: "dd-MM-yyyy" }}
             </td>
             <td *ngIf="isMobile">
-              วันที่หมดอายุ: {{ group.expires_at | date: "dd/MM/yyyy" }}
+              วันที่หมดอายุ: {{ group.expires_at | date: "dd-MM-yyyy" }}
             </td>
 
             <td>

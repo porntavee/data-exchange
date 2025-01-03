@@ -111,14 +111,12 @@ export class DApiLogComponent implements OnInit {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1; // JS months are 0-indexed
-
     // Generate years dynamically
     for (let year = 2000; year <= currentYear; year++) {
       this.years.push({ label: year.toString(), value: year });
     }
 
     // Filter months and years based on the current date
-    this.updateAvailableOptions(currentYear, currentMonth);
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
     this.filteredYears = [...this.years];
@@ -131,13 +129,14 @@ export class DApiLogComponent implements OnInit {
       this.years.push({ label: year.toString(), value: year });
     }
 
+    this.updateAvailableOptions(currentYear, currentMonth);
+
     this.readLog();
 
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
     this.checkScreenSize();
     window.addEventListener("resize", this.checkScreenSize.bind(this));
-    // this.initializeChartOptions(); // เริ่มต้นแสดงผล
   }
 
   ngOnDestroy() {
@@ -145,6 +144,8 @@ export class DApiLogComponent implements OnInit {
   }
 
   updateFilteredMonths(currentYear: number, currentMonth: number) {
+    console.log("รายการเดือนทั้งหมดก่อนกรอง:", this.months); // แสดงรายการทั้งหมดก่อนกรอง
+
     if (this.selectedYear === currentYear) {
       // หากเป็นปีปัจจุบัน ให้กรองเดือนที่เกินจากเดือนปัจจุบัน
       this.filteredMonths = this.months.filter(
@@ -154,6 +155,8 @@ export class DApiLogComponent implements OnInit {
       // หากเป็นปีอื่น ให้แสดงทุกเดือน
       this.filteredMonths = [...this.months];
     }
+
+    console.log("รายการเดือนหลังกรอง:", this.filteredMonths); // แสดงรายการหลังกรอง
   }
 
   onYearChange() {
@@ -171,6 +174,9 @@ export class DApiLogComponent implements OnInit {
     ) {
       this.selectedMonth = null;
     }
+
+    // บอก Angular ว่ามีการเปลี่ยนแปลง
+    this.changeDetection.detectChanges();
   }
 
   updateAvailableOptions(currentYear: number, currentMonth: number) {
@@ -283,19 +289,29 @@ export class DApiLogComponent implements OnInit {
   // }
 
   updateChart(): void {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+
     if (this.viewMode === "monthly") {
-      // && this.selectedMonth
+      if (this.selectedYear) {
+        // อัปเดตรายการเดือน
+        this.updateFilteredMonths(currentYear, currentMonth);
 
+        // หากเป็นปีปัจจุบัน ให้เลือกเดือนล่าสุด
+        if (this.selectedYear === currentYear) {
+          this.selectedMonth = currentMonth;
+        }
+      }
+
+      // อ่านข้อมูลรายเดือน
       this.readMonthLog();
-      // this.chartOptions5_1 = this.getMonthlyChartOptions(this.currentYear, this.currentMonth);
-      // this.changeDetection.detectChanges();
     } else if (this.viewMode === "yearly") {
-      // && this.selectedYear
-
+      // อ่านข้อมูลรายปี
       this.readYearLog();
-      // this.chartOptions5_1 = this.getYearlyChartOptions(this.currentYear);
-      // this.changeDetection.detectChanges();
     }
+
+    this.changeDetection.detectChanges();
   }
 
   getMonthlyChartOptions(logList): Highcharts.Options {
