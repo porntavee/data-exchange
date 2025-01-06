@@ -268,6 +268,11 @@ export class DApiLogComponent implements OnInit {
 
   openDailog(param) {
     this.submitted = false;
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // JS months are 0-indexed
+    this.selectedMonth = currentMonth;
+    this.selectedYear = currentYear;
     this.alarmGroupDialog = true;
     this.dialogHeader =
       "Log Chart of Tag: " + param.tag + " Endpoint: " + param.endpoints;

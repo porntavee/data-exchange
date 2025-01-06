@@ -588,7 +588,7 @@ export class DApiUseComponent implements OnInit {
 
   processActiveGroup(group: any, index: number): void {
     const mockEvent = new Event("init");
-    this.tryExecute2(mockEvent, group, true, index);
+    // this.tryExecute2(mockEvent, group, true, index);
   }
 
   async readRoute() {
@@ -676,6 +676,7 @@ export class DApiUseComponent implements OnInit {
   }
 
   async createToken() {
+    console.log(this.toDate, this.fromDate);
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -685,9 +686,26 @@ export class DApiUseComponent implements OnInit {
             .toString()
             .padStart(2, "0")}`
         : "";
+    // ตรวจสอบว่า fromDate และ toDate มีค่าหรือไม่
+    if (!this.fromDate || !this.toDate) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Invalid Date",
+        detail: "กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
+      });
+      return;
+    }
+
+    // ตรวจสอบว่า fromDate มากกว่า toDate หรือไม่
+    if (this.fromDate > this.toDate) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Invalid Date Range",
+        detail: "วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด"
+      });
+      return;
+    }
     let userdata = jwt_decode(localStorage.getItem("token"));
-    console.log(formatDate(this.rangeDates[0]));
-    console.log(formatDate(this.rangeDates[1]));
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/create";
     this.http
@@ -697,8 +715,8 @@ export class DApiUseComponent implements OnInit {
         route_id: this.api_id,
         details: this.requestDetails,
         duration: this.selectedDuration["value"],
-        from_date: formatDate(this.rangeDates[0]),
-        to_date: formatDate(this.rangeDates[1])
+        from_date: formatDate(this.fromDate),
+        to_date: formatDate(this.toDate)
       })
       .subscribe(
         async data => {
@@ -885,7 +903,6 @@ export class DApiUseComponent implements OnInit {
     this.requestDetails = "";
     this.selectedDuration = "0";
     this.rangeDates = undefined;
-    this.toDate = undefined;
     this.api_id = param.api_id;
   }
 

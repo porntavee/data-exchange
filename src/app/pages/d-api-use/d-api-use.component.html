@@ -513,7 +513,7 @@
         *ngIf="check1"
         (click)="createGroup()"
       ></button>
-      <button
+      <!-- <button
         pButton
         pRipple
         label="Save"
@@ -521,14 +521,14 @@
         class="p-button-success"
         *ngIf="check"
         (click)="editlistGroup()"
-      ></button>
+      ></button> -->
     </div>
   </ng-template>
 </p-dialog>
 
 <p-dialog
   [(visible)]="requestDialog"
-  [style]="{ width: '650px' }"
+  [style]="{ width: '650px', height: '600px' }"
   [(header)]="requestDialogHeader"
   [modal]="true"
   styleClass="p-fluid"
@@ -566,18 +566,33 @@
       class="p-field"
       style="margin-top: 20px;"
     >
-      <label for="rangeDates">ช่วงวันที่</label>
-      <p-calendar
-        id="rangeDates"
-        [(ngModel)]="rangeDates"
-        selectionMode="range"
-        dateFormat="dd-mm-yy"
-        placeholder="เลือกช่วงวันที่"
-        style="width: 100%;"
-        [readonlyInput]="true"
-        [minDate]="today"
-        [showIcon]="true"
-      ></p-calendar>
+      <div class="row">
+        <div class="col-6">
+          <label for="fromDate">ตั้งแต่วันที่</label>
+          <p-calendar
+            id="fromDate"
+            [(ngModel)]="fromDate"
+            dateFormat="dd-mm-yy"
+            placeholder="เลือกวันที่เริ่มต้น"
+            style="width: 100%;"
+            [minDate]="today"
+            [showIcon]="true"
+          ></p-calendar>
+        </div>
+        <div class="col-6">
+          <label for="toDate">ถึงวันที่</label>
+          <p-calendar
+            id="toDate"
+            [(ngModel)]="toDate"
+            [minDate]="today"
+            dateFormat="dd-mm-yy"
+            placeholder="เลือกวันที่สิ้นสุด"
+            style="width: 100%;"
+            [disabled]="isReadOnly"
+            [showIcon]="true"
+          ></p-calendar>
+        </div>
+      </div>
     </div>
   </ng-template>
 

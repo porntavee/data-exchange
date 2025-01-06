@@ -103,7 +103,7 @@ export class DApiApproveComponent implements OnInit {
   selectedValues: string[];
   isLoading: boolean = true;
   isLoadingalarmGroups: boolean = true;
-
+  today: Date = new Date(); // วันปัจจุบัน
   approveDialog: boolean = false;
   approveDialogHeader = "Approve Detail";
   requestDetails = "";
@@ -243,10 +243,34 @@ export class DApiApproveComponent implements OnInit {
             .padStart(2, "0")}`
         : "";
 
+    if (
+      this.fromAdminDate &&
+      this.toAdminDate &&
+      this.fromAdminDate > this.toAdminDate
+    ) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Invalid Date Range",
+        detail: "วันที่เริ่มต้นต้องไม่น้อยกว่าวันที่สิ้นสุด"
+      });
+      return; // หยุดการทำงานหากเงื่อนไขวันที่ไม่ถูกต้อง
+    }
+
+    if (
+      (this.fromAdminDate && !this.toAdminDate) ||
+      (!this.fromAdminDate && this.toAdminDate)
+    ) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Incomplete Date Fields",
+        detail: "กรุณากรอกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
+      });
+      return; // หยุดการทำงานหากกรอกไม่ครบ
+    }
+
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
 
-    debugger;
     this.http
       .post<any>(apiUrl, {
         user_id: this.user_id,
@@ -262,6 +286,11 @@ export class DApiApproveComponent implements OnInit {
       .subscribe(
         data => {
           this.approveDialog = false;
+          this.messageService.add({
+            severity: "success",
+            summary: "Complete",
+            detail: "อัพเดทข้อมูลเสร็จสิ้น"
+          });
           this.readToken();
         },
         error => {}
@@ -377,6 +406,7 @@ export class DApiApproveComponent implements OnInit {
       this.fromAdminDate = this.convertToDate(group.from_at);
       this.toAdminDate = this.convertToDate(group.to_at);
       this.approveDialog = true;
+      this.fromAdminDate = this.today;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
       this.route_id = group.route_id;

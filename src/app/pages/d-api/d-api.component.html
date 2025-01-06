@@ -250,7 +250,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12 pr-0">
+        <div class="col-4 pr-0">
           <p-dropdown
             [options]="dataSets"
             [(ngModel)]="selectedDataSets"
@@ -260,7 +260,6 @@
             filterBy="title"
             [showClear]="true"
             [showClear]="true"
-            [scrollStrategy]="scrollStrategy"
             appendTo="body"
             [baseZIndex]="1000"
             placeholder="Select DataSets"
@@ -353,7 +352,6 @@
             [options]="conditionOptions"
             [(ngModel)]="alarmGroup['operator' + (i + 1)]"
             placeholder="เลือกเงื่อนไข"
-            style="width: 100%;"
           ></p-dropdown>
         </div>
       </div>
@@ -388,6 +386,47 @@
             <input type="text" pInputText id="email" [(ngModel)]="emailsendline" style="width: 50%; margin-left: 15px;"
                 placeholder="Optional" />
         </div> -->
+    <ng-template pTemplate="footer" class="footer">
+      <div style="display:flex">
+        <p-checkbox
+          name="groupname"
+          value="recoveryNotification"
+          label="Active"
+          (onChange)="changecheck($event)"
+          [(ngModel)]="selectedValues"
+        ></p-checkbox>
+        &nbsp; &nbsp;
+      </div>
+
+      <div style="float: right;">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-danger"
+          (click)="hideDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Create"
+          icon="pi pi-check"
+          class="p-button-success"
+          *ngIf="alarmGroup.id == undefined"
+          (click)="createRoute()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-success"
+          *ngIf="alarmGroup.id != undefined"
+          (click)="editlistGroup()"
+        ></button>
+      </div>
+    </ng-template>
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
@@ -406,14 +445,6 @@
       <button
         pButton
         pRipple
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-danger"
-        (click)="hideDialog()"
-      ></button>
-      <button
-        pButton
-        pRipple
         label="Create"
         icon="pi pi-check"
         class="p-button-success"
@@ -428,15 +459,6 @@
         class="p-button-success"
         *ngIf="alarmGroup.id != undefined"
         (click)="editlistGroup()"
-      ></button>
-      <button
-        pButton
-        pRipple
-        label="Delete"
-        icon="pi pi-trash"
-        class="p-button-danger"
-        *ngIf="alarmGroup.id != undefined"
-        (click)="deleteRoute(alarmGroup.id)"
       ></button>
     </div>
   </ng-template>

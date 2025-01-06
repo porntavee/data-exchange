@@ -581,11 +581,11 @@
 </p-dialog>
 <p-dialog
   [(visible)]="approveDialog"
-  [style]="{ width: '650px', height: '1000px' }"
+  [style]="{ width: '950px', height: '1050px' }"
   [(header)]="approveDialogHeader"
   [modal]="true"
   styleClass="p-fluid"
-  [contentStyle]="{ overflow: 'visible' }"
+  [contentStyle]="{ overflow: 'scroll' }"
 >
   <ng-template pTemplate="content">
     <div class="p-field">
@@ -686,6 +686,7 @@
             placeholder="เลือกวันที่เริ่มต้น"
             style="width: 100%;"
             [showIcon]="true"
+            [minDate]="today"
           ></p-calendar>
         </div>
         <div class="col-6">
@@ -697,13 +698,14 @@
             placeholder="เลือกวันที่สิ้นสุด"
             style="width: 100%;"
             [showIcon]="true"
+            [minDate]="today"
           ></p-calendar>
         </div>
       </div>
     </div>
   </ng-template>
   <ng-template pTemplate="footer">
-    <div style="float: right;">
+    <div style="float: right; margin-top:24px">
       <button
         pButton
         pRipple

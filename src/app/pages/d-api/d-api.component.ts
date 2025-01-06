@@ -237,7 +237,8 @@ export class DApiComponent implements OnInit {
       endpoints: "/endpoint-name",
       methods: '["POST","GET"]',
       request: '[{"num": (int, None), "detail": (str, None)}]',
-      response: '[{"num": (int, None), "detail": (str, None)}]'
+      response: '[{"num": (int, None), "detail": (str, None)}]',
+      type: "public"
     };
     this.jsonData = [];
     this.symbolDataAdded = [];
@@ -246,6 +247,7 @@ export class DApiComponent implements OnInit {
     this.ipSearch = null;
     this.submitted = false;
     this.alarmGroupDialog = true;
+    console.log(this.alarmGroup.type);
     this.hasNoSearchResult = false;
     this.dialogHeader = "Add new";
     this.check = false;
@@ -255,6 +257,7 @@ export class DApiComponent implements OnInit {
       this.selectedValues = [this.availableMethods[0]];
     } else {
     }
+    console.log(this.alarmGroup.type);
   }
   editline(AlarmGroup: alarmGroup) {
     this.symbolData = [];
