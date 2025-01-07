@@ -547,12 +547,12 @@ export class DApiUseComponent implements OnInit {
     );
   }
 
-  tryExecute2(
+  async tryExecute2(
     event: Event,
     param: any,
     skipDialog: boolean = false,
     index
-  ): void {
+  ): Promise<void> {
     if (this.userGroupCheck !== "develop") {
       return; // ออกจากฟังก์ชันทันทีถ้าไม่ใช่
     }
@@ -564,32 +564,30 @@ export class DApiUseComponent implements OnInit {
       dataset_id: param.dataset_id,
       query_string: param.query
     };
-
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
 
-    const sub = this.http.post<any>(apiUrl, model).subscribe(
-      data => {
-        // เก็บข้อมูลใน Array กรณี API สำเร็จ
-        this.alarmGroups[index].statusAPI = data.status;
-        this.alarmGroups[index].data = data.data.length;
-      },
-      error => {
-        this.alarmGroups[index].statusAPI = "Error";
-        this.alarmGroups[index].data = "Error";
-      },
-      () => {
-        this.isLoadingalarmGroups = false; // การโหลดเสร็จ
-      }
-    );
+    try {
+      const data = await this.http.post<any>(apiUrl, model).toPromise();
+      // เก็บข้อมูลใน Array กรณี API สำเร็จ
+      this.alarmGroups[index].statusAPI = data.status;
+      this.alarmGroups[index].data = data.data.length;
+    } catch (error) {
+      // กรณีเกิดข้อผิดพลาด
+      this.alarmGroups[index].statusAPI = "Error";
+      this.alarmGroups[index].data = "Error";
+    } finally {
+      this.isLoadingalarmGroups = false; // การโหลดเสร็จ
+    }
 
-    this.apiSubscriptions.push(sub);
+    // this.apiSubscriptions.push(sub);
   }
 
-  processActiveGroup(group: any, index: number): void {
-    const mockEvent = new Event("init");
-    // this.tryExecute2(mockEvent, group, true, index);
-  }
+  // async processActiveGroup(group: any, index: number): Promise<void> {
+  //   const mockEvent = new Event("init");
+  //   await this.tryExecute2(mockEvent, group, true, index); // รอจนกว่าการทำงานจะเสร็จ
+  //   console.log(mockEvent, group, index);
+  // }
 
   async readRoute() {
     let userdata = jwt_decode(localStorage.getItem("token"));
@@ -598,28 +596,18 @@ export class DApiUseComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/read_library/" +
       userdata["id"];
 
-    return new Promise<void>((resolve, reject) => {
-      this.http.get<any>(apiUrl).subscribe(
-        data => {
-          // กรองเฉพาะรายการที่ active = true
-          const activeGroups = data.data.filter(
-            element => element.active === true
-          );
+    try {
+      const data = await this.http.get<any>(apiUrl).toPromise();
+      const activeGroups = data.data.filter(element => element.active === true);
 
-          // วนลูปเฉพาะรายการที่ active = true
-          activeGroups.forEach((group, index) => {
-            this.processActiveGroup(group, index);
-          });
-          // เก็บข้อมูลที่กรองไว้ใน alarmGroups
-          this.alarmGroups = activeGroups;
+      this.alarmGroups = activeGroups;
 
-          resolve(); // แจ้งว่า Promise สำเร็จ
-        },
-        error => {
-          reject(error); // แจ้งว่า Promise ล้มเหลว
-        }
-      );
-    });
+      for (let index = 0; index < activeGroups.length; index++) {
+        const group = activeGroups[index];
+        console.log(`กำลังประมวลผลกลุ่มที่ ${index + 1}:`, group);
+        await this.tryExecute2(new Event("init"), group, true, index);
+      }
+    } catch (error) {}
   }
 
   async readRoute2() {
@@ -632,20 +620,17 @@ export class DApiUseComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.http.get<any>(apiUrl).subscribe(
         data => {
-          // กรองเฉพาะรายการที่ active = true
           const activeGroups = data.data.filter(
             element => element.active === true
           );
 
-          // วนลูปเฉพาะรายการที่ active = true
           activeGroups.forEach((group, index) => {});
-          // เก็บข้อมูลที่กรองไว้ใน alarmGroups
           this.alarmGroups = activeGroups;
 
-          resolve(); // แจ้งว่า Promise สำเร็จ
+          resolve();
         },
         error => {
-          reject(error); // แจ้งว่า Promise ล้มเหลว
+          reject(error);
         }
       );
     });
@@ -665,7 +650,7 @@ export class DApiUseComponent implements OnInit {
         // this.alarmGroups.forEach((group, index) => {
         //   this.alarmGroups[index].status = group.status;
         //   const mockEvent = new Event("init"); // อีเวนต์จำลอง
-        //   // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
+        // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
         // });
         this.isLoadingData = false;
         this.tokenList = data.data;

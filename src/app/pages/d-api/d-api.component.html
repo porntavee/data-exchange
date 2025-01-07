@@ -55,7 +55,6 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
           <th pSortableColumn="tag">
             Tag <p-sortIcon field="tag"></p-sortIcon>
           </th>
@@ -74,8 +73,7 @@
 
       <ng-template pTemplate="body" let-group>
         <tr>
-          <td *ngIf="!isMobile">{{ group.id }}</td>
-          <td *ngIf="isMobile">ID: {{ group.id }}</td>
+        
 
           <td *ngIf="!isMobile">{{ group.tag }}</td>
           <td *ngIf="isMobile">Tag: {{ group.tag }}</td>

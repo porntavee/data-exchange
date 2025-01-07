@@ -5,7 +5,7 @@
     <p-toolbar styleClass="p-mb-4">
       <div class="p-toolbar-group-left">
         <div style="font-size: 18px; font-weight: 600;" class="text-color">
-          API Library ทั้งหมด
+          All API Library
         </div>
       </div>
       <div class="p-toolbar-group-right">
@@ -103,7 +103,7 @@
     <p-toolbar styleClass="p-mb-4">
       <div class="p-toolbar-group-left">
         <div style="font-size: 18px; font-weight: 600;" class="text-color">
-          API Library ของฉัน
+          My API Library
         </div>
       </div>
       <div class="p-toolbar-group-right">
@@ -135,9 +135,6 @@
       >
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id">
-              ลำดับ <p-sortIcon field="id"></p-sortIcon>
-            </th>
             <th pSortableColumn="status">
               Status <p-sortIcon field="status"></p-sortIcon>
             </th>
@@ -151,7 +148,7 @@
               API Key <p-sortIcon field="token"></p-sortIcon>
             </th>
             <th pSortableColumn="expires_at">
-              วันที่หมดอายุ <p-sortIcon field="expires_at"></p-sortIcon>
+              Expired Date <p-sortIcon field="expires_at"></p-sortIcon>
             </th>
             <th></th>
           </tr>
@@ -159,9 +156,6 @@
 
         <ng-template pTemplate="body" let-group>
           <tr>
-            <td *ngIf="!isMobile">{{ group.row_number }}</td>
-            <td *ngIf="isMobile">ลำดับ: {{ group.row_number }}</td>
-
             <td *ngIf="!isMobile">
               <div
                 [ngClass]="{
@@ -216,7 +210,7 @@
               {{ group.expires_at | date: "dd-MM-yyyy" }}
             </td>
             <td *ngIf="isMobile">
-              วันที่หมดอายุ: {{ group.expires_at | date: "dd-MM-yyyy" }}
+              Expired Date: {{ group.expires_at | date: "dd-MM-yyyy" }}
             </td>
 
             <td>

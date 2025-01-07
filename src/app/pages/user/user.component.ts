@@ -426,7 +426,8 @@ export class UserComponent implements OnInit {
       this.user.lastname != undefined &&
       this.user.email != undefined &&
       this.user.password != undefined &&
-      this.user.username != undefined
+      this.user.username != undefined &&
+      this.user_password != undefined
     ) {
       this.invalidFirstName = "";
       this.invalidSurname = "";
@@ -592,7 +593,10 @@ export class UserComponent implements OnInit {
     }
   }
   checkusername() {
-    this.invalidUserName = "";
+    console.log(this.user.username);
+    if (this.user.username) {
+      this.invalidUserName = "";
+    }
   }
   findIndexById(id: string): number {
     let index = -1;
