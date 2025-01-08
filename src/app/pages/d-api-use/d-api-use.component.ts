@@ -5,12 +5,14 @@ import { Title } from "@angular/platform-browser";
 import { LineGroupService } from "@app/linegroupservice";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { ThemeService } from "app/theme.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { threadId } from "worker_threads";
 import jwt_decode from "jwt-decode";
 // import { DApiUseService } from "@app/d-api-use.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subscription } from "rxjs";
+import { of, Subject } from "rxjs";
+import { switchMap, catchError, takeUntil } from "rxjs/operators";
 
 export interface LineGroup {
   id?: number;
@@ -76,10 +78,16 @@ export interface editGroup {
   styleUrls: ["./d-api-use.component.css"]
 })
 export class DApiUseComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();
+  private abortController: AbortController | null = null;
+  private abortControllers: AbortController[] = [];
   userGroup: any;
   isMobile: boolean = false;
   descriptionDialogVisible: boolean = false;
   selectedDescription: string | null = null;
+  cancel$ = new Subject<void>(); // ตัวแปรนี้จะถูกใช้เพื่อยกเลิกคำร้อง API
+  cancelRequests: Subject<void>[] = []; // เก็บ Subject สำหรับยกเลิกคำร้อง API
+
   roleType = [
     {
       id: 1,
@@ -306,6 +314,7 @@ export class DApiUseComponent implements OnInit {
   isReadOnly: boolean;
   isLoadingData: boolean;
   rangeDates: any;
+  isActive: boolean = true;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -515,8 +524,6 @@ export class DApiUseComponent implements OnInit {
     }, 5 * 60 * 1000);
     let userdata = jwt_decode(localStorage.getItem("token"));
     this.userGroup = this.getUserGroup(userdata, this.roleType);
-    // this.tryExecute2();
-    // this.fetchAndMapData();
     this.isLoadingalarmGroups = false;
     this.changeDetection.detectChanges();
     this.checkScreenSize();
@@ -528,6 +535,9 @@ export class DApiUseComponent implements OnInit {
       clearInterval(this.intervalId);
     }
     this.apiSubscriptions.forEach(sub => sub.unsubscribe());
+    this.cancelRequests.forEach(cancel$ => cancel$.next());
+    this.cancelRequests = [];
+    this.isActive = false;
     window.removeEventListener("resize", this.checkScreenSize.bind(this));
   }
 
@@ -537,7 +547,7 @@ export class DApiUseComponent implements OnInit {
 
   getFilteredGroups() {
     if (!this.searchText) {
-      return this.alarmGroups; // If no search text, return all groups
+      return this.alarmGroups;
     }
 
     return this.alarmGroups.filter(
@@ -547,19 +557,28 @@ export class DApiUseComponent implements OnInit {
     );
   }
 
+  cancelAllRequests(): void {
+    this.abortControllers.forEach(controller => controller.abort());
+    this.abortControllers = [];
+  }
+
   async tryExecute2(
     event: Event,
     param: any,
     skipDialog: boolean = false,
     index
   ): Promise<void> {
+    console.log("TRYEXECUTE2");
     if (this.userGroupCheck !== "develop") {
-      return; // ออกจากฟังก์ชันทันทีถ้าไม่ใช่
+      return;
     }
     this.isLoadingalarmGroups = true;
 
-    event?.stopPropagation(); // ป้องกันเหตุการณ์ซ้อนทับ
+    event?.stopPropagation();
 
+    const cancel$ = new Subject<void>();
+    this.cancelRequests.push(cancel$);
+    this.cancel$ = cancel$;
     let model = {
       dataset_id: param.dataset_id,
       query_string: param.query
@@ -568,26 +587,50 @@ export class DApiUseComponent implements OnInit {
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
 
     try {
-      const data = await this.http.post<any>(apiUrl, model).toPromise();
-      // เก็บข้อมูลใน Array กรณี API สำเร็จ
-      this.alarmGroups[index].statusAPI = data.status;
-      this.alarmGroups[index].data = data.data.length;
+      await of(null)
+        .pipe(
+          switchMap(() =>
+            this.http
+              .post<any>(apiUrl, model, {
+                headers: new HttpHeaders(),
+                params: new HttpParams(),
+                observe: "response"
+              })
+              .pipe(
+                takeUntil(cancel$),
+                catchError(error => {
+                  if (error.name === "AbortError") {
+                    console.log("API request was aborted");
+                  }
+                  this.alarmGroups[index].statusAPI = "Error";
+                  this.alarmGroups[index].data = "Error";
+                  return of(error);
+                })
+              )
+          )
+        )
+        .toPromise()
+        .then(response => {
+          const data = response.body;
+          this.alarmGroups[index].statusAPI = data.status;
+          this.alarmGroups[index].data = data.data.length;
+        })
+        .catch(error => {
+          console.error(error);
+          this.isLoadingalarmGroups = false;
+        })
+        .finally(() => {
+          this.isLoadingalarmGroups = false;
+        });
     } catch (error) {
-      // กรณีเกิดข้อผิดพลาด
-      this.alarmGroups[index].statusAPI = "Error";
-      this.alarmGroups[index].data = "Error";
-    } finally {
-      this.isLoadingalarmGroups = false; // การโหลดเสร็จ
+      console.error(error);
+      this.isLoadingalarmGroups = false;
     }
-
-    // this.apiSubscriptions.push(sub);
   }
 
-  // async processActiveGroup(group: any, index: number): Promise<void> {
-  //   const mockEvent = new Event("init");
-  //   await this.tryExecute2(mockEvent, group, true, index); // รอจนกว่าการทำงานจะเสร็จ
-  //   console.log(mockEvent, group, index);
-  // }
+  cancelRequestOnPageChange(cancel$: Subject<void>) {
+    cancel$.next();
+  }
 
   async readRoute() {
     let userdata = jwt_decode(localStorage.getItem("token"));
@@ -603,6 +646,10 @@ export class DApiUseComponent implements OnInit {
       this.alarmGroups = activeGroups;
 
       for (let index = 0; index < activeGroups.length; index++) {
+        if (!this.isActive) {
+          break;
+        }
+
         const group = activeGroups[index];
         console.log(`กำลังประมวลผลกลุ่มที่ ${index + 1}:`, group);
         await this.tryExecute2(new Event("init"), group, true, index);
@@ -643,18 +690,10 @@ export class DApiUseComponent implements OnInit {
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" +
       userdata["id"];
-    // const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" + userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
-        // this.alarmGroups = data.data;
-        // this.alarmGroups.forEach((group, index) => {
-        //   this.alarmGroups[index].status = group.status;
-        //   const mockEvent = new Event("init"); // อีเวนต์จำลอง
-        // this.tryExecute2(mockEvent, group, true, index); // skipDialog = true
-        // });
         this.isLoadingData = false;
         this.tokenList = data.data;
-        // this.changeDetection.detectChanges();
       },
       error => {}
     );
