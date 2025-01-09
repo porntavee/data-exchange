@@ -46,7 +46,7 @@
             User<p-sortIcon field="user_id"></p-sortIcon>
           </th>
           <th pSortableColumn="created_at" style="width: 20%; ">
-            วันที่<p-sortIcon field="created_at"></p-sortIcon>
+            Date<p-sortIcon field="created_at"></p-sortIcon>
           </th>
           <th style="width: 20%;"></th>
         </tr>
@@ -113,123 +113,6 @@
     </div>
   </div>
 </div>
-<p-dialog
-  [(visible)]="lineDialog"
-  [style]="{ width: '650px' }"
-  [(header)]="dialogHeader"
-  [modal]="true"
-  styleClass="p-fluid"
-  [contentStyle]="{ overflow: 'visible' }"
->
-  <ng-template pTemplate="content">
-    <div class="p-field">
-      <div class="row mx-0">
-        <div class="col pl-0">
-          <label
-            for="id"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >ID:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_id }}</span>
-          <br />
-          <label
-            for="name"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Group Name:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_name }}</span>
-          <br />
-          <label
-            for="Drescription"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            >Description:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span>{{ AlarmGroup.group_description }}</span>
-          <br />
-          <label
-            for="Email"
-            [ngClass]="{
-              'theme-arya-text': themeService.theme === 'arya-orange',
-              'theme-saga-text': themeService.theme === 'saga-orange'
-            }"
-            *nglf="AlarmGroup.email != '' || AlarmGroup.email != null"
-            >Email:</label
-          >&nbsp;&nbsp;&nbsp;
-          <span *nglf="AlarmGroup.email != '' || AlarmGroup.email != null">{{
-            AlarmGroup.email
-          }}</span>
-          <br *nglf="AlarmGroup.email != '' || AlarmGroup.email != null" />
-          <br />
-          <div style="display: flex; justify-content: space-between;">
-            <div>
-              <p-checkbox
-                name="groupname"
-                value="recoveryNotification"
-                label="Recovery Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
-              &nbsp; &nbsp;
-              <p-checkbox
-                name="groupname"
-                value="resendNotification"
-                label="Resend Notification"
-                (onChange)="changecheck($event)"
-                [(ngModel)]="selectedValues"
-                readonly="true"
-              ></p-checkbox>
-            </div>
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 p-0">
-            <div class="row mx-0 mt-2">
-              <div class="col-12 pr-2">
-                <p-table
-                  [value]="stringArray"
-                  [scrollable]="true"
-                  responsiveLayout="scroll"
-                  scrollHeight="250px"
-                  width="650px"
-                >
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th
-                        [ngClass]="{
-                          'theme-arya-text':
-                            themeService.theme === 'arya-orange',
-                          'theme-saga-text':
-                            themeService.theme === 'saga-orange'
-                        }"
-                      >
-                        Monitor alarm of
-                      </th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-stringArray>
-                    <tr>
-                      <td>
-                        <li>{{ stringArray }}</li>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
 
 <p-dialog
   [(visible)]="alarmGroupDialog"

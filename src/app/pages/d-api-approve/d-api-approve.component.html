@@ -366,68 +366,6 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
 >
   <ng-template pTemplate="content">
-    <!-- <div class="col-12 justify-content-between flex">
-            <div class="row">
-
-                <input type="text" pInputText id="nameSearch" [(ngModel)]="nameSearch" autofocus (input)="nameInput()"
-                    class="nameSearch" placeholder="Search by Symbol Name" />
-
-                <input type="text" pInputText id="ipSearch" [(ngModel)]="ipSearch" (input)="ipInput()" class="ipSearch"
-                    placeholder="Search by IP Address" />
-
-                <button pButton pRipple label="Search" icon="pi pi-search" class="p-button ml-1 butSearch"
-                    (click)="searchSymbol()"></button>
-
-            </div>
-        </div> -->
-    <!-- <div class="col-12 col-sm-12 col-md-12 p-0">
-            <div class="row mx-0 mt-2">
-                <div class="col-12 pr-2">
-                    <p-table [value]="symbolData" responsiveLayout="scroll" scrollHeight="200px">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th style="text-align:center;" class="col-2 pl-0">
-                                    SYMBOL ID
-                                </th>
-                                <th class="col-4 pl-0">
-                                    SYMBOL Name
-                                </th>
-                                <th class="col-4 pl-0">
-                                    IP Address
-                                </th>
-                                <th class="col-2 pl-0">
-                                    Action
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" *ngIf="hasNoSearchResult; else otherField">
-                            <tr>
-                                <td colspan="4">No seacrh result.</td>
-                            </tr>
-                        </ng-template>
-                        <ng-template #otherField pTemplate="body" let-rowData>
-
-                            <tr>
-                                <td class="col-2 pl-0">{{rowData.SYMBOL_ID}}</td>
-                                <td class="col-4 pl-0">
-                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME1}}">{{rowData.SYMBOL_NAME1}}</div>
-                                </td>
-                                <td class="col-4 pl-0">
-                                    <div class="myDIV3" title="{{rowData.SYMBOL_NAME3}}">{{rowData.SYMBOL_NAME3}}</div>
-                                </td>
-                                <td class="col-2 pl-0">
-                                    <button pButton pRipple class="Newbuttd" (click)="addSymbol(rowData)"><i
-                                            class="pi pi-plus"></i></button>
-                                    <button pButton pRipple class="oldbut" (click)="addSymbol(rowData)">Add</button>
-                                </td>
-                            </tr>
-
-                        </ng-template>
-                    </p-table>
-               
-                </div>
-            </div>
-        </div> -->
     <div
       style="background-color: grey; width:100%; border-top: 1px dashed grey;"
     ></div>
@@ -533,12 +471,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div style="padding-top: 30px;">
-            <label for="email" style="font-weight: bold;">Email: </label>
-            <input type="text" pInputText id="email" [(ngModel)]="emailsendline" style="width: 50%; margin-left: 15px;"
-                placeholder="Optional" />
-        </div> -->
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
@@ -551,10 +483,6 @@
         [(ngModel)]="selectedValues"
       ></p-checkbox>
       &nbsp; &nbsp;
-      <!-- <p-checkbox name="groupname" value="resendNotification" label="Resend Notification"
-                (onChange)="changecheck($event)" [(ngModel)]="selectedValues"></p-checkbox> -->
-      <!-- <p-dropdown style="width: 120px; margin-left: 16px;" [options]="minutes" [(ngModel)]="selectedValue" optionLabel="name"
-                 placeholder="Resend interval"></p-dropdown> -->
     </div>
 
     <div style="float: right;">
@@ -581,11 +509,10 @@
 </p-dialog>
 <p-dialog
   [(visible)]="approveDialog"
-  [style]="{ width: '950px', height: '1050px' }"
+  [style]="{ width: '950px', height: '600px' }"
   [(header)]="approveDialogHeader"
   [modal]="true"
   styleClass="p-fluid"
-  [contentStyle]="{ overflow: 'scroll' }"
 >
   <ng-template pTemplate="content">
     <div class="p-field">

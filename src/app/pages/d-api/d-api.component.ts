@@ -160,6 +160,7 @@ export class DApiComponent implements OnInit {
   isMobile: boolean = false;
   executeDialog: boolean = false;
   isLoadingData: boolean;
+  isRebootLoading: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -377,14 +378,18 @@ export class DApiComponent implements OnInit {
   }
 
   reboot() {
+    this.isRebootLoading = true; // เริ่มโหลด
     let model = {};
     const apiUrl =
       "https://dss.motorway.go.th:4433/minsight/api/dynamic_api/reboot";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         // //debugger
+        this.isRebootLoading = false;
       },
-      error => {}
+      error => {
+        this.isRebootLoading = false;
+      }
     );
   }
   tryExecute() {

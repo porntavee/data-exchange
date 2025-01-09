@@ -568,7 +568,6 @@ export class DApiUseComponent implements OnInit {
     skipDialog: boolean = false,
     index
   ): Promise<void> {
-    console.log("TRYEXECUTE2");
     if (this.userGroupCheck !== "develop") {
       return;
     }
@@ -651,7 +650,6 @@ export class DApiUseComponent implements OnInit {
         }
 
         const group = activeGroups[index];
-        console.log(`กำลังประมวลผลกลุ่มที่ ${index + 1}:`, group);
         await this.tryExecute2(new Event("init"), group, true, index);
       }
     } catch (error) {}
@@ -700,7 +698,6 @@ export class DApiUseComponent implements OnInit {
   }
 
   async createToken() {
-    console.log(this.toDate, this.fromDate);
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -944,7 +941,7 @@ export class DApiUseComponent implements OnInit {
     this.api_id = param.route_id;
     this.requestDetails = param.details;
     this.selectedDuration = "0";
-
+    console.log("Hi");
     this.fromDate = param.from_at
       ? this.convertToDate(param.from_at)
       : undefined;

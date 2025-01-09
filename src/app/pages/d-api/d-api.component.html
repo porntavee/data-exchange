@@ -10,15 +10,25 @@
         </div>
       </div>
       <div class="p-toolbar-group-right actions">
+        <!-- ปุ่ม Reboot -->
         <button
           pButton
           pRipple
           class="p-button-warning mr-2 Newbut"
+          [disabled]="isRebootLoading"
           (click)="reboot()"
         >
-          <i class="pi pi-refresh"></i>
-          <span class="Newtxt new-font">Reboot</span>
+          <ng-container *ngIf="!isRebootLoading">
+            <i class="pi pi-refresh"></i>
+            <span class="Newtxt new-font">Reboot</span>
+          </ng-container>
+          <ng-container *ngIf="isRebootLoading">
+            <i class="pi pi-spinner pi-spin"></i>
+            <span class="Newtxt new-font">Loading...</span>
+          </ng-container>
         </button>
+
+        <!-- ปุ่ม Create Route API -->
         <button
           pButton
           pRipple
@@ -28,6 +38,8 @@
           <i class="pi pi-plus"></i>
           <span class="Newtxt new-font">Create Route API</span>
         </button>
+
+        <!-- ช่องค้นหา -->
         <span class="p-input-icon-left search-container">
           <i class="pi pi-search"></i>
           <input
@@ -73,8 +85,6 @@
 
       <ng-template pTemplate="body" let-group>
         <tr>
-        
-
           <td *ngIf="!isMobile">{{ group.tag }}</td>
           <td *ngIf="isMobile">Tag: {{ group.tag }}</td>
 

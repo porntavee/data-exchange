@@ -274,6 +274,7 @@ export class DApiLogComponent implements OnInit {
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
     this.alarmGroupDialog = true;
+    this.viewMode = "monthly";
     this.dialogHeader =
       "Log Chart of Tag: " + param.tag + " Endpoint: " + param.endpoints;
     this.check = false;
