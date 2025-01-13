@@ -426,11 +426,6 @@ export class DApiUseComponent implements OnInit {
     this.viewDialog = true;
     this.api_id = param.route_id;
     this.requestDetails = param.details;
-    // this.selectedDuration = { value: param.duration };
-    // var index = this.durationOptions.findIndex(
-    //   data => data.value === param.duration.toString()
-    // );
-    // this.selectedDuration = this.durationOptions[index];
     this.selectedDuration = "0";
     // แปลง from_at และ to_at เป็น Date
     this.fromDate = this.convertToDate(param.from_at);
@@ -921,6 +916,8 @@ export class DApiUseComponent implements OnInit {
   openRequestDialog(param) {
     //debugger
     this.requestDialog = true;
+    this.fromDate = new Date();
+    this.toDate = new Date(new Date().setDate(new Date().getDate() + 7));
     this.requestDetails = "";
     this.selectedDuration = "0";
     this.rangeDates = undefined;
@@ -941,7 +938,6 @@ export class DApiUseComponent implements OnInit {
     this.api_id = param.route_id;
     this.requestDetails = param.details;
     this.selectedDuration = "0";
-    console.log("Hi");
     this.fromDate = param.from_at
       ? this.convertToDate(param.from_at)
       : undefined;

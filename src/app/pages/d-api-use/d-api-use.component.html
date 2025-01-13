@@ -593,14 +593,6 @@
   <ng-template pTemplate="footer">
     <div style="float: right;">
       <button
-        pButton
-        pRipple
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-danger"
-        (click)="closeDialog()"
-      ></button>
-      <button
         *ngIf="!isReadOnly"
         pButton
         pRipple

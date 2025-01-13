@@ -123,8 +123,7 @@ export class DApiComponent implements OnInit {
     { title: "DSS online", value: "6" },
     { title: "DXC", value: "7" }
   ];
-  selectedDataSets: any;
-
+  selectedDataSets: any = undefined;
   selectedValue: any;
   itemsAction: MenuItem[];
   alarmGroupDialog: boolean;
@@ -453,6 +452,14 @@ export class DApiComponent implements OnInit {
   }
 
   createRoute() {
+    if (!this.alarmGroup.tag || !this.selectedDataSets?.value) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "กรุณากรอกข้อมูลให้ครบถ้วน"
+      });
+      return;
+    }
     let model = {
       id: 0,
       tag: this.alarmGroup.tag,
@@ -489,9 +496,37 @@ export class DApiComponent implements OnInit {
       operator10: this.alarmGroup.operator10 ?? ""
     };
 
+    const requiredFields = [
+      "tag",
+      "methods",
+      "datasets",
+      "description",
+      "endpoints",
+      "request",
+      "response",
+      "query",
+      "type"
+    ];
+
+    let missingFields = requiredFields.filter(field => !model[field]);
+
+    if (missingFields.length > 0) {
+      // Log missing fields
+      console.log("Missing required fields:", missingFields);
+
+      // ใช้ MessageService แจ้งเตือน
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: `Please fill in all required fields: ${missingFields.join(
+          ", "
+        )}`
+      });
+      return; // หยุดการทำงานหากข้อมูลไม่ครบ
+    }
+
     let jsonStr = JSON.stringify(model);
 
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create';
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/create";
     this.http.post<any>(apiUrl, model).subscribe(
@@ -499,7 +534,13 @@ export class DApiComponent implements OnInit {
         this.hideDialog();
         this.readRoute();
       },
-      error => {}
+      error => {
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Failed to create route. Please try again."
+        });
+      }
     );
   }
 
