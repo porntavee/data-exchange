@@ -395,7 +395,9 @@ export class DApiApproveComponent implements OnInit {
       this.requestDetails = group.details;
       this.user_id = group.user_id;
       this.route_id = group.route_id;
-      this.selectedDuration = { value: group.duration };
+      this.selectedDuration = {
+        value: group.duration
+      };
       var index = this.durationOptions.findIndex(
         data => data.value === group.duration.toString()
       );
@@ -403,8 +405,14 @@ export class DApiApproveComponent implements OnInit {
       this.selectAdminDuration = this.durationOptions[index];
       this.fromDate = this.convertToDate(group.from_at);
       this.toDate = this.convertToDate(group.to_at);
-      this.fromAdminDate = this.convertToDate(group.from_at);
-      this.toAdminDate = this.convertToDate(group.to_at);
+      const currentDate = new Date();
+      this.fromAdminDate = currentDate; // วันที่ปัจจุบัน
+      this.toAdminDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate() + 7
+      ); // ปัจจุบัน + 7 วัน
+
       this.approveDialog = true;
       this.fromAdminDate = this.today;
     } else if (status === "ปิดใช้งาน") {

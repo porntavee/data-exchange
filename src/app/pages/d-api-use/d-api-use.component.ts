@@ -543,14 +543,26 @@ export class DApiUseComponent implements OnInit {
 
   getFilteredGroups() {
     if (!this.searchText) {
-      return this.alarmGroups;
+      return this.alarmGroups; // คืนค่ากลุ่มทั้งหมดถ้าไม่มีข้อความค้นหา
     }
 
-    return this.alarmGroups.filter(
-      group =>
-        group.tag.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        group.endpoints.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    const searchLower = this.searchText.toLowerCase(); // แปลงข้อความค้นหาเป็นตัวพิมพ์เล็ก
+
+    return this.alarmGroups.filter(group => {
+      // แปลงสถานะเป็นข้อความที่แสดง
+      const statusText =
+        group.status == "1"
+          ? "รอตรวจสอบจากเจ้าหน้าที่"
+          : group.status == "2"
+          ? "เปิดใช้งานแล้ว"
+          : "ยังไม่เปิดใช้งาน";
+
+      return (
+        group.tag.toLowerCase().includes(searchLower) || // ตรวจสอบ tag
+        group.endpoints.toLowerCase().includes(searchLower) || // ตรวจสอบ endpoints
+        statusText.toLowerCase().includes(searchLower) // ตรวจสอบสถานะในรูปแบบข้อความ
+      );
+    });
   }
 
   cancelAllRequests(): void {

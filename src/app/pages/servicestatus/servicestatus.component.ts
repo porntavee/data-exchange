@@ -1,4 +1,10 @@
-import { Component, ViewChild, OnInit, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  ChangeDetectorRef,
+  HostListener
+} from "@angular/core";
 import * as Highcharts from "highcharts";
 import HC_exporting from "highcharts/modules/exporting";
 HC_exporting(Highcharts);
@@ -27,7 +33,6 @@ import {
       gridster {
         width: 97vw;
         height: 250px;
-        min-width: 1700px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -119,6 +124,7 @@ export class ServicestatusComponent implements OnInit {
   chartOptions: any;
   ngOnInit(): void {
     this.loadData();
+    this.setGridOptions();
     this.ServicestatusService.getBackup().subscribe(
       data => {
         this.products = data.data; // อัปเดตข้อมูลใน products
@@ -193,6 +199,45 @@ export class ServicestatusComponent implements OnInit {
   // ngAfterViewInit() {
   //   this.drawDisk();
   // }
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event: Event) {
+    this.setGridOptions();
+  }
+
+  setGridOptions() {
+    const screenWidth = window.innerWidth;
+    console.log("Screen width:", screenWidth);
+
+    if (screenWidth < 1440) {
+      this.gridOptions = {
+        minCols: 1,
+        maxCols: 1,
+        minRows: 2,
+        maxRows: 2,
+        gridType: "verticalFixed" as GridType,
+        fixedRowHeight: 100,
+        margin: 16
+      };
+    } else {
+      this.gridOptions = {
+        minCols: 2,
+        maxCols: 12,
+        minRows: 1,
+        maxRows: 2,
+        gridType: "verticalFixed" as GridType,
+        fixedRowHeight: 100,
+        fixedColWidth: 200,
+        margin: 16
+      };
+    }
+
+    // รีเซ็ตค่า x และ y ให้เหมาะสม
+    this.dashboard.forEach(item => {
+      item.x = item.x < this.gridOptions.maxCols ? item.x : 0;
+      item.y = item.y < this.gridOptions.maxRows ? item.y : 0;
+    });
+  }
 
   ngOnDestroy(): void {
     if (this.intervalId) {

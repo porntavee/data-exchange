@@ -450,6 +450,16 @@ General styles p {
   border-radius: 10px;
 }
 
+.gridster-responsive {
+  display: flex; /* หรือ grid ขึ้นอยู่กับการตั้งค่า */
+  flex-wrap: wrap; /* หากต้องการให้การจัดเรียงเป็นแบบยืดหยุ่น */
+  justify-content: space-around;
+  width: 100%;
+}
+.gridster-item {
+  /* อาจจะต้องมีการปรับ width, margin หรืออื่นๆ ที่ส่งผลต่อการจัดเรียง */
+}
+
 /* Gridster styles */
 .gridster {
   height: 100%;
@@ -466,6 +476,60 @@ General styles p {
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.header-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.header-item {
+  flex: 1 1 200px; /* Allow items to shrink and grow */
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.header-item.cpu-chart,
+.header-item.memory-chart,
+.header-item.progress-bar {
+  text-align: center;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .header-item {
+    flex: 1 1 100%; /* Stack items on smaller screens */
+  }
+  .card-body {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+}
+
+@media (max-width: 1440px) {
+  .header-content {
+    flex-direction: column; /* Stack items vertically on very small screens */
+  }
+  .header-item {
+    flex: 1 1 100%;
+  }
+  .accordion-header {
+    min-width: 100px;
+  }
+  .gridster-responsive {
+    display: flex; /* หรือ grid ขึ้นอยู่กับการตั้งค่า */
+    flex-wrap: wrap; /* หากต้องการให้การจัดเรียงเป็นแบบยืดหยุ่น */
+    justify-content: start !important;
+    width: 100%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .gridster-responsive {
+    display: flex; /* หรือ grid ขึ้นอยู่กับการตั้งค่า */
+    flex-wrap: wrap; /* หากต้องการให้การจัดเรียงเป็นแบบยืดหยุ่น */
+    justify-content: start !important;
+    width: 100%;
+  }
 }
 
 /* p-table styles */
