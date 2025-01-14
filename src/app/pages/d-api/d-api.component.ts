@@ -257,6 +257,9 @@ export class DApiComponent implements OnInit {
       this.selectedValues = [this.availableMethods[0]];
     } else {
     }
+    console.log(this.availableMethods[0]);
+    this.selectedMethods = this.availableMethods[0];
+    console.log(this.selectedMethods);
     console.log(this.alarmGroup.type);
   }
   editline(AlarmGroup: alarmGroup) {
@@ -324,7 +327,7 @@ export class DApiComponent implements OnInit {
   availableMethods: string[] = ["POST", "GET", "PUT", "DELETE"];
 
   // เก็บ Method ที่ถูกเลือก
-  selectedMethods: string[] = [];
+  selectedMethods: any;
 
   // เก็บข้อมูล Methods ที่ถูกสร้างเป็น JSON String
   methods: string = "";

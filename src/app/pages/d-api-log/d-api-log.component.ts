@@ -111,8 +111,12 @@ export class DApiLogComponent implements OnInit {
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1; // JS months are 0-indexed
-    // Generate years dynamically
-    for (let year = 2000; year <= currentYear; year++) {
+
+    // สร้างรายการปี (เริ่มต้นจาก 2024)
+    const startYear = Math.max(2024, currentYear - 5); // หากปีเริ่มต้นน้อยกว่า 2024 ให้เริ่มที่ 2024
+    const endYear = currentYear + 5;
+    this.years = [];
+    for (let year = startYear; year <= endYear; year++) {
       this.years.push({ label: year.toString(), value: year });
     }
 
@@ -121,13 +125,6 @@ export class DApiLogComponent implements OnInit {
     this.selectedYear = currentYear;
     this.filteredYears = [...this.years];
     this.updateFilteredMonths(currentYear, currentMonth);
-    // สร้างรายการปี (สมมติให้เป็นช่วง 5 ปีย้อนหลังและ 5 ปีข้างหน้า)
-    const startYear = currentYear - 5;
-    const endYear = currentYear + 5;
-    this.years = [];
-    for (let year = startYear; year <= endYear; year++) {
-      this.years.push({ label: year.toString(), value: year });
-    }
 
     this.updateAvailableOptions(currentYear, currentMonth);
 

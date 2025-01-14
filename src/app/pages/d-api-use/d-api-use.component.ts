@@ -313,6 +313,7 @@ export class DApiUseComponent implements OnInit {
   today: Date = new Date(); // วันปัจจุบัน
   isReadOnly: boolean;
   isLoadingData: boolean;
+  isLoadingDataTable: boolean;
   rangeDates: any;
   isActive: boolean = true;
   constructor(
@@ -566,7 +567,6 @@ export class DApiUseComponent implements OnInit {
     if (this.userGroupCheck !== "develop") {
       return;
     }
-    this.isLoadingalarmGroups = true;
 
     event?.stopPropagation();
 
@@ -678,6 +678,7 @@ export class DApiUseComponent implements OnInit {
 
   async readToken() {
     this.isLoadingData = true;
+
     let userdata = jwt_decode(localStorage.getItem("token"));
 
     const apiUrl =
@@ -930,18 +931,19 @@ export class DApiUseComponent implements OnInit {
     }
 
     this.requestDialog = true;
-    this.toDate = undefined;
     this.rangeDates = undefined;
-    // ปลดล็อค readonly
     this.isReadOnly = false;
+
+    const today = new Date(); // วันที่วันนี้
+    const nextWeek = new Date(); // วันที่ +7 วัน
+    nextWeek.setDate(today.getDate() + 7);
+
+    this.fromDate = today; // ตั้งค่าเป็นวันนี้
+    this.toDate = nextWeek; // ตั้งค่าเป็นวันนี้ +7 วัน
+    this.selectedDuration = "0";
 
     this.api_id = param.route_id;
     this.requestDetails = param.details;
-    this.selectedDuration = "0";
-    this.fromDate = param.from_at
-      ? this.convertToDate(param.from_at)
-      : undefined;
-    this.toDate = param.to_at ? this.convertToDate(param.to_at) : undefined;
   }
 
   checkIfMobile(): void {

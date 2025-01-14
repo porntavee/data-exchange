@@ -19,11 +19,13 @@
           (click)="reboot()"
         >
           <ng-container *ngIf="!isRebootLoading">
-            <i class="pi pi-refresh"></i>
+            <i class="pi pi-refresh mr-2"></i>
+            <!-- เพิ่ม class mr-2 -->
             <span class="Newtxt new-font">Reboot</span>
           </ng-container>
           <ng-container *ngIf="isRebootLoading">
-            <i class="pi pi-spinner pi-spin"></i>
+            <i class="pi pi-spinner pi-spin mr-2"></i>
+            <!-- เพิ่ม class mr-2 -->
             <span class="Newtxt new-font">Loading...</span>
           </ng-container>
         </button>
@@ -35,7 +37,7 @@
           class="p-button-warning mr-2 Newbut"
           (click)="openDailog()"
         >
-          <i class="pi pi-plus"></i>
+          <i class="pi pi-plus" style="margin-right: 8px;"></i>
           <span class="Newtxt new-font">Create Route API</span>
         </button>
 
@@ -64,6 +66,7 @@
       dataKey="id"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [showCurrentPageReport]="true"
+      styleClass="custom-p-table"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -203,21 +206,18 @@
         <div class="col-6 pr-0">
           <label for="methods" style="font-weight: bold;">Methods</label>
           <div class="form-check" *ngFor="let method of availableMethods">
-            <p-checkbox
+            <p-radioButton
               name="method"
               value="{{ method }}"
               label="{{ method }}"
-              (onChange)="toggleMethodSelection(method)"
-              [(ngModel)]="selectedValues"
-            ></p-checkbox>
+              [(ngModel)]="selectedMethods"
+            ></p-radioButton>
           </div>
-          <small
-            class="p-error block"
-            *ngIf="submitted && selectedMethods.length === 0"
-          >
+          <small class="p-error block" *ngIf="submitted && !selectedMethod">
             At least one method is required.
           </small>
         </div>
+
         <div class="col-6 pr-0">
           <div class="row">
             <label for="methods" style="font-weight: bold; margin-right: 15px;"

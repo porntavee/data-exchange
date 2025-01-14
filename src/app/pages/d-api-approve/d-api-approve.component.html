@@ -509,10 +509,11 @@
 </p-dialog>
 <p-dialog
   [(visible)]="approveDialog"
-  [style]="{ width: '950px', height: '600px' }"
+  [style]="{ width: '950px', height: '800px' }"
   [(header)]="approveDialogHeader"
-  [modal]="true"
   styleClass="p-fluid"
+  [baseZIndex]="1000"
+  [autoZIndex]="true"
 >
   <ng-template pTemplate="content">
     <div class="p-field">
@@ -524,6 +525,7 @@
         pInputTextarea
         placeholder="กรอกรายละเอียด..."
         style="width: 100%;"
+        readonly
       ></textarea>
     </div>
     <div class="p-field" style="margin-top: 20px;">
@@ -535,6 +537,7 @@
         placeholder="เลือกระยะเวลา"
         optionLabel="label"
         style="width: 100%;"
+        [disabled]="true"
       ></p-dropdown>
     </div>
     <div
@@ -554,6 +557,7 @@
             placeholder="เลือกวันที่เริ่มต้น"
             style="width: 100%;"
             [showIcon]="true"
+            [disabled]="true"
           ></p-calendar>
         </div>
         <div class="col-6">
@@ -565,6 +569,7 @@
             placeholder="เลือกวันที่สิ้นสุด"
             style="width: 100%;"
             [showIcon]="true"
+            [disabled]="true"
           ></p-calendar>
         </div>
       </div>
@@ -632,13 +637,14 @@
     </div>
   </ng-template>
   <ng-template pTemplate="footer">
-    <div style="float: right; margin-top:24px">
+    <div style="text-align: right; width: 100%;">
       <button
         pButton
         pRipple
         label="Reject"
         icon="pi pi-times"
         class="p-button-danger"
+        style="margin-right: 8px;"
         (click)="reject()"
       ></button>
       <button

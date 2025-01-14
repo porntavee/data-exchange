@@ -131,6 +131,36 @@
 .truncate {
 }
 
+/* เปลี่ยนสี background และสีตัวอักษรของ paginator ที่ถูกเลือก */
+.p-paginator .p-highlight {
+  background-color: #007bff !important; /* เปลี่ยนเป็นสีที่ต้องการ */
+  color: white !important; /* เปลี่ยนสีตัวอักษร */
+  border-radius: 4px; /* เพิ่มขอบมนหากต้องการ */
+}
+
+/* เพิ่ม hover effect */
+.p-paginator .p-highlight:hover {
+  background-color: #0056b3 !important; /* สีเข้มขึ้นตอน hover */
+  color: white !important;
+}
+
+:host ::ng-deep .p-paginator .p-highlight {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.p-dialog {
+  display: flex;
+  flex-direction: column;
+}
+.p-dialog-content {
+  flex: 1; /* ให้เนื้อหาขยายได้ */
+  overflow-y: auto;
+}
+.p-dialog-footer {
+  flex-shrink: 0; /* ให้ Footer อยู่ที่ตำแหน่งเดิม */
+}
+
 ::ng-deep .p-datatable-scrollable .p-datatable-wrapper::-webkit-scrollbar {
   width: 8px !important;
   height: 8px !important;

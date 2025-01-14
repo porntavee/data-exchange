@@ -44,6 +44,23 @@
   }
 }
 
+.p-paginator .p-highlight {
+  background-color: #007bff !important; /* เปลี่ยนเป็นสีที่ต้องการ */
+  color: white !important; /* เปลี่ยนสีตัวอักษร */
+  border-radius: 4px; /* เพิ่มขอบมนหากต้องการ */
+}
+
+/* เพิ่ม hover effect */
+.p-paginator .p-highlight:hover {
+  background-color: #0056b3 !important; /* สีเข้มขึ้นตอน hover */
+  color: white !important;
+}
+
+:host ::ng-deep .p-paginator .p-highlight {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
 ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   background-color: #061949 !important;
   color: white;
