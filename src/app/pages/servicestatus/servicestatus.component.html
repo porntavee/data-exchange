@@ -85,15 +85,15 @@
             </div>
 
             <div class="header-item progress-bar">
-              <p-progressBar
-                *ngIf="!isLoading"
-                [(value)]="tab.header.storage.percentUsed"
-              ></p-progressBar>
-              <p-progressSpinner
-                *ngIf="isLoading"
-                styleClass="custom-spinner"
-                [style]="{ width: '50px', height: '50px' }"
-              ></p-progressSpinner>
+              <div class="custom-progress-bar">
+                <div
+                  class="custom-progress-bar-inner"
+                  [style.width.%]="tab.header.storage.percentUsed"
+                ></div>
+                <span class="progress-text"
+                  >{{ tab.header.storage.percentUsed }}%</span
+                >
+              </div>
             </div>
           </div>
         </button>
@@ -104,7 +104,7 @@
             <gridster
               [options]="gridOptions"
               class="gridster-responsive"
-              style="background: none; width: 100%;"
+              style="background: none; width: 100%; margin-left:100px"
             >
               <gridster-item
                 [item]="item"

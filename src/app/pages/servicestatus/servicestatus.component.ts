@@ -211,12 +211,13 @@ export class ServicestatusComponent implements OnInit {
 
     if (screenWidth < 1440) {
       this.gridOptions = {
-        minCols: 1,
-        maxCols: 1,
+        minCols: 12,
+        maxCols: 12,
         minRows: 2,
         maxRows: 2,
         gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 100,
+        fixedRowHeight: 300,
+        fixedColWidth: 200,
         margin: 16
       };
     } else {
@@ -226,10 +227,18 @@ export class ServicestatusComponent implements OnInit {
         minRows: 1,
         maxRows: 2,
         gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 100,
+        fixedRowHeight: 300, // ความสูงของแต่ละ row คงที่ที่ 300
         fixedColWidth: 200,
-        margin: 16
+        margin: 16,
+        outerMargin: true // เพิ่ม margin รอบนอก (ถ้าต้องการ)
       };
+      this.dashboard = [
+        { cols: 3, rows: 2, x: 0, y: 0, header: "loadcpu" },
+        { cols: 3, rows: 2, x: 3, y: 0, header: "loadmemory" },
+        { cols: 2, rows: 1, x: 6, y: 0, header: "loadCPUText" },
+        { cols: 2, rows: 1, x: 6, y: 1, header: "loadMemoryText" },
+        { cols: 4, rows: 2, x: 8, y: 0, header: "loaddiskstatus" }
+      ];
     }
 
     // รีเซ็ตค่า x และ y ให้เหมาะสม

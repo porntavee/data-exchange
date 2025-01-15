@@ -458,6 +458,7 @@ General styles p {
 }
 .gridster-item {
   /* อาจจะต้องมีการปรับ width, margin หรืออื่นๆ ที่ส่งผลต่อการจัดเรียง */
+  min-height: 300px;
 }
 
 /* Gridster styles */
@@ -469,7 +470,7 @@ General styles p {
 
 .gridster-item .card {
   width: 100%; /* ใช้พื้นที่ทั้งหมดของไอเท็ม */
-  height: 100%;
+  min-height: 300px;
   background-color: #f4f4f4;
   border: 1px solid #ddd;
   display: flex;
@@ -493,6 +494,10 @@ General styles p {
 .header-item.memory-chart,
 .header-item.progress-bar {
   text-align: center;
+}
+
+.header-item.progress-bar {
+  min-width: 200px;
 }
 
 /* Media Queries for responsiveness */
@@ -520,6 +525,62 @@ General styles p {
     flex-wrap: wrap; /* หากต้องการให้การจัดเรียงเป็นแบบยืดหยุ่น */
     justify-content: start !important;
     width: 100%;
+  }
+}
+
+.header-item.progress-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #f3f3f3;
+  position: relative;
+}
+
+.custom-progress-bar-inner {
+  height: 100%;
+  background-color: #4caf50;
+}
+
+.progress-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: black;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-progress-bar {
+    height: 8px;
+  }
+  .progress-text {
+    font-size: 12px;
+  }
+}
+
+.custom-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 

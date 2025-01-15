@@ -123,6 +123,7 @@
     <!-- Desktop View -->
     <div>
       <p-table
+        [value]="filteredGroups"
         #dt
         [value]="tokenList"
         [rows]="10"
