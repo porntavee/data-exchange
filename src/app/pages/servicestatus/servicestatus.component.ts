@@ -203,6 +203,7 @@ export class ServicestatusComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event: Event) {
     this.setGridOptions();
+    this.drawDisk();
   }
 
   setGridOptions() {
@@ -216,7 +217,7 @@ export class ServicestatusComponent implements OnInit {
         minRows: 2,
         maxRows: 2,
         gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 300,
+        fixedRowHeight: 100,
         fixedColWidth: 200,
         margin: 16
       };
@@ -227,7 +228,7 @@ export class ServicestatusComponent implements OnInit {
         minRows: 1,
         maxRows: 2,
         gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 300, // ความสูงของแต่ละ row คงที่ที่ 300
+        fixedRowHeight: 100, // ความสูงของแต่ละ row คงที่ที่ 300
         fixedColWidth: 200,
         margin: 16,
         outerMargin: true // เพิ่ม margin รอบนอก (ถ้าต้องการ)
