@@ -247,7 +247,6 @@ export class DApiComponent implements OnInit {
     this.ipSearch = null;
     this.submitted = false;
     this.alarmGroupDialog = true;
-    console.log(this.alarmGroup.type);
     this.hasNoSearchResult = false;
     this.dialogHeader = "Add new";
     this.check = false;
@@ -257,10 +256,7 @@ export class DApiComponent implements OnInit {
       this.selectedValues = [this.availableMethods[0]];
     } else {
     }
-    console.log(this.availableMethods[0]);
     this.selectedMethods = this.availableMethods[0];
-    console.log(this.selectedMethods);
-    console.log(this.alarmGroup.type);
   }
   editline(AlarmGroup: alarmGroup) {
     this.symbolData = [];
@@ -395,21 +391,50 @@ export class DApiComponent implements OnInit {
     );
   }
   tryExecute() {
+    if (!this.selectedDataSets || !this.selectedDataSets.value) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please select a dataset."
+      });
+      return;
+    }
+
+    if (!this.alarmGroup || !this.alarmGroup.query) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Query string is missing."
+      });
+      return;
+    }
+
     let model = {
       dataset_id: this.selectedDataSets.value,
       query_string: this.alarmGroup.query
     };
 
-    let jsonStr = JSON.stringify(model);
-
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/tryexecute";
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
+        this.messageService.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Executing..."
+        });
         this.jsonData = data.data;
+        return;
         // //debugger
       },
-      error => {}
+      error => {
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Try again!"
+        });
+        return;
+      }
     );
   }
 
@@ -515,7 +540,6 @@ export class DApiComponent implements OnInit {
 
     if (missingFields.length > 0) {
       // Log missing fields
-      console.log("Missing required fields:", missingFields);
 
       // ใช้ MessageService แจ้งเตือน
       this.messageService.add({

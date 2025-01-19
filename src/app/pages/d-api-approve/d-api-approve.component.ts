@@ -114,8 +114,8 @@ export class DApiApproveComponent implements OnInit {
   route_id: any;
   fromDate: Date = new Date(); // วันที่ปัจจุบัน
   toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
-  fromAdminDate: Date = new Date(); // วันที่ปัจจุบัน
-  toAdminDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+  fromAdminDate: any = ""; // วันที่ปัจจุบัน
+  toAdminDate: any = "";
 
   // ตัวเลือกสำหรับ Dropdown
   durationOptions = [

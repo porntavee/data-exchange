@@ -500,7 +500,7 @@ General styles p {
 }
 
 /* Media Queries for responsiveness */
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   .header-item {
     flex: 1 1 100%; /* Stack items on smaller screens */
   }
@@ -508,22 +508,6 @@ General styles p {
     padding: 10px; /* Reduce padding for smaller screens */
   }
   .accordion-header {
-  }
-}
-
-@media (max-width: 580px) {
-  .header-content {
-    flex-direction: column; /* Stack items vertically on very small screens */
-  }
-  .header-item {
-    flex: 1 1 100%;
-  }
-  .accordion-header {
-  }
-  .gridster-responsive {
-    flex-wrap: wrap; /* หากต้องการให้การจัดเรียงเป็นแบบยืดหยุ่น */
-    justify-content: start !important;
-    width: 100%;
   }
 }
 

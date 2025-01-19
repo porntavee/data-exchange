@@ -67,6 +67,7 @@
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [showCurrentPageReport]="true"
       styleClass="custom-p-table"
+      [rowsPerPageOptions]="[10, 20, 30]"
     >
       <ng-template pTemplate="header">
         <tr>
@@ -316,7 +317,8 @@
             [paginator]="true"
             [rows]="10"
             [responsiveLayout]="'scroll'"
-            [rowsPerPageOptions]="[5, 10, 20]"
+            [rowsPerPageOptions]="[5, 10, 20, 30]"
+            appendTo="body"
           >
             <ng-template pTemplate="header">
               <tr>

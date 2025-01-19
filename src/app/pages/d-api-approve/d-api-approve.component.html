@@ -14,7 +14,7 @@
         style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;"
       >
         <p-dropdown
-          [style]="{ width: '100%', maxWidth: '350px' }"
+          [style]="{ maxWidth: '350px' }"
           [options]="statusOptions"
           [(ngModel)]="selectedStatus"
           optionLabel="label"
@@ -31,7 +31,6 @@
             (input)="dt.filterGlobal($event.target.value, 'contains')"
             class="Searchtxt new-font"
             placeholder="Search..."
-            style="width: 100%;"
           />
         </span>
       </div>
@@ -366,9 +365,7 @@
   [contentStyle]="{ 'overflow-y': 'auto', 'overflow-x': 'auto' }"
 >
   <ng-template pTemplate="content">
-    <div
-      style="background-color: grey; width:100%; border-top: 1px dashed grey;"
-    ></div>
+    <div style="background-color: grey;  border-top: 1px dashed grey;"></div>
     <div class="col-12 justify-content-between flex">
       <div class="row mx-0">
         <div class="col-6 pr-0">
@@ -524,7 +521,6 @@
         [(ngModel)]="requestDetails"
         pInputTextarea
         placeholder="กรอกรายละเอียด..."
-        style="width: 100%;"
         readonly
       ></textarea>
     </div>
@@ -536,7 +532,6 @@
         [(ngModel)]="selectedDuration"
         placeholder="เลือกระยะเวลา"
         optionLabel="label"
-        style="width: 100%;"
         [disabled]="true"
       ></p-dropdown>
     </div>
@@ -555,7 +550,6 @@
             [(ngModel)]="fromDate"
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่เริ่มต้น"
-            style="width: 100%;"
             [showIcon]="true"
             [disabled]="true"
           ></p-calendar>
@@ -567,7 +561,6 @@
             [(ngModel)]="toDate"
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่สิ้นสุด"
-            style="width: 100%;"
             [showIcon]="true"
             [disabled]="true"
           ></p-calendar>
@@ -585,7 +578,6 @@
         [(ngModel)]="adminDetails"
         pInputTextarea
         placeholder="กรอกรายละเอียด..."
-        style="width: 100%;"
       ></textarea>
     </div>
     <div class="p-field" style="margin-top: 20px;">
@@ -598,7 +590,7 @@
         [(ngModel)]="selectAdminDuration"
         placeholder="ระยะเวลาที่อนุมัติ"
         optionLabel="label"
-        style="width: 100%;"
+        appendTo="body"
       ></p-dropdown>
     </div>
     <div
@@ -616,7 +608,6 @@
             [(ngModel)]="fromAdminDate"
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่เริ่มต้น"
-            style="width: 100%;"
             [showIcon]="true"
             [minDate]="today"
           ></p-calendar>
@@ -628,7 +619,6 @@
             [(ngModel)]="toAdminDate"
             dateFormat="dd-mm-yy"
             placeholder="เลือกวันที่สิ้นสุด"
-            style="width: 100%;"
             [showIcon]="true"
             [minDate]="today"
           ></p-calendar>

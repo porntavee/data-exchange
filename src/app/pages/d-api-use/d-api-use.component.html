@@ -129,7 +129,14 @@
         [rows]="10"
         [paginator]="true"
         [loading]="isLoadingalarmGroups"
-        [globalFilterFields]="['id', 'tag', 'endpoints', 'expires_at', 'token']"
+        [globalFilterFields]="[
+          'id',
+          'tag',
+          'endpoints',
+          'expires_at',
+          'token',
+          'status_description'
+        ]"
         dataKey="group_id"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [showCurrentPageReport]="true"
