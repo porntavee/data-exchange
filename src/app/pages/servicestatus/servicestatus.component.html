@@ -104,7 +104,7 @@
             <gridster
               [options]="gridOptions"
               class="gridster-responsive"
-              style="background: none; width: 100%; margin-left:100px"
+              style="background: none; width: 100%; margin-left:10%"
             >
               <gridster-item
                 [item]="item"
@@ -190,7 +190,7 @@
                     *ngIf="item.header === 'loadCPUText'"
                   >
                     <div class="card-body pt-1">
-                      <h5 class="card-title" style="color:black">CPU CORE</h5>
+                      <h5 class="card-title" style="color:black;">CPU CORE</h5>
                       <div class="card-content">
                         <p-progressSpinner
                           *ngIf="isLoading"

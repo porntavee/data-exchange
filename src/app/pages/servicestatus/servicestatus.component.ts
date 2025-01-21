@@ -31,7 +31,7 @@ import {
       }
 
       gridster {
-        min-height: 200px;
+        min-height: 250px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -50,6 +50,17 @@ import {
       gridster-item {
         /* background-color: #1e1e1e; */
         border-radius: 16px;
+      }
+      @media (max-width: 1007px) {
+        gridster-item {
+          min-height: 220px !important;
+        }
+      }
+      @media (max-width: 976px) {
+        gridster-item {
+         
+          max-height: 220px !important;
+        }
       }
     `
   ]
