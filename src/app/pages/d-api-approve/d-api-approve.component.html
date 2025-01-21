@@ -591,6 +591,7 @@
         placeholder="ระยะเวลาที่อนุมัติ"
         optionLabel="label"
         appendTo="body"
+        (onChange)="onAdminDurationChange($event)"
       ></p-dropdown>
     </div>
     <div
@@ -598,8 +599,6 @@
       class="p-field"
       style="margin-top: 20px;"
     >
-      <!-- <label style="font-weight: bold;">วันที่</label> -->
-      <!-- {{fromDate}} -->
       <div class="row">
         <div class="col-6">
           <label for="fromAdminDate">ตั้งแต่วันที่</label>

@@ -31,8 +31,7 @@ import {
       }
 
       gridster {
-        width: 97vw;
-        height: 250px;
+        min-height: 200px;
       }
       gridster::-webkit-scrollbar {
         width: 8px;
@@ -208,45 +207,44 @@ export class ServicestatusComponent implements OnInit {
 
   setGridOptions() {
     const screenWidth = window.innerWidth;
-    console.log("Screen width:", screenWidth);
 
-    if (screenWidth < 1440) {
-      this.gridOptions = {
-        minCols: 12,
-        maxCols: 12,
-        minRows: 2,
-        maxRows: 2,
-        gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 100,
-        fixedColWidth: 200,
-        margin: 16
-      };
-    } else {
-      this.gridOptions = {
-        minCols: 2,
-        maxCols: 12,
-        minRows: 1,
-        maxRows: 2,
-        gridType: "verticalFixed" as GridType,
-        fixedRowHeight: 100, // ความสูงของแต่ละ row คงที่ที่ 300
-        fixedColWidth: 200,
-        margin: 16,
-        outerMargin: true // เพิ่ม margin รอบนอก (ถ้าต้องการ)
-      };
-      this.dashboard = [
-        { cols: 3, rows: 2, x: 0, y: 0, header: "loadcpu" },
-        { cols: 3, rows: 2, x: 3, y: 0, header: "loadmemory" },
-        { cols: 2, rows: 1, x: 6, y: 0, header: "loadCPUText" },
-        { cols: 2, rows: 1, x: 6, y: 1, header: "loadMemoryText" },
-        { cols: 4, rows: 2, x: 8, y: 0, header: "loaddiskstatus" }
-      ];
-    }
+    // if (screenWidth < 1440) {
+    //   this.gridOptions = {
+    //     minCols: 12,
+    //     maxCols: 12,
+    //     minRows: 2,
+    //     maxRows: 2,
+    //     gridType: "verticalFixed" as GridType,
+    //     fixedRowHeight: 100,
+    //     fixedColWidth: 200,
+    //     margin: 16
+    //   };
+    // } else {
+    //   this.gridOptions = {
+    //     minCols: 2,
+    //     maxCols: 12,
+    //     minRows: 1,
+    //     maxRows: 2,
+    //     gridType: "verticalFixed" as GridType,
+    //     fixedRowHeight: 100, // ความสูงของแต่ละ row คงที่ที่ 300
+    //     fixedColWidth: 200,
+    //     margin: 16,
+    //     outerMargin: true // เพิ่ม margin รอบนอก (ถ้าต้องการ)
+    //   };
+    //   this.dashboard = [
+    //     { cols: 3, rows: 2, x: 0, y: 0, header: "loadcpu" },
+    //     { cols: 3, rows: 2, x: 3, y: 0, header: "loadmemory" },
+    //     { cols: 2, rows: 1, x: 6, y: 0, header: "loadCPUText" },
+    //     { cols: 2, rows: 1, x: 6, y: 1, header: "loadMemoryText" },
+    //     { cols: 4, rows: 2, x: 8, y: 0, header: "loaddiskstatus" }
+    //   ];
+    // }
 
-    // รีเซ็ตค่า x และ y ให้เหมาะสม
-    this.dashboard.forEach(item => {
-      item.x = item.x < this.gridOptions.maxCols ? item.x : 0;
-      item.y = item.y < this.gridOptions.maxRows ? item.y : 0;
-    });
+    // // รีเซ็ตค่า x และ y ให้เหมาะสม
+    // this.dashboard.forEach(item => {
+    //   item.x = item.x < this.gridOptions.maxCols ? item.x : 0;
+    //   item.y = item.y < this.gridOptions.maxRows ? item.y : 0;
+    // });
   }
 
   ngOnDestroy(): void {

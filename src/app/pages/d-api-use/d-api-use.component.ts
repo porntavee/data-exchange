@@ -298,8 +298,8 @@ export class DApiUseComponent implements OnInit {
   // selectedDuration: string = ''; // เก็บระยะเวลาที่เลือก
   api_id: string = "";
   selectedDuration: any = {};
-  fromDate: Date = new Date(); // วันที่ปัจจุบัน
-  toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+  fromDate: any;
+  toDate: any;
   status: string;
   dataAmount: any;
   viewDialog: boolean;
@@ -606,7 +606,6 @@ export class DApiUseComponent implements OnInit {
                 takeUntil(cancel$),
                 catchError(error => {
                   if (error.name === "AbortError") {
-                    console.log("API request was aborted");
                   }
                   this.alarmGroups[index].statusAPI = "Error";
                   this.alarmGroups[index].data = "Error";
@@ -622,14 +621,12 @@ export class DApiUseComponent implements OnInit {
           this.alarmGroups[index].data = data.data.length;
         })
         .catch(error => {
-          console.error(error);
           this.isLoadingalarmGroups = false;
         })
         .finally(() => {
           this.isLoadingalarmGroups = false;
         });
     } catch (error) {
-      console.error(error);
       this.isLoadingalarmGroups = false;
     }
   }
@@ -715,17 +712,6 @@ export class DApiUseComponent implements OnInit {
             .toString()
             .padStart(2, "0")}`
         : "";
-    // ตรวจสอบว่า fromDate และ toDate มีค่าหรือไม่
-    if (!this.fromDate || !this.toDate) {
-      this.messageService.add({
-        severity: "error",
-        summary: "Invalid Date",
-        detail: "กรุณาเลือกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
-      });
-      return;
-    }
-
-    // ตรวจสอบว่า fromDate มากกว่า toDate หรือไม่
     if (this.fromDate > this.toDate) {
       this.messageService.add({
         severity: "error",
@@ -749,12 +735,13 @@ export class DApiUseComponent implements OnInit {
       })
       .subscribe(
         async data => {
+          this.messageService.add({
+            severity: "success",
+            summary: "Success !",
+            detail: "ดำเนินการส่งเรื่องขออนุญาตเรียบร้อย !"
+          });
           this.requestDialog = false;
-
-          // เรียก readRoute และรอให้เสร็จ
           await this.readRoute2();
-
-          // เรียก readToken ต่อเมื่อ readRoute เสร็จ
           await this.readToken();
         },
         error => {}
@@ -926,11 +913,20 @@ export class DApiUseComponent implements OnInit {
     { label: "ไม่มีหมดอายุ", value: "0" }
   ];
 
+  onDurationChange(event: any): void {
+    if (event.value?.value === "-1") {
+      this.fromDate = new Date();
+      this.toDate = new Date(new Date().setDate(new Date().getDate() + 7));
+    } else {
+      this.fromDate = "";
+      this.toDate = "";
+    }
+  }
+
   openRequestDialog(param) {
-    //debugger
     this.requestDialog = true;
-    this.fromDate = new Date();
-    this.toDate = new Date(new Date().setDate(new Date().getDate() + 7));
+    this.fromDate = "";
+    this.toDate = "";
     this.requestDetails = "";
     this.selectedDuration = "0";
     this.rangeDates = undefined;
@@ -946,12 +942,14 @@ export class DApiUseComponent implements OnInit {
     this.rangeDates = undefined;
     this.isReadOnly = false;
 
-    const today = new Date(); // วันที่วันนี้
-    const nextWeek = new Date(); // วันที่ +7 วัน
-    nextWeek.setDate(today.getDate() + 7);
+    // const today = new Date(); // วันที่วันนี้
+    // const nextWeek = new Date(); // วันที่ +7 วัน
+    // nextWeek.setDate(today.getDate() + 7);
 
-    this.fromDate = today; // ตั้งค่าเป็นวันนี้
-    this.toDate = nextWeek; // ตั้งค่าเป็นวันนี้ +7 วัน
+    // this.fromDate = today; // ตั้งค่าเป็นวันนี้
+    // this.toDate = nextWeek; // ตั้งค่าเป็นวันนี้ +7 วัน
+    this.fromDate = "";
+    this.toDate = "";
     this.selectedDuration = "0";
 
     this.api_id = param.route_id;

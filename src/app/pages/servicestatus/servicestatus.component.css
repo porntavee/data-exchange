@@ -11,10 +11,8 @@
   height: calc(100vh - 200px);
 }
 .bgcards {
-  position: relative; /* กำหนดให้ตำแหน่งเป็น relative */
   overflow-y: auto; /* ซ่อนสิ่งที่เกินขอบเขต */
   background-color: rgba(6, 11, 40, 0.5); /* สี #060B28 แบบโปร่งใส 50% */
-
   height: calc(100vh - 200px);
 }
 
@@ -369,7 +367,7 @@ General styles p {
   transition: background-color 0.3s ease;
   width: 90%; /* ใช้ 100% เพื่อให้ header มีขนาดเต็มความกว้าง */
   box-sizing: border-box; /* รวม padding ในขนาดของ element */
-  min-width: 1700px;
+  max-width: 1700px;
 }
 @media screen and (max-width: 1920px) {
   .accordion-content {
@@ -407,7 +405,7 @@ General styles p {
   height: 100%;
   background-color: #4caf50;
   width: 0%;
-  border-radius: 8px 0 0 8px;
+  border-radius: 16px;
   transition: width 0.5s ease-in-out;
 }
 
@@ -419,20 +417,6 @@ General styles p {
   font-weight: bold;
   color: white;
   font-size: 12px;
-}
-
-/* Card */
-.card {
-  /* background-color: #f4f4f4; */
-  border-radius: 8px;
-  margin-top: 24px;
-  padding-left: 24px;
-  padding-right: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .card-dashboard {
@@ -484,7 +468,7 @@ General styles p {
 }
 
 .header-item {
-  flex: 1 1 200px; /* Allow items to shrink and grow */
+  flex: 1 1 50px; /* Allow items to shrink and grow */
   text-align: left;
   margin-bottom: 10px;
 }

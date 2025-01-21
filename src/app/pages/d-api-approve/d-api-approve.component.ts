@@ -112,8 +112,8 @@ export class DApiApproveComponent implements OnInit {
   selectAdminDuration: any = {};
   user_id: any;
   route_id: any;
-  fromDate: Date = new Date(); // วันที่ปัจจุบัน
-  toDate: Date = new Date(new Date().setDate(new Date().getDate() + 7)); // อีก 7 วันจากวันนี้
+  fromDate: any = "";
+  toDate: any = "";
   fromAdminDate: any = ""; // วันที่ปัจจุบัน
   toAdminDate: any = "";
 
@@ -392,6 +392,9 @@ export class DApiApproveComponent implements OnInit {
     if (status === "ตรวจสอบรายละเอียด") {
       //debugger
       // this.approve(group.user_id, group.route_id);
+
+      console.log("ตรวจสอบ");
+      this.adminDetails = "";
       this.requestDetails = group.details;
       this.user_id = group.user_id;
       this.route_id = group.route_id;
@@ -403,24 +406,28 @@ export class DApiApproveComponent implements OnInit {
       );
       this.selectedDuration = this.durationOptions[index];
       this.selectAdminDuration = this.durationOptions[index];
-      this.fromDate = this.convertToDate(group.from_at);
-      this.toDate = this.convertToDate(group.to_at);
-      const currentDate = new Date();
-      this.fromAdminDate = currentDate; // วันที่ปัจจุบัน
-      this.toAdminDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate() + 7
-      ); // ปัจจุบัน + 7 วัน
-
+      this.fromDate = "";
+      this.toDate = "";
+      this.fromAdminDate = "";
+      this.toAdminDate = "";
       this.approveDialog = true;
-      this.fromAdminDate = this.today;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
       this.close();
     } else {
-      // คุณสามารถเพิ่มฟังก์ชันสำหรับ "ปิดใช้งาน" ที่นี่
+    }
+  }
+
+  onAdminDurationChange(event: any): void {
+    console.log("Selected value:", event.value);
+
+    if (event.value?.value === "-1") {
+      this.fromAdminDate = new Date();
+      this.toAdminDate = new Date(new Date().setDate(new Date().getDate() + 7));
+    } else {
+      this.fromAdminDate = "";
+      this.toAdminDate = "";
     }
   }
 
