@@ -360,7 +360,6 @@ General styles p {
   background-color: #061949;
   color: white;
   text-align: left;
-  border: none;
   cursor: pointer;
   font-size: 18px;
   font-weight: bold;
@@ -369,6 +368,33 @@ General styles p {
   box-sizing: border-box; /* รวม padding ในขนาดของ element */
   max-width: 1700px;
 }
+
+.responsive-text {
+  font-weight: bold;
+  font-size: 1.5vw;
+
+  @media (max-width: 768px) {
+    font-size: 8vw;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14vw;
+  }
+}
+
+.card-title {
+  color: black;
+  font-size: 1.2vw;
+
+  @media (max-width: 768px) {
+    font-size: 2vw;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 4vw;
+  }
+}
+
 @media screen and (max-width: 1920px) {
   .accordion-content {
     padding: 0 10px;
@@ -392,8 +418,6 @@ General styles p {
 
 /* Progress Bar */
 .progress-bar-container {
-  width: 100%;
-  max-width: 300px;
   background-color: #e0e0e0;
   border-radius: 8px;
   height: 20px;
@@ -468,7 +492,6 @@ General styles p {
 }
 
 .header-item {
-  flex: 1 1 50px; /* Allow items to shrink and grow */
   text-align: left;
   margin-bottom: 10px;
 }
@@ -481,6 +504,7 @@ General styles p {
 
 .header-item.progress-bar {
   min-width: 200px;
+  max-width: 200px;
 }
 
 /* Media Queries for responsiveness */

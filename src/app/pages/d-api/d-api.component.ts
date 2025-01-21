@@ -661,6 +661,15 @@ export class DApiComponent implements OnInit {
       return;
     }
 
+    if (!this.alarmGroup.description) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please enter description."
+      });
+      return;
+    }
+
     if (!this.alarmGroup.endpoints) {
       this.messageService.add({
         severity: "warn",
@@ -678,6 +687,11 @@ export class DApiComponent implements OnInit {
       return;
     }
     this.submitted = true;
+    this.messageService.add({
+      severity: "success",
+      summary: "Success",
+      detail: "Edit Success !"
+    });
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/' + this.alarmGroup.id;
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/" +
