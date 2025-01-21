@@ -643,6 +643,40 @@ export class DApiComponent implements OnInit {
   }
 
   editlistGroup() {
+    if (!this.selectedDataSets || !this.selectedDataSets.value) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please select a dataset."
+      });
+      return;
+    }
+
+    if (!this.alarmGroup.tag) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please enter tag."
+      });
+      return;
+    }
+
+    if (!this.alarmGroup.endpoints) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please enter endpoints."
+      });
+      return;
+    }
+    if (!this.alarmGroup || !this.alarmGroup.query) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Query string is missing."
+      });
+      return;
+    }
     this.submitted = true;
     // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/route/update/' + this.alarmGroup.id;
     const apiUrl =
