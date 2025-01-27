@@ -402,7 +402,6 @@ export class DApiApproveComponent implements OnInit {
       this.requestDetails = group.details;
       this.user_id = group.user_id;
       this.route_id = group.route_id;
-      console.log(group.expires_at, group.from_at);
       this.selectedDuration = {
         value: group.duration
       };
@@ -414,8 +413,6 @@ export class DApiApproveComponent implements OnInit {
       this.selectAdminDuration = this.durationOptions[index];
       this.fromDate = new Date(group.from_at);
       this.toDate = new Date(group.expires_at);
-      console.log(this.fromDate, this.toDate);
-      console.log(this.fromAdminDate, this.toAdminDate);
       if (this.selectAdminDuration.value === "-1") {
         this.fromAdminDate = new Date();
         this.toAdminDate = new Date(
@@ -437,9 +434,7 @@ export class DApiApproveComponent implements OnInit {
   }
 
   onAdminDurationChange(event: any): void {
-    console.log(event);
     if (event.value === "-1") {
-      console.log("Hello");
       this.fromAdminDate = new Date();
       this.toAdminDate = new Date(new Date().setDate(new Date().getDate() + 7));
     } else {
