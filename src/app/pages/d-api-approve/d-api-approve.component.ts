@@ -288,8 +288,8 @@ export class DApiApproveComponent implements OnInit {
           this.approveDialog = false;
           this.messageService.add({
             severity: "success",
-            summary: "Complete",
-            detail: "อัพเดทข้อมูลเสร็จสิ้น"
+            summary: "Success",
+            detail: "เปิดใช้งานแล้ว"
           });
           this.readToken();
         },
@@ -328,6 +328,11 @@ export class DApiApproveComponent implements OnInit {
         data => {
           this.approveDialog = false;
           this.readToken();
+          this.messageService.add({
+            severity: "success",
+            summary: "Success",
+            detail: "ปฏิเสธการใช้งานแล้ว"
+          });
         },
         error => {}
       );
@@ -401,6 +406,7 @@ export class DApiApproveComponent implements OnInit {
       this.selectedDuration = {
         value: group.duration
       };
+
       var index = this.durationOptions.findIndex(
         data => data.value === group.duration.toString()
       );
@@ -409,19 +415,31 @@ export class DApiApproveComponent implements OnInit {
       this.fromDate = new Date(group.from_at);
       this.toDate = new Date(group.expires_at);
       console.log(this.fromDate, this.toDate);
-      this.fromAdminDate = "";
-      this.toAdminDate = "";
+      console.log(this.fromAdminDate, this.toAdminDate);
+      if (this.selectAdminDuration.value === "-1") {
+        this.fromAdminDate = new Date();
+        this.toAdminDate = new Date(
+          new Date().setDate(new Date().getDate() + 7)
+        );
+      }
       this.approveDialog = true;
     } else if (status === "ปิดใช้งาน") {
       this.user_id = group.user_id;
       this.route_id = group.route_id;
       this.close();
+      this.messageService.add({
+        severity: "success",
+        summary: "Success",
+        detail: "ปิดใช้งานเรียบร้อยแล้ว"
+      });
     } else {
     }
   }
 
   onAdminDurationChange(event: any): void {
-    if (event.value?.value === "-1") {
+    console.log(event);
+    if (event.value === "-1") {
+      console.log("Hello");
       this.fromAdminDate = new Date();
       this.toAdminDate = new Date(new Date().setDate(new Date().getDate() + 7));
     } else {

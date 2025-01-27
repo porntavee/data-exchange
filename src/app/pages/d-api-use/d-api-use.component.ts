@@ -744,7 +744,13 @@ export class DApiUseComponent implements OnInit {
           await this.readRoute2();
           await this.readToken();
         },
-        error => {}
+        error => {
+          this.messageService.add({
+            severity: "warn",
+            summary: "Warning !",
+            detail: "กรุณากรอกรายละเอียดให้ครบถ้วน !"
+          });
+        }
       );
   }
 

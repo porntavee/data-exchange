@@ -125,24 +125,7 @@ export class UserComponent implements OnInit {
         }
       }
     });
-    // this.userService.getUserZone().subscribe({
-    //   next: datas => {
-    //     this.zonelist = datas;
-    //     // this.selectedZone = datas[0]
-    //     // console.log(datas)
-    //     // this.alarmGroups = datas;
-    //     // this.changeDetection.detectChanges();
-    //   },
-    //   error: error => {
-    //     if (error.status == 401) {
-    //       this.messageService.add({
-    //         severity: "error",
-    //         summary: "Error",
-    //         detail: "Session expired, please logout and login again."
-    //       });
-    //     }
-    //   }
-    // });
+  
     this.userService.currentMessage.subscribe(user => {
       if (user != undefined) {
         this.itemsAction = [
@@ -593,7 +576,6 @@ export class UserComponent implements OnInit {
     }
   }
   checkusername() {
-    console.log(this.user.username);
     if (this.user.username) {
       this.invalidUserName = "";
     }
@@ -613,10 +595,8 @@ export class UserComponent implements OnInit {
   sendmail(email) {
     this.userService.sendmail(email).subscribe({
       next: data => {
-        //console.log(data)
       },
       error: error => {
-        console.error("There was an error!", error);
       }
     });
   }
