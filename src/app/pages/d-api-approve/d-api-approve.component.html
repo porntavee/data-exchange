@@ -651,3 +651,14 @@
 </p-dialog>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<p-dialog
+  [(visible)]="isDialogVisible"
+  [header]="dialogTitle"
+  [modal]="true"
+  [closable]="true"
+  [style]="{ width: '50vw' }"
+  (onHide)="closeCheckDialog()"
+>
+  <p>{{ selectedGroup?.details || "No Description" }}</p>
+</p-dialog>

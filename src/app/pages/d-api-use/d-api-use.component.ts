@@ -316,6 +316,8 @@ export class DApiUseComponent implements OnInit {
   isLoadingDataTable: boolean;
   rangeDates: any;
   isActive: boolean = true;
+  selectedGroup: null;
+  isDialogVisible: boolean;
   constructor(
     private changeDetection: ChangeDetectorRef,
     private lineGroupService: LineGroupService,
@@ -754,6 +756,15 @@ export class DApiUseComponent implements OnInit {
       );
   }
 
+  showAdminDetails(group: any): void {
+    this.selectedGroup = group;
+    this.isDialogVisible = true;
+  }
+
+  closeDialogDetails(): void {
+    this.isDialogVisible = false;
+    this.selectedGroup = null;
+  }
   apiResults: {
     name: string;
     statusAPI: string;

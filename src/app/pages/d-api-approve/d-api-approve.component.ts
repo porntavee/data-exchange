@@ -128,6 +128,9 @@ export class DApiApproveComponent implements OnInit {
   ];
   isMobile: boolean;
   isLoadingData: boolean;
+  dialogTitle: string;
+  selectedGroup: any;
+  isDialogVisible: boolean;
 
   constructor(
     private changeDetection: ChangeDetectorRef,
@@ -299,6 +302,14 @@ export class DApiApproveComponent implements OnInit {
 
   reject() {
     let userdata = jwt_decode(localStorage.getItem("token"));
+    if (!this.adminDetails) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "กรุณากรอกเหตุผลในการปฏิเสธ"
+      });
+      return;
+    }
     const formatDate = (date: Date | null): string =>
       date
         ? `${date.getFullYear()}${(date.getMonth() + 1)
@@ -397,8 +408,12 @@ export class DApiApproveComponent implements OnInit {
     if (status === "ตรวจสอบรายละเอียด") {
       //debugger
       // this.approve(group.user_id, group.route_id);
+      if (group.status_description === "ปฏิเสธ") {
+        this.adminDetails = group.admin_details;
+      } else {
+        this.adminDetails = "";
+      }
 
-      this.adminDetails = "";
       this.requestDetails = group.details;
       this.user_id = group.user_id;
       this.route_id = group.route_id;
@@ -557,8 +572,26 @@ export class DApiApproveComponent implements OnInit {
         label: "ปิดใช้งาน",
         icon: "pi pi-times",
         command: () => this.toggleStatus("ปิดใช้งาน", group)
+      },
+      {
+        label: "ติดตามสถานะ",
+        icon: "pi pi-clock",
+        command: () => this.approvedDetail("ติดตามสถานะ", group)
       }
     ];
+  }
+
+  approvedDetail(status: string, group: any): void {
+    console.log("status", status);
+    console.log("group", group);
+    this.dialogTitle = group.status_description;
+    this.selectedGroup = group;
+    this.isDialogVisible = true;
+  }
+
+  closeCheckDialog(): void {
+    this.isDialogVisible = false;
+    this.selectedGroup = null;
   }
   createGroup() {
     if (
