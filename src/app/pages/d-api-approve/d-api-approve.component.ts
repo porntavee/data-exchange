@@ -258,17 +258,18 @@ export class DApiApproveComponent implements OnInit {
       });
       return; // หยุดการทำงานหากเงื่อนไขวันที่ไม่ถูกต้อง
     }
-
     if (
       (this.fromAdminDate && !this.toAdminDate) ||
-      (!this.fromAdminDate && this.toAdminDate)
+      (!this.fromAdminDate && this.toAdminDate) ||
+      this.fromAdminDate?.toString().trim() === "" ||
+      this.toAdminDate?.toString().trim() === ""
     ) {
       this.messageService.add({
         severity: "error",
         summary: "Incomplete Date Fields",
         detail: "กรุณากรอกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
       });
-      return; // หยุดการทำงานหากกรอกไม่ครบ
+      return;
     }
 
     const apiUrl =
@@ -301,53 +302,117 @@ export class DApiApproveComponent implements OnInit {
   }
 
   reject() {
-    let userdata = jwt_decode(localStorage.getItem("token"));
-    if (!this.adminDetails) {
-      this.messageService.add({
-        severity: "error",
-        summary: "Error",
-        detail: "กรุณากรอกเหตุผลในการปฏิเสธ"
-      });
-      return;
-    }
-    const formatDate = (date: Date | null): string =>
-      date
-        ? `${date.getFullYear()}${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}${date
-            .getDate()
-            .toString()
-            .padStart(2, "0")}`
-        : "";
+    this.confirmationService.confirm({
+      message: "คุณแน่ใจหรือไม่ว่าต้องการปฏิเสธคำขอนี้?",
+      header: "ยืนยันการปฏิเสธ",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        let userdata = jwt_decode(localStorage.getItem("token"));
 
-    const apiUrl =
-      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
-
-    this.http
-      .post<any>(apiUrl, {
-        user_id: this.user_id,
-        route_id: this.route_id,
-        status: -1,
-        admin_id: userdata["id"],
-        admin_name: userdata["username"],
-        details: this.adminDetails,
-        duration: this.selectAdminDuration["value"],
-        from_admin_date: formatDate(this.fromAdminDate),
-        to_admin_date: formatDate(this.toAdminDate)
-      })
-      .subscribe(
-        data => {
-          this.approveDialog = false;
-          this.readToken();
+        if (!this.adminDetails || this.adminDetails.trim() === "") {
           this.messageService.add({
-            severity: "success",
-            summary: "Success",
-            detail: "ปฏิเสธการใช้งานแล้ว"
+            severity: "error",
+            summary: "Error",
+            detail: "กรุณากรอกเหตุผลในการปฏิเสธ"
           });
-        },
-        error => {}
-      );
+          return;
+        }
+
+        const formatDate = (date: Date | null): string =>
+          date
+            ? `${date.getFullYear()}${(date.getMonth() + 1)
+                .toString()
+                .padStart(2, "0")}${date
+                .getDate()
+                .toString()
+                .padStart(2, "0")}`
+            : "";
+
+        const apiUrl =
+          "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+
+        this.http
+          .post<any>(apiUrl, {
+            user_id: this.user_id,
+            route_id: this.route_id,
+            status: -1,
+            admin_id: userdata["id"],
+            admin_name: userdata["username"],
+            details: this.adminDetails,
+            duration: this.selectAdminDuration["value"],
+            from_admin_date: formatDate(this.fromAdminDate),
+            to_admin_date: formatDate(this.toAdminDate)
+          })
+          .subscribe(
+            data => {
+              this.approveDialog = false;
+              this.readToken();
+              this.messageService.add({
+                severity: "success",
+                summary: "Success",
+                detail: "ปฏิเสธการใช้งานแล้ว"
+              });
+            },
+            error => {
+              this.messageService.add({
+                severity: "error",
+                summary: "Error",
+                detail: "เกิดข้อผิดพลาดในการปฏิเสธ"
+              });
+            }
+          );
+      }
+    });
   }
+
+  // reject() {
+  //   let userdata = jwt_decode(localStorage.getItem("token"));
+  //   if (!this.adminDetails) {
+  //     this.messageService.add({
+  //       severity: "error",
+  //       summary: "Error",
+  //       detail: "กรุณากรอกเหตุผลในการปฏิเสธ"
+  //     });
+  //     return;
+  //   }
+  //   const formatDate = (date: Date | null): string =>
+  //     date
+  //       ? `${date.getFullYear()}${(date.getMonth() + 1)
+  //           .toString()
+  //           .padStart(2, "0")}${date
+  //           .getDate()
+  //           .toString()
+  //           .padStart(2, "0")}`
+  //       : "";
+
+  //   const apiUrl =
+  //     "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/approve";
+
+  //   this.http
+  //     .post<any>(apiUrl, {
+  //       user_id: this.user_id,
+  //       route_id: this.route_id,
+  //       status: -1,
+  //       admin_id: userdata["id"],
+  //       admin_name: userdata["username"],
+  //       details: this.adminDetails,
+  //       duration: this.selectAdminDuration["value"],
+  //       from_admin_date: formatDate(this.fromAdminDate),
+  //       to_admin_date: formatDate(this.toAdminDate)
+  //     })
+  //     .subscribe(
+  //       data => {
+  //         this.approveDialog = false;
+  //         this.readToken();
+  //         this.messageService.add({
+  //           severity: "success",
+  //           summary: "Success",
+  //           detail: "ปฏิเสธการใช้งานแล้ว"
+  //         });
+  //       },
+  //       error => {}
+  //     );
+  // }
 
   close() {
     let userdata = jwt_decode(localStorage.getItem("token"));
@@ -570,17 +635,17 @@ export class DApiApproveComponent implements OnInit {
     // อัปเดตรายการเมนู
     this.itemsAction = [
       {
-        label: "ตรวจสอบรายละเอียด",
+        label: "Review&Approve",
         icon: "pi pi-check",
         command: () => this.toggleStatus("ตรวจสอบรายละเอียด", group)
       },
       {
-        label: "ปิดใช้งาน",
+        label: "Deactivate",
         icon: "pi pi-times",
         command: () => this.toggleStatus("ปิดใช้งาน", group)
       },
       {
-        label: "ติดตามสถานะ",
+        label: "Check Details",
         icon: "pi pi-clock",
         command: () => this.approvedDetail("ติดตามสถานะ", group)
       }
