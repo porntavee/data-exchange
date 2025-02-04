@@ -58,7 +58,6 @@ import {
       }
       @media (max-width: 976px) {
         gridster-item {
-         
           max-height: 220px !important;
         }
       }
@@ -67,6 +66,7 @@ import {
 })
 export class ServicestatusComponent implements OnInit {
   @ViewChild("cal2") calendar: any;
+
   RangeCPU: Highcharts.Chart;
   optionsstatusCPU: any;
   optionsstatusMemory: any;
@@ -135,6 +135,7 @@ export class ServicestatusComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
     this.setGridOptions();
+    window.addEventListener("resize", () => this.drawHeaderSparkline());
     this.ServicestatusService.getBackup().subscribe(
       data => {
         this.products = data.data; // อัปเดตข้อมูลใน products
@@ -425,8 +426,9 @@ export class ServicestatusComponent implements OnInit {
   drawHeaderSparkline() {
     this.cdr.detectChanges();
 
+    const chartWidth = window.innerWidth < 426 ? 100 : 200; // ปรับขนาดตามจอ
+
     this.tabs.forEach((tab, index) => {
-      // เรียงข้อมูลตาม timestamp (ค่าที่เก็บไว้ใน point[0])
       const sortedCpuData = [...tab.header.cpuRange].sort(
         (a, b) => a[0] - b[0]
       );
@@ -439,19 +441,13 @@ export class ServicestatusComponent implements OnInit {
       const last24CpuData = sortedCpuData
         .slice(-24)
         .map((point: [number, number]) => {
-          const cpuValue = Math.round(point[1] * 100) / 100;
-          // ปรับเวลาข้อมูล CPU ด้วยการบวก offset (GMT+7)
-          const localCpuTime = point[0] * 1000 + offset;
-          return [localCpuTime, cpuValue];
+          return [point[0] * 1000 + offset, Math.round(point[1] * 100) / 100];
         });
 
       const last24MemoryData = sortedMemoryData
         .slice(-24)
         .map((point: [number, number]) => {
-          const memValue = Math.round(point[1] * 100) / 100;
-          // ปรับเวลาข้อมูล Memory ด้วยการบวก offset (GMT+7)
-          const localMemTime = point[0] * 1000 + offset;
-          return [localMemTime, memValue];
+          return [point[0] * 1000 + offset, Math.round(point[1] * 100) / 100];
         });
 
       const cpuSparklineOptions: any = {
@@ -460,14 +456,13 @@ export class ServicestatusComponent implements OnInit {
           backgroundColor: "transparent",
           panning: false,
           marginLeft: 0,
-          width: 200,
-          height: 40
+          width: chartWidth, // ใช้ค่า width ที่ปรับตามขนาดจอ
+          height: 40,
+          spacingBottom: 10 // 🟢 เพิ่ม margin-bottom 10px
         },
         title: {
           text: ``,
-          style: {
-            color: this.colortitle
-          },
+          style: { color: this.colortitle },
           floating: true,
           align: "center"
         },
@@ -488,10 +483,7 @@ export class ServicestatusComponent implements OnInit {
           tickWidth: 0
         },
         plotOptions: {
-          series: {
-            marker: { enabled: false },
-            animation: false // ปิดอนิเมชัน
-          }
+          series: { marker: { enabled: false }, animation: false }
         },
         series: [
           {
@@ -499,11 +491,7 @@ export class ServicestatusComponent implements OnInit {
             name: "CPU Util",
             data: last24CpuData,
             color: "#00FFFF",
-            lineWidth: 2,
-            tooltip: {
-              shared: true,
-              useHTML: true
-            }
+            lineWidth: 2
           }
         ]
       };
@@ -514,14 +502,12 @@ export class ServicestatusComponent implements OnInit {
           backgroundColor: "transparent",
           panning: false,
           marginLeft: 0,
-          width: 200,
+          width: chartWidth, // ใช้ค่า width ที่ปรับตามขนาดจอ
           height: 40
         },
         title: {
           text: ``,
-          style: {
-            color: this.colortitle
-          },
+          style: { color: this.colortitle },
           floating: true,
           align: "center"
         },
@@ -542,10 +528,7 @@ export class ServicestatusComponent implements OnInit {
           tickWidth: 0
         },
         plotOptions: {
-          series: {
-            marker: { enabled: false },
-            animation: false // ปิดอนิเมชัน
-          }
+          series: { marker: { enabled: false }, animation: false }
         },
         series: [
           {
@@ -553,24 +536,18 @@ export class ServicestatusComponent implements OnInit {
             name: "Memory Util",
             data: last24MemoryData,
             color: "#FFFF00",
-            lineWidth: 2,
-            tooltip: {
-              shared: true,
-              useHTML: true
-            }
+            lineWidth: 2
           }
         ]
       };
 
       const containerCPUId = `containerCPU-${tab.header.instance}`;
-      const containerCPU = document.getElementById(containerCPUId);
-      if (containerCPU) {
+      const containerMemoryId = `containerMemory-${tab.header.instance}`;
+
+      if (document.getElementById(containerCPUId)) {
         Highcharts.chart(containerCPUId, cpuSparklineOptions);
       }
-
-      const containerMemoryId = `containerMemory-${tab.header.instance}`;
-      const containerMemory = document.getElementById(containerMemoryId);
-      if (containerMemory) {
+      if (document.getElementById(containerMemoryId)) {
         Highcharts.chart(containerMemoryId, memorySparklineOptions);
       }
     });

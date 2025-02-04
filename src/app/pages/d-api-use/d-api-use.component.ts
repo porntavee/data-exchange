@@ -344,6 +344,11 @@ export class DApiUseComponent implements OnInit {
         label: "Edit",
         icon: "pi pi-pencil",
         command: event => this.openEditDialog(this.selectedGroups)
+      },
+      {
+        label: "Info",
+        icon: "pi pi-info",
+        command: event => this.showAdminDetails(this.selectedGroups)
       }
     ];
   }
@@ -757,6 +762,7 @@ export class DApiUseComponent implements OnInit {
   }
 
   showAdminDetails(group: any): void {
+    console.log(group);
     this.selectedGroup = group;
     this.isDialogVisible = true;
   }

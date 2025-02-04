@@ -383,9 +383,19 @@ export class DApiComponent implements OnInit {
     this.http.post<any>(apiUrl, model).subscribe(
       data => {
         // //debugger
+        this.messageService.add({
+          severity: "success",
+          summary: "Success",
+          detail: "Reboot success"
+        });
         this.isRebootLoading = false;
       },
       error => {
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Reboot failed."
+        });
         this.isRebootLoading = false;
       }
     );

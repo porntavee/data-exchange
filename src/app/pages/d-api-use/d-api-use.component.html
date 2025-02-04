@@ -158,9 +158,9 @@
             <th pSortableColumn="expires_at">
               Expired Date <p-sortIcon field="expires_at"></p-sortIcon>
             </th>
-            <th pSortableColumn="noted">
+            <!-- <th pSortableColumn="noted">
               Noted <p-sortIcon field="noted"></p-sortIcon>
-            </th>
+            </th> -->
             <th></th>
             <th></th>
           </tr>
@@ -224,7 +224,7 @@
             <td *ngIf="isMobile">
               Expired Date: {{ group.expires_at | date: "dd-MM-yyyy" }}
             </td>
-            <td *ngIf="!isMobile">
+            <!-- <td *ngIf="!isMobile">
               <button
                 pButton
                 type="button"
@@ -239,17 +239,29 @@
                 icon="pi pi-info"
                 (click)="showAdminDetails(group)"
               ></button>
-            </td>
+            </td> -->
 
             <p-dialog
               [(visible)]="isDialogVisible"
-              [header]="'Noted Description'"
+              header="Library Details"
               [modal]="true"
               [closable]="true"
               [style]="{ width: '50vw' }"
-              (onHide)="closeDialogDetails()"
+              (onHide)="closeDialog()"
             >
-              <p>{{ selectedGroup?.admin_details || "No Description" }}</p>
+              <div *ngIf="selectedGroup">
+                <p>
+                  <strong>Status:</strong>
+                  {{ selectedGroup.status_description }}
+                </p>
+                <p><strong>Tag:</strong> {{ selectedGroup.tag }}</p>
+                <p><strong>End Point:</strong> {{ selectedGroup.endpoints }}</p>
+                <p><strong>API Key:</strong> {{ selectedGroup.token }}</p>
+                <p>
+                  <strong>Expired Date:</strong>
+                  {{ selectedGroup.expires_at | date: "dd-MM-yyyy" }}
+                </p>
+              </div>
             </p-dialog>
 
             <td>

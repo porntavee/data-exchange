@@ -6,7 +6,7 @@
     <p-toolbar styleClass="p-mb-4 p-d-flex p-flex-wrap">
       <div class="p-toolbar-group-left">
         <div style="font-size: 18px; font-weight: 600;" class="text-color">
-          API Log
+          API Approve
         </div>
       </div>
       <div
@@ -654,11 +654,25 @@
 
 <p-dialog
   [(visible)]="isDialogVisible"
-  [header]="dialogTitle"
+  [header]="'Group Details'"
   [modal]="true"
   [closable]="true"
   [style]="{ width: '50vw' }"
   (onHide)="closeCheckDialog()"
 >
-  <p>{{ selectedGroup?.details || "No Description" }}</p>
+  <div *ngIf="selectedGroup">
+    <p><strong>User:</strong> {{ selectedGroup.username }}</p>
+    <p><strong>Tag:</strong> {{ selectedGroup.tag }}</p>
+    <p><strong>End Point:</strong> {{ selectedGroup.endpoints }}</p>
+    <p>
+      <strong>Request Date:</strong>
+      {{ selectedGroup.request_at | date: "dd-MM-yyyy HH:mm:ss" }}
+    </p>
+    <p>
+      <strong>Approve Date:</strong>
+      {{ selectedGroup.approve_at | date: "dd-MM-yyyy HH:mm:ss" }}
+    </p>
+    <p><strong>Approve By:</strong> {{ selectedGroup.admin_name }}</p>
+    <p><strong>Status:</strong> {{ selectedGroup.status_description }}</p>
+  </div>
 </p-dialog>

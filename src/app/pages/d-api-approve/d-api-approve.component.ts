@@ -406,8 +406,6 @@ export class DApiApproveComponent implements OnInit {
 
   toggleStatus(status: string, group: any) {
     if (status === "ตรวจสอบรายละเอียด") {
-      //debugger
-      // this.approve(group.user_id, group.route_id);
       if (group.status_description === "ปฏิเสธ") {
         this.adminDetails = group.admin_details;
       } else {
@@ -428,23 +426,31 @@ export class DApiApproveComponent implements OnInit {
       this.selectAdminDuration = this.durationOptions[index];
       this.fromDate = new Date(group.from_at);
       this.toDate = new Date(group.expires_at);
+
       if (this.selectAdminDuration.value === "-1") {
         this.fromAdminDate = new Date();
         this.toAdminDate = new Date(
           new Date().setDate(new Date().getDate() + 7)
         );
       }
+
       this.approveDialog = true;
     } else if (status === "ปิดใช้งาน") {
-      this.user_id = group.user_id;
-      this.route_id = group.route_id;
-      this.close();
-      this.messageService.add({
-        severity: "success",
-        summary: "Success",
-        detail: "ปิดใช้งานเรียบร้อยแล้ว"
+      this.confirmationService.confirm({
+        message: "คุณแน่ใจหรือไม่ว่าต้องการปิดใช้งาน?",
+        header: "ยืนยันการปิดใช้งาน",
+        icon: "pi pi-exclamation-triangle",
+        accept: () => {
+          this.user_id = group.user_id;
+          this.route_id = group.route_id;
+          this.close();
+          this.messageService.add({
+            severity: "success",
+            summary: "Success",
+            detail: "ปิดใช้งานเรียบร้อยแล้ว"
+          });
+        }
       });
-    } else {
     }
   }
 
