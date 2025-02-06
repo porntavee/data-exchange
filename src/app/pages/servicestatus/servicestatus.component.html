@@ -46,10 +46,7 @@
           class="accordion-header"
           (click)="toggleTab(tab.header.instance)"
         >
-          <div
-            class="header-content"
-            style="display: flex;justify-content: space-between; width: 100%; color: white;"
-          >
+          <div class="header-content">
             <!-- Instance Name -->
             <div class="header-item instance">
               <span>{{ tab.header.instance }}</span>
@@ -61,10 +58,7 @@
             </div>
 
             <div class="header-item cpu-chart">
-              <div
-                [id]="'containerCPU-' + tab.header.instance"
-                style="margin-top: 25px;"
-              ></div>
+              <div [id]="'containerCPU-' + tab.header.instance"></div>
             </div>
 
             <!-- Memory Usage -->
@@ -73,10 +67,7 @@
             </div>
 
             <div class="header-item memory-chart">
-              <div
-                [id]="'containerMemory-' + tab.header.instance"
-                style="margin-top: 25px;"
-              ></div>
+              <div [id]="'containerMemory-' + tab.header.instance"></div>
             </div>
 
             <!-- Disk Information -->

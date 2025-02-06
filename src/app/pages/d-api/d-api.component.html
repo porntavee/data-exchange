@@ -393,17 +393,6 @@
                 placeholder="Optional" />
         </div> -->
     <ng-template pTemplate="footer" class="footer">
-      <div style="display:flex">
-        <p-checkbox
-          name="groupname"
-          value="recoveryNotification"
-          label="Active"
-          (onChange)="changecheck($event)"
-          [(ngModel)]="selectedValues"
-        ></p-checkbox>
-        &nbsp; &nbsp;
-      </div>
-
       <div style="float: right;">
         <button
           pButton
@@ -436,17 +425,6 @@
   </ng-template>
 
   <ng-template pTemplate="footer" class="footer">
-    <div style="display:flex">
-      <p-checkbox
-        name="groupname"
-        value="recoveryNotification"
-        label="Active"
-        (onChange)="changecheck($event)"
-        [(ngModel)]="selectedValues"
-      ></p-checkbox>
-      &nbsp; &nbsp;
-    </div>
-
     <div style="float: right;">
       <button
         pButton

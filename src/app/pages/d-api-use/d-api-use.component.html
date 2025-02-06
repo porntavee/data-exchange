@@ -261,6 +261,14 @@
                   <strong>Expired Date:</strong>
                   {{ selectedGroup.expires_at | date: "dd-MM-yyyy" }}
                 </p>
+                <p>
+                  <strong>Request at:</strong>
+                  {{ selectedGroup.request_at | date: "dd-MM-yyyy" }}
+                </p>
+                <p>
+                  <strong>Approved at:</strong>
+                  {{ selectedGroup.approve_at | date: "dd-MM-yyyy" }}
+                </p>
               </div>
             </p-dialog>
 

@@ -492,8 +492,8 @@ General styles p {
 }
 
 .header-item {
-  text-align: left;
-  margin-bottom: 10px;
+  flex: 1; /* ทำให้แต่ละ item มีขนาดเท่ากัน */
+  display: flex;
 }
 
 .header-item.cpu-chart,
