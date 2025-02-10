@@ -458,7 +458,7 @@ export class ServicestatusComponent implements OnInit {
           marginLeft: 0,
           width: chartWidth, // ใช้ค่า width ที่ปรับตามขนาดจอ
           height: 40,
-          spacingBottom: 10 // 🟢 เพิ่ม margin-bottom 10px
+          spacingBottom: 0 // 🟢 เพิ่ม margin-bottom 10px
         },
         title: {
           text: ``,
@@ -503,7 +503,8 @@ export class ServicestatusComponent implements OnInit {
           panning: false,
           marginLeft: 0,
           width: chartWidth, // ใช้ค่า width ที่ปรับตามขนาดจอ
-          height: 40
+          height: 40,
+          spacingBottom: 0
         },
         title: {
           text: ``,
