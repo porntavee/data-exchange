@@ -67,7 +67,9 @@ export class LoginComponent implements OnInit {
     lastname: "",
     zone: 0,
     role: "monitor",
-    confirmPassword: ""
+    confirmPassword: "",
+    email: "",
+    agency: ""
   };
   roleType = [
     {
@@ -239,6 +241,8 @@ export class LoginComponent implements OnInit {
       admindssshow: 1
     }
   ];
+  displayForgetPasswordDialog: boolean;
+  displayResetForgetPasswordDialog: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -286,7 +290,9 @@ export class LoginComponent implements OnInit {
       lastname: "",
       zone: 0,
       role: "monitor",
-      confirmPassword: ""
+      confirmPassword: "",
+      email: "",
+      agency: ""
     };
   }
 
@@ -575,6 +581,15 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
+  forgetPasswordDialog() {
+    this.displayForgetPasswordDialog = true;
+  }
+
+  resetPasswordDialog() {
+    this.displayResetForgetPasswordDialog = true;
+  }
+
   countdownnumber: any = "(" + 180 + ")";
   countdown() {
     let seconds: number = 179;
@@ -617,13 +632,31 @@ export class LoginComponent implements OnInit {
   createUser() {
     const password = this.userData.password;
     const confirmPassword = this.userData.confirmPassword;
-
+    const email = this.userData.email;
     // ตรวจสอบว่าพาสเวิร์ดตรงกัน
     if (password !== confirmPassword) {
       this.messageService.add({
         severity: "error",
         summary: "Error",
         detail: "Passwords do not match."
+      });
+      return;
+    }
+
+    if (email === "") {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Please fill the form | Email is required."
+      });
+      return;
+    }
+
+    if (this.userData.agency === "") {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Please fill the form | Agency is required."
       });
       return;
     }
@@ -656,7 +689,9 @@ export class LoginComponent implements OnInit {
           lastname: "",
           zone: 0,
           role: "monitor",
-          confirmPassword: ""
+          confirmPassword: "",
+          email: "",
+          agency: ""
         };
         this.displayDialog = false;
       },

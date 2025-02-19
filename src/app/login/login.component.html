@@ -88,6 +88,122 @@
             </span>
           </div>
 
+          <div class="text-center mt-3">
+            <span (click)="forgetPasswordDialog()" class="link-like">
+              ลืมรหัสผ่าน
+            </span>
+          </div>
+
+          <p-dialog
+            header="ลืมรหัสผ่าน"
+            [(visible)]="displayForgetPasswordDialog"
+            [modal]="true"
+            [closable]="true"
+            (onHide)="closeDialog()"
+            [style]="{ width: '90%' }"
+            [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+          >
+            <div>
+              <form (ngSubmit)="createUser()">
+                <div class="form-group">
+                  <label for="username">Username:</label>
+                  <input
+                    pInputText
+                    id="username"
+                    name="username"
+                    [(ngModel)]="userData.username"
+                    class="form-control"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email :</label>
+                  <input
+                    pInputText
+                    id="email"
+                    name="email"
+                    [(ngModel)]="userData.email"
+                    class="form-control"
+                    required
+                  />
+                </div>
+
+                <div class="form-group text-center">
+                  <button
+                    pButton
+                    label="Submit"
+                    type="submit"
+                    class="btn btn-success w-100"
+                    (click)="resetPasswordDialog()"
+                  ></button>
+                </div>
+              </form>
+            </div>
+          </p-dialog>
+
+          <p-dialog
+            header="เปลี่ยนรหัสผ่านใหม่"
+            [(visible)]="displayResetForgetPasswordDialog"
+            [modal]="true"
+            [closable]="true"
+            (onHide)="closeDialog()"
+            [style]="{ width: '90%' }"
+            [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+          >
+            <div>
+              <form (ngSubmit)="createUser()">
+                <div class="form-group">
+                  <label for="password">Password:</label>
+                  <input
+                    pInputText
+                    id="password"
+                    name="password"
+                    [(ngModel)]="userData.password"
+                    class="form-control"
+                    type="password"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="confirmPassword">Confirm Password:</label>
+                  <input
+                    pInputText
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    [(ngModel)]="userData.confirmPassword"
+                    class="form-control"
+                    type="password"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="confirmPassword">OTP: (Ref:)</label>
+                  <input
+                    pInputText
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    [(ngModel)]="userData.confirmPassword"
+                    class="form-control"
+                    type="password"
+                    required
+                  />
+                </div>
+
+                <div class="form-group text-center">
+                  <button
+                    pButton
+                    label="Submit"
+                    type="submit"
+                    class="btn btn-success w-100"
+                    (click)="resetPasswordDialog()"
+                  ></button>
+                </div>
+              </form>
+            </div>
+          </p-dialog>
+
           <!-- Signup Dialog -->
           <p-dialog
             header="สมัครสมาชิก"
@@ -154,6 +270,28 @@
                     [(ngModel)]="userData.confirmPassword"
                     class="form-control"
                     type="password"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email">Email :</label>
+                  <input
+                    pInputText
+                    id="email"
+                    name="email"
+                    [(ngModel)]="userData.email"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="agency">หน่วยงาน :</label>
+                  <input
+                    pInputText
+                    id="agency"
+                    name="agency"
+                    [(ngModel)]="userData.agency"
+                    class="form-control"
                     required
                   />
                 </div>

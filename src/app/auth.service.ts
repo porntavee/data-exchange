@@ -1,5 +1,9 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse,HttpHeaders } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders
+} from "@angular/common/http";
 //import { JwtHelperService } from '@auth0/angular-jwt';
 import { retry, catchError } from "rxjs/operators";
 import { User } from "./user";
@@ -64,12 +68,6 @@ export class AuthService {
       })
       .pipe(retry(0), catchError(this.handleError));
   }
-  
-  
-
- 
-
-
 
   login(username, password) {
     const headers = { "content-type": "application/json" };
