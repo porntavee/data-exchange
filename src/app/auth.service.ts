@@ -174,6 +174,30 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
+  requestEmailOTP(username: string, email: string) {
+    const headers = { "content-type": "application/json" };
+    return this.http
+      .post<string>(
+        `${environment.loginURL}/authen/forgot_password`,
+        JSON.stringify({ username: username, email: email }), // เปลี่ยนจาก recipient เป็น email
+        { headers }
+      )
+      .pipe(retry(2), catchError(this.handleError));
+  }
+
+  // verifyEmailOTP(username, email, otp) {
+  //   const headers = { "content-type": "application/json" };
+  //   return this.http
+  //     .post<string>(
+  //       `${environment.dataExchangeURL}/email/verify`,
+  //       JSON.stringify({ key: key, otp: otp }),
+  //       {
+  //         headers: headers
+  //       }
+  //     )
+  //     .pipe(retry(2), catchError(this.handleError));
+  // }
+
   submitOTP(userName, phoneNumber, refCode, joinpin) {
     // return console.log("SUBMIT OTP FROM SERVICE");
     const headers = {

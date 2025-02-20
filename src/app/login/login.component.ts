@@ -243,6 +243,7 @@ export class LoginComponent implements OnInit {
   ];
   displayForgetPasswordDialog: boolean;
   displayResetForgetPasswordDialog: boolean;
+  showRefCode: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -588,6 +589,21 @@ export class LoginComponent implements OnInit {
 
   resetPasswordDialog() {
     this.displayResetForgetPasswordDialog = true;
+    this.authservice
+      .requestEmailOTP(this.userData.username, this.userData.email)
+      .subscribe({
+        next: response => {
+          console.log("OTP sent successfully", response);
+          const responseData = JSON.parse(response);
+          console.log(responseData.data.ref_code);
+          this.otp = responseData.data.ref_code.split("");
+          this.refCode = responseData.data.ref_code;
+          this.showRefCode = true;
+        },
+        error: error => {
+          console.error("Error sending OTP", error);
+        }
+      });
   }
 
   countdownnumber: any = "(" + 180 + ")";

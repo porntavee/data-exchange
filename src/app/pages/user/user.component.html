@@ -90,17 +90,21 @@
             <th style="width: 5%">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th style="width: 20%" pSortableColumn="firstname">
+            <th style="width: 15%" pSortableColumn="firstname">
               Name <p-sortIcon field="firstname"></p-sortIcon>
             </th>
-            <th style="width: 20%" pSortableColumn="username">
+            <th style="width: 15%" pSortableColumn="username">
               Username <p-sortIcon field="username"></p-sortIcon>
             </th>
-            <th style="width: 20%" pSortableColumn="email">
+            <th style="width: 15%" pSortableColumn="email">
               Email <p-sortIcon field="email"></p-sortIcon>
             </th>
-            <th style="width: 20%" pSortableColumn="role">
+            <th style="width: 15%" pSortableColumn="role">
               Role <p-sortIcon field="role"></p-sortIcon>
+            </th>
+
+            <th style="width: 15%" pSortableColumn="role">
+              Agency <p-sortIcon field="role"></p-sortIcon>
             </th>
 
             <th style="width: 5%"></th>
@@ -132,6 +136,9 @@
             </td>
             <td *ngIf="!isMobile">{{ user.role }}</td>
             <td *ngIf="isMobile">Role: {{ user.role }}</td>
+
+            <td *ngIf="!isMobile">{{ user.agency }}</td>
+            <td *ngIf="isMobile">Role: {{ user.agency }}</td>
 
             <td>
               <p-menu

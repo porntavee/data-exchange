@@ -179,7 +179,10 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="confirmPassword">OTP: (Ref:)</label>
+                  <label for="confirmPassword"
+                    >OTP: (Ref: <span *ngIf="showRefCode">{{ refCode }}</span
+                    >)</label
+                  >
                   <input
                     pInputText
                     id="confirmPassword"
