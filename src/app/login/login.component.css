@@ -259,3 +259,24 @@ html {
   padding: 0;
   box-sizing: border-box;
 }
+
+.disabled {
+  pointer-events: none; /* ปิดการคลิก */
+  opacity: 0.5; /* ทำให้ดูจางลง */
+}
+
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+}
+
+.password-requirements li {
+  color: red;
+  margin-bottom: 4px;
+}
+
+.password-requirements .valid {
+  color: green;
+  font-weight: bold;
+}

@@ -53,6 +53,19 @@ export class LoginComponent implements OnInit {
   otp_input: string;
   twoFA_input: string;
   themeValue: string = this.themeService.theme;
+  resetPassword: string = "";
+  confirmResetPassword: string;
+  resetOTP: string = "";
+  resetPasswordUsername: string;
+  resetPasswordEmail: string;
+
+  passwordValidations = {
+    length: false,
+    lowercase: false,
+    uppercase: false,
+    number: false,
+    specialChar: false
+  };
   // user = {
   //   firstName: "",
   //   lastName: "",
@@ -244,6 +257,13 @@ export class LoginComponent implements OnInit {
   displayForgetPasswordDialog: boolean;
   displayResetForgetPasswordDialog: boolean;
   showRefCode: boolean;
+  verificationKey: any;
+  userid: any;
+  displayOTPDlg: boolean;
+  emailSent: any;
+  countdownTime: number;
+  isResendButtonDisabled: boolean;
+  countdownInterval: NodeJS.Timeout;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -439,6 +459,20 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  validatePassword() {
+    const password = this.resetPassword || "";
+
+    this.passwordValidations.length = password.length >= 8;
+    this.passwordValidations.lowercase = /[a-z]/.test(password);
+    this.passwordValidations.uppercase = /[A-Z]/.test(password);
+    this.passwordValidations.number = /\d/.test(password);
+    this.passwordValidations.specialChar = /[!@#$%^&*]/.test(password);
+  }
+
+  isPasswordValid(): boolean {
+    return Object.values(this.passwordValidations).every(Boolean);
+  }
+
   onSubmit2FA(twoFA) {
     // var joinpin = twoFA.join("");
     this.twoFA_input;
@@ -584,26 +618,198 @@ export class LoginComponent implements OnInit {
   }
 
   forgetPasswordDialog() {
+    console.log("HI");
     this.displayForgetPasswordDialog = true;
+    this.resetPasswordUsername = "";
+    this.resetPasswordEmail = "";
+  }
+
+  forgetPasswordStep() {
+    this.displayResetForgetPasswordDialog = true;
+    this.resetPassword = "";
+    this.confirmResetPassword = "";
+    this.resetOTP = "";
+  }
+
+  onResetPassword() {
+    // Assuming you have form values or variables holding these values
+    const password = this.resetPassword; // the password entered
+    const confirmPassword = this.confirmResetPassword; // the confirm password entered
+    const otp = this.resetOTP; // the OTP entered by the user
+    const key = this.refCode; // the key entered by the user (or from context)
+
+    // First, let's check if the passwords match
+    if (password !== confirmPassword || password === "") {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Password doesn't match",
+        life: 3000
+      });
+      return; // Stop further execution if passwords don't match
+    }
+
+    // Validate password strength using regex
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail:
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.",
+        life: 3000
+      });
+      return; // Stop further execution if password is invalid
+    }
+
+    // Check OTP length
+    if (otp.length !== 6) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter a 6 digit OTP.",
+        life: 3000
+      });
+      return; // Stop further execution if OTP is not 6 digits
+    }
+
+    // Now let's verify the OTP and key
+    this.authservice.verifyEmail(key, otp).subscribe(
+      verifyResponse => {
+        console.log("OTP Verification successful:", verifyResponse);
+
+        // If OTP is correct, proceed to reset the password
+        const userId = this.userid; // Get the actual user ID from the context, maybe from a session or form
+
+        // Proceed with password reset only if OTP is verified
+        if (verifyResponse.data.status === true) {
+          this.authservice
+            .resetPassword(userId, password)
+            .subscribe(resetResponse => {
+              this.displayForgetPasswordDialog = false;
+              this.displayResetForgetPasswordDialog = false;
+              this.messageService.add({
+                severity: "success",
+                summary: "Success",
+                detail: "Your password has been successfully changed.",
+                life: 3000
+              });
+            });
+        } else {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Please check the OTP or try again later.",
+            life: 3000
+          });
+        }
+      },
+      verifyError => {
+        console.error("OTP verification failed:", verifyError);
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "OTP verification failed. Please try again.",
+          life: 3000
+        });
+      }
+    );
   }
 
   resetPasswordDialog() {
-    this.displayResetForgetPasswordDialog = true;
+    if (!this.resetPasswordUsername || !this.resetPasswordEmail) {
+      this.messageService.add({
+        severity: "warn",
+        summary: "Field Missing !",
+        detail: "Username and Email are required !"
+      });
+      return;
+    }
+
+    this.loading = true;
+
     this.authservice
-      .requestEmailOTP(this.userData.username, this.userData.email)
+      .requestEmailOTP(this.resetPasswordUsername, this.resetPasswordEmail)
       .subscribe({
         next: response => {
-          console.log("OTP sent successfully", response);
-          const responseData = JSON.parse(response);
-          console.log(responseData.data.ref_code);
-          this.otp = responseData.data.ref_code.split("");
-          this.refCode = responseData.data.ref_code;
-          this.showRefCode = true;
+          try {
+            const responseData =
+              typeof response === "string" ? JSON.parse(response) : response;
+            this.refCode = responseData.data.ref_code;
+            this.userid = responseData.data.user_id;
+            this.emailSent = responseData.data.email_sent_otp;
+            this.showRefCode = true;
+            this.messageService.add({
+              severity: "info",
+              summary: "Information",
+              detail: responseData.message
+            });
+          } catch (error) {
+            console.error("Error parsing response:", error);
+          }
         },
         error: error => {
           console.error("Error sending OTP", error);
+          this.loading = false;
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Error, please try again"
+          });
+        },
+        complete: () => {
+          this.loading = false;
+          this.displayOTPDlg = true; // เปิด OTP dialog เมื่อ OTP ถูกส่งแล้ว
+          this.startCountdownOTP();
+          this.displayForgetPasswordDialog = false;
         }
       });
+  }
+
+  onVerifyOTP() {
+    const otp = this.resetOTP; // OTP ที่ผู้ใช้กรอก
+    const key = this.refCode; // refCode ที่ได้จากการส่ง OTP
+
+    if (otp.length !== 6) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter a 6 digit OTP.",
+        life: 3000
+      });
+      return; // หาก OTP ไม่ถูกต้องจะหยุดการทำงาน
+    }
+
+    this.authservice.verifyEmail(key, otp).subscribe(
+      verifyResponse => {
+        if (verifyResponse.data.status === true) {
+          this.messageService.add({
+            severity: "success",
+            summary: "Success",
+            detail: "OTP verified. Now you can reset your password.",
+            life: 3000
+          });
+          this.displayOTPDlg = false; // ปิด OTP dialog
+          this.displayResetForgetPasswordDialog = true; // เปิด dialog รีเซ็ตรหัสผ่าน
+        } else {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: "OTP verification failed. Please try again.",
+            life: 3000
+          });
+        }
+      },
+      verifyError => {
+        console.error("OTP verification failed:", verifyError);
+        this.messageService.add({
+          severity: "error",
+          summary: "Error",
+          detail: "OTP verification failed. Please try again.",
+          life: 3000
+        });
+      }
+    );
   }
 
   countdownnumber: any = "(" + 180 + ")";
@@ -627,6 +833,24 @@ export class LoginComponent implements OnInit {
 
     setTimeout(makeIteration, 1000); // 1 second waiting
   }
+
+  startCountdownOTP() {
+    // รีเซ็ตเวลานับถอยหลัง
+    this.countdownTime = 300;
+    this.isResendButtonDisabled = true; // ปิดปุ่มเมื่อเริ่มนับถอยหลัง
+
+    // ใช้ setInterval เพื่อลดเวลา 1 วินาทีทุกๆ วินาที
+    this.countdownInterval = setInterval(() => {
+      this.countdownTime--; // ลดเวลา
+
+      // เมื่อเวลาเหลือ 0 ให้หยุดการนับถอยหลังและเปิดปุ่ม
+      if (this.countdownTime <= 0) {
+        clearInterval(this.countdownInterval); // หยุด setInterval
+        this.isResendButtonDisabled = false; // เปิดปุ่มให้คลิกได้
+      }
+    }, 1000); // ทุกๆ 1000 มิลลิวินาที (1 วินาที)
+  }
+
   startCountdown() {
     const countdownElement = document.getElementById("countdown");
     this.showTimer = true;
@@ -649,30 +873,25 @@ export class LoginComponent implements OnInit {
     const password = this.userData.password;
     const confirmPassword = this.userData.confirmPassword;
     const email = this.userData.email;
+    const { firstname, lastname, username, agency } = this.userData;
+
     // ตรวจสอบว่าพาสเวิร์ดตรงกัน
+
+    // ตรวจสอบกรอกข้อมูลที่สำคัญ
+    if (!firstname || !lastname || !username || !email || !agency) {
+      this.messageService.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Please fill in all required fields."
+      });
+      return;
+    }
+
     if (password !== confirmPassword) {
       this.messageService.add({
         severity: "error",
         summary: "Error",
         detail: "Passwords do not match."
-      });
-      return;
-    }
-
-    if (email === "") {
-      this.messageService.add({
-        severity: "error",
-        summary: "Error",
-        detail: "Please fill the form | Email is required."
-      });
-      return;
-    }
-
-    if (this.userData.agency === "") {
-      this.messageService.add({
-        severity: "error",
-        summary: "Error",
-        detail: "Please fill the form | Agency is required."
       });
       return;
     }
@@ -684,7 +903,7 @@ export class LoginComponent implements OnInit {
         severity: "error",
         summary: "Error",
         detail:
-          "Please fill the form | Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character."
+          "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character."
       });
       return;
     }
@@ -718,9 +937,20 @@ export class LoginComponent implements OnInit {
             summary: "Error",
             detail: "Session expired, please logout and login again."
           });
+        } else {
+          this.messageService.add({
+            severity: "error",
+            summary: "Error",
+            detail: "An error occurred while creating the account."
+          });
         }
       }
     });
+  }
+
+  onResendOTP() {
+    this.resetPasswordDialog();
+    this.startCountdown();
   }
 
   resendOTP(event) {

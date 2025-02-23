@@ -100,30 +100,30 @@
             [modal]="true"
             [closable]="true"
             (onHide)="closeDialog()"
-            [style]="{ width: '90%' }"
+            [style]="{ width: '100%', maxWidth: '500px' }"
             [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
           >
-            <div>
-              <form (ngSubmit)="createUser()">
+            <div class="d-flex justify-content-center">
+              <form class="w-100">
                 <div class="form-group">
                   <label for="username">Username:</label>
                   <input
                     pInputText
                     id="username"
                     name="username"
-                    [(ngModel)]="userData.username"
+                    [(ngModel)]="this.resetPasswordUsername"
                     class="form-control"
                     required
                   />
                 </div>
 
                 <div class="form-group">
-                  <label for="email">Email :</label>
+                  <label for="email">Email:</label>
                   <input
                     pInputText
                     id="email"
                     name="email"
-                    [(ngModel)]="userData.email"
+                    [(ngModel)]="this.resetPasswordEmail"
                     class="form-control"
                     required
                   />
@@ -132,62 +132,76 @@
                 <div class="form-group text-center">
                   <button
                     pButton
-                    label="Submit"
                     type="submit"
-                    class="btn btn-success w-100"
+                    class="btn btn-success mx-auto"
                     (click)="resetPasswordDialog()"
-                  ></button>
+                    [disabled]="loading"
+                    style="width: auto; padding: 10px 20px;"
+                  >
+                    <ng-container *ngIf="loading">
+                      <i class="pi pi-spin pi-spinner"></i> Loading...
+                    </ng-container>
+                    <ng-container *ngIf="!loading">
+                      Submit
+                    </ng-container>
+                  </button>
                 </div>
               </form>
             </div>
           </p-dialog>
 
+          <!-- Reset Password Dialog -->
           <p-dialog
             header="เปลี่ยนรหัสผ่านใหม่"
             [(visible)]="displayResetForgetPasswordDialog"
             [modal]="true"
             [closable]="true"
             (onHide)="closeDialog()"
-            [style]="{ width: '90%' }"
+            [style]="{ width: '100%', maxWidth: '500px' }"
             [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
           >
             <div>
-              <form (ngSubmit)="createUser()">
+              <form>
                 <div class="form-group">
                   <label for="password">Password:</label>
                   <input
                     pInputText
                     id="password"
                     name="password"
-                    [(ngModel)]="userData.password"
-                    class="form-control"
-                    type="password"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <input
-                    pInputText
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    [(ngModel)]="userData.confirmPassword"
+                    [(ngModel)]="resetPassword"
+                    (input)="validatePassword()"
                     class="form-control"
                     type="password"
                     required
                   />
                 </div>
 
+                <!-- แสดงข้อความเงื่อนไขรหัสผ่าน -->
+                <ul class="password-requirements">
+                  <li [ngClass]="{ valid: passwordValidations.length }">
+                    รหัสผ่านต้องมีอย่างน้อย 8 ตัว
+                  </li>
+                  <li [ngClass]="{ valid: passwordValidations.lowercase }">
+                    ต้องมีตัวพิมพ์เล็ก (a-z)
+                  </li>
+                  <li [ngClass]="{ valid: passwordValidations.uppercase }">
+                    ต้องมีตัวพิมพ์ใหญ่ (A-Z)
+                  </li>
+                  <li [ngClass]="{ valid: passwordValidations.number }">
+                    ต้องมีตัวเลข (0-9)
+                  </li>
+                  <li [ngClass]="{ valid: passwordValidations.specialChar }">
+                    ต้องมีอักขระพิเศษ (!@#$%^&*)
+                  </li>
+                </ul>
+
                 <div class="form-group">
-                  <label for="confirmPassword"
-                    >OTP: (Ref: <span *ngIf="showRefCode">{{ refCode }}</span
-                    >)</label
-                  >
+                  <label for="confirmPassword">Confirm Password:</label>
                   <input
                     pInputText
                     id="confirmPassword"
                     name="confirmPassword"
-                    [(ngModel)]="userData.confirmPassword"
+                    [(ngModel)]="confirmResetPassword"
                     class="form-control"
                     type="password"
                     required
@@ -199,9 +213,73 @@
                     pButton
                     label="Submit"
                     type="submit"
-                    class="btn btn-success w-100"
-                    (click)="resetPasswordDialog()"
+                    class="btn btn-success mx-auto"
+                    style="width: auto; padding: 10px 20px;"
+                    (click)="onResetPassword()"
+                    [disabled]="!isPasswordValid()"
                   ></button>
+                </div>
+              </form>
+            </div>
+          </p-dialog>
+
+          <!-- OTP Dialog -->
+          <p-dialog
+            header="กรอกรหัส OTP"
+            [(visible)]="displayOTPDlg"
+            [modal]="true"
+            [closable]="true"
+            (onHide)="closeDialog()"
+            [style]="{ width: '100%', maxWidth: '500px' }"
+            [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+          >
+            <div>
+              <form>
+                <div class="form-group">
+                  <label for="confirmOTP"
+                    >We already sent OTP to email: {{ this.emailSent }}</label
+                  >
+                  <label for="confirmOTP">Please enter it below</label>
+                  <label for="confirmOTP"
+                    >(Ref: <span *ngIf="showRefCode">{{ refCode }}</span
+                    >)</label
+                  >
+                  <input
+                    pInputText
+                    id="confirmOTP"
+                    name="confirmOTP"
+                    [(ngModel)]="this.resetOTP"
+                    class="form-control"
+                    required
+                    maxlength="6"
+                    style="text-align: center;"
+                  />
+                </div>
+
+                <div class="form-group text-center">
+                  <button
+                    pButton
+                    label="Submit"
+                    type="submit"
+                    class="btn btn-success mx-auto"
+                    style="width: auto; padding: 10px 20px;"
+                    (click)="onVerifyOTP()"
+                  ></button>
+                  <div class="text-center mt-3">
+                    <!-- ปุ่ม "ส่ง OTP อีกครั้ง" -->
+                    <span
+                      (click)="isResendButtonDisabled ? null : onResendOTP()"
+                      class="link-like"
+                      [ngClass]="{ disabled: isResendButtonDisabled }"
+                    >
+                      ส่ง OTP อีกครั้ง
+                    </span>
+
+                    <!-- แสดงเวลานับถอยหลัง -->
+                    <div *ngIf="isResendButtonDisabled">
+                      <p>สามารถส่ง OTP ได้ในอีก {{ countdownTime }} วินาที</p>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -214,7 +292,7 @@
             [modal]="true"
             [closable]="true"
             (onHide)="closeDialog()"
-            [style]="{ width: '90%' }"
+            [style]="{ width: '100%', maxWidth: '500px' }"
             [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
           >
             <div>
@@ -277,7 +355,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="email">Email :</label>
+                  <label for="email">Email:</label>
                   <input
                     pInputText
                     id="email"
@@ -288,7 +366,7 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label for="agency">หน่วยงาน :</label>
+                  <label for="agency">หน่วยงาน:</label>
                   <input
                     pInputText
                     id="agency"
@@ -298,12 +376,14 @@
                     required
                   />
                 </div>
+
                 <div class="form-group text-center">
                   <button
                     pButton
                     label="Submit"
                     type="submit"
-                    class="btn btn-success w-100"
+                    class="btn btn-success mx-auto"
+                    style="width: auto; padding: 10px 20px;"
                   ></button>
                 </div>
               </form>

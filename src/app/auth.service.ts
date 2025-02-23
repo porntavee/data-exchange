@@ -69,6 +69,36 @@ export class AuthService {
       .pipe(retry(0), catchError(this.handleError));
   }
 
+  //   ## Reset password
+  // POST: https://dss.motorway.go.th:4433/minsight/api/authen/reset_password/{user_id}
+  // Body: {
+  //   "password": "hhhhhhhh"
+  // }
+
+  verifyEmail(key: string, otp: string) {
+    const headers = { "content-type": "application/json" };
+    const body = JSON.stringify({ key: key, otp: otp });
+
+    return this.http
+      .post<any>(`${environment.dataExchangeURL}/email/verify`, body, {
+        headers: headers
+      })
+      .pipe(retry(0), catchError(this.handleError));
+  }
+
+  resetPassword(userid: string, password: string) {
+    const headers = { "content-type": "application/json" };
+    const body = JSON.stringify({ password: password });
+
+    return this.http
+      .post<any>(
+        `${environment.loginURL}authen/reset_password/${userid}`,
+        body,
+        { headers: headers }
+      )
+      .pipe(retry(0), catchError(this.handleError));
+  }
+
   login(username, password) {
     const headers = { "content-type": "application/json" };
     const body = JSON.stringify({ username: username, password: password });
