@@ -81,3 +81,20 @@ sudo docker run -it -v /home/administrator/web_server/conf/nginx.conf:/etc/nginx
 ```bash
 docker run -it -v %cd%\nginx\nginx.conf:/etc/nginx/nginx.conf:ro -v %cd%\nginx\linkflow:/etc/nginx/conf.d/linkflow -v %cd%\nginx\infitel:/etc/nginx/conf.d/infitel -p 443:443 --name web_and_proxy nt_web_server
 ```
+
+nvm use 16.20.1
+set NODE_OPTIONS=--openssl-legacy-provider
+ng s
+
+User : sk
+Pass: dssdataentry2024
+
+
+Remote GlobalProtect
+server='10.120.22.35'
+port='1433'
+user='sa'
+password='$BD$$2@24InS'
+database='minsight_2024'
+as_dict=True
+login_timeout = 3
