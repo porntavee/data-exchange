@@ -258,18 +258,21 @@ export class DApiApproveComponent implements OnInit {
       });
       return; // หยุดการทำงานหากเงื่อนไขวันที่ไม่ถูกต้อง
     }
-    if (
-      (this.fromAdminDate && !this.toAdminDate) ||
-      (!this.fromAdminDate && this.toAdminDate) ||
-      this.fromAdminDate?.toString().trim() === "" ||
-      this.toAdminDate?.toString().trim() === ""
-    ) {
-      this.messageService.add({
-        severity: "error",
-        summary: "Incomplete Date Fields",
-        detail: "กรุณากรอกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
-      });
-      return;
+    console.log(this.selectedDuration);
+    if (this.selectAdminDuration["label"] === "กำหนดวัน") {
+      if (
+        (this.fromAdminDate && !this.toAdminDate) ||
+        (!this.fromAdminDate && this.toAdminDate) ||
+        this.fromAdminDate?.toString().trim() === "" ||
+        this.toAdminDate?.toString().trim() === ""
+      ) {
+        this.messageService.add({
+          severity: "error",
+          summary: "Incomplete Date Fields",
+          detail: "กรุณากรอกวันที่เริ่มต้นและวันที่สิ้นสุดให้ครบถ้วน"
+        });
+        return;
+      }
     }
 
     const apiUrl =
@@ -299,6 +302,10 @@ export class DApiApproveComponent implements OnInit {
         },
         error => {}
       );
+  }
+
+  onDurationChange(event: any) {
+    console.log("Selected Duration:", event.value);
   }
 
   reject() {
