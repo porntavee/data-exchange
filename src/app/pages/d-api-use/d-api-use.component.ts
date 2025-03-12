@@ -694,20 +694,51 @@ export class DApiUseComponent implements OnInit {
 
   async readToken() {
     this.isLoadingData = true;
-
+  
     let userdata = jwt_decode(localStorage.getItem("token"));
-
+  
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/" +
       userdata["id"];
     this.http.get<any>(apiUrl).subscribe(
       data => {
         this.isLoadingData = false;
-        this.tokenList = data.data;
+  
+        // เรียงลำดับตาม status_description ก่อน และตาม expires_at หรือ request_at
+        this.tokenList = data.data.sort((a, b) => {
+          // จัดลำดับ status_description ตามลำดับที่ต้องการ
+          const statusOrder = {
+            'รอตรวจสอบจากเจ้าหน้าที่': 1,
+            'เปิดใช้งาน': 2,
+            'ปฏิเสธ': 3,
+            'ปิดใช้งาน': 4
+          };
+  
+          // เปรียบเทียบ status_description
+          const statusComparison = statusOrder[a.status_description] - statusOrder[b.status_description];
+          if (statusComparison !== 0) {
+            return statusComparison;
+          }
+  
+          // ถ้า status_description เป็น 'รอตรวจสอบจากเจ้าหน้าที่' ให้เรียงตาม request_at
+          if (a.status_description === 'รอตรวจสอบจากเจ้าหน้าที่' && b.status_description === 'รอตรวจสอบจากเจ้าหน้าที่') {
+            const requestA = new Date(a.request_at);
+            const requestB = new Date(b.request_at);
+            return requestB.getTime() - requestA.getTime(); // ลำดับจากใหม่ไปเก่า (มากไปหาน้อย)
+          }
+  
+          // ถ้าไม่ใช่ 'รอตรวจสอบจากเจ้าหน้าที่' ให้เรียงตาม expires_at
+          const expiresA = new Date(a.expires_at);
+          const expiresB = new Date(b.expires_at);
+          return expiresB.getTime() - expiresA.getTime(); // ลำดับจากใหม่ไปเก่า (มากไปหาน้อย)
+        });
       },
-      error => {}
+      error => {
+        // จัดการข้อผิดพลาดที่เกิดขึ้น
+      }
     );
   }
+  
 
   async createToken() {
     const formatDate = (date: Date | null): string =>

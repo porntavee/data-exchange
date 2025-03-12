@@ -216,18 +216,25 @@ export class DApiLogComponent implements OnInit {
   readLog() {
     this.isLoadingData = true;
     let userdata = jwt_decode(localStorage.getItem("token"));
-
-    const apiUrl =
-      "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
-    // const apiUrl = 'https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read';
+  
+    const apiUrl = "https://dss.motorway.go.th:4433/dxc/api/data-exchange/log/read";
+    
     this.http.get<any>(apiUrl).subscribe(
       data => {
         this.isLoadingData = false;
-        this.tokenList = data.data;
+        // เรียงข้อมูลจาก created_at ล่าสุดลงไป
+        this.tokenList = data.data.sort((a, b) => {
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          return dateB.getTime() - dateA.getTime(); // ลำดับจากใหม่ไปเก่า
+        });
       },
-      error => {}
+      error => {
+        // จัดการข้อผิดพลาดที่เกิดขึ้น
+      }
     );
   }
+  
 
   readMonthLog() {
     const apiUrl =

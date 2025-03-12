@@ -207,15 +207,33 @@ export class DApiApproveComponent implements OnInit {
     this.isLoadingData = true;
     const apiUrl =
       "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
-
-    // const apiUrl =
-    //   "https://dss.motorway.go.th:4433/dxc/api/data-exchange/token/read/0";
+  
     this.http.get<any>(apiUrl).subscribe(
       data => {
         this.isLoadingData = false;
-        //debugger
-        this.tokenList = data.data;
-
+  
+        // เรียงข้อมูลก่อนตาม status_description และหลังตาม request_at
+        this.tokenList = data.data.sort((a, b) => {
+          // สร้างลำดับที่กำหนดสำหรับ status_description
+          const statusOrder = {
+            'รอตรวจสอบจากเจ้าหน้าที่': 1,
+            'เปิดใช้งาน': 2,
+            'ปฏิเสธ': 3,
+            'ปิดใช้งาน': 4
+          };
+  
+          // เปรียบเทียบ status_description ก่อน
+          const statusComparison = statusOrder[a.status_description] - statusOrder[b.status_description];
+          if (statusComparison !== 0) {
+            return statusComparison; // ถ้า status ไม่เหมือนกัน จะคืนค่าการเปรียบเทียบนี้
+          }
+  
+          // ถ้า status เหมือนกัน ให้เปรียบเทียบตาม request_at
+          const dateA = new Date(a.request_at);
+          const dateB = new Date(b.request_at);
+          return dateB.getTime() - dateA.getTime(); // ลำดับจากใหม่ไปเก่า
+        });
+  
         this.statusOptions = [
           { label: "ทั้งหมด", value: null },
           {
@@ -229,9 +247,12 @@ export class DApiApproveComponent implements OnInit {
         // เริ่มต้น: ใช้ข้อมูลทั้งหมด
         this.filteredList = [...this.tokenList];
       },
-      error => {}
+      error => {
+        // จัดการข้อผิดพลาดที่เกิดขึ้น
+      }
     );
   }
+  
 
   approve() {
     let userdata = jwt_decode(localStorage.getItem("token"));
