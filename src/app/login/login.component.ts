@@ -409,7 +409,7 @@ export class LoginComponent implements OnInit {
     }
 
     // เงื่อนไข username ที่ตรงกับรายชื่อพิเศษ
-    const specialUsers = ["charoenwasit", "panuwat", "saengdao", "Palm", "sk"];
+    const specialUsers = ["charoenwasit", "panuwat", "saengdao", "palm", "sk","minsight","fm_chairat"];
     if (specialUsers.includes(userdata.user_name)) {
       return "develop";
     }
